@@ -1,0 +1,102 @@
+var FIELD_TYPES = { string: true, number: true, enum: true, boolean: true };
+
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+export function validateMetadata(value) {
+  var errors = [];
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return { valid: false, errors: ['元数据必须是对象'] };
+  }
+
+  if (!Number.isInteger(value.schemaVersion) || value.schemaVersion < 1) {
+    errors.push('schemaVersion 必须是正整数');
+  }
+
+  var years = Array.isArray(value.supportedYears) ? value.supportedYears : [];
+  if (!years.length || years.some(function (year) { return !Number.isInteger(year); })) {
+    errors.push('supportedYears 必须包含至少一个整数年份');
+  }
+  if (!years.includes(value.defaultYear)) {
+    errors.push('默认年份 ' + value.defaultYear + ' 不在 supportedYears 中');
+  }
+
+  var yearSources = value.yearSources && typeof value.yearSources === 'object' ? value.yearSources : {};
+  years.forEach(function (year) {
+    var source = yearSources[year];
+    ['mappingSource', 'scoreSource', 'planSource'].forEach(function (key) {
+      if (!source || !isNonEmptyString(source[key])) errors.push(year + ' 年缺少 ' + key);
+    });
+    if (source && source.collegeFallbackSource != null && !isNonEmptyString(source.collegeFallbackSource)) {
+      errors.push(year + ' 年 collegeFallbackSource 必须是非空路径');
+    }
+  });
+
+  var fields = Array.isArray(value.fields) ? value.fields : [];
+  if (!fields.length) errors.push('fields 必须包含至少一个字段');
+  var seen = {};
+  fields.forEach(function (field, index) {
+    var prefix = '字段 #' + (index + 1);
+    if (!field || typeof field !== 'object') {
+      errors.push(prefix + ' 必须是对象');
+      return;
+    }
+    if (!isNonEmptyString(field.key)) errors.push(prefix + ' 缺少 key');
+    else if (seen[field.key]) errors.push('字段 key 重复：' + field.key);
+    else seen[field.key] = true;
+    if (!isNonEmptyString(field.label)) errors.push(prefix + ' 缺少 label');
+    if (!isNonEmptyString(field.exportLabel)) errors.push(prefix + ' 缺少 exportLabel');
+    if (!FIELD_TYPES[field.type]) errors.push(prefix + ' type 无效');
+    ['filterEnable', 'sortEnable', 'tableShow', 'exportEnable'].forEach(function (flag) {
+      if (typeof field[flag] !== 'boolean') errors.push(prefix + ' 缺少布尔开关 ' + flag);
+    });
+    if (field.type === 'enum' && (!Array.isArray(field.enumValues) || !field.enumValues.length)) {
+      errors.push((field.key || prefix) + ' 缺少 enumValues');
+    }
+    if (field.type === 'number') {
+      if (field.min != null && !Number.isFinite(field.min)) errors.push((field.key || prefix) + ' min 必须是数字');
+      if (field.max != null && !Number.isFinite(field.max)) errors.push((field.key || prefix) + ' max 必须是数字');
+      if (Number.isFinite(field.min) && Number.isFinite(field.max) && field.min > field.max) {
+        errors.push((field.key || prefix) + ' 数值范围无效：min 大于 max');
+      }
+    }
+  });
+
+  if (!fields.some(function (field) { return field && field.exportEnable === true; })) {
+    errors.push('必须配置至少一个导出字段');
+  }
+  var defaultSort = value.defaultSort;
+  var sortField = defaultSort && fields.find(function (field) { return field.key === defaultSort.key; });
+  if (!defaultSort || !sortField || !sortField.sortEnable) {
+    errors.push('默认排序字段 ' + (defaultSort && defaultSort.key) + ' 不存在或未启用排序');
+  } else if (!['asc', 'desc', 'original'].includes(defaultSort.direction)) {
+    errors.push('默认排序方向无效');
+  }
+
+  if (!Array.isArray(value.scorePresets)) errors.push('scorePresets 必须是数组');
+  if (!Number.isInteger(value.pageSize) || value.pageSize < 1) errors.push('pageSize 必须是正整数');
+  if (value.exportFormat !== 'csv') errors.push('exportFormat 当前仅支持 csv');
+
+  return { valid: errors.length === 0, errors: errors };
+}
+
+export async function loadMetadata(url, fetchImpl) {
+  var fetcher = fetchImpl || fetch;
+  var response;
+  try {
+    response = await fetcher(url, { cache: 'no-store' });
+  } catch (error) {
+    throw new Error(url + ' 加载失败：' + error.message);
+  }
+  if (!response.ok) throw new Error(url + ' 加载失败（HTTP ' + response.status + '）');
+  var value;
+  try {
+    value = await response.json();
+  } catch (error) {
+    throw new Error(url + ' 解析失败：' + error.message);
+  }
+  var result = validateMetadata(value);
+  if (!result.valid) throw new Error('元数据无效：' + result.errors.join('；'));
+  return value;
+}

@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "defaultYear": 2026,
+  "supportedYears": [2024, 2025, 2026],
+  "yearSources": {
+    "2024": {
+      "mappingSource": "data/专科专业可报本科专业对照.json",
+      "scoreSource": "data/分数线2024.json",
+      "planSource": "data/招生计划2024.json"
+    },
+    "2025": {
+      "mappingSource": "data/专科专业可报本科专业对照.json",
+      "scoreSource": "data/分数线2025.json",
+      "planSource": "data/招生计划2025.json"
+    },
+    "2026": {
+      "mappingSource": "data/专科专业可报本科专业对照.json",
+      "scoreSource": "data/分数线2026.json",
+      "planSource": "data/招生计划2026.json",
+      "collegeFallbackSource": "data/招生高校及专业2026.json"
+    }
+  },
+  "fields": [
+    {
+      "key": "majorName",
+      "label": "本科专业",
+      "exportLabel": "本科专业",
+      "type": "string",
+      "filterEnable": false,
+      "sortEnable": false,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "score",
+      "label": "分数线",
+      "exportLabel": "分数线",
+      "type": "number",
+      "min": 0,
+      "max": 750,
+      "filterEnable": true,
+      "sortEnable": true,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "schoolType",
+      "label": "办学性质",
+      "exportLabel": "办学性质筛选",
+      "type": "enum",
+      "enumValues": ["公办", "民办"],
+      "filterEnable": true,
+      "sortEnable": false,
+      "tableShow": false,
+      "exportEnable": false
+    },
+    {
+      "key": "povertyStatus",
+      "label": "建档立卡",
+      "exportLabel": "建档立卡筛选",
+      "type": "enum",
+      "enumValues": ["是", "否"],
+      "filterEnable": true,
+      "sortEnable": false,
+      "tableShow": false,
+      "exportEnable": false
+    },
+    {
+      "key": "publicSchoolCount",
+      "label": "公办院校数",
+      "exportLabel": "公办院校数",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": false,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "privateSchoolCount",
+      "label": "民办院校数",
+      "exportLabel": "民办院校数",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": false,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "schoolCount",
+      "label": "院校数",
+      "exportLabel": "院校总数",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": true,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "planCount",
+      "label": "计划人数",
+      "exportLabel": "计划人数",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": true,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "originalOrder",
+      "label": "原始顺序",
+      "exportLabel": "原始顺序",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": true,
+      "tableShow": false,
+      "exportEnable": false
+    }
+  ],
+  "defaultSort": {
+    "key": "originalOrder",
+    "direction": "original"
+  },
+  "scorePresets": [
+    { "label": "100 分以下", "min": 0, "max": 99 },
+    { "label": "100–149 分", "min": 100, "max": 149 },
+    { "label": "150–199 分", "min": 150, "max": 199 },
+    { "label": "200 分及以上", "min": 200, "max": 750 }
+  ],
+  "pageSize": 50,
+  "exportFormat": "csv"
+}

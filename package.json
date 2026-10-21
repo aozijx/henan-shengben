@@ -1,0 +1,8 @@
+{
+  "name": "henan-shengben",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
