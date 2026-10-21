@@ -1,0 +1,86 @@
+/* ============================================================
+   河南专升本 · 查询工具  —  布局样式
+   头部、统计数字、配色切换、页签、视图骨架、页脚
+   ============================================================ */
+
+/* ---------- 头部 ---------- */
+.masthead{padding:36px 0 18px;}
+.masthead-top{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:0 0 10px;
+}
+.eyebrow{
+  margin:0;font-size:13px;letter-spacing:.14em;
+  color:var(--blue);font-weight:600;
+}
+h1{
+  margin:0 0 10px;font-family:var(--serif);
+  font-size:26px;line-height:1.35;letter-spacing:.01em;
+}
+.lede{margin:0;color:var(--muted);font-size:14px;max-width:58em;}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:8px;margin:20px 0 0;padding:0;list-style:none;
+}
+.stats>div{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:10px 12px;
+  box-shadow:var(--shadow);
+}
+.stats dt{
+  font-family:var(--mono);font-size:20px;font-weight:700;
+  color:var(--blue-deep);font-variant-numeric:tabular-nums;
+}
+.stats dd{margin:2px 0 0;font-size:12px;color:var(--muted);}
+
+/* ---------- 配色切换按钮 ---------- */
+.theme-toggle{
+  appearance:none;cursor:pointer;flex:0 0 auto;
+  width:38px;height:38px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-strong);border-radius:999px;
+  background:var(--card);color:var(--blue);
+  transition:background-color .15s,border-color .15s,color .15s;
+}
+.theme-toggle:hover{background:var(--surface-2);border-color:var(--blue);}
+.theme-toggle svg{display:none;width:18px;height:18px;}
+:root[data-theme-mode="light"] .theme-toggle .ico-light,
+:root[data-theme-mode="dark"]  .theme-toggle .ico-dark,
+:root[data-theme-mode="auto"]  .theme-toggle .ico-auto,
+:root:not([data-theme-mode])   .theme-toggle .ico-auto{display:block;}
+
+/* ---------- 页签 ---------- */
+.tabs{
+  display:flex;gap:4px;margin:18px 0 0;
+  border-bottom:1px solid var(--line-strong);position:sticky;top:0;
+  background:var(--paper);z-index:20;padding-top:10px;
+}
+.tab{
+  appearance:none;border:none;background:none;cursor:pointer;
+  font:inherit;font-size:15px;font-weight:600;color:var(--muted);
+  padding:10px 14px 12px;border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+}
+.tab:hover{color:var(--ink);}
+.tab.is-active{color:var(--blue-deep);border-bottom-color:var(--vermill);}
+
+/* ---------- 视图 ---------- */
+.view{padding-top:20px;}
+.view[hidden]{display:none;}
+.view-title{font-family:var(--serif);font-size:20px;margin:0 0 6px;}
+.view-sub{margin:0 0 18px;color:var(--muted);font-size:13px;}
+
+/* ---------- 页脚 ---------- */
+.footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);}
+.footer p{margin:0;font-size:12.5px;color:var(--muted);}
+
+/* ---------- 桌面扩展 ---------- */
+@media (min-width:768px){
+  .masthead{padding:52px 0 22px;}
+  h1{font-size:34px;}
+  .lede{font-size:15px;}
+  .stats{gap:12px;margin-top:26px;}
+  .stats dt{font-size:24px;}
+  .theme-toggle{width:42px;height:42px;}
+  .theme-toggle svg{width:20px;height:20px;}
+}

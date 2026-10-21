@@ -1,0 +1,149 @@
+/* ============================================================
+   河南专升本 · 查询工具  —  基础样式
+   变量表（浅色 / 深色）、重置、全局排版与无障碍
+   ============================================================ */
+
+:root{
+  color-scheme: light;
+
+  /* ---- 基础色 ---- */
+  --paper:#f5f6f8;
+  --card:#ffffff;
+  --ink:#17222e;
+  --muted:#5b6b7a;
+  --faint:#8b99a6;
+  --line:#e0e5ea;
+  --line-strong:#c9d2da;
+  --blue:#1f4e79;          /* 档案蓝：链接与强调文字 */
+  --blue-deep:#16385a;     /* 更深的蓝：数字、激活态文字 */
+  --blue-soft:#e8eef4;
+  --vermill:#c2410c;       /* 朱砂：分数线、强调数字 */
+  --vermill-soft:#fbeadd;
+  --olive:#4d7c0f;         /* 下降趋势 */
+  --na:#c2cad2;
+
+  /* ---- 主操作按钮（背景 + 反白文字） ---- */
+  --btn-bg:#1f4e79;
+  --btn-bg-hover:#16385a;
+  --btn-fg:#ffffff;
+  --focus-ring:rgba(31,78,121,.14);
+
+  /* ---- 分层表面 ---- */
+  --surface-2:#f0f3f6;     /* 表头、chip 底 */
+  --surface-3:#f7fafc;     /* 行悬停 */
+  --code-bg:#eef1f4;
+  --other-bg:#eef1f4;
+  --other-fg:#44525f;
+  --mgmt-bg:#fef3e2;
+  --mgmt-fg:#8a5a00;
+  --warn-bg:#fdf5ef;
+  --warn-border:#f2c9b4;
+
+  /* ---- 院校标注标签（招生计划） ---- */
+  --pub-bg:#e8eef4;
+  --pub-fg:#1f4e79;
+  --min-bg:#fbeadd;
+  --min-fg:#c2410c;
+  --card-bg:#efeaf6;
+  --card-fg:#6b4d8f;
+
+  /* ---- 图表配色 ---- */
+  --chart-grid:#edf0f3;
+  --chart-2024:#a8bccd;
+  --chart-2025:#2e5f8a;
+  --chart-2026:#c2410c;
+  --trend-1:#1f4e79;
+  --trend-2:#c2410c;
+  --trend-3:#4d7c0f;
+  --trend-4:#8a5a00;
+  --trend-5:#6b4d8f;
+  --trend-6:#2e7d74;
+  --trend-7:#b0435f;
+  --trend-8:#5b6b7a;
+
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Consolas,Menlo,monospace;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",system-ui,-apple-system,sans-serif;
+  --serif:"Songti SC","SimSun","Noto Serif CJK SC",serif;
+  --radius:10px;
+  --shadow:0 1px 2px rgba(23,34,46,.06),0 6px 20px rgba(23,34,46,.05);
+}
+
+/* ---------- 深色模式变量表 ---------- */
+:root[data-theme="dark"]{
+  color-scheme: dark;
+
+  --paper:#0f1317;
+  --card:#171d24;
+  --ink:#dfe6ee;
+  --muted:#94a2b0;
+  --faint:#6b7885;
+  --line:#252e38;
+  --line-strong:#37424e;
+  --blue:#6aa9e0;
+  --blue-deep:#a6d0f0;
+  --blue-soft:#1b2b3c;
+  --vermill:#f08a5c;
+  --vermill-soft:#3a2114;
+  --olive:#93c74f;
+  --na:#4b5560;
+
+  --btn-bg:#2a6ea6;
+  --btn-bg-hover:#3480bd;
+  --btn-fg:#ffffff;
+  --focus-ring:rgba(106,169,224,.28);
+
+  --surface-2:#1e252d;
+  --surface-3:#1c242c;
+  --code-bg:#222b34;
+  --other-bg:#232b34;
+  --other-fg:#b7c3cf;
+  --mgmt-bg:#33260f;
+  --mgmt-fg:#e5b86a;
+  --warn-bg:#2a1c14;
+  --warn-border:#5a3a26;
+
+  --pub-bg:#1b2b3c;
+  --pub-fg:#a6d0f0;
+  --min-bg:#3a2114;
+  --min-fg:#f08a5c;
+  --card-bg:#2c2138;
+  --card-fg:#b393e0;
+
+  --chart-grid:#242d37;
+  --chart-2024:#5d7286;
+  --chart-2025:#4b8cc4;
+  --chart-2026:#e0703d;
+  --trend-1:#6aa9e0;
+  --trend-2:#f08a5c;
+  --trend-3:#9ed45a;
+  --trend-4:#e0b95a;
+  --trend-5:#b393e0;
+  --trend-6:#5fc7ba;
+  --trend-7:#ec8aa6;
+  --trend-8:#94a2b0;
+
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 20px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.6;
+  transition:background-color .25s ease, color .25s ease;
+}
+.page{max-width:1120px;margin:0 auto;padding:0 16px 48px;}
+.sr-only{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;
+}
+code{background:var(--code-bg);padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:var(--mono);}
+
+/* ---------- 无障碍 ---------- */
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+}
