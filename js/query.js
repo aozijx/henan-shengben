@@ -4,16 +4,31 @@
    （分数线 + 招生院校明细）。不持有 DOM 引用（由入口传入）。
    ============================================================ */
 
-import { MAPPING, isReady } from './data.js';
+import { getMappingByYear, getMetadata, isReady } from './data.js';
 import { esc } from './utils.js';
 import { renderTable, renderMatchList } from './render.js';
+
+var queryYear = null;
+
+export function setQueryYear(year) { queryYear = Number(year); }
+
+function currentMapping() {
+  var metadata = getMetadata();
+  var year = queryYear || (metadata && metadata.defaultYear);
+  return getMappingByYear(year);
+}
+
+export function findMappingMatches(mapping, keyword) {
+  var kw = String(keyword || '').trim();
+  return (mapping || []).filter(function (item) { return String(item['专科专业'] || '').indexOf(kw) > -1; });
+}
 
 /* ---------- 建议填充（datalist） ---------- */
 export function fillSuggest($suggest, kw) {
   $suggest.innerHTML = '';
   if (!kw || !isReady()) return;
   var n = 0;
-  MAPPING.forEach(function (m) {
+  currentMapping().forEach(function (m) {
     var name = m['专科专业'];
     if (name.indexOf(kw) > -1 && n < 30) {
       var opt = document.createElement('option');
@@ -45,7 +60,8 @@ export function doQuery($q, $hint, $result) {
     return;
   }
 
-  var matches = MAPPING.filter(function (m) { return m['专科专业'].indexOf(kw) > -1; });
+  var mapping = currentMapping();
+  var matches = findMappingMatches(mapping, kw);
   if (!matches.length) {
     $hint.textContent = '';
     lastMajors = [];
@@ -53,7 +69,7 @@ export function doQuery($q, $hint, $result) {
     if (resultListener) resultListener([], '');
     $result.innerHTML = '<div class="msg-notfound">未找到专科专业「' + esc(kw) + '」。<br>' +
       '可尝试：关键词的一部分（如「物联网」）；' +
-      '本工具收录 2026 年对照一览表中的 ' + MAPPING.length + ' 个专科专业。</div>';
+      '本工具收录 ' + (queryYear || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
     return;
   }
   var spec = matches[0];
@@ -65,7 +81,8 @@ export function doQuery($q, $hint, $result) {
 }
 
 function findSpecByName(name) {
-  for (var i = 0; i < MAPPING.length; i++) if (MAPPING[i]['专科专业'] === name) return MAPPING[i];
+  var mapping = currentMapping();
+  for (var i = 0; i < mapping.length; i++) if (mapping[i]['专科专业'] === name) return mapping[i];
   return null;
 }
 
@@ -75,7 +92,7 @@ function showSpec($hint, $result, spec) {
   lastMajors = majors;
   lastSpecName = spec['专科专业'];
   if (resultListener) resultListener(majors, lastSpecName);
-  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（2026 对照一览表）';
+  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + (queryYear || '') + ' 对照一览表）';
   if (!majors.length) {
     $result.innerHTML = '<div class="empty">「' + esc(spec['专科专业']) + '」暂无可报本科专业数据</div>';
     return;

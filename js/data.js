@@ -117,6 +117,10 @@ export function getYearData(index, year) {
   };
 }
 
+export function getMappingByYear(year) {
+  return activeStore && activeStore.mappingByYear[year] ? activeStore.mappingByYear[year] : [];
+}
+
 export function getScoreIndex() {
   return activeIndex ? activeIndex.scoreByYear : {};
 }

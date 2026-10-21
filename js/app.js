@@ -103,7 +103,12 @@ theme.applyTheme(theme.readThemeMode(), false);
 bootstrapData('metadata/school-data.json').then(function (loaded) {
   window.__henanReady = true;
   initStats();
-  explorer.initExplorer($('explorer'), loaded.metadata);
+  explorer.initExplorer($('explorer'), loaded.metadata, {
+    onYearChange: function (year) {
+      query.setQueryYear(year);
+      if ($q.value.trim()) query.doQuery($q, $hint, $result);
+    }
+  });
   query.setResultListener(explorer.setSearchResult);
   afterLoad();
 }).catch(function (err) {

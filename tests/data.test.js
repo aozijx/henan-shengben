@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   buildIndexes,
   getCollegesByYear,
+  getMappingByYear,
   getScore,
   getScoreIndex,
   getYearData,
@@ -56,6 +57,25 @@ test('loads only source paths and years declared by metadata', async () => {
   assert.deepEqual(store.years, [2027]);
   assert.equal(store.mapping.length, 1);
   assert.equal(store.plansByYear[2027][0].院校名称, '测试大学');
+});
+
+test('returns the mapping declared for the selected year', async () => {
+  const metadata = metadata2027();
+  metadata.supportedYears = [2026, 2027];
+  metadata.defaultYear = 2026;
+  metadata.yearSources[2026] = {
+    mappingSource: 'fixtures/mapping-2026.json',
+    scoreSource: 'fixtures/scores-2026.json',
+    planSource: 'fixtures/plans-2026.json'
+  };
+  const payloads = fixturePayloads();
+  payloads['fixtures/mapping-2026.json'] = [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '旧专业' }] }];
+  payloads['fixtures/scores-2026.json'] = [];
+  payloads['fixtures/plans-2026.json'] = [];
+  await loadAll(metadata, createFetch(payloads, []));
+
+  assert.equal(getMappingByYear(2026)[0].可报本科专业[0].专业名称, '旧专业');
+  assert.equal(getMappingByYear(2027)[0].可报本科专业[0].专业名称, '软件工程');
 });
 
 test('a configured source failure names the exact path', async () => {

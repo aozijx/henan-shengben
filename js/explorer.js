@@ -215,20 +215,24 @@ function recompute(state, metadata) {
   };
 }
 
-export function initExplorer(root, metadata) {
+export function initExplorer(root, metadata, options) {
+  options = options || {};
   var state = reduceExplorerState(createInitialState(metadata), { type: 'LOAD_SUCCESS' }, metadata);
   state = { ...state, columnWidths: readColumnWidths(localStorage, metadata) };
   function dispatch(event) {
+    var previousYear = state.year;
     state = reduceExplorerState(state, event, metadata);
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
+    if (state.year !== previousYear && typeof options.onYearChange === 'function') options.onYearChange(state.year);
   }
   activeExplorer = {
     dispatch: dispatch,
     getState: function () { return state; }
   };
   renderExplorerControls(root, metadata, state, dispatch);
+  if (typeof options.onYearChange === 'function') options.onYearChange(state.year);
   return activeExplorer;
 }
 
