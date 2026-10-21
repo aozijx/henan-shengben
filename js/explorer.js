@@ -69,6 +69,10 @@ export function sanitizeScoreInput(value) {
   return String(value == null ? '' : value).replace(/\D+/g, '');
 }
 
+export function canExport(state) {
+  return state.status === 'ready' && Array.isArray(state.rows) && state.rows.length > 0 && !state.validationError;
+}
+
 function filterField(metadata, key) {
   return metadata.fields.find(function (field) { return field.key === key && field.filterEnable; });
 }
@@ -137,7 +141,7 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
       (state.majors.length ? '预览表格准备中…' : '请先查询专科专业，再使用筛选与导出。') +
     '</div></section>' +
     '<section class="export-actions"><button type="button" id="exportCsv"' +
-      (state.status !== 'ready' || !state.rows.length || state.validationError ? ' disabled' : '') + '>导出 CSV</button></section>';
+      (!canExport(state) ? ' disabled' : '') + '>导出 CSV</button></section>';
 
   var yearSelect = root.querySelector('[data-year]');
   if (yearSelect) yearSelect.addEventListener('change', function () { dispatch({ type: 'SET_YEAR', year: yearSelect.value }); });

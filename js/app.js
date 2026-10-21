@@ -10,7 +10,7 @@ import * as data from './data.js';
 import * as query from './query.js';
 import * as explorer from './explorer.js';
 import { initCharts } from './stats.js';
-import { loadMetadata } from './metadata.js';
+import { bootstrapData } from './bootstrap.js';
 
 var $ = function (id) { return document.getElementById(id); };
 var $q = $('q'), $result = $('result'), $hint = $('hint');
@@ -100,10 +100,7 @@ theme.systemThemeChangeListener(function () {
 /* ---------- 启动 ---------- */
 theme.applyTheme(theme.readThemeMode(), false);
 
-loadMetadata('metadata/school-data.json').then(function (metadata) {
-  return data.loadAll(metadata).then(function (store) { return { metadata: metadata, store: store }; });
-}).then(function (loaded) {
-  data.buildIndexes(loaded.store, loaded.metadata);
+bootstrapData('metadata/school-data.json').then(function (loaded) {
   window.__henanReady = true;
   initStats();
   explorer.initExplorer($('explorer'), loaded.metadata);
@@ -112,6 +109,8 @@ loadMetadata('metadata/school-data.json').then(function (metadata) {
 }).catch(function (err) {
   $result.innerHTML = '<div class="msg-notfound"><b>数据加载失败：</b>' + esc(err.message) + '<br>' +
     '请确认 metadata 配置及其声明的数据文件完整后刷新页面重试。</div>';
+  var explorerRoot = $('explorer');
+  if (explorerRoot) explorerRoot.innerHTML = '<div class="msg-notfound"><b>筛选与导出不可用：</b>' + esc(err.message) + '</div>';
   $hint.textContent = '';
 });
 
