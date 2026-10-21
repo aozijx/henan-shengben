@@ -1,5 +1,6 @@
 import { getCollegesByYear, getScore } from './data.js';
 import { buildPreviewRows, sortPreviewRows, validateScoreRange } from './pipeline.js';
+import { renderPreview } from './preview.js';
 import { esc } from './utils.js';
 
 var activeExplorer = null;
@@ -152,6 +153,14 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   });
   var reset = root.querySelector('[data-action="reset"]');
   if (reset) reset.addEventListener('click', function () { dispatch({ type: 'RESET_FILTERS' }); });
+  renderPreview(root.querySelector('#preview-table'), {
+    rows: state.rows,
+    page: state.page,
+    effectiveSchoolCount: state.effectiveSchoolCount,
+    hasSearch: state.majors.length > 0,
+    status: state.status,
+    error: state.error
+  }, metadata, dispatch);
 }
 
 function recompute(state, metadata) {
