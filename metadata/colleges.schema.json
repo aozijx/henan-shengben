@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://henan-shengben.local/colleges.schema.json",
+  "title": "招生高校及专业",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["院校代码", "学校名称", "专业代码", "专业名称"],
+    "properties": {
+      "院校代码": { "type": "string", "minLength": 1 },
+      "学校名称": { "type": "string", "minLength": 1 },
+      "专业代码": { "type": "string", "minLength": 1 },
+      "专业名称": { "type": "string", "minLength": 1 },
+      "学制": { "type": "string" },
+      "师范": { "type": "string" },
+      "艺术": { "type": "string" },
+      "备注": { "type": "string" }
+    }
+  }
+}

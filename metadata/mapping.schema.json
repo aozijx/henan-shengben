@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://henan-shengben.local/mapping.schema.json",
+  "title": "专科专业可报本科专业对照",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["专科专业", "可报本科专业"],
+    "properties": {
+      "专科专业": { "type": "string", "minLength": 1 },
+      "可报本科专业": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["专业名称", "专业代号", "考试科目代码", "考试科目", "代码6位"],
+          "properties": {
+            "专业名称": { "type": "string", "minLength": 1 },
+            "专业代号": { "type": "string", "minLength": 1 },
+            "考试科目代码": { "type": "string", "minLength": 1 },
+            "考试科目": { "type": "string", "minLength": 1 },
+            "代码6位": { "type": "string", "pattern": "^[0-9]{6}[0-9A-Z]{0,2}$" }
+          }
+        }
+      }
+    }
+  }
+}

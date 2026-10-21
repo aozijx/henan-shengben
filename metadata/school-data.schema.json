@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://henan-shengben.local/metadata.schema.json",
+  "title": "school-data metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "defaultYear",
+    "supportedYears",
+    "yearSources",
+    "fields",
+    "defaultSort",
+    "pageSize",
+    "exportFormat"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "defaultYear": { "type": "integer", "minimum": 2000 },
+    "supportedYears": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "integer", "minimum": 2000 },
+      "uniqueItems": true
+    },
+    "yearSources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mappingSource", "scoreSource", "planSource"],
+        "properties": {
+          "mappingSource": { "type": "string", "minLength": 1 },
+          "scoreSource": { "type": "string", "minLength": 1 },
+          "planSource": { "type": "string", "minLength": 1 },
+          "collegeFallbackSource": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key", "label", "exportLabel", "type",
+          "filterEnable", "sortEnable", "tableShow", "exportEnable"
+        ],
+        "properties": {
+          "key": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "exportLabel": { "type": "string", "minLength": 1 },
+          "type": { "enum": ["string", "number", "enum", "boolean"] },
+          "enumValues": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "min": { "type": "number" },
+          "max": { "type": "number" },
+          "sortKey": { "type": "string", "minLength": 1 },
+          "filterEnable": { "type": "boolean" },
+          "sortEnable": { "type": "boolean" },
+          "tableShow": { "type": "boolean" },
+          "exportEnable": { "type": "boolean" }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "type": { "const": "enum" } }, "required": ["type"] },
+            "then": { "required": ["enumValues"] }
+          }
+        ]
+      }
+    },
+    "defaultSort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "direction"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1 },
+        "direction": { "enum": ["asc", "desc", "original"] }
+      }
+    },
+    "pageSize": { "type": "integer", "minimum": 1 },
+    "exportFormat": { "const": "csv" }
+  }
+}

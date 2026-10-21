@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://henan-shengben.local/plans.schema.json",
+  "title": "招生计划数据",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "年度", "专业代号", "专业名称", "计划人数", "院校代号", "院校名称", "办学性质"
+    ],
+    "properties": {
+      "年度": { "type": "integer", "minimum": 2000 },
+      "专业代号": { "type": "string", "minLength": 1 },
+      "专业名称": { "type": "string", "minLength": 1 },
+      "计划人数": { "type": "integer", "minimum": 0 },
+      "学制": { "type": "integer" },
+      "学费标准": { "type": "integer" },
+      "最低住宿费": { "type": "integer" },
+      "院校代号": { "type": "string", "minLength": 1 },
+      "院校名称": { "type": "string", "minLength": 1 },
+      "办学性质": { "enum": ["公办", "民办"] },
+      "招生类别": { "type": ["string", "null"] },
+      "建档立卡": { "enum": ["是", "否"] },
+      "通信地址": { "type": ["string", "null"] },
+      "其他说明": { "type": ["string", "null"] },
+      "咨询电话": { "type": ["string", "null"] },
+      "招生章程网址": { "type": ["string", "null"] }
+    }
+  }
+}
