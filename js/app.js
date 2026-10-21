@@ -10,6 +10,7 @@ import * as data from './data.js';
 import * as query from './query.js';
 import * as table from './table.js';
 import { initCharts } from './stats.js';
+import { loadMetadata } from './metadata.js';
 
 var $ = function (id) { return document.getElementById(id); };
 var $q = $('q'), $result = $('result'), $hint = $('hint');
@@ -21,12 +22,12 @@ var VIEWS = ['query', 'table', 'stats', 'about'];
 /* ---------- 头部统计数字 ---------- */
 function initStats() {
   data.uniqueMajors();
-  var schools = {};
-  data.COLLEGES.forEach(function (r) { schools[r['学校名称']] = 1; });
+  var metadata = data.getMetadata();
+  var activeYear = metadata ? metadata.defaultYear : null;
   $('stat-spec').textContent = String(data.MAPPING.length);
   $('stat-major').textContent = String(data.ALL_MAJORS.length);
-  $('stat-score').textContent = String((data.SCORE_BY_YEAR[2026] || []).length);
-  $('stat-school').textContent = String(Object.keys(schools).length);
+  $('stat-score').textContent = String((data.SCORE_BY_YEAR[activeYear] || []).length);
+  $('stat-school').textContent = String(data.getPlanStats()['院校数']);
   $('stat-plan').textContent = String(data.PLANS.length);
 }
 
@@ -100,15 +101,17 @@ theme.systemThemeChangeListener(function () {
 /* ---------- 启动 ---------- */
 theme.applyTheme(theme.readThemeMode(), false);
 
-data.loadAll().then(function () {
-  data.buildIndexes();
+loadMetadata('metadata/school-data.json').then(function (metadata) {
+  return data.loadAll(metadata).then(function (store) { return { metadata: metadata, store: store }; });
+}).then(function (loaded) {
+  data.buildIndexes(loaded.store, loaded.metadata);
   window.__henanReady = true;
   initStats();
   table.initTable();
   afterLoad();
 }).catch(function (err) {
   $result.innerHTML = '<div class="msg-notfound"><b>数据加载失败：</b>' + esc(err.message) + '<br>' +
-    '请确认 <code>data/</code> 目录完整（8 个 JSON 文件）后刷新页面重试。</div>';
+    '请确认 metadata 配置及其声明的数据文件完整后刷新页面重试。</div>';
   $hint.textContent = '';
 });
 
