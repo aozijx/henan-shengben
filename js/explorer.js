@@ -1,8 +1,9 @@
 import { getCollegesByYear, getScore } from './data.js';
+import { enumOptions, filterDefaultValue } from './metadata.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { renderPreview } from './preview.js';
 import { downloadCsv, getExportFields } from './export.js';
-import { clearPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
+import { EXPLORER_STATE_KEY, clearPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 
@@ -12,7 +13,7 @@ function defaultFilters(metadata) {
   var filters = {};
   (metadata.fields || []).forEach(function (field) {
     if (!field.filterEnable) return;
-    filters[field.key] = field.type === 'enum' ? '全部' : '';
+    filters[field.key] = filterDefaultValue(field);
   });
   return filters;
 }
@@ -80,7 +81,7 @@ function filterField(metadata, key) {
 
 function enumControl(field, stateKey, state, disabled) {
   if (!field) return '';
-  var options = ['全部'].concat(field.enumValues || []).map(function (value) {
+  var options = enumOptions(field).map(function (value) {
     return '<option value="' + esc(value) + '"' + (state.filters[stateKey] === value ? ' selected' : '') + '>' + esc(value) + '</option>';
   }).join('');
   return '<label class="filter-field"><span>' + esc(field.label) + '</span>' +
@@ -95,7 +96,7 @@ function minControl(field, state, disabled) {
     (disabled ? ' disabled' : '') + '></label>';
 }
 
-export function renderExplorerControls(root, metadata, state, dispatch) {
+function renderExplorerControls(root, metadata, state, dispatch) {
   if (!root) return;
   var unavailable = state.status !== 'ready' || !state.majors.length;
 
@@ -217,7 +218,7 @@ export function initExplorer(root, metadata, options) {
     if (event.type === 'SET_FILTER' || event.type === 'SET_SORT' || event.type === 'RESET_FILTERS') {
       writeExplorerState(localStorage, state.filters, state.sort);
     }
-    if (event.type === 'CLEAR_ALL') localStorage.removeItem('henan-explorer-v1');
+    if (event.type === 'CLEAR_ALL') localStorage.removeItem(EXPLORER_STATE_KEY);
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
     notifyFilteredResult(state, options);

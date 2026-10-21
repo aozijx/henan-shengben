@@ -6,7 +6,7 @@
 
 import { SCORE_BY_YEAR, YEARS, getScoreIndex, getPlanStats, PLANS } from './data.js';
 import { chartPalette } from './theme.js';
-import { esc } from './utils.js';
+import { esc, schoolName } from './utils.js';
 
 var charts = {};              // 图表实例
 var chartsResizeBound = false;
@@ -110,9 +110,10 @@ export function renderPlanOverview() {
   var schools = {};
   var minS = {}, pubS = {};
   PLANS.forEach(function (r) {
-    schools[r['院校名称']] = 1;
-    if (r['办学性质'] === '民办') minS[r['院校名称']] = 1;
-    else pubS[r['院校名称']] = 1;
+    var sn = schoolName(r);
+    schools[sn] = 1;
+    if (r['办学性质'] === '民办') minS[sn] = 1;
+    else pubS[sn] = 1;
   });
   box.dataset.rendered = '1';
   box.innerHTML =

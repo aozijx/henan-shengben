@@ -1,5 +1,18 @@
 var FIELD_TYPES = { string: true, number: true, enum: true, boolean: true };
 
+/* 枚举字段的全部可选项（含「全部」） */
+export function enumOptions(field) {
+  return ['全部'].concat(field.enumValues || []);
+}
+
+/* 筛选默认值：枚举字段取 metadata 声明的 filterDefault，其余为空串 */
+export function filterDefaultValue(field) {
+  if (field.type === 'enum') {
+    return enumOptions(field).indexOf(field.filterDefault) >= 0 ? field.filterDefault : '全部';
+  }
+  return '';
+}
+
 function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
@@ -53,6 +66,13 @@ export function validateMetadata(value) {
     });
     if (field.type === 'enum' && (!Array.isArray(field.enumValues) || !field.enumValues.length)) {
       errors.push((field.key || prefix) + ' 缺少 enumValues');
+    }
+    if (field.filterDefault != null && field.type !== 'enum') {
+      errors.push((field.key || prefix) + ' filterDefault 仅适用于 enum 字段');
+    }
+    if (field.type === 'enum' && field.filterDefault != null &&
+        enumOptions(field).indexOf(field.filterDefault) < 0) {
+      errors.push((field.key || prefix) + ' filterDefault 必须是「全部」或 enumValues 之一');
     }
     if (field.type === 'number') {
       if (field.min != null && !Number.isFinite(field.min)) errors.push((field.key || prefix) + ' min 必须是数字');

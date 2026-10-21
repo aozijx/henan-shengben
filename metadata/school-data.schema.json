@@ -60,6 +60,7 @@
           "min": { "type": "number" },
           "max": { "type": "number" },
           "sortKey": { "type": "string", "minLength": 1 },
+          "filterDefault": { "type": "string", "minLength": 1 },
           "filterEnable": { "type": "boolean" },
           "sortEnable": { "type": "boolean" },
           "tableShow": { "type": "boolean" },

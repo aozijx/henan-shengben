@@ -1,3 +1,5 @@
+import { schoolName } from './utils.js';
+
 function normalizeText(value) {
   return String(value == null ? '' : value).replace(/\s+/g, '');
 }
@@ -20,7 +22,8 @@ function rowMatchesPlan(row, filters) {
   var type = row['办学性质'] || '公办';
   var poverty = row['建档立卡'] || '否';
   if (filters.schoolType && filters.schoolType !== '全部' && type !== filters.schoolType) return false;
-  if (filters.povertyStatus && filters.povertyStatus !== '全部' && poverty !== filters.povertyStatus) return false;
+  /* 「否」只看普通计划；「是」与「全部」都包含普通+专项（人数合计），专项人数另计入 povertyPlanCount */
+  if (filters.povertyStatus === '否' && poverty === '是') return false;
   return true;
 }
 
@@ -50,17 +53,24 @@ export function buildPreviewRows(input) {
     years.forEach(function (year) {
       var publicSchools = {}, privateSchools = {};
       var publicPlan = 0, privatePlan = 0, planCount = 0;
+      var publicPovertyPlan = 0, privatePovertyPlan = 0, povertyPlanCount = 0;
       (input.getPlans(major, year) || []).forEach(function (planRow) {
         if (!rowMatchesPlan(planRow, filters)) return;
         hasPlans = true;
-        var school = planRow['院校名称'] || planRow['学校名称'] || '';
+        var school = schoolName(planRow);
         var isPrivate = planRow['办学性质'] === '民办';
+        var isPoverty = planRow['建档立卡'] === '是';
         var count = Number(planRow['计划人数']) || 0;
         if (school) {
           if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
         }
-        if (isPrivate) privatePlan += count; else publicPlan += count;
-        planCount += count;
+        if (isPoverty) {
+          if (isPrivate) privatePovertyPlan += count; else publicPovertyPlan += count;
+          povertyPlanCount += count;
+        } else {
+          if (isPrivate) privatePlan += count; else publicPlan += count;
+          planCount += count;
+        }
       });
       var score = input.getScore(major, year);
       row['score' + year] = score == null ? null : Number(score);
@@ -69,7 +79,9 @@ export function buildPreviewRows(input) {
       row['schoolCount' + year] = row['publicSchoolCount' + year] + row['privateSchoolCount' + year];
       row['schoolSplit' + year] = row['publicSchoolCount' + year] + '/' + row['privateSchoolCount' + year];
       row['planCount' + year] = planCount;
+      row['povertyPlanCount' + year] = povertyPlanCount;
       row['planSplit' + year] = publicPlan + '/' + privatePlan;
+      row['povertyPlanSplit' + year] = publicPovertyPlan + '/' + privatePovertyPlan;
       if (year === latestYear) latestSchools = allSchoolsFor(publicSchools, privateSchools);
     });
 

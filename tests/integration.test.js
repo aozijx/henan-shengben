@@ -40,7 +40,7 @@ test('a metadata-only new year flows through load, filter, sort, preview and exp
 
   assert.deepEqual(loaded.store.years, [2027]);
   assert.deepEqual(rows.map((row) => row.majorName), ['数据工程', '智能工程']);
-  assert.match(csv, /^\uFEFF本科专业,2027分数线,2027院校数\(公\/民\),2027计划人数\(公\/民\)\r\n数据工程,220,0\/1,0\/15\r\n智能工程,180,1\/0,20\/0/);
+  assert.match(csv, /^\uFEFF本科专业,2027分数线,2027院校数\(公\/民\),2027计划人数\(公\/民\)\r\n数据工程,220,0\/1,0\/0\r\n智能工程,180,1\/0,20\/0/);
   assert.equal(buildExportFilename(loaded.metadata.defaultYear, new Date(2026, 9, 21)), '院校数据_2027_20261021.csv');
 });
 

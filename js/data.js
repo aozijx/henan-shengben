@@ -1,5 +1,5 @@
 /* 数据加载、索引与读取。数据源和年份完全由 metadata 声明。 */
-import { normCode6 } from './utils.js';
+import { normCode6, schoolName } from './utils.js';
 
 export var YEARS = [];
 export var SCORE_BY_YEAR = {};
@@ -150,7 +150,7 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
   return list.slice().sort(function (a, b) {
     var aType = a['办学性质'] || '公办', bType = b['办学性质'] || '公办';
     if (aType !== bType) return aType === '公办' ? -1 : 1;
-    var aName = a['院校名称'] || a['学校名称'] || '', bName = b['院校名称'] || b['学校名称'] || '';
+    var aName = schoolName(a), bName = schoolName(b);
     if (aName !== bName) return aName.localeCompare(bName, 'zh-CN');
     return String(a['院校代号'] || '').localeCompare(String(b['院校代号'] || ''));
   });
@@ -159,7 +159,7 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
 export function getPlanStats() {
   var schools = {}, privateRows = 0, povertyRows = 0, regularRows = 0, total = 0;
   PLANS.forEach(function (row) {
-    schools[row['院校名称']] = true;
+    schools[schoolName(row)] = true;
     if (row['办学性质'] === '民办') privateRows += 1;
     if (row['建档立卡'] === '是') povertyRows += 1;
     if (row['招生类别'] === '普通专升本') regularRows += 1;

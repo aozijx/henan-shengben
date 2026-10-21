@@ -47,7 +47,9 @@ test('aggregates every year side by side in one row', () => {
   assert.deepEqual(
     years.map((year) => row['schoolCount' + year]), [2, 2, 2]);
   assert.deepEqual(
-    years.map((year) => row['planCount' + year]), [55, 55, 55]);
+    years.map((year) => row['planCount' + year]), [50, 50, 50]);
+  assert.deepEqual(
+    years.map((year) => row['povertyPlanCount' + year]), [5, 5, 5]);
 });
 
 test('missing yearly scores stay null and are skipped in neither rows nor filters', () => {
@@ -59,9 +61,11 @@ test('missing yearly scores stay null and are skipped in neither rows nor filter
 
 test('applies school type and poverty status filters within every year', () => {
   const result = run({ schoolType: '公办', povertyStatus: '是' });
-  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程']);
-  assert.equal(result.rows[0].schoolCount2026, 1);
-  assert.equal(result.rows[0].planCount2026, 5);
+  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程', '英语']);
+  const se = result.rows[0];
+  assert.equal(se.schoolCount2026, 1);
+  assert.equal(se.planCount2026, 20);
+  assert.equal(se.povertyPlanCount2026, 5);
 });
 
 test('全部 values do not force optional filtering', () => {
@@ -86,24 +90,43 @@ test('counts schools after plan filters before applying the school count bound',
   assert.equal(result.effectiveSchoolCount, 0);
 });
 
-test('counts a duplicate school once while summing ordinary and poverty plans', () => {
+test('counts a duplicate school once while keeping ordinary and poverty plans separate', () => {
   const row = run({ schoolType: '公办' }).rows[0];
   assert.equal(row.publicSchoolCount2026, 1);
   assert.equal(row.schoolCount2026, 1);
-  assert.equal(row.planCount2026, 25);
+  assert.equal(row.planCount2026, 20);
+  assert.equal(row.povertyPlanCount2026, 5);
   assert.equal(run().effectiveSchoolCount, 3);
+});
+
+test('poverty filter=是 keeps regular and poverty plans together with merged counts', () => {
+  const result = run({ povertyStatus: '是' });
+  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程', '会计学', '英语']);
+  const se = result.rows[0];
+  assert.equal(se.schoolCount2026, 2);
+  assert.equal(se.planCount2026, 50);
+  assert.equal(se.povertyPlanCount2026, 5);
+});
+
+test('poverty=否 keeps regular plans and drops the poverty count', () => {
+  const result = run({ povertyStatus: '否' });
+  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程', '英语']);
+  const se = result.rows[0];
+  assert.equal(se.schoolCount2026, 2);
+  assert.equal(se.planCount2026, 50);
+  assert.equal(se.povertyPlanCount2026, 0);
 });
 
 test('splits school counts and plan totals into public/private as pub/min text', () => {
   assert.deepEqual(
     run().rows.map((row) => row.majorName + ':' + row.schoolSplit2026 + ':' + row.planSplit2026),
-    ['软件工程:1/1:25/30', '会计学:0/1:0/10', '英语:1/0:12/0']);
+    ['软件工程:1/1:20/30', '会计学:0/1:0/0', '英语:1/0:12/0']);
   assert.deepEqual(
     run({ schoolType: '公办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2026 + ':' + row.planSplit2026),
-    ['软件工程:1/0:25/0', '英语:1/0:12/0']);
+    ['软件工程:1/0:20/0', '英语:1/0:12/0']);
   assert.deepEqual(
     run({ schoolType: '民办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2024 + ':' + row.planSplit2024),
-    ['软件工程:0/1:0/30', '会计学:0/1:0/10']);
+    ['软件工程:0/1:0/30', '会计学:0/1:0/0']);
 });
 
 test('restores stable original order', () => {

@@ -7,7 +7,7 @@
    ============================================================ */
 
 import { getScore, getCollegesByYear } from './data.js';
-import { esc } from './utils.js';
+import { esc, schoolName } from './utils.js';
 
 function subjectBadge(subject, code) {
   var cls = 'other';
@@ -37,6 +37,38 @@ function scoreCell(major, year) {
 
 /* ---------- 年份折叠：招生院校明细（挂在每个专业行下方） ---------- */
 
+/* 合并同一院校同一专业的普通计划与建档立卡专项条目：
+   人数分开统计，标签合并展示（公办 + 建档立卡专项）。 */
+function mergePlanEntries(list) {
+  var isPlan = list.length && list[0]['办学性质'] != null;
+  if (!isPlan) return list.slice();
+  var byKey = {};
+  var order = [];
+  list.forEach(function (c) {
+    var key = (c['院校名称'] || '') + '|' + (c['院校代号'] || '');
+    var isPoverty = c['建档立卡'] === '是';
+    var count = Number(c['计划人数']) || 0;
+    if (!byKey[key]) {
+      byKey[key] = { base: c, regular: 0, poverty: 0, hasRegular: false, hasPoverty: false };
+      order.push(key);
+    }
+    var entry = byKey[key];
+    if (isPoverty) { entry.poverty += count; entry.hasPoverty = true; }
+    else { entry.regular += count; entry.hasRegular = true; }
+  });
+  return order.map(function (key) {
+    var entry = byKey[key];
+    var merged = Object.assign({}, entry.base);
+    merged['计划人数'] = entry.regular;
+    merged['建档立卡计划人数'] = entry.poverty;
+    merged['建档立卡'] = entry.hasPoverty ? '是' : '否';
+    merged['招生类别'] = entry.hasRegular && entry.hasPoverty
+      ? '普通专升本 + 建档立卡专项'
+      : (entry.hasPoverty ? '建档立卡专项' : '普通专升本');
+    return merged;
+  });
+}
+
 /* 办学性质 / 建档立卡标签 */
 function schoolTags(c) {
   var out = [];
@@ -46,31 +78,35 @@ function schoolTags(c) {
   return out.join('');
 }
 
-/* 摘要信息（summary 行右侧）：学制 / 计划人数 / 学费 */
+/* 摘要信息（summary 行右侧）：学制 / 计划人数（普通与建档立卡分开） / 学费 */
 function schoolSum(c) {
   var parts = [];
   if (c['学制']) parts.push(esc(String(c['学制'])) + ' 年');
-  if (c['计划人数'] != null) parts.push('计划 ' + c['计划人数'] + ' 人');
+  var regular = Number(c['计划人数']) || 0;
+  var poverty = Number(c['建档立卡计划人数']) || 0;
+  if (poverty > 0) parts.push('计划 ' + regular + ' 人 · 专项 ' + poverty + ' 人');
+  else if (regular > 0 || c['计划人数'] != null) parts.push('计划 ' + regular + ' 人');
   if (c['学费标准'] != null) parts.push('学费 ¥' + c['学费标准'] + '/年');
   if (!parts.length && c['备注']) parts.push(esc(String(c['备注'])));
   return parts.join(' · ');
 }
 
 /* 二级：单个院校条目（可折叠，展开显示该条目的全部字段） */
-function schoolItemHtml(c, seenName) {
-  var sn = c['院校名称'] || c['学校名称'] || '';
-  seenName[sn] = (seenName[sn] || 0) + 1;
-  var dup = seenName[sn] > 1 ? '（' + seenName[sn] + '）' : '';
+function schoolItemHtml(c) {
+  var sn = schoolName(c);
   var isPlan = c['办学性质'] != null;   // 招生计划条目（全字段） vs 总表兜底条目
 
   var meta;
   if (isPlan) {
+    var regular = Number(c['计划人数']) || 0;
+    var poverty = Number(c['建档立卡计划人数']) || 0;
     meta = [
       ['院校代码', c['院校代号']],
       ['专业代号', c['专业代号']],
       ['专业名称', c['专业名称']],
       ['学制', c['学制'] || '—'],
-      ['计划人数', c['计划人数'] != null ? c['计划人数'] + ' 人' : '—'],
+      ['计划人数（普通）', regular + ' 人'],
+      ['计划人数（建档立卡）', poverty > 0 ? poverty + ' 人' : '—'],
       ['学费标准（元/年）', c['学费标准'] != null ? '¥' + c['学费标准'] : '—'],
       ['最低住宿费（元/年）', c['最低住宿费'] != null ? '¥' + c['最低住宿费'] : '—'],
       ['办学性质', c['办学性质'] || '—'],
@@ -109,20 +145,21 @@ function schoolItemHtml(c, seenName) {
   var tags = schoolTags(c);
   var sumInfo = schoolSum(c);
   return '<details class="school-item">' +
-    '<summary><span class="si-name">' + esc(sn) + dup + '</span>' +
+    '<summary><span class="si-name">' + esc(sn) + '</span>' +
     tags +
     (sumInfo ? '<span class="count">' + sumInfo + '</span>' : '') +
     '</summary>' +
     '<dl class="school-meta">' + metaHtml + '</dl></details>';
 }
 
-/* 单个年份分组：summary 显示 公办/民办院校数与计划人数合计，组内为院校条目 */
+/* 单个年份分组：summary 显示 公办/民办院校数与普通计划人数，组内为院校条目 */
 export function buildYearSummaryHtml(list) {
   var pubSet = {}, minSet = {};
-  var planPub = 0, planMin = 0;
+  var planPub = 0, planMin = 0, povertyTotal = 0;
   (list || []).forEach(function (c) {
-    var sn = c['院校名称'] || c['学校名称'] || '';
+    var sn = schoolName(c);
     var n = Number(c['计划人数']) || 0;
+    povertyTotal += Number(c['建档立卡计划人数']) || 0;
     if (c['办学性质'] === '民办') {
       minSet[sn] = 1;
       planMin += n;
@@ -131,17 +168,17 @@ export function buildYearSummaryHtml(list) {
       planPub += n;
     }
   });
-  return '<span class="yg-pub">公办 ' + Object.keys(pubSet).length + ' 所 · 计划 ' + planPub + ' 人</span>' +
+  var html = '<span class="yg-pub">公办 ' + Object.keys(pubSet).length + ' 所 · 计划 ' + planPub + ' 人</span>' +
     '<span class="yg-min">民办 ' + Object.keys(minSet).length + ' 所 · 计划 ' + planMin + ' 人</span>';
+  if (povertyTotal > 0) html += '<span class="yg-card">建档立卡专项 ' + povertyTotal + ' 人</span>';
+  return html;
 }
 
 function yearGroupHtml(m, year, openDefault) {
-  var list = getCollegesByYear(year, m);
-  var seenName = {};
+  var list = mergePlanEntries(getCollegesByYear(year, m));
   var schoolSet = {};
   list.forEach(function (c) {
-    var sn = c['院校名称'] || c['学校名称'] || '';
-    schoolSet[sn] = 1;
+    schoolSet[schoolName(c)] = 1;
   });
   var sumParts = [];
   if (!list.length) {
@@ -149,14 +186,10 @@ function yearGroupHtml(m, year, openDefault) {
   } else {
     sumParts.push(buildYearSummaryHtml(list));
   }
-  var countLabel = list.length
-    ? (Object.keys(schoolSet).length === list.length
-        ? Object.keys(schoolSet).length + ' 所院校'
-        : Object.keys(schoolSet).length + ' 所院校（' + list.length + ' 条）')
-    : '';
+  var countLabel = list.length ? Object.keys(schoolSet).length + ' 所院校' : '';
   var items = list.length
     ? '<div class="school-list"><div class="school-list-head">' + year + ' 年招生院校<span class="count">' + countLabel + '</span></div>' +
-      list.map(function (c) { return schoolItemHtml(c, seenName); }).join('') + '</div>'
+      list.map(function (c) { return schoolItemHtml(c); }).join('') + '</div>'
     : '<div class="cb-empty">该年招生计划与总表均未收录该校年该专业。</div>';
 
   return '<details class="year-group" data-year="' + year + '"' + (openDefault ? ' open' : '') + '>' +
@@ -184,11 +217,11 @@ export function renderTable($result, title, majors, countNote) {
     var nameHtml = esc(m['专业名称']);
     if (/职业教育/.test(m['专业名称'])) nameHtml += '<span class="tag">职教本科</span>';
 
-    var list26 = getCollegesByYear(2026, m);
+    var list26 = mergePlanEntries(getCollegesByYear(2026, m));
     total += list26.length;
     var pub26 = {}, min26 = {};
     list26.forEach(function (c) {
-      var sn = c['院校名称'] || c['学校名称'] || '';
+      var sn = schoolName(c);
       if (c['办学性质'] === '民办') min26[sn] = 1; else pub26[sn] = 1;
     });
     var id = 'cd-' + Math.random().toString(36).slice(2, 8);

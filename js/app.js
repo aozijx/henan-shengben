@@ -1,7 +1,8 @@
 /* ============================================================
    河南专升本 · 查询工具  —  入口模块
    持有 DOM 引用、页签路由、主题按钮、数据加载编排与事件绑定。
-   功能按模块拆分：utils / theme / data / render / query / stats。
+   功能按模块拆分：utils / theme / metadata / data / render / query /
+   explorer / pipeline / preview / export / preferences / stats / bootstrap。
    ============================================================ */
 
 import { esc } from './utils.js';

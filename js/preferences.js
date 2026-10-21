@@ -1,3 +1,5 @@
+import { enumOptions, filterDefaultValue } from './metadata.js';
+
 export var COLUMN_WIDTHS_KEY = 'henan-table-widths-v1';
 export var EXPLORER_STATE_KEY = 'henan-explorer-v1';
 
@@ -33,10 +35,6 @@ export function writeColumnWidths(storage, widths) {
 
 /* ---------- 筛选与排序状态持久化 ---------- */
 
-function defaultFilterValue(field) {
-  return field.type === 'enum' ? '全部' : '';
-}
-
 function filterFields(metadata) {
   return (metadata.fields || []).filter(function (field) { return field.filterEnable; });
 }
@@ -46,12 +44,11 @@ function sanitizeFilters(saved, metadata) {
   filterFields(metadata).forEach(function (field) {
     var value = saved[field.key];
     if (field.type === 'enum') {
-      var valid = ['全部'].concat(field.enumValues || []);
-      filters[field.key] = valid.indexOf(value) >= 0 ? value : '全部';
-    } else if (field.key === 'schoolCount') {
+      filters[field.key] = enumOptions(field).indexOf(value) >= 0 ? value : filterDefaultValue(field);
+    } else if (field.type === 'number') {
       filters[field.key] = /^\d*$/.test(String(value == null ? '' : value)) ? String(value) : '';
     } else {
-      filters[field.key] = value == null ? defaultFilterValue(field) : String(value);
+      filters[field.key] = value == null ? filterDefaultValue(field) : String(value);
     }
   });
   return filters;

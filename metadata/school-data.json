@@ -157,6 +157,7 @@
       "exportLabel": "建档立卡筛选",
       "type": "enum",
       "enumValues": ["是", "否"],
+      "filterDefault": "否",
       "filterEnable": true,
       "sortEnable": false,
       "tableShow": false,

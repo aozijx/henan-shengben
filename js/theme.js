@@ -5,7 +5,7 @@
    图表配色由 stats 模块通过 chartPalette() 读取 CSS 变量，深色自动跟随。
    ============================================================ */
 
-export var THEME_KEY = 'henan-theme';
+var THEME_KEY = 'henan-theme';
 var THEME_MODES = ['light', 'dark', 'auto'];
 
 var themeMedia = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
