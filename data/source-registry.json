@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "outputPath": "省控线/省控线_2024.json",
+      "pdfPaths": ["省控线/原始PDF/省控线_2024.pdf"],
+      "expectedCount": 143,
+      "parser": "scorelines",
+      "year": 2024
+    },
+    {
+      "outputPath": "省控线/省控线_2025.json",
+      "pdfPaths": ["省控线/原始PDF/省控线_2025.pdf"],
+      "expectedCount": 172,
+      "parser": "scorelines",
+      "year": 2025
+    },
+    {
+      "outputPath": "省控线/省控线_2026.json",
+      "pdfPaths": ["省控线/原始PDF/省控线_2026.pdf"],
+      "expectedCount": 185,
+      "parser": "scorelines",
+      "year": 2026
+    },
+    {
+      "outputPath": "专业对照/专业对照_2026.json",
+      "pdfPaths": [
+        "专业对照/原始PDF/专业代号对照_2026.pdf",
+        "专业对照/原始PDF/专业对照一览_2026.pdf"
+      ],
+      "expectedCount": 558,
+      "parser": "mapping",
+      "year": 2026
+    },
+    {
+      "outputPath": "招生计划/招生计划_2024.json",
+      "pdfPaths": ["招生计划/原始PDF/招生计划_2024.pdf"],
+      "expectedCount": 1111,
+      "parser": "plans",
+      "year": 2024
+    },
+    {
+      "outputPath": "招生计划/招生计划_2025.json",
+      "pdfPaths": ["招生计划/原始PDF/招生计划_2025.pdf"],
+      "expectedCount": 1066,
+      "parser": "plans",
+      "year": 2025
+    },
+    {
+      "outputPath": "招生计划/招生计划_2026.json",
+      "pdfPaths": ["招生计划/原始PDF/招生计划_2026.pdf"],
+      "expectedCount": 1259,
+      "parser": "plans",
+      "year": 2026
+    },
+    {
+      "outputPath": "招生高校及专业/招生高校及专业_2026.json",
+      "pdfPaths": ["招生高校及专业/原始PDF/招生高校及专业_2026.pdf"],
+      "expectedCount": 987,
+      "parser": "master",
+      "year": 2026
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import unittest
+import json
 from pathlib import Path
 
 from tools import convert
@@ -6,6 +7,9 @@ from tools import convert
 
 class SourceRegistryTest(unittest.TestCase):
     def test_registry_is_the_single_source_of_file_paths_and_counts(self):
+        self.assertTrue(convert.SOURCE_REGISTRY_PATH.is_file())
+        registry_document = json.loads(
+            convert.SOURCE_REGISTRY_PATH.read_text(encoding='utf-8'))
         entries = convert.SOURCE_REGISTRY
         outputs = [entry.output_path for entry in entries]
 
@@ -16,6 +20,7 @@ class SourceRegistryTest(unittest.TestCase):
         self.assertEqual(convert.SOURCES, [
             (entry.output_path, entry.extract) for entry in entries
         ])
+        self.assertEqual(len(registry_document['sources']), len(entries))
         for entry in entries:
             for pdf_path in entry.pdf_paths:
                 self.assertTrue((convert.DATA / pdf_path).is_file(), pdf_path)

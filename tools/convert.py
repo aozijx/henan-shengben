@@ -365,23 +365,22 @@ class SourceSpec:
         raise ValueError(f'未知解析器: {self.parser}')
 
 
-# 文件路径、解析器和官方行数只在这张表中声明一次。
-SOURCE_REGISTRY = [
-    SourceSpec('省控线/省控线_2024.json', ('省控线/原始PDF/省控线_2024.pdf',), 143, 'scorelines', 2024),
-    SourceSpec('省控线/省控线_2025.json', ('省控线/原始PDF/省控线_2025.pdf',), 172, 'scorelines', 2025),
-    SourceSpec('省控线/省控线_2026.json', ('省控线/原始PDF/省控线_2026.pdf',), 185, 'scorelines', 2026),
-    SourceSpec(
-        '专业对照/专业对照_2026.json',
-        ('专业对照/原始PDF/专业代号对照_2026.pdf', '专业对照/原始PDF/专业对照一览_2026.pdf'),
-        558, 'mapping', 2026),
-    SourceSpec('招生计划/招生计划_2024.json', ('招生计划/原始PDF/招生计划_2024.pdf',), 1111, 'plans', 2024),
-    SourceSpec('招生计划/招生计划_2025.json', ('招生计划/原始PDF/招生计划_2025.pdf',), 1066, 'plans', 2025),
-    SourceSpec('招生计划/招生计划_2026.json', ('招生计划/原始PDF/招生计划_2026.pdf',), 1259, 'plans', 2026),
-    SourceSpec(
-        '招生高校及专业/招生高校及专业_2026.json',
-        ('招生高校及专业/原始PDF/招生高校及专业_2026.pdf',),
-        987, 'master', 2026),
-]
+SOURCE_REGISTRY_PATH = DATA / 'source-registry.json'
+
+
+def load_source_registry(path=SOURCE_REGISTRY_PATH):
+    document = json.loads(path.read_text(encoding='utf-8'))
+    return [SourceSpec(
+        output_path=item['outputPath'],
+        pdf_paths=tuple(item['pdfPaths']),
+        expected_count=item['expectedCount'],
+        parser=item['parser'],
+        year=item['year'],
+    ) for item in document['sources']]
+
+
+# 路径、解析器和官方行数由共享 JSON 声明，Python 只加载和分派。
+SOURCE_REGISTRY = load_source_registry()
 
 EXPECTED_COUNTS = {
     source.output_path: source.expected_count for source in SOURCE_REGISTRY
