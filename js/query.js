@@ -75,9 +75,9 @@ export function doQuery($q, $hint, $result) {
   var spec = matches[0];
   if (matches.length > 1) {
     renderMatchList($result, matches.map(function (m) { return { name: m['专科专业'] }; }),
-      function (it) { showSpec($hint, $result, findSpecByName(it.name)); }, '专科专业');
+      function (it) { showSpec($q, $hint, $result, findSpecByName(it.name)); }, '专科专业');
   }
-  showSpec($hint, $result, spec);
+  showSpec($q, $hint, $result, spec);
 }
 
 function findSpecByName(name) {
@@ -86,8 +86,9 @@ function findSpecByName(name) {
   return null;
 }
 
-function showSpec($hint, $result, spec) {
+function showSpec($q, $hint, $result, spec) {
   if (!spec) return;
+  $q.value = spec['专科专业'];
   var majors = spec['可报本科专业'] || [];
   lastMajors = majors;
   lastSpecName = spec['专科专业'];

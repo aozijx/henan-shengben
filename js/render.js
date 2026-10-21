@@ -116,26 +116,37 @@ function schoolItemHtml(c, seenName) {
 }
 
 /* 单个年份分组：summary 显示 公办/民办院校数与计划人数合计，组内为院校条目 */
+export function buildYearSummaryHtml(list) {
+  var pubSet = {}, minSet = {};
+  var planPub = 0, planMin = 0;
+  (list || []).forEach(function (c) {
+    var sn = c['院校名称'] || c['学校名称'] || '';
+    var n = Number(c['计划人数']) || 0;
+    if (c['办学性质'] === '民办') {
+      minSet[sn] = 1;
+      planMin += n;
+    } else {
+      pubSet[sn] = 1;
+      planPub += n;
+    }
+  });
+  return '<span class="yg-pub">公办 ' + Object.keys(pubSet).length + ' 所 · 计划 ' + planPub + ' 人</span>' +
+    '<span class="yg-min">民办 ' + Object.keys(minSet).length + ' 所 · 计划 ' + planMin + ' 人</span>';
+}
+
 function yearGroupHtml(m, year, openDefault) {
   var list = getCollegesByYear(year, m);
   var seenName = {};
-  var schoolSet = {}, pubSet = {}, minSet = {};
-  var planPub = 0, planMin = 0;
+  var schoolSet = {};
   list.forEach(function (c) {
     var sn = c['院校名称'] || c['学校名称'] || '';
     schoolSet[sn] = 1;
-    if (c['办学性质'] === '民办') minSet[sn] = 1; else pubSet[sn] = 1;
-    var n = Number(c['计划人数']) || 0;
-    if (c['办学性质'] === '民办') planMin += n; else planPub += n;
   });
-  var pubN = Object.keys(pubSet).length, minN = Object.keys(minSet).length;
   var sumParts = [];
   if (!list.length) {
     sumParts.push('<span class="yg-na">该年无招生院校</span>');
   } else {
-    sumParts.push('<span class="yg-pub">公办 ' + pubN + ' 所</span>');
-    sumParts.push('<span class="yg-min">民办 ' + minN + ' 所</span>');
-    sumParts.push('<span class="yg-plan">计划 ' + (planPub + planMin) + ' 人</span>');
+    sumParts.push(buildYearSummaryHtml(list));
   }
   var countLabel = list.length
     ? (Object.keys(schoolSet).length === list.length
