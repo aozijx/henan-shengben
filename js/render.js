@@ -6,7 +6,7 @@
    只负责把数据渲染成 HTML 并绑定结果区内部交互，不持有查询状态。
    ============================================================ */
 
-import { getScore, getCollegesByYear, getMajorYearStats } from './data.js';
+import { getScore, getCollegesByYear } from './data.js';
 import { esc } from './utils.js';
 
 function subjectBadge(subject, code) {
@@ -184,15 +184,18 @@ export function renderTable($result, title, majors, countNote) {
     var nameHtml = esc(m['专业名称']);
     if (/职业教育/.test(m['专业名称'])) nameHtml += '<span class="tag">职教本科</span>';
 
-    var stats = getMajorYearStats(m);
-    var union = stats.union.total;
     var list26 = getCollegesByYear(2026, m);
     total += list26.length;
+    var pub26 = {}, min26 = {};
+    list26.forEach(function (c) {
+      var sn = c['院校名称'] || c['学校名称'] || '';
+      if (c['办学性质'] === '民办') min26[sn] = 1; else pub26[sn] = 1;
+    });
     var id = 'cd-' + Math.random().toString(36).slice(2, 8);
 
-    var schoolBtn = union
-      ? '<button type="button" class="school-sum" aria-expanded="false">' +
-        '3 年 ' + union + ' 所 <span class="arr">▸</span></button>'
+    var schoolBtn = list26.length
+      ? '<button type="button" class="school-sum" aria-expanded="false" title="2026 年公办院校数/民办院校数">' +
+        '2026年 ' + Object.keys(pub26).length + '/' + Object.keys(min26).length + ' 所 <span class="arr">▸</span></button>'
       : '<span class="na">—</span>';
 
     body.push(

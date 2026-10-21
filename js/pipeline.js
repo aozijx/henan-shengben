@@ -24,6 +24,13 @@ function rowMatchesPlan(row, filters) {
   return true;
 }
 
+function allSchoolsFor(publicSchools, privateSchools) {
+  var merged = {};
+  Object.keys(publicSchools).forEach(function (s) { merged[s] = true; });
+  Object.keys(privateSchools).forEach(function (s) { merged[s] = true; });
+  return merged;
+}
+
 export function buildPreviewRows(input) {
   var filters = input.filters || {};
   var years = (input.years || []).slice().sort(function (a, b) { return a - b; });
@@ -41,27 +48,29 @@ export function buildPreviewRows(input) {
     var hasPlans = false;
 
     years.forEach(function (year) {
-      var publicSchools = {}, privateSchools = {}, allSchools = {};
-      var planCount = 0;
+      var publicSchools = {}, privateSchools = {};
+      var publicPlan = 0, privatePlan = 0, planCount = 0;
       (input.getPlans(major, year) || []).forEach(function (planRow) {
         if (!rowMatchesPlan(planRow, filters)) return;
         hasPlans = true;
         var school = planRow['院校名称'] || planRow['学校名称'] || '';
         var isPrivate = planRow['办学性质'] === '民办';
+        var count = Number(planRow['计划人数']) || 0;
         if (school) {
-          allSchools[school] = true;
           if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
         }
-        planCount += Number(planRow['计划人数']) || 0;
+        if (isPrivate) privatePlan += count; else publicPlan += count;
+        planCount += count;
       });
       var score = input.getScore(major, year);
       row['score' + year] = score == null ? null : Number(score);
       row['publicSchoolCount' + year] = Object.keys(publicSchools).length;
       row['privateSchoolCount' + year] = Object.keys(privateSchools).length;
-      row['schoolCount' + year] = Object.keys(allSchools).length;
+      row['schoolCount' + year] = row['publicSchoolCount' + year] + row['privateSchoolCount' + year];
       row['schoolSplit' + year] = row['publicSchoolCount' + year] + '/' + row['privateSchoolCount' + year];
       row['planCount' + year] = planCount;
-      if (year === latestYear) latestSchools = allSchools;
+      row['planSplit' + year] = publicPlan + '/' + privatePlan;
+      if (year === latestYear) latestSchools = allSchoolsFor(publicSchools, privateSchools);
     });
 
     if (!hasPlans) return;

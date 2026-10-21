@@ -96,25 +96,9 @@ function minControl(field, state, disabled) {
     (disabled ? ' disabled' : '') + '></label>';
 }
 
-function sortOptions(metadata, selected) {
-  var output = [];
-  metadata.fields.filter(function (field) { return field.sortEnable; }).forEach(function (field) {
-    if (field.key === 'originalOrder') {
-      output.push({ value: field.key + ':original', label: field.label });
-    } else {
-      output.push({ value: field.key + ':desc', label: field.label + '：从高到低' });
-      output.push({ value: field.key + ':asc', label: field.label + '：从低到高' });
-    }
-  });
-  return output.map(function (option) {
-    return '<option value="' + esc(option.value) + '"' + (option.value === selected ? ' selected' : '') + '>' + esc(option.label) + '</option>';
-  }).join('');
-}
-
 export function renderExplorerControls(root, metadata, state, dispatch) {
   if (!root) return;
   var unavailable = state.status !== 'ready' || !state.majors.length;
-  var selectedSort = state.sort.key + ':' + state.sort.direction;
 
   root.innerHTML =
     '<div class="explorer-status" aria-live="polite">' +
@@ -129,8 +113,6 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
         minControl(filterField(metadata, 'schoolCount'), state, unavailable) +
       '</div></div>' +
     '</section>' +
-    '<section class="sort-panel" aria-label="排序控制"><label class="filter-field"><span>排序方式</span>' +
-      '<select data-sort' + (unavailable ? ' disabled' : '') + '>' + sortOptions(metadata, selectedSort) + '</select></label></section>' +
     '<section class="explorer-actions" aria-label="操作按钮">' +
       '<button type="button" data-action="reset"' + (unavailable ? ' disabled' : '') + '>重置筛选</button>' +
       '<button type="button" data-action="clear-storage"' + (state.status !== 'ready' ? ' disabled' : '') + '>清除本地存储</button>' +
@@ -150,11 +132,6 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
       if (control.value !== clean) control.value = clean;
       dispatch({ type: 'SET_FILTER', key: control.dataset.filterNumber, value: clean });
     });
-  });
-  var sortSelect = root.querySelector('[data-sort]');
-  if (sortSelect) sortSelect.addEventListener('change', function () {
-    var parts = sortSelect.value.split(':');
-    dispatch({ type: 'SET_SORT', sort: { key: parts[0], direction: parts[1] } });
   });
   var reset = root.querySelector('[data-action="reset"]');
   if (reset) reset.addEventListener('click', function () { dispatch({ type: 'RESET_FILTERS' }); });
@@ -177,6 +154,7 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   renderPreview(root.querySelector('#preview-table'), {
     rows: state.rows,
     page: state.page,
+    sort: state.sort,
     effectiveSchoolCount: state.effectiveSchoolCount,
     effectiveSchoolYear: latestSupportedYear(metadata),
     hasSearch: state.majors.length > 0,

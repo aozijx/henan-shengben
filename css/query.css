@@ -229,7 +229,7 @@ tr.major-row.is-open .major-name::before{transform:rotate(90deg);}
 .explorer{margin-top:20px;display:flex;flex-direction:column;gap:12px;}
 .explorer-status:empty{display:none;}
 .loading{display:block;padding:14px;color:var(--muted);text-align:center;}
-.filter-panel,.sort-panel,.explorer-actions,.preview-section,.export-actions{
+.filter-panel,.explorer-actions,.preview-section,.export-actions{
   background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
   box-shadow:var(--shadow);padding:14px;
 }
@@ -250,7 +250,9 @@ tr.major-row.is-open .major-name::before{transform:rotate(90deg);}
 }
 .explorer-actions button:hover:not(:disabled){border-color:var(--blue);color:var(--blue-deep);}
 .explorer-actions button:disabled,.export-actions button:disabled{opacity:.5;cursor:not-allowed;}
-.sort-panel{display:flex;align-items:end;}
-.sort-panel .filter-field{min-width:min(100%,280px);}
+/* 表头点击排序（由 metadata sortEnable 驱动） */
+.preview-table th.sortable{cursor:pointer;user-select:none;}
+.preview-table th.sortable:hover{background:var(--surface-3);}
+.preview-table .sort-ind{margin-left:4px;font-size:10px;color:var(--blue);}
 .explorer-actions,.export-actions{display:flex;flex-wrap:wrap;gap:8px;}
 .preview-placeholder{padding:28px 12px;color:var(--muted);text-align:center;}

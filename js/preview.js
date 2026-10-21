@@ -47,7 +47,16 @@ export function buildPreviewHtml(model, metadata) {
     return '<col data-field="' + esc(field.key) + '"' + (width ? ' style="width:' + Number(width) + 'px"' : '') + '>';
   }).join('');
   var headers = fields.map(function (field) {
-    return '<th scope="col" data-field="' + esc(field.key) + '">' + esc(field.label) +
+    /* sortKey：拆分列（如 院校数(公/民)）按其对应的合计数值字段排序 */
+    var sortKey = field.sortKey || field.key;
+    var sortable = field.sortEnable || field.sortKey;
+    var sort = model.sort && model.sort.key === sortKey ? model.sort.direction : null;
+    var indicator = sort === 'desc' ? '<span class="sort-ind">▼</span>'
+      : sort === 'asc' ? '<span class="sort-ind">▲</span>' : '';
+    var ariaSort = sort === 'desc' ? ' aria-sort="descending"'
+      : sort === 'asc' ? ' aria-sort="ascending"' : '';
+    var sortableAttr = sortable ? ' class="sortable" data-sort="' + esc(sortKey) + '" title="点击排序"' + ariaSort : '';
+    return '<th scope="col" data-field="' + esc(field.key) + '"' + sortableAttr + '>' + esc(field.label) + indicator +
       '<button type="button" class="column-resizer" data-resize="' + esc(field.key) + '" aria-label="调整' + esc(field.label) + '列宽"></button></th>';
   }).join('');
   var body = page.rows.map(function (row) {
@@ -67,9 +76,23 @@ export function buildPreviewHtml(model, metadata) {
     '</nav>';
 }
 
+export function nextSortDirection(current, key) {
+  if (!current || current.key !== key || current.direction === 'asc') return 'desc';
+  return 'asc';
+}
+
 export function renderPreview(root, model, metadata, dispatch) {
   if (!root) return;
   root.innerHTML = buildPreviewHtml(model, metadata);
+  root.querySelectorAll('th[data-sort]').forEach(function (th) {
+    th.addEventListener('click', function (event) {
+      if (event.target.closest('.column-resizer')) return;
+      dispatch({
+        type: 'SET_SORT',
+        sort: { key: th.dataset.sort, direction: nextSortDirection(model.sort, th.dataset.sort) }
+      });
+    });
+  });
   root.querySelectorAll('[data-page]').forEach(function (button) {
     button.addEventListener('click', function () {
       dispatch({ type: 'SET_PAGE', page: Number(button.dataset.page) });

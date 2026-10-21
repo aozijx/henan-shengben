@@ -171,29 +171,6 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
 
 export function getColleges(major) { return getCollegesByYear(activeMetadata && activeMetadata.defaultYear, major); }
 
-export function getMajorYearStats(major) {
-  var stats = { schools: {}, plans: {}, union: { pub: 0, min: 0, total: 0 } };
-  var unionSeen = {}, unionPub = 0, unionMin = 0;
-  YEARS.forEach(function (year) {
-    var seen = {}, pub = 0, min = 0, planPub = 0, planMin = 0;
-    getCollegesByYear(year, major).forEach(function (row) {
-      var school = row['院校名称'] || row['学校名称'] || '';
-      var isPrivate = row['办学性质'] === '民办';
-      if (!seen[school]) {
-        seen[school] = true;
-        if (isPrivate) min += 1; else pub += 1;
-        if (!unionSeen[school]) { unionSeen[school] = true; if (isPrivate) unionMin += 1; else unionPub += 1; }
-      }
-      var count = Number(row['计划人数']) || 0;
-      if (isPrivate) planMin += count; else planPub += count;
-    });
-    stats.schools[year] = { pub: pub, min: min, total: pub + min };
-    stats.plans[year] = { pub: planPub, min: planMin, total: planPub + planMin };
-  });
-  stats.union = { pub: unionPub, min: unionMin, total: unionPub + unionMin };
-  return stats;
-}
-
 export function getPlanStats() {
   var schools = {}, privateRows = 0, povertyRows = 0, regularRows = 0, total = 0;
   PLANS.forEach(function (row) {

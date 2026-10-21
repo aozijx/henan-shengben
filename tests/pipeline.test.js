@@ -94,16 +94,16 @@ test('counts a duplicate school once while summing ordinary and poverty plans', 
   assert.equal(run().effectiveSchoolCount, 3);
 });
 
-test('splits school counts into public/private as pub/min text', () => {
+test('splits school counts and plan totals into public/private as pub/min text', () => {
   assert.deepEqual(
-    run().rows.map((row) => row.majorName + ':' + row.schoolSplit2026),
-    ['软件工程:1/1', '会计学:0/1', '英语:1/0']);
+    run().rows.map((row) => row.majorName + ':' + row.schoolSplit2026 + ':' + row.planSplit2026),
+    ['软件工程:1/1:25/30', '会计学:0/1:0/10', '英语:1/0:12/0']);
   assert.deepEqual(
-    run({ schoolType: '公办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2026),
-    ['软件工程:1/0', '英语:1/0']);
+    run({ schoolType: '公办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2026 + ':' + row.planSplit2026),
+    ['软件工程:1/0:25/0', '英语:1/0:12/0']);
   assert.deepEqual(
-    run({ schoolType: '民办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2024),
-    ['软件工程:0/1', '会计学:0/1']);
+    run({ schoolType: '民办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2024 + ':' + row.planSplit2024),
+    ['软件工程:0/1:0/30', '会计学:0/1:0/10']);
 });
 
 test('restores stable original order', () => {

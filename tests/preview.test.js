@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPreviewHtml, formatFieldValue, getPreviewFields, paginate, resizeColumnWidth } from '../js/preview.js';
+import { buildPreviewHtml, formatFieldValue, getPreviewFields, nextSortDirection, paginate, resizeColumnWidth } from '../js/preview.js';
 
 const metadata = {
   pageSize: 2,
@@ -57,6 +57,36 @@ test('renders effective school statistics and only the current page rows', () =>
   assert.match(html, /工商管理/);
   assert.doesNotMatch(html, /软件工程/);
   assert.doesNotMatch(html, /护理学/);
+});
+
+test('marks only sortable headers and shows the current sort indicator', () => {
+  const sortableMetadata = {
+    pageSize: 2,
+    fields: [
+      { key: 'score', label: '分数线', type: 'number', tableShow: true, sortEnable: true },
+      { key: 'majorName', label: '本科专业', type: 'string', tableShow: true, sortEnable: false },
+      { key: 'schoolSplit', label: '院校数(公/民)', type: 'string', tableShow: true, sortEnable: false, sortKey: 'schoolCount' }
+    ]
+  };
+  const unsorted = buildPreviewHtml({ rows: rows.slice(0, 1), page: 1, hasSearch: true, sort: { key: 'originalOrder', direction: 'original' } }, sortableMetadata);
+  assert.match(unsorted, /<th scope="col" data-field="score" class="sortable" data-sort="score" title="点击排序">/);
+  assert.match(unsorted, /<th scope="col" data-field="majorName">/);
+  assert.match(unsorted, /<th scope="col" data-field="schoolSplit" class="sortable" data-sort="schoolCount"/);
+  assert.doesNotMatch(unsorted, /sort-ind/);
+
+  const desc = buildPreviewHtml({ rows: rows.slice(0, 1), page: 1, hasSearch: true, sort: { key: 'schoolCount', direction: 'desc' } }, sortableMetadata);
+  assert.match(desc, /data-field="schoolSplit" class="sortable" data-sort="schoolCount" title="点击排序" aria-sort="descending"/);
+  assert.match(desc, /▼/);
+  const asc = buildPreviewHtml({ rows: rows.slice(0, 1), page: 1, hasSearch: true, sort: { key: 'score', direction: 'asc' } }, sortableMetadata);
+  assert.match(asc, /aria-sort="ascending"/);
+  assert.match(asc, /▲/);
+});
+
+test('header clicks cycle from high to low then low to high', () => {
+  assert.equal(nextSortDirection(null, 'score'), 'desc');
+  assert.equal(nextSortDirection({ key: 'majorName', direction: 'asc' }, 'score'), 'desc');
+  assert.equal(nextSortDirection({ key: 'score', direction: 'desc' }, 'score'), 'asc');
+  assert.equal(nextSortDirection({ key: 'score', direction: 'asc' }, 'score'), 'desc');
 });
 
 test('formats null and numeric values consistently for preview and export', () => {
