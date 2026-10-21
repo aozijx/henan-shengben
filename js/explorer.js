@@ -1,6 +1,7 @@
 import { getCollegesByYear, getScore } from './data.js';
 import { buildPreviewRows, sortPreviewRows, validateScoreRange } from './pipeline.js';
 import { renderPreview } from './preview.js';
+import { downloadCsv, getExportFields } from './export.js';
 import { esc } from './utils.js';
 
 var activeExplorer = null;
@@ -126,7 +127,8 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
     '<section class="preview-section"><div id="preview-table" class="preview-placeholder" aria-live="polite">' +
       (state.majors.length ? '预览表格准备中…' : '请先查询专科专业，再使用筛选与导出。') +
     '</div></section>' +
-    '<section class="export-actions"><button type="button" id="exportCsv" disabled>导出 CSV</button></section>';
+    '<section class="export-actions"><button type="button" id="exportCsv"' +
+      (state.status !== 'ready' || !state.rows.length || state.validationError ? ' disabled' : '') + '>导出 CSV</button></section>';
 
   var yearSelect = root.querySelector('[data-year]');
   if (yearSelect) yearSelect.addEventListener('change', function () { dispatch({ type: 'SET_YEAR', year: yearSelect.value }); });
@@ -153,6 +155,10 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   });
   var reset = root.querySelector('[data-action="reset"]');
   if (reset) reset.addEventListener('click', function () { dispatch({ type: 'RESET_FILTERS' }); });
+  var exportButton = root.querySelector('#exportCsv');
+  if (exportButton) exportButton.addEventListener('click', function () {
+    downloadCsv({ rows: state.rows, fields: getExportFields(metadata), year: state.year, date: new Date() });
+  });
   renderPreview(root.querySelector('#preview-table'), {
     rows: state.rows,
     page: state.page,
