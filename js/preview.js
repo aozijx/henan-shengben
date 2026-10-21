@@ -56,7 +56,8 @@ export function buildPreviewHtml(model, metadata) {
     }).join('') + '</tr>';
   }).join('');
 
-  return '<div class="preview-summary"><b>导出预览</b><span>有效院校 ' + Number(model.effectiveSchoolCount || 0) +
+  var schoolLabel = '有效院校' + (model.effectiveSchoolYear ? '（' + model.effectiveSchoolYear + '）' : '');
+  return '<div class="preview-summary"><b>导出预览</b><span>' + esc(schoolLabel) + ' ' + Number(model.effectiveSchoolCount || 0) +
     ' 所 · 共 ' + page.total + ' 个专业 · 当前 ' + page.start + '–' + page.end + '</span></div>' +
     '<div class="preview-scroll"><table class="preview-table"><colgroup>' + columns + '</colgroup><thead><tr>' + headers + '</tr></thead><tbody>' + body + '</tbody></table></div>' +
     '<nav class="preview-pagination" aria-label="预览分页">' +

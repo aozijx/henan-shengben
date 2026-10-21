@@ -8,11 +8,11 @@ function schoolCountLimit(value) {
   return /^\d+$/.test(text) ? Number(text) : null;
 }
 
-function rowMatchesFilters(row, filters) {
+function rowMatchesFilters(row, filters, latestYear) {
   if (filters.subject && filters.subject !== '全部' &&
       normalizeText(row.subject) !== normalizeText(filters.subject)) return false;
   var limit = schoolCountLimit(filters.schoolCount);
-  if (limit != null && row.schoolCount <= limit) return false;
+  if (limit != null && latestYear != null && (row['schoolCount' + latestYear] || 0) <= limit) return false;
   return true;
 }
 
@@ -26,41 +26,48 @@ function rowMatchesPlan(row, filters) {
 
 export function buildPreviewRows(input) {
   var filters = input.filters || {};
+  var years = (input.years || []).slice().sort(function (a, b) { return a - b; });
+  var latestYear = years.length ? years[years.length - 1] : null;
   var effectiveSchools = {};
   var rows = [];
 
   (input.majors || []).forEach(function (major, originalOrder) {
-    var score = input.getScore(major, input.year);
-    var planRows = (input.getPlans(major, input.year) || []).filter(function (row) {
-      return rowMatchesPlan(row, filters);
-    });
-    if (!planRows.length) return;
-
-    var publicSchools = {}, privateSchools = {}, allSchools = {};
-    var planCount = 0;
-    planRows.forEach(function (row) {
-      var school = row['院校名称'] || row['学校名称'] || '';
-      var isPrivate = row['办学性质'] === '民办';
-      if (school) {
-        allSchools[school] = true;
-        if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
-      }
-      planCount += Number(row['计划人数']) || 0;
-    });
     var row = {
       majorName: major['专业名称'] || '',
       subject: major['考试科目'] || '',
-      score: score == null ? null : Number(score),
-      publicSchoolCount: Object.keys(publicSchools).length,
-      privateSchoolCount: Object.keys(privateSchools).length,
-      schoolCount: Object.keys(allSchools).length,
-      planCount: planCount,
-      originalOrder: originalOrder,
-      major: major,
-      planRows: planRows
+      originalOrder: originalOrder
     };
-    if (!rowMatchesFilters(row, filters)) return;
-    Object.keys(allSchools).forEach(function (school) { effectiveSchools[school] = true; });
+    var latestSchools = {};
+    var hasPlans = false;
+
+    years.forEach(function (year) {
+      var publicSchools = {}, privateSchools = {}, allSchools = {};
+      var planCount = 0;
+      (input.getPlans(major, year) || []).forEach(function (planRow) {
+        if (!rowMatchesPlan(planRow, filters)) return;
+        hasPlans = true;
+        var school = planRow['院校名称'] || planRow['学校名称'] || '';
+        var isPrivate = planRow['办学性质'] === '民办';
+        if (school) {
+          allSchools[school] = true;
+          if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
+        }
+        planCount += Number(planRow['计划人数']) || 0;
+      });
+      var score = input.getScore(major, year);
+      row['score' + year] = score == null ? null : Number(score);
+      row['publicSchoolCount' + year] = Object.keys(publicSchools).length;
+      row['privateSchoolCount' + year] = Object.keys(privateSchools).length;
+      row['schoolCount' + year] = Object.keys(allSchools).length;
+      row['planCount' + year] = planCount;
+      if (year === latestYear) latestSchools = allSchools;
+    });
+
+    if (!hasPlans) return;
+    if (!rowMatchesFilters(row, filters, latestYear)) return;
+    if (latestYear != null) {
+      Object.keys(latestSchools).forEach(function (school) { effectiveSchools[school] = true; });
+    }
     rows.push(row);
   });
 

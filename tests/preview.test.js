@@ -51,8 +51,8 @@ test('renders filtered empty separately from the initial state', () => {
 });
 
 test('renders effective school statistics and only the current page rows', () => {
-  const html = buildPreviewHtml({ rows, page: 2, effectiveSchoolCount: 17, hasSearch: true }, metadata);
-  assert.match(html, /有效院校 17 所/);
+  const html = buildPreviewHtml({ rows, page: 2, effectiveSchoolCount: 17, effectiveSchoolYear: 2026, hasSearch: true }, metadata);
+  assert.match(html, /有效院校（2026） 17 所/);
   assert.match(html, /英语/);
   assert.match(html, /工商管理/);
   assert.doesNotMatch(html, /软件工程/);

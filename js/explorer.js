@@ -114,9 +114,6 @@ function sortOptions(metadata, selected) {
 export function renderExplorerControls(root, metadata, state, dispatch) {
   if (!root) return;
   var unavailable = state.status !== 'ready' || !state.majors.length;
-  var yearOptions = metadata.supportedYears.map(function (year) {
-    return '<option value="' + year + '"' + (state.year === year ? ' selected' : '') + '>' + year + ' 年</option>';
-  }).join('');
   var selectedSort = state.sort.key + ':' + state.sort.direction;
 
   root.innerHTML =
@@ -126,7 +123,6 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
     '</div>' +
     '<section class="filter-panel" aria-label="筛选条件">' +
       '<div class="filter-group"><h3>筛选条件</h3><div class="filter-row">' +
-        '<label class="filter-field"><span>数据年份</span><select data-year' + (state.status !== 'ready' ? ' disabled' : '') + '>' + yearOptions + '</select></label>' +
         enumControl(filterField(metadata, 'schoolType'), 'schoolType', state, unavailable) +
         enumControl(filterField(metadata, 'povertyStatus'), 'povertyStatus', state, unavailable) +
         enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
@@ -145,8 +141,6 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
     '<section class="export-actions"><button type="button" id="exportCsv"' +
       (!canExport(state) ? ' disabled' : '') + '>导出 CSV</button></section>';
 
-  var yearSelect = root.querySelector('[data-year]');
-  if (yearSelect) yearSelect.addEventListener('change', function () { dispatch({ type: 'SET_YEAR', year: yearSelect.value }); });
   root.querySelectorAll('[data-filter]').forEach(function (control) {
     control.addEventListener('change', function () { dispatch({ type: 'SET_FILTER', key: control.dataset.filter, value: control.value }); });
   });
@@ -184,6 +178,7 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
     rows: state.rows,
     page: state.page,
     effectiveSchoolCount: state.effectiveSchoolCount,
+    effectiveSchoolYear: latestSupportedYear(metadata),
     hasSearch: state.majors.length > 0,
     status: state.status,
     error: state.error,
@@ -191,11 +186,16 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   }, metadata, dispatch);
 }
 
-function recompute(state) {
+function latestSupportedYear(metadata) {
+  var years = metadata.supportedYears || [];
+  return years.length ? Math.max.apply(null, years) : null;
+}
+
+function recompute(state, metadata) {
   if (state.status !== 'ready' || !state.majors.length) return { ...state, rows: [], effectiveSchoolCount: 0 };
   var preview = buildPreviewRows({
     majors: state.majors,
-    year: state.year,
+    years: metadata.supportedYears,
     filters: state.filters,
     getScore: function (major, year) { return getScore(major, year); },
     getPlans: function (major, year) { return getCollegesByYear(year, major); }
@@ -215,7 +215,7 @@ export function initExplorer(root, metadata, options) {
     var previousYear = state.year;
     state = reduceExplorerState(state, event, metadata);
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
-    state = recompute(state);
+    state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
     if (state.year !== previousYear && typeof options.onYearChange === 'function') options.onYearChange(state.year);
   }

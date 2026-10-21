@@ -11,14 +11,15 @@
   },
   "fields": [
     { "key": "majorName", "label": "本科专业", "exportLabel": "本科专业", "type": "string", "filterEnable": false, "sortEnable": false, "tableShow": true, "exportEnable": true },
-    { "key": "score", "label": "分数线", "exportLabel": "分数线", "type": "number", "min": 0, "max": 750, "filterEnable": true, "sortEnable": true, "tableShow": true, "exportEnable": true },
+    { "key": "score2027", "label": "2027分数线", "exportLabel": "2027分数线", "type": "number", "min": 0, "max": 750, "filterEnable": false, "sortEnable": true, "tableShow": true, "exportEnable": true },
+    { "key": "schoolCount2027", "label": "2027院校数", "exportLabel": "2027院校数", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": true, "exportEnable": true },
+    { "key": "planCount2027", "label": "2027计划人数", "exportLabel": "2027计划人数", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": true, "exportEnable": true },
     { "key": "schoolType", "label": "办学性质", "exportLabel": "办学性质", "type": "enum", "enumValues": ["公办", "民办"], "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
     { "key": "povertyStatus", "label": "建档立卡", "exportLabel": "建档立卡", "type": "enum", "enumValues": ["是", "否"], "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
-    { "key": "schoolCount", "label": "院校数", "exportLabel": "院校数", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": true, "exportEnable": true },
-    { "key": "planCount", "label": "计划人数", "exportLabel": "计划人数", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": true, "exportEnable": true },
+    { "key": "schoolCount", "label": "院校数(2027)", "exportLabel": "院校数(2027)", "type": "number", "min": 0, "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
     { "key": "originalOrder", "label": "原始顺序", "exportLabel": "原始顺序", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": false, "exportEnable": false }
   ],
-  "defaultSort": { "key": "score", "direction": "desc" },
+  "defaultSort": { "key": "score2027", "direction": "desc" },
   "pageSize": 50,
   "exportFormat": "csv"
 }

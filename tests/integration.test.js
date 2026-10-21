@@ -30,7 +30,7 @@ test('a metadata-only new year flows through load, filter, sort, preview and exp
   const majors = loaded.store.mapping[0].可报本科专业;
   const preview = buildPreviewRows({
     majors,
-    year: loaded.metadata.defaultYear,
+    years: loaded.metadata.supportedYears,
     filters: { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' },
     getScore: (major, year) => getScore(loaded.index, major, year),
     getPlans: (major, year) => getCollegesByYear(loaded.index, year, major)
@@ -40,7 +40,7 @@ test('a metadata-only new year flows through load, filter, sort, preview and exp
 
   assert.deepEqual(loaded.store.years, [2027]);
   assert.deepEqual(rows.map((row) => row.majorName), ['数据工程', '智能工程']);
-  assert.match(csv, /^\uFEFF本科专业,分数线,院校数,计划人数\r\n数据工程,220,1,15/);
+  assert.match(csv, /^\uFEFF本科专业,2027分数线,2027院校数,2027计划人数\r\n数据工程,220,1,15\r\n智能工程,180,1,20/);
   assert.equal(buildExportFilename(loaded.metadata.defaultYear, new Date(2026, 9, 21)), '院校数据_2027_20261021.csv');
 });
 
