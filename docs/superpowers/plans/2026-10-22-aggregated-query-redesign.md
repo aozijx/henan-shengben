@@ -94,17 +94,19 @@ git commit -m "refactor: organize source data by dataset"
 - Create: `crawler/README.md`
 - Create: `crawler/tests/test_discover.py`
 - Create: `crawler/tests/test_download.py`
+- Modify: `data/source-registry.json`
 - Create: `data/来源清单/来源清单_2024.json`
 - Create: `data/来源清单/来源清单_2025.json`
 - Create: `data/来源清单/来源清单_2026.json`
 
 **Interfaces:**
-- Consumes: `discover_year(year: int, page_url: str, html: str | None = None) -> list[SourceEntry]`。
+- Consumes: `data/source-registry.json` 中的 `crawlTargets[]`；每项统一声明 `dataset/year/sourcePageUrl/manifestPath/downloadDirectory/parser`，`--years` 只用于筛选配置，不在 Python 中拼文件名。
+- Produces: `load_crawl_targets(registry_path: Path, years: set[int] | None) -> list[CrawlTarget]`；`discover_year(target: CrawlTarget, html: str | None = None) -> list[SourceEntry]`。
 - Produces: `download_manifest(manifest_path: Path, data_root: Path, session: requests.Session) -> DownloadReport`；`SourceEntry` 包含 `year/sourcePageUrl/pdfUrl/localPath/majorCode/majorName`。
 
 - [ ] **Step 1: 写来源发现失败测试**
 
-fixture 覆盖相对/绝对 PDF 链接、URL 编码中文、重复链接、非官方域名和反爬脚本页；断言只保留官方 PDF、按专业代码稳定排序，反爬页抛出 `DiscoveryBlockedError`。
+先断言 `load_crawl_targets` 从共享注册表读取三年目标、按年份筛选且拒绝重复 `(dataset, year)`；fixture 再覆盖相对/绝对 PDF 链接、URL 编码中文、重复链接、非官方域名和反爬脚本页，断言只保留官方 PDF、按专业代码稳定排序，反爬页抛出 `DiscoveryBlockedError`。
 
 - [ ] **Step 2: 写下载失败测试**
 
@@ -118,7 +120,7 @@ Expected: FAIL，模块尚不存在。
 
 - [ ] **Step 4: 实现发现和下载器**
 
-`discover.py` 解析官方列表页或显式保存的官方 HTML；`download.py` 使用 `.part` 临时文件完成后原子重命名，输出 HTTP 状态、SHA-256、字节数和 `downloadStatus`。
+`source_rules.py` 只定义注册表数据类型和官方域名规则；`discover.py` 从 `source-registry.json` 读取三年页面、清单路径和下载目录，再解析官方列表页或显式保存的官方 HTML；`download.py` 使用 `.part` 临时文件完成后原子重命名，输出 HTTP 状态、SHA-256、字节数和 `downloadStatus`。爬虫、下载器和 Task 3 转换器共用同一 `parser` 与路径声明。
 
 - [ ] **Step 5: 生成并下载 2024–2026 清单**
 
