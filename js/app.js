@@ -8,7 +8,7 @@ import { esc } from './utils.js';
 import * as theme from './theme.js';
 import * as data from './data.js';
 import * as query from './query.js';
-import * as table from './table.js';
+import * as explorer from './explorer.js';
 import { initCharts } from './stats.js';
 import { loadMetadata } from './metadata.js';
 
@@ -17,7 +17,7 @@ var $q = $('q'), $result = $('result'), $hint = $('hint');
 var $suggest = $('suggest');
 
 var currentView = 'query';
-var VIEWS = ['query', 'table', 'stats', 'about'];
+var VIEWS = ['query', 'stats', 'about'];
 
 /* ---------- 头部统计数字 ---------- */
 function initStats() {
@@ -44,7 +44,6 @@ function switchView(v) {
     tab.setAttribute('aria-selected', String(on));
   });
   if (v === 'stats' && data.isReady()) initCharts();
-  if (v === 'table' && data.isReady()) table.refreshTable();
   if (location.hash !== '#' + v) location.hash = v;
 }
 window.addEventListener('hashchange', function () {
@@ -107,7 +106,8 @@ loadMetadata('metadata/school-data.json').then(function (metadata) {
   data.buildIndexes(loaded.store, loaded.metadata);
   window.__henanReady = true;
   initStats();
-  table.initTable();
+  explorer.initExplorer($('explorer'), loaded.metadata);
+  query.setResultListener(explorer.setSearchResult);
   afterLoad();
 }).catch(function (err) {
   $result.innerHTML = '<div class="msg-notfound"><b>数据加载失败：</b>' + esc(err.message) + '<br>' +

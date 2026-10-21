@@ -117,6 +117,10 @@ export function getYearData(index, year) {
   };
 }
 
+export function getScoreIndex() {
+  return activeIndex ? activeIndex.scoreByYear : {};
+}
+
 export function getScore(indexOrMajor, majorOrYear, maybeYear) {
   var hasIndex = indexOrMajor && indexOrMajor.scoreByYear;
   var index = hasIndex ? indexOrMajor : activeIndex;

@@ -4,6 +4,7 @@ import {
   buildIndexes,
   getCollegesByYear,
   getScore,
+  getScoreIndex,
   getYearData,
   loadAll
 } from '../js/data.js';
@@ -75,6 +76,7 @@ test('builds a generic 2027 index without year-specific production code', async 
 
   assert.equal(getYearData(index, 2027).plans.length, 1);
   assert.equal(getScore(index, major, 2027), 188);
+  assert.equal(getScoreIndex()[2027]['80'].score, 188);
   assert.deepEqual(getCollegesByYear(index, 2027, major).map((row) => row.院校名称), ['测试大学']);
 });
 

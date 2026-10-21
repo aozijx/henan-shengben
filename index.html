@@ -25,7 +25,6 @@
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/query.css">
 <link rel="stylesheet" href="css/stats.css">
-<link rel="stylesheet" href="css/table.css">
 <link rel="stylesheet" href="css/about.css">
 </head>
 <body>
@@ -61,7 +60,6 @@
 
   <nav class="tabs" role="tablist" aria-label="功能切换">
     <button class="tab is-active" id="tab-query" role="tab" aria-selected="true" data-view="query">专业查询</button>
-    <button class="tab" id="tab-table" role="tab" aria-selected="false" data-view="table">汇总表</button>
     <button class="tab" id="tab-stats" role="tab" aria-selected="false" data-view="stats">数据分析</button>
     <button class="tab" id="tab-about" role="tab" aria-selected="false" data-view="about">数据说明</button>
   </nav>
@@ -81,28 +79,9 @@
       <div id="result" class="result" aria-live="polite">
         <div class="empty">输入专业名称，回车或点「查询」开始检索</div>
       </div>
-    </section>
-
-    <!-- ========== 视图：汇总表 ========== -->
-    <section class="view" id="view-table" role="tabpanel" hidden>
-      <h2 class="view-title">汇总表</h2>
-      <p class="view-sub">把「专业查询」最近一次结果汇总成一张可对照的表格：可报本科专业、三年省控线、三年招生院校数（分公办 / 民办）与招生计划人数（分公办 / 民办合计）。年份与指标可自由勾选，勾选后即时更新。</p>
-      <div class="field-config">
-        <fieldset class="fc-group">
-          <legend>年份</legend>
-          <label class="fc-opt"><input type="checkbox" class="fc-year" value="2024" checked> 2024</label>
-          <label class="fc-opt"><input type="checkbox" class="fc-year" value="2025" checked> 2025</label>
-          <label class="fc-opt"><input type="checkbox" class="fc-year" value="2026" checked> 2026</label>
-        </fieldset>
-        <fieldset class="fc-group">
-          <legend>指标</legend>
-          <label class="fc-opt"><input type="checkbox" class="fc-metric" value="score" checked> 省控线</label>
-          <label class="fc-opt"><input type="checkbox" class="fc-metric" value="schools" checked> 招生院校数</label>
-          <label class="fc-opt"><input type="checkbox" class="fc-metric" value="plans" checked> 招生计划人数</label>
-        </fieldset>
+      <div id="explorer" class="explorer" aria-label="筛选排序与导出">
+        <div class="loading">正在加载筛选配置与院校数据…</div>
       </div>
-      <p class="fc-note">「院校数」按院校名称去重；「计划人数」为该年公办 / 民办各院校招生计划人数合计（含建档立卡专项）。单元格数字格式均为「公办 / 民办」。</p>
-      <div id="summary-table" class="table-wrap" aria-live="polite"></div>
     </section>
 
     <!-- ========== 视图：数据分析 ========== -->

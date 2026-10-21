@@ -221,3 +221,35 @@ tr.major-row.is-open .major-name::before{transform:rotate(90deg);}
   .clear,.go{height:52px;}
   .school-meta{grid-template-columns:repeat(4,1fr);}
 }
+
+/* ---------- metadata 驱动的筛选、排序与操作区 ---------- */
+.explorer{margin-top:20px;display:flex;flex-direction:column;gap:12px;}
+.explorer-status:empty{display:none;}
+.loading{display:block;padding:14px;color:var(--muted);text-align:center;}
+.filter-panel,.sort-panel,.explorer-actions,.preview-section,.export-actions{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px;
+}
+.filter-panel{display:grid;gap:14px;}
+.filter-group h3{margin:0 0 9px;font-size:13px;color:var(--muted);}
+.filter-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;}
+.filter-field{display:grid;gap:5px;min-width:132px;font-size:12px;color:var(--muted);}
+.filter-field select,.filter-field input{
+  min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:8px;
+  background:var(--surface);color:var(--ink);font:inherit;font-size:14px;
+}
+.filter-field select:focus,.filter-field input:focus{outline:2px solid var(--blue-soft);border-color:var(--blue);}
+.filter-field select:disabled,.filter-field input:disabled{opacity:.55;cursor:not-allowed;}
+.score-range .filter-field{min-width:110px;max-width:150px;}
+.score-presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.score-preset,.explorer-actions button,.export-actions button{
+  min-height:38px;padding:7px 12px;border:1px solid var(--line-strong);border-radius:8px;
+  background:var(--surface-2);color:var(--ink);font:inherit;cursor:pointer;
+}
+.score-preset:hover:not(:disabled),.explorer-actions button:hover:not(:disabled){border-color:var(--blue);color:var(--blue-deep);}
+.score-preset:disabled,.explorer-actions button:disabled,.export-actions button:disabled{opacity:.5;cursor:not-allowed;}
+.field-error{min-height:18px;margin:6px 0 0;color:var(--vermill);font-size:12px;}
+.sort-panel{display:flex;align-items:end;}
+.sort-panel .filter-field{min-width:min(100%,280px);}
+.explorer-actions,.export-actions{display:flex;flex-wrap:wrap;gap:8px;}
+.preview-placeholder{padding:28px 12px;color:var(--muted);text-align:center;}
