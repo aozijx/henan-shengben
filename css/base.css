@@ -31,6 +31,7 @@
   /* ---- 分层表面 ---- */
   --surface-2:#f0f3f6;     /* 表头、chip 底 */
   --surface-3:#f7fafc;     /* 行悬停 */
+  --row-alt:#f3f6fa;       /* 表格隔行加深 */
   --code-bg:#eef1f4;
   --other-bg:#eef1f4;
   --other-fg:#44525f;
@@ -94,6 +95,7 @@
 
   --surface-2:#1e252d;
   --surface-3:#1c242c;
+  --row-alt:#202832;
   --code-bg:#222b34;
   --other-bg:#232b34;
   --other-fg:#b7c3cf;

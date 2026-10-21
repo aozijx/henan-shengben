@@ -54,7 +54,7 @@
 .badge-subject.mgmt{background:var(--mgmt-bg);color:var(--mgmt-fg);}
 .badge-subject.other{background:var(--other-bg);color:var(--other-fg);}
 
-.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+.table-wrap{overflow:auto;max-height:min(70vh,720px);background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
 table{
   width:100%;min-width:960px;border-collapse:collapse;font-size:14px;
   table-layout:fixed;
@@ -69,9 +69,11 @@ col.c-school{width:12%;}
 thead th{
   background:var(--surface-2);color:var(--muted);font-weight:600;font-size:12.5px;
   text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-strong);
-  white-space:nowrap;position:sticky;top:0;z-index:1;
+  white-space:nowrap;position:sticky;top:0;z-index:2;
+  box-shadow:inset 0 -1px 0 var(--line-strong); /* collapse 模式下 sticky 边框会随滚动消失，用内阴影替代 */
 }
 tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;overflow-wrap:break-word;}
+tbody tr:nth-child(4n+3) td{background:var(--row-alt);} /* 结果表主体为「专业行+院校行」成对排布，按对隔行加深 */
 tbody tr.major-row:last-of-type td{border-bottom:none;}
 tbody tr.major-row:hover td{background:var(--surface-3);}
 .major-name{font-weight:600;}
