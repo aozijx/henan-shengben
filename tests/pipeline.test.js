@@ -55,16 +55,16 @@ test('filters by professional basic course and ignores whitespace differences', 
   assert.deepEqual(run({ subject: '大学语文、专业英语' }).rows.map((row) => row.majorName), ['英语']);
 });
 
-test('keeps majors whose school count is within the inclusive upper bound', () => {
-  assert.deepEqual(run({ schoolCount: '1' }).rows.map((row) => row.majorName), ['会计学', '英语']);
-  assert.deepEqual(run({ schoolCount: '2' }).rows.map((row) => row.majorName), ['软件工程', '会计学', '英语']);
-  assert.deepEqual(run({ schoolCount: '0' }).rows.map((row) => row.majorName), []);
+test('keeps majors whose school count is greater than the entered value', () => {
+  assert.deepEqual(run({ schoolCount: '1' }).rows.map((row) => row.majorName), ['软件工程']);
+  assert.deepEqual(run({ schoolCount: '2' }).rows.map((row) => row.majorName), []);
+  assert.deepEqual(run({ schoolCount: '0' }).rows.map((row) => row.majorName), ['软件工程', '会计学', '英语']);
 });
 
 test('counts schools after plan filters before applying the school count bound', () => {
   const result = run({ schoolType: '公办', schoolCount: '1' });
-  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程', '英语']);
-  assert.equal(result.effectiveSchoolCount, 2);
+  assert.deepEqual(result.rows.map((row) => row.majorName), []);
+  assert.equal(result.effectiveSchoolCount, 0);
 });
 
 test('counts a duplicate school once while summing ordinary and poverty plans', () => {

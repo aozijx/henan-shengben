@@ -88,10 +88,10 @@ function enumControl(field, stateKey, state, disabled) {
     '<select data-filter="' + stateKey + '"' + (disabled ? ' disabled' : '') + '>' + options + '</select></label>';
 }
 
-function maxControl(field, state, disabled) {
+function minControl(field, state, disabled) {
   if (!field) return '';
   var value = state.filters[field.key] || '';
-  return '<label class="filter-field"><span>' + esc(field.label) + ' ≤</span>' +
+  return '<label class="filter-field"><span>' + esc(field.label) + ' &gt;</span>' +
     '<input data-filter-number="' + esc(field.key) + '" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="不限" value="' + esc(value) + '"' +
     (disabled ? ' disabled' : '') + '></label>';
 }
@@ -130,7 +130,7 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
         enumControl(filterField(metadata, 'schoolType'), 'schoolType', state, unavailable) +
         enumControl(filterField(metadata, 'povertyStatus'), 'povertyStatus', state, unavailable) +
         enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
-        maxControl(filterField(metadata, 'schoolCount'), state, unavailable) +
+        minControl(filterField(metadata, 'schoolCount'), state, unavailable) +
       '</div></div>' +
     '</section>' +
     '<section class="sort-panel" aria-label="排序控制"><label class="filter-field"><span>排序方式</span>' +

@@ -12,7 +12,7 @@ function rowMatchesFilters(row, filters) {
   if (filters.subject && filters.subject !== '全部' &&
       normalizeText(row.subject) !== normalizeText(filters.subject)) return false;
   var limit = schoolCountLimit(filters.schoolCount);
-  if (limit != null && row.schoolCount > limit) return false;
+  if (limit != null && row.schoolCount <= limit) return false;
   return true;
 }
 
