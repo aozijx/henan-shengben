@@ -59,6 +59,7 @@ export function buildPreviewRows(input) {
       row['publicSchoolCount' + year] = Object.keys(publicSchools).length;
       row['privateSchoolCount' + year] = Object.keys(privateSchools).length;
       row['schoolCount' + year] = Object.keys(allSchools).length;
+      row['schoolSplit' + year] = row['publicSchoolCount' + year] + '/' + row['privateSchoolCount' + year];
       row['planCount' + year] = planCount;
       if (year === latestYear) latestSchools = allSchools;
     });

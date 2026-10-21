@@ -100,3 +100,16 @@ function showSpec($q, $hint, $result, spec) {
   }
   renderTable($result, spec['专科专业'] + ' → 可报本科专业', majors, majors.length + ' 个专业');
 }
+
+/* ---------- 筛选联动：把筛选后的专业列表重渲染到结果区 ----------
+   由 explorer 在筛选/排序变化时回调，majors 为按原顺序排列的可报本科专业。
+   未查询或查询为空时不动作；全部被筛掉时给出明确提示。 */
+export function renderFilteredResult($result, majors, note) {
+  if (!isReady() || !lastMajors.length) return;
+  if (!majors.length) {
+    $result.innerHTML = '<div class="empty">当前筛选条件下没有符合的本科专业（原有 ' +
+      lastMajors.length + ' 个），可调整或重置下方筛选。</div>';
+    return;
+  }
+  renderTable($result, lastSpecName + ' → 可报本科专业', majors, note || (majors.length + ' 个专业'));
+}

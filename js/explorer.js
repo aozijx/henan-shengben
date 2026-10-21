@@ -191,6 +191,27 @@ function latestSupportedYear(metadata) {
   return years.length ? Math.max.apply(null, years) : null;
 }
 
+/* ---------- 筛选联动结果区 ----------
+   把筛选后的专业（保持原顺序）通知给上层，用于重渲染查询结果表；
+   同时返回「筛选后 X / Y 个专业」的计数说明（未启用筛选时为 null）。 */
+function activeFilterNote(state) {
+  var f = state.filters || {};
+  var active = (f.schoolType && f.schoolType !== '全部') ||
+    (f.povertyStatus && f.povertyStatus !== '全部') ||
+    (f.subject && f.subject !== '全部') ||
+    (f.schoolCount != null && f.schoolCount !== '');
+  if (!active) return null;
+  return '筛选后 ' + state.rows.length + ' / ' + state.majors.length + ' 个专业';
+}
+
+function notifyFilteredResult(state, options) {
+  if (typeof options.onFilteredResult !== 'function') return;
+  var majors = state.rows.slice()
+    .sort(function (a, b) { return a.originalOrder - b.originalOrder; })
+    .map(function (row) { return state.majors[row.originalOrder]; });
+  options.onFilteredResult(majors, activeFilterNote(state));
+}
+
 function recompute(state, metadata) {
   if (state.status !== 'ready' || !state.majors.length) return { ...state, rows: [], effectiveSchoolCount: 0 };
   var preview = buildPreviewRows({
@@ -218,6 +239,7 @@ export function initExplorer(root, metadata, options) {
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
     if (state.year !== previousYear && typeof options.onYearChange === 'function') options.onYearChange(state.year);
+    notifyFilteredResult(state, options);
   }
   activeExplorer = {
     dispatch: dispatch,
@@ -225,6 +247,7 @@ export function initExplorer(root, metadata, options) {
   };
   renderExplorerControls(root, metadata, state, dispatch);
   if (typeof options.onYearChange === 'function') options.onYearChange(state.year);
+  notifyFilteredResult(state, options);
   return activeExplorer;
 }
 

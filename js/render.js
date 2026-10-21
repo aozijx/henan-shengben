@@ -92,11 +92,12 @@ function schoolItemHtml(c, seenName) {
       ['备注', c['备注'] || '—']
     ];
   }
-  /* 长字段独占整行：通信地址 / 其他说明 / 招生章程网址 / 备注 */
+  /* 长字段独占整行：通信地址 / 其他说明 / 招生章程网址 / 备注；前 4 项为紧凑首行（宽屏四列） */
   var fullSet = { '通信地址': 1, '其他说明': 1, '招生章程网址': 1, '备注': 1 };
-  var metaHtml = meta.map(function (kv) {
+  var metaHtml = meta.map(function (kv, i) {
     var label = kv[0], val = kv[1];
-    var cls = fullSet[label] ? ' meta-row full' : '';
+    var cls = i < 4 ? ' head' : '';
+    if (fullSet[label]) cls += ' full';
     var v = val === '是'
       ? '<span class="mark on">是</span>'
       : (label === '办学性质'
@@ -165,10 +166,10 @@ function yearGroupHtml(m, year, openDefault) {
     items + '</details>';
 }
 
-/* 一级：某个专业的「年份折叠」层（三年分组） */
+/* 一级：某个专业的「年份折叠」层（三年分组，默认全部收起） */
 function yearStackHtml(m) {
   return '<div class="year-stack">' +
-    yearGroupHtml(m, 2026, true) +
+    yearGroupHtml(m, 2026, false) +
     yearGroupHtml(m, 2025, false) +
     yearGroupHtml(m, 2024, false) +
     '</div>';

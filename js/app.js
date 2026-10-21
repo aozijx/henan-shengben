@@ -107,6 +107,9 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
     onYearChange: function (year) {
       query.setQueryYear(year);
       if ($q.value.trim()) query.doQuery($q, $hint, $result);
+    },
+    onFilteredResult: function (majors, note) {
+      query.renderFilteredResult($result, majors, note);
     }
   });
   query.setResultListener(explorer.setSearchResult);

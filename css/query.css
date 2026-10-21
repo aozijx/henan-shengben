@@ -219,7 +219,10 @@ tr.major-row.is-open .major-name::before{transform:rotate(90deg);}
 @media (min-width:768px){
   .search-row input{height:52px;font-size:17px;}
   .clear,.go{height:52px;}
+  /* 院校详情：仅首行四列（院校代码/专业代号/专业名称/学制），其余两列，长字段整行 */
   .school-meta{grid-template-columns:repeat(4,1fr);}
+  .meta-row{grid-column:span 2;}
+  .meta-row.head{grid-column:span 1;}
 }
 
 /* ---------- metadata 驱动的筛选、排序与操作区 ---------- */

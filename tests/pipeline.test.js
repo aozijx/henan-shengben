@@ -94,6 +94,18 @@ test('counts a duplicate school once while summing ordinary and poverty plans', 
   assert.equal(run().effectiveSchoolCount, 3);
 });
 
+test('splits school counts into public/private as pub/min text', () => {
+  assert.deepEqual(
+    run().rows.map((row) => row.majorName + ':' + row.schoolSplit2026),
+    ['软件工程:1/1', '会计学:0/1', '英语:1/0']);
+  assert.deepEqual(
+    run({ schoolType: '公办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2026),
+    ['软件工程:1/0', '英语:1/0']);
+  assert.deepEqual(
+    run({ schoolType: '民办' }).rows.map((row) => row.majorName + ':' + row.schoolSplit2024),
+    ['软件工程:0/1', '会计学:0/1']);
+});
+
 test('restores stable original order', () => {
   const rows = run().rows.slice().reverse();
   assert.deepEqual(sortPreviewRows(rows, { key: 'originalOrder', direction: 'original' }).map((row) => row.majorName), [
