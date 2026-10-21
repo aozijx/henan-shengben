@@ -31,8 +31,7 @@ test('a metadata-only new year flows through load, filter, sort, preview and exp
   const preview = buildPreviewRows({
     majors,
     year: loaded.metadata.defaultYear,
-    metadata: loaded.metadata,
-    filters: { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '' },
+    filters: { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' },
     getScore: (major, year) => getScore(loaded.index, major, year),
     getPlans: (major, year) => getCollegesByYear(loaded.index, year, major)
   });

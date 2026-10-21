@@ -74,7 +74,6 @@ export function validateMetadata(value) {
     errors.push('默认排序方向无效');
   }
 
-  if (!Array.isArray(value.scorePresets)) errors.push('scorePresets 必须是数组');
   if (!Number.isInteger(value.pageSize) || value.pageSize < 1) errors.push('pageSize 必须是正整数');
   if (value.exportFormat !== 'csv') errors.push('exportFormat 当前仅支持 csv');
 

@@ -25,7 +25,6 @@ function validMetadata() {
       }
     ],
     defaultSort: { key: 'score', direction: 'desc' },
-    scorePresets: [{ label: '200 分以上', min: 200, max: 750 }],
     pageSize: 50,
     exportFormat: 'csv'
   };

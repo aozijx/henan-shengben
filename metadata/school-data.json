@@ -38,7 +38,7 @@
       "type": "number",
       "min": 0,
       "max": 750,
-      "filterEnable": true,
+      "filterEnable": false,
       "sortEnable": true,
       "tableShow": true,
       "exportEnable": true
@@ -60,6 +60,32 @@
       "exportLabel": "建档立卡筛选",
       "type": "enum",
       "enumValues": ["是", "否"],
+      "filterEnable": true,
+      "sortEnable": false,
+      "tableShow": false,
+      "exportEnable": false
+    },
+    {
+      "key": "subject",
+      "label": "专业基础课",
+      "exportLabel": "专业基础课",
+      "type": "enum",
+      "enumValues": [
+        "高等数学",
+        "管理学",
+        "大学语文",
+        "大学语文、专业英语",
+        "经济学",
+        "法学基础",
+        "教育学心理学",
+        "中医基础",
+        "生理学、病理解剖学",
+        "动物、植物遗传学",
+        "体育专业综合",
+        "音乐专业综合",
+        "美术专业综合",
+        "舞蹈专业综合"
+      ],
       "filterEnable": true,
       "sortEnable": false,
       "tableShow": false,
@@ -93,7 +119,7 @@
       "exportLabel": "院校总数",
       "type": "number",
       "min": 0,
-      "filterEnable": false,
+      "filterEnable": true,
       "sortEnable": true,
       "tableShow": true,
       "exportEnable": true
@@ -125,12 +151,6 @@
     "key": "originalOrder",
     "direction": "original"
   },
-  "scorePresets": [
-    { "label": "100 分以下", "min": 0, "max": 99 },
-    { "label": "100–149 分", "min": 100, "max": 149 },
-    { "label": "150–199 分", "min": 150, "max": 199 },
-    { "label": "200 分及以上", "min": 200, "max": 750 }
-  ],
   "pageSize": 50,
   "exportFormat": "csv"
 }

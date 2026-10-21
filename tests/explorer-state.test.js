@@ -1,10 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createInitialState, reduceExplorerState, sanitizeScoreInput } from '../js/explorer.js';
+import { createInitialState, reduceExplorerState, sanitizeNumberInput } from '../js/explorer.js';
 
 const metadata = {
   defaultYear: 2026,
-  defaultSort: { key: 'originalOrder', direction: 'original' }
+  defaultSort: { key: 'originalOrder', direction: 'original' },
+  fields: [
+    { key: 'schoolType', type: 'enum', filterEnable: true },
+    { key: 'povertyStatus', type: 'enum', filterEnable: true },
+    { key: 'subject', type: 'enum', filterEnable: true },
+    { key: 'schoolCount', type: 'number', filterEnable: true }
+  ]
 };
 
 test('creates a loading state from metadata defaults', () => {
@@ -12,7 +18,7 @@ test('creates a loading state from metadata defaults', () => {
   assert.equal(state.status, 'loading');
   assert.equal(state.year, 2026);
   assert.deepEqual(state.sort, metadata.defaultSort);
-  assert.deepEqual(state.filters, { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '' });
+  assert.deepEqual(state.filters, { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' });
   assert.equal(state.page, 1);
 });
 
@@ -41,7 +47,7 @@ test('reset restores filters and default sort while retaining year and search', 
     year: 2025,
     majors: [{ 专业名称: '英语' }],
     specName: '商务英语',
-    filters: { schoolType: '民办', povertyStatus: '是', minScore: '100', maxScore: '200' },
+    filters: { schoolType: '民办', povertyStatus: '是', subject: '管理学', schoolCount: '3' },
     sort: { key: 'score', direction: 'desc' },
     page: 3
   };
@@ -49,7 +55,7 @@ test('reset restores filters and default sort while retaining year and search', 
   assert.equal(reset.year, 2025);
   assert.equal(reset.specName, '商务英语');
   assert.equal(reset.majors.length, 1);
-  assert.deepEqual(reset.filters, { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '' });
+  assert.deepEqual(reset.filters, { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' });
   assert.deepEqual(reset.sort, metadata.defaultSort);
   assert.equal(reset.page, 1);
 });
@@ -63,19 +69,18 @@ test('loading success and failure states are explicit', () => {
   assert.equal(failed.error, 'metadata 无效');
 });
 
-test('search result replacement resets the page and clears stale validation', () => {
-  const state = { ...createInitialState(metadata), page: 3, validationError: '旧错误' };
+test('search result replacement resets the page', () => {
+  const state = { ...createInitialState(metadata), page: 3 };
   const next = reduceExplorerState(state, {
     type: 'SET_SEARCH_RESULT', majors: [{ 专业名称: '软件工程' }], specName: '软件技术'
   }, metadata);
   assert.equal(next.specName, '软件技术');
   assert.equal(next.page, 1);
-  assert.equal(next.validationError, '');
 });
 
-test('score input sanitizer blocks letters, punctuation and negative signs', () => {
-  assert.equal(sanitizeScoreInput('12a-3.4'), '1234');
-  assert.equal(sanitizeScoreInput(' 200 '), '200');
+test('number input sanitizer blocks letters, punctuation and negative signs', () => {
+  assert.equal(sanitizeNumberInput('12a-3.4'), '1234');
+  assert.equal(sanitizeNumberInput(' 20 '), '20');
 });
 
 test('column width updates and full reset have explicit state transitions', () => {
@@ -90,5 +95,5 @@ test('column width updates and full reset have explicit state transitions', () =
   const cleared = reduceExplorerState(resized, { type: 'CLEAR_ALL' }, metadata);
   assert.equal(cleared.status, 'ready');
   assert.deepEqual(cleared.majors, []);
-  assert.deepEqual(cleared.filters, { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '' });
+  assert.deepEqual(cleared.filters, { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' });
 });

@@ -1,5 +1,5 @@
 import { getCollegesByYear, getScore } from './data.js';
-import { buildPreviewRows, sortPreviewRows, validateScoreRange } from './pipeline.js';
+import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { renderPreview } from './preview.js';
 import { downloadCsv, getExportFields } from './export.js';
 import { clearPreferences, readColumnWidths, writeColumnWidths } from './preferences.js';
@@ -8,19 +8,23 @@ import { esc } from './utils.js';
 
 var activeExplorer = null;
 
-function defaultFilters() {
-  return { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '' };
+function defaultFilters(metadata) {
+  var filters = {};
+  (metadata.fields || []).forEach(function (field) {
+    if (!field.filterEnable) return;
+    filters[field.key] = field.type === 'enum' ? '全部' : '';
+  });
+  return filters;
 }
 
 export function createInitialState(metadata) {
   return {
     status: 'loading',
     error: '',
-    validationError: '',
     year: metadata.defaultYear,
     majors: [],
     specName: '',
-    filters: defaultFilters(),
+    filters: defaultFilters(metadata),
     sort: { key: metadata.defaultSort.key, direction: metadata.defaultSort.direction },
     page: 1,
     rows: [],
@@ -32,9 +36,9 @@ export function createInitialState(metadata) {
 export function reduceExplorerState(state, event, metadata) {
   if (event.type === 'LOAD_SUCCESS') return { ...state, status: 'ready', error: '' };
   if (event.type === 'LOAD_ERROR') return { ...state, status: 'error', error: event.error || '加载失败' };
-  if (event.type === 'SET_YEAR') return { ...state, year: Number(event.year), page: 1, validationError: '' };
+  if (event.type === 'SET_YEAR') return { ...state, year: Number(event.year), page: 1 };
   if (event.type === 'SET_FILTER') {
-    return { ...state, filters: { ...state.filters, [event.key]: event.value }, page: 1, validationError: '' };
+    return { ...state, filters: { ...state.filters, [event.key]: event.value }, page: 1 };
   }
   if (event.type === 'SET_SORT') return { ...state, sort: { ...event.sort }, page: 1 };
   if (event.type === 'SET_PAGE') return { ...state, page: Math.max(1, Number(event.page) || 1) };
@@ -46,17 +50,15 @@ export function reduceExplorerState(state, event, metadata) {
       ...state,
       majors: Array.isArray(event.majors) ? event.majors.slice() : [],
       specName: event.specName || '',
-      page: 1,
-      validationError: ''
+      page: 1
     };
   }
   if (event.type === 'RESET_FILTERS') {
     return {
       ...state,
-      filters: defaultFilters(),
+      filters: defaultFilters(metadata),
       sort: { key: metadata.defaultSort.key, direction: metadata.defaultSort.direction },
-      page: 1,
-      validationError: ''
+      page: 1
     };
   }
   if (event.type === 'CLEAR_ALL') {
@@ -65,12 +67,12 @@ export function reduceExplorerState(state, event, metadata) {
   return state;
 }
 
-export function sanitizeScoreInput(value) {
+export function sanitizeNumberInput(value) {
   return String(value == null ? '' : value).replace(/\D+/g, '');
 }
 
 export function canExport(state) {
-  return state.status === 'ready' && Array.isArray(state.rows) && state.rows.length > 0 && !state.validationError;
+  return state.status === 'ready' && Array.isArray(state.rows) && state.rows.length > 0;
 }
 
 function filterField(metadata, key) {
@@ -84,6 +86,14 @@ function enumControl(field, stateKey, state, disabled) {
   }).join('');
   return '<label class="filter-field"><span>' + esc(field.label) + '</span>' +
     '<select data-filter="' + stateKey + '"' + (disabled ? ' disabled' : '') + '>' + options + '</select></label>';
+}
+
+function maxControl(field, state, disabled) {
+  if (!field) return '';
+  var value = state.filters[field.key] || '';
+  return '<label class="filter-field"><span>' + esc(field.label) + ' ≤</span>' +
+    '<input data-filter-number="' + esc(field.key) + '" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="不限" value="' + esc(value) + '"' +
+    (disabled ? ' disabled' : '') + '></label>';
 }
 
 function sortOptions(metadata, selected) {
@@ -104,13 +114,8 @@ function sortOptions(metadata, selected) {
 export function renderExplorerControls(root, metadata, state, dispatch) {
   if (!root) return;
   var unavailable = state.status !== 'ready' || !state.majors.length;
-  var score = filterField(metadata, 'score') || {};
   var yearOptions = metadata.supportedYears.map(function (year) {
     return '<option value="' + year + '"' + (state.year === year ? ' selected' : '') + '>' + year + ' 年</option>';
-  }).join('');
-  var presets = (metadata.scorePresets || []).map(function (preset) {
-    return '<button type="button" class="score-preset" data-min="' + preset.min + '" data-max="' + preset.max + '"' +
-      (unavailable ? ' disabled' : '') + '>' + esc(preset.label) + '</button>';
   }).join('');
   var selectedSort = state.sort.key + ':' + state.sort.direction;
 
@@ -120,16 +125,13 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
       (state.status === 'error' ? '<span class="msg-notfound">' + esc(state.error) + '</span>' : '') +
     '</div>' +
     '<section class="filter-panel" aria-label="筛选条件">' +
-      '<div class="filter-group"><h3>基础属性筛选</h3><div class="filter-row">' +
+      '<div class="filter-group"><h3>筛选条件</h3><div class="filter-row">' +
         '<label class="filter-field"><span>数据年份</span><select data-year' + (state.status !== 'ready' ? ' disabled' : '') + '>' + yearOptions + '</select></label>' +
         enumControl(filterField(metadata, 'schoolType'), 'schoolType', state, unavailable) +
         enumControl(filterField(metadata, 'povertyStatus'), 'povertyStatus', state, unavailable) +
+        enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
+        maxControl(filterField(metadata, 'schoolCount'), state, unavailable) +
       '</div></div>' +
-      '<div class="filter-group"><h3>分数区间筛选</h3><div class="filter-row score-range">' +
-        '<label class="filter-field"><span>最低分</span><input data-score="minScore" type="text" inputmode="numeric" pattern="[0-9]*" min="' + (score.min ?? 0) + '" max="' + (score.max ?? '') + '" value="' + esc(state.filters.minScore) + '"' + (unavailable ? ' disabled' : '') + '></label>' +
-        '<label class="filter-field"><span>最高分</span><input data-score="maxScore" type="text" inputmode="numeric" pattern="[0-9]*" min="' + (score.min ?? 0) + '" max="' + (score.max ?? '') + '" value="' + esc(state.filters.maxScore) + '"' + (unavailable ? ' disabled' : '') + '></label>' +
-        '<div class="score-presets" aria-label="快速分数档位">' + presets + '</div>' +
-      '</div><p class="field-error" id="scoreError">' + esc(state.validationError) + '</p></div>' +
     '</section>' +
     '<section class="sort-panel" aria-label="排序控制"><label class="filter-field"><span>排序方式</span>' +
       '<select data-sort' + (unavailable ? ' disabled' : '') + '>' + sortOptions(metadata, selectedSort) + '</select></label></section>' +
@@ -148,17 +150,11 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   root.querySelectorAll('[data-filter]').forEach(function (control) {
     control.addEventListener('change', function () { dispatch({ type: 'SET_FILTER', key: control.dataset.filter, value: control.value }); });
   });
-  root.querySelectorAll('[data-score]').forEach(function (control) {
+  root.querySelectorAll('[data-filter-number]').forEach(function (control) {
     control.addEventListener('input', function () {
-      var clean = sanitizeScoreInput(control.value);
+      var clean = sanitizeNumberInput(control.value);
       if (control.value !== clean) control.value = clean;
-      dispatch({ type: 'SET_FILTER', key: control.dataset.score, value: clean });
-    });
-  });
-  root.querySelectorAll('.score-preset').forEach(function (button) {
-    button.addEventListener('click', function () {
-      dispatch({ type: 'SET_FILTER', key: 'minScore', value: button.dataset.min });
-      dispatch({ type: 'SET_FILTER', key: 'maxScore', value: button.dataset.max });
+      dispatch({ type: 'SET_FILTER', key: control.dataset.filterNumber, value: clean });
     });
   });
   var sortSelect = root.querySelector('[data-sort]');
@@ -195,21 +191,17 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   }, metadata, dispatch);
 }
 
-function recompute(state, metadata) {
+function recompute(state) {
   if (state.status !== 'ready' || !state.majors.length) return { ...state, rows: [], effectiveSchoolCount: 0 };
-  var validation = validateScoreRange(state.filters, metadata);
-  if (!validation.valid) return { ...state, validationError: validation.error };
   var preview = buildPreviewRows({
     majors: state.majors,
     year: state.year,
     filters: state.filters,
-    metadata: metadata,
     getScore: function (major, year) { return getScore(major, year); },
     getPlans: function (major, year) { return getCollegesByYear(year, major); }
   });
   return {
     ...state,
-    validationError: '',
     rows: sortPreviewRows(preview.rows, state.sort),
     effectiveSchoolCount: preview.effectiveSchoolCount
   };
@@ -223,7 +215,7 @@ export function initExplorer(root, metadata, options) {
     var previousYear = state.year;
     state = reduceExplorerState(state, event, metadata);
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
-    state = recompute(state, metadata);
+    state = recompute(state);
     renderExplorerControls(root, metadata, state, dispatch);
     if (state.year !== previousYear && typeof options.onYearChange === 'function') options.onYearChange(state.year);
   }

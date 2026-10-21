@@ -1,15 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPreviewRows, sortPreviewRows, validateScoreRange } from '../js/pipeline.js';
-
-const metadata = {
-  fields: [{ key: 'score', type: 'number', min: 0, max: 750 }]
-};
+import { buildPreviewRows, sortPreviewRows } from '../js/pipeline.js';
 
 const majors = [
-  { 专业名称: '软件工程', 专业代号: '80' },
-  { 专业名称: '会计学', 专业代号: '97' },
-  { 专业名称: '英语', 专业代号: 'C1' }
+  { 专业名称: '软件工程', 专业代号: '80', 考试科目: '高等数学' },
+  { 专业名称: '会计学', 专业代号: '97', 考试科目: '管理学' },
+  { 专业名称: '英语', 专业代号: 'C1', 考试科目: '大学语文、专业英语' }
 ];
 
 const scores = { 软件工程: 180, 会计学: 150, 英语: 210 };
@@ -31,20 +27,20 @@ function run(filters = {}) {
   return buildPreviewRows({
     majors,
     year: 2026,
-    filters: { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '', ...filters },
+    filters: { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '', ...filters },
     getScore: (major) => scores[major.专业名称],
     getPlans: (major) => plans[major.专业名称]
   });
 }
 
-test('applies school type, poverty status and score filters with AND semantics', () => {
-  const result = run({ schoolType: '公办', povertyStatus: '是', minScore: '180', maxScore: '180' });
+test('applies school type and poverty status filters with AND semantics', () => {
+  const result = run({ schoolType: '公办', povertyStatus: '是' });
   assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程']);
   assert.equal(result.rows[0].schoolCount, 1);
   assert.equal(result.rows[0].planCount, 5);
 });
 
-test('全部 values do not force school type or poverty filtering', () => {
+test('全部 values do not force optional filtering', () => {
   assert.deepEqual(run().rows.map((row) => row.majorName), ['软件工程', '会计学', '英语']);
 });
 
@@ -53,21 +49,22 @@ test('supports public/private and yes/no filter branches', () => {
   assert.deepEqual(run({ povertyStatus: '否' }).rows.map((row) => row.majorName), ['软件工程', '英语']);
 });
 
-test('score bounds are inclusive and accept preset range values', () => {
-  assert.deepEqual(run({ minScore: '150', maxScore: '180' }).rows.map((row) => row.majorName), ['软件工程', '会计学']);
+test('filters by professional basic course and ignores whitespace differences', () => {
+  assert.deepEqual(run({ subject: '管理学' }).rows.map((row) => row.majorName), ['会计学']);
+  assert.deepEqual(run({ subject: ' 管理学 ' }).rows.map((row) => row.majorName), ['会计学']);
+  assert.deepEqual(run({ subject: '大学语文、专业英语' }).rows.map((row) => row.majorName), ['英语']);
 });
 
-test('rejects letters, special characters, negatives and reversed score bounds', () => {
-  assert.equal(validateScoreRange({ minScore: '1a', maxScore: '' }, metadata).valid, false);
-  assert.equal(validateScoreRange({ minScore: '1.5', maxScore: '' }, metadata).valid, false);
-  assert.equal(validateScoreRange({ minScore: '-1', maxScore: '' }, metadata).valid, false);
-  assert.match(validateScoreRange({ minScore: '200', maxScore: '100' }, metadata).error, /最低分.*最高分/);
+test('keeps majors whose school count is within the inclusive upper bound', () => {
+  assert.deepEqual(run({ schoolCount: '1' }).rows.map((row) => row.majorName), ['会计学', '英语']);
+  assert.deepEqual(run({ schoolCount: '2' }).rows.map((row) => row.majorName), ['软件工程', '会计学', '英语']);
+  assert.deepEqual(run({ schoolCount: '0' }).rows.map((row) => row.majorName), []);
 });
 
-test('accepts blank bounds and returns normalized numeric values', () => {
-  assert.deepEqual(validateScoreRange({ minScore: '', maxScore: '200' }, metadata), {
-    valid: true, error: '', min: null, max: 200
-  });
+test('counts schools after plan filters before applying the school count bound', () => {
+  const result = run({ schoolType: '公办', schoolCount: '1' });
+  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程', '英语']);
+  assert.equal(result.effectiveSchoolCount, 2);
 });
 
 test('counts a duplicate school once while summing ordinary and poverty plans', () => {

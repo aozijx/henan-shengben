@@ -19,7 +19,6 @@
     { "key": "originalOrder", "label": "原始顺序", "exportLabel": "原始顺序", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": false, "exportEnable": false }
   ],
   "defaultSort": { "key": "score", "direction": "desc" },
-  "scorePresets": [],
   "pageSize": 50,
   "exportFormat": "csv"
 }
