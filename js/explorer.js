@@ -36,7 +36,6 @@ export function createInitialState(metadata) {
 export function reduceExplorerState(state, event, metadata) {
   if (event.type === 'LOAD_SUCCESS') return { ...state, status: 'ready', error: '' };
   if (event.type === 'LOAD_ERROR') return { ...state, status: 'error', error: event.error || '加载失败' };
-  if (event.type === 'SET_YEAR') return { ...state, year: Number(event.year), page: 1 };
   if (event.type === 'SET_FILTER') {
     return { ...state, filters: { ...state.filters, [event.key]: event.value }, page: 1 };
   }
@@ -211,12 +210,10 @@ export function initExplorer(root, metadata, options) {
   var state = reduceExplorerState(createInitialState(metadata), { type: 'LOAD_SUCCESS' }, metadata);
   state = { ...state, columnWidths: readColumnWidths(localStorage, metadata) };
   function dispatch(event) {
-    var previousYear = state.year;
     state = reduceExplorerState(state, event, metadata);
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
-    if (state.year !== previousYear && typeof options.onYearChange === 'function') options.onYearChange(state.year);
     notifyFilteredResult(state, options);
   }
   activeExplorer = {
@@ -224,7 +221,6 @@ export function initExplorer(root, metadata, options) {
     getState: function () { return state; }
   };
   renderExplorerControls(root, metadata, state, dispatch);
-  if (typeof options.onYearChange === 'function') options.onYearChange(state.year);
   notifyFilteredResult(state, options);
   return activeExplorer;
 }

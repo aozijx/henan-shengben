@@ -44,5 +44,3 @@ export function downloadCsv(model, documentLike, urlApi) {
   }
   return filename;
 }
-
-export var EXPORTERS = { csv: downloadCsv };

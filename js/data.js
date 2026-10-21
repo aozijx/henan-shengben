@@ -5,8 +5,6 @@ export var YEARS = [];
 export var SCORE_BY_YEAR = {};
 export var MAPPING = [];
 export var PLANS = [];
-export var PLAN_BY_YEAR = {};
-export var COLLEGES = [];
 export var ALL_MAJORS = [];
 
 var activeStore = null;
@@ -60,9 +58,7 @@ export async function loadAll(metadata, fetchImpl) {
   YEARS = store.years.slice();
   SCORE_BY_YEAR = store.scoresByYear;
   MAPPING = store.mapping;
-  PLAN_BY_YEAR = store.plansByYear;
   PLANS = store.plansByYear[metadata.defaultYear] || [];
-  COLLEGES = store.fallbacksByYear[metadata.defaultYear] || [];
   ready = true;
   return store;
 }
@@ -106,15 +102,6 @@ export function buildIndexes(store, metadata) {
   });
   activeIndex = index;
   return index;
-}
-
-export function getYearData(index, year) {
-  var current = index || activeIndex;
-  if (!current || !current.store.years.includes(Number(year))) return null;
-  return {
-    mapping: current.store.mappingByYear[year] || [], scores: current.store.scoresByYear[year] || [],
-    plans: current.store.plansByYear[year] || [], fallback: current.store.fallbacksByYear[year] || []
-  };
 }
 
 export function getMappingByYear(year) {
@@ -168,8 +155,6 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
     return String(a['院校代号'] || '').localeCompare(String(b['院校代号'] || ''));
   });
 }
-
-export function getColleges(major) { return getCollegesByYear(activeMetadata && activeMetadata.defaultYear, major); }
 
 export function getPlanStats() {
   var schools = {}, privateRows = 0, povertyRows = 0, regularRows = 0, total = 0;

@@ -206,7 +206,6 @@ tr.major-row.is-open .major-name::before{transform:rotate(90deg);}
   display:inline-block;padding:3px 10px;border-radius:6px;font-size:12.5px;
   background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
 }
-.chip .y{color:var(--muted);font-size:11.5px;}
 
 /* ---------- 未找到提示 ---------- */
 .msg-notfound{

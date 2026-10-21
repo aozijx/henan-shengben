@@ -22,14 +22,6 @@ test('creates a loading state from metadata defaults', () => {
   assert.equal(state.page, 1);
 });
 
-test('year changes preserve search but reset page', () => {
-  const state = { ...createInitialState(metadata), status: 'ready', page: 3, majors: [{ 专业名称: '软件工程' }] };
-  const next = reduceExplorerState(state, { type: 'SET_YEAR', year: 2025 }, metadata);
-  assert.equal(next.year, 2025);
-  assert.equal(next.page, 1);
-  assert.equal(next.majors.length, 1);
-});
-
 test('filter and sort changes reset pagination', () => {
   let state = { ...createInitialState(metadata), status: 'ready', page: 4 };
   state = reduceExplorerState(state, { type: 'SET_FILTER', key: 'schoolType', value: '民办' }, metadata);

@@ -6,12 +6,12 @@
    ============================================================ */
 
 export var THEME_KEY = 'henan-theme';
-export var THEME_MODES = ['light', 'dark', 'auto'];
+var THEME_MODES = ['light', 'dark', 'auto'];
 
 var themeMedia = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 var themeMode = 'auto';
 
-export function themeLabel(m) {
+function themeLabel(m) {
   return m === 'light' ? '浅色' : m === 'dark' ? '深色' : '跟随系统';
 }
 

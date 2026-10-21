@@ -104,10 +104,6 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   window.__henanReady = true;
   initStats();
   explorer.initExplorer($('explorer'), loaded.metadata, {
-    onYearChange: function (year) {
-      query.setQueryYear(year);
-      if ($q.value.trim()) query.doQuery($q, $hint, $result);
-    },
     onFilteredResult: function (majors, note) {
       query.renderFilteredResult($result, majors, note);
     }

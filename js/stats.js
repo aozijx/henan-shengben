@@ -124,7 +124,7 @@ export function renderPlanOverview() {
 
 
 
-export function renderFallbackStats() {
+function renderFallbackStats() {
   if (fallbackRendered) return;
   var distHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:40%">区间</th><th>2024</th><th>2025</th><th>2026</th></tr></thead><tbody>' +
     BINS.map(function (b) {

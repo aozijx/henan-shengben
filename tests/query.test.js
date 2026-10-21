@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { doQuery, findMappingMatches, setQueryYear } from '../js/query.js';
+import { doQuery, findMappingMatches } from '../js/query.js';
 import { loadAll } from '../js/data.js';
 
 test('searches only the mapping supplied for the selected year', () => {
@@ -25,7 +25,6 @@ test('completes a successful partial query to the selected specialty name', asyn
     'plans.json': []
   };
   await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
-  setQueryYear(2027);
   const input = { value: '物联网' };
   const hint = { textContent: '' };
   const result = { innerHTML: '' };

@@ -8,14 +8,9 @@ import { getMappingByYear, getMetadata, isReady } from './data.js';
 import { esc } from './utils.js';
 import { renderTable, renderMatchList } from './render.js';
 
-var queryYear = null;
-
-export function setQueryYear(year) { queryYear = Number(year); }
-
 function currentMapping() {
   var metadata = getMetadata();
-  var year = queryYear || (metadata && metadata.defaultYear);
-  return getMappingByYear(year);
+  return getMappingByYear(metadata && metadata.defaultYear);
 }
 
 export function findMappingMatches(mapping, keyword) {
@@ -39,12 +34,10 @@ export function fillSuggest($suggest, kw) {
   });
 }
 
-/* 最近一次查询的可报本科专业列表（供汇总表等模块复用） */
+/* 最近一次查询的可报本科专业列表（供筛选联动结果区复用） */
 var lastMajors = [];
 var lastSpecName = '';
 var resultListener = null;
-export function getLastMajors() { return lastMajors; }
-export function getLastSpecName() { return lastSpecName; }
 export function setResultListener(listener) { resultListener = listener; }
 
 /* ---------- 查询入口 ---------- */
@@ -67,9 +60,10 @@ export function doQuery($q, $hint, $result) {
     lastMajors = [];
     lastSpecName = '';
     if (resultListener) resultListener([], '');
+    var metadata = getMetadata();
     $result.innerHTML = '<div class="msg-notfound">未找到专科专业「' + esc(kw) + '」。<br>' +
       '可尝试：关键词的一部分（如「物联网」）；' +
-      '本工具收录 ' + (queryYear || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
+      '本工具收录 ' + ((metadata && metadata.defaultYear) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
     return;
   }
   var spec = matches[0];
@@ -93,7 +87,8 @@ function showSpec($q, $hint, $result, spec) {
   lastMajors = majors;
   lastSpecName = spec['专科专业'];
   if (resultListener) resultListener(majors, lastSpecName);
-  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + (queryYear || '') + ' 对照一览表）';
+  var metadata = getMetadata();
+  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + ((metadata && metadata.defaultYear) || '') + ' 对照一览表）';
   if (!majors.length) {
     $result.innerHTML = '<div class="empty">「' + esc(spec['专科专业']) + '」暂无可报本科专业数据</div>';
     return;
