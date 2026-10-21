@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""从 pdf/ 官方文件重新抽取数据，与 data/ 现有 JSON 比对，防止数据错误。
+"""从 data/*/原始PDF 官方文件重新抽取数据，与规范 JSON 比对。
 
 用法：
   python tools/convert.py            # 校验模式：逐文件比对，报告差异（不变更文件）
@@ -16,6 +16,7 @@ import io
 import json
 import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 import pdfplumber
@@ -23,21 +24,7 @@ import pdfplumber
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 ROOT = Path(__file__).resolve().parent.parent
-PDF = ROOT / 'pdf'
 DATA = ROOT / 'data'
-
-# 已知不变量：转换结果行数必须与官方文件一致
-EXPECTED_COUNTS = {
-    '分数线2024.json': 143,
-    '分数线2025.json': 172,
-    '分数线2026.json': 185,
-    '专科专业可报本科专业对照.json': 558,
-    '招生计划2024.json': 1111,
-    '招生计划2025.json': 1066,
-    '招生计划2026.json': 1259,
-    '招生高校及专业2026.json': 987,
-}
-
 
 def squash(text):
     """去掉换行与多余空白（PDF 单元格内自动换行不含语义）。"""
@@ -65,7 +52,7 @@ def is_title(row):
 
 
 def tables_of(name):
-    with pdfplumber.open(PDF / name) as pdf:
+    with pdfplumber.open(DATA / name) as pdf:
         for page in pdf.pages:
             for table in page.extract_tables():
                 yield table
@@ -100,10 +87,10 @@ def baseName(name):
     return base.replace('试点', '')
 
 
-def extract_code_table():
+def extract_code_table(name):
     out = {}
     prev_code, prev_subject = '', ''
-    for row in rows_of('2026代号对照表.pdf'):
+    for row in rows_of(name):
         if len(row) < 4 or is_header(row):
             continue
         title = squash(row[1])
@@ -152,11 +139,11 @@ def parse_master_cell(cell):
     return pairs
 
 
-def extract_mapping():
+def extract_mapping(code_table_name, overview_name):
     edges = []  # (专科专业名称, 本科条目)
     current_masters = []
     prev_subject = ''
-    for row in rows_of('2026对照一览表.pdf'):
+    for row in rows_of(overview_name):
         if len(row) < 5 or is_header(row):
             continue
         seq = squash(row[0])
@@ -188,7 +175,7 @@ def extract_mapping():
             grouped[major] = []
             order.append(major)
         grouped[major].append(item)
-    code_table = extract_code_table()
+    code_table = extract_code_table(code_table_name)
     out = []
     for major in order:
         items = []
@@ -277,10 +264,10 @@ def extract_plans(name, year, twelve_cols_default=True):
 
 # ---------- 招生总表 2026 ----------
 
-def extract_master_table():
+def extract_master_table(name):
     out = []
     cur_code, cur_school = '', ''
-    for row in rows_of('河南省2026年普通高职（专科）毕业生进入本科阶段学习招生高校及专业总表.pdf'):
+    for row in rows_of(name):
         if len(row) < 8 or is_header(row):
             continue
         if squash(row[0]) and squash(row[1]):
@@ -356,16 +343,50 @@ def diff_mapping(extracted, existing):
     return diffs
 
 
-SOURCES = [
-    ('分数线2024.json', lambda: extract_scorelines('2024年河南省普通高校专升本招生录取控制分数线.pdf')),
-    ('分数线2025.json', lambda: extract_scorelines('2025年河南省普通高校专升本招生录取控制分数线.pdf')),
-    ('分数线2026.json', lambda: extract_scorelines('2026年河南省普通高校专升本招生录取控制分数线.pdf')),
-    ('专科专业可报本科专业对照.json', extract_mapping),
-    ('招生计划2024.json', lambda: extract_plans('河南省2024年普通高等学校专科毕业生升入本科阶段学习招生计划.pdf', 2024, twelve_cols_default=False)),
-    ('招生计划2025.json', lambda: extract_plans('河南省2025年普通高等学校专科毕业生升入本科阶段学习招生计划.pdf', 2025)),
-    ('招生计划2026.json', lambda: extract_plans('河南省2026年普通高等学校专科毕业生升入本科阶段学习招生计划.pdf', 2026)),
-    ('招生高校及专业2026.json', extract_master_table),
+@dataclass(frozen=True)
+class SourceSpec:
+    output_path: str
+    pdf_paths: tuple[str, ...]
+    expected_count: int
+    parser: str
+    year: int
+
+    def extract(self):
+        if self.parser == 'scorelines':
+            return extract_scorelines(self.pdf_paths[0])
+        if self.parser == 'mapping':
+            return extract_mapping(*self.pdf_paths)
+        if self.parser == 'plans':
+            return extract_plans(
+                self.pdf_paths[0], self.year,
+                twelve_cols_default=self.year != 2024)
+        if self.parser == 'master':
+            return extract_master_table(self.pdf_paths[0])
+        raise ValueError(f'未知解析器: {self.parser}')
+
+
+# 文件路径、解析器和官方行数只在这张表中声明一次。
+SOURCE_REGISTRY = [
+    SourceSpec('省控线/省控线_2024.json', ('省控线/原始PDF/省控线_2024.pdf',), 143, 'scorelines', 2024),
+    SourceSpec('省控线/省控线_2025.json', ('省控线/原始PDF/省控线_2025.pdf',), 172, 'scorelines', 2025),
+    SourceSpec('省控线/省控线_2026.json', ('省控线/原始PDF/省控线_2026.pdf',), 185, 'scorelines', 2026),
+    SourceSpec(
+        '专业对照/专业对照_2026.json',
+        ('专业对照/原始PDF/专业代号对照_2026.pdf', '专业对照/原始PDF/专业对照一览_2026.pdf'),
+        558, 'mapping', 2026),
+    SourceSpec('招生计划/招生计划_2024.json', ('招生计划/原始PDF/招生计划_2024.pdf',), 1111, 'plans', 2024),
+    SourceSpec('招生计划/招生计划_2025.json', ('招生计划/原始PDF/招生计划_2025.pdf',), 1066, 'plans', 2025),
+    SourceSpec('招生计划/招生计划_2026.json', ('招生计划/原始PDF/招生计划_2026.pdf',), 1259, 'plans', 2026),
+    SourceSpec(
+        '招生高校及专业/招生高校及专业_2026.json',
+        ('招生高校及专业/原始PDF/招生高校及专业_2026.pdf',),
+        987, 'master', 2026),
 ]
+
+EXPECTED_COUNTS = {
+    source.output_path: source.expected_count for source in SOURCE_REGISTRY
+}
+SOURCES = [(source.output_path, source.extract) for source in SOURCE_REGISTRY]
 
 
 def main():
@@ -374,7 +395,7 @@ def main():
     for filename, extractor in SOURCES:
         extracted = extractor()
         existing = json.loads((DATA / filename).read_text(encoding='utf-8'))
-        if filename == '专科专业可报本科专业对照.json':
+        if filename == '专业对照/专业对照_2026.json':
             diffs = diff_mapping(extracted, existing)
         else:
             diffs = diff_rows(extracted, existing)

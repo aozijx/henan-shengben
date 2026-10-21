@@ -4,20 +4,20 @@
   "supportedYears": [2024, 2025, 2026],
   "yearSources": {
     "2024": {
-      "mappingSource": "data/专科专业可报本科专业对照.json",
-      "scoreSource": "data/分数线2024.json",
-      "planSource": "data/招生计划2024.json"
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2024.json",
+      "planSource": "data/招生计划/招生计划_2024.json"
     },
     "2025": {
-      "mappingSource": "data/专科专业可报本科专业对照.json",
-      "scoreSource": "data/分数线2025.json",
-      "planSource": "data/招生计划2025.json"
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2025.json",
+      "planSource": "data/招生计划/招生计划_2025.json"
     },
     "2026": {
-      "mappingSource": "data/专科专业可报本科专业对照.json",
-      "scoreSource": "data/分数线2026.json",
-      "planSource": "data/招生计划2026.json",
-      "collegeFallbackSource": "data/招生高校及专业2026.json"
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2026.json",
+      "planSource": "data/招生计划/招生计划_2026.json",
+      "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
     }
   },
   "fields": [

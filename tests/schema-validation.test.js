@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import Ajv from 'ajv';
@@ -37,16 +37,35 @@ test('school-data.json passes runtime validateMetadata', () => {
   assert.deepEqual(result, { valid: true, errors: [] }, result.errors.join('；'));
 });
 
+test('all metadata sources resolve inside typed data directories', () => {
+  const metadata = loadJson('metadata/school-data.json');
+  const failures = [];
+
+  Object.entries(metadata.yearSources).forEach(function ([year, sources]) {
+    Object.entries(sources).forEach(function ([role, relativePath]) {
+      const normalized = relativePath.replace(/\\/g, '/');
+      const parts = normalized.split('/');
+      if (parts[0] !== 'data' || parts.length < 3) {
+        failures.push(year + ' ' + role + ' 未位于 data 类型子目录：' + relativePath);
+      } else if (!existsSync(join(ROOT, relativePath))) {
+        failures.push(year + ' ' + role + ' 文件不存在：' + relativePath);
+      }
+    });
+  });
+
+  assert.deepEqual(failures, [], failures.join('\n'));
+});
+
 test('all data files pass their JSON Schemas', () => {
   const files = [
-    ['scores.schema.json', 'data/分数线2024.json'],
-    ['scores.schema.json', 'data/分数线2025.json'],
-    ['scores.schema.json', 'data/分数线2026.json'],
-    ['plans.schema.json', 'data/招生计划2024.json'],
-    ['plans.schema.json', 'data/招生计划2025.json'],
-    ['plans.schema.json', 'data/招生计划2026.json'],
-    ['mapping.schema.json', 'data/专科专业可报本科专业对照.json'],
-    ['colleges.schema.json', 'data/招生高校及专业2026.json']
+    ['scores.schema.json', 'data/省控线/省控线_2024.json'],
+    ['scores.schema.json', 'data/省控线/省控线_2025.json'],
+    ['scores.schema.json', 'data/省控线/省控线_2026.json'],
+    ['plans.schema.json', 'data/招生计划/招生计划_2024.json'],
+    ['plans.schema.json', 'data/招生计划/招生计划_2025.json'],
+    ['plans.schema.json', 'data/招生计划/招生计划_2026.json'],
+    ['mapping.schema.json', 'data/专业对照/专业对照_2026.json'],
+    ['colleges.schema.json', 'data/招生高校及专业/招生高校及专业_2026.json']
   ];
   const failures = [];
   files.forEach(function (pair) {
@@ -64,7 +83,7 @@ test('all data files pass their JSON Schemas', () => {
 });
 
 test('mapping entries have unique (专科专业, 本科专业名称, 代码6位)', () => {
-  const mapping = loadJson('data/专科专业可报本科专业对照.json');
+  const mapping = loadJson('data/专业对照/专业对照_2026.json');
   const seen = new Set();
   const duplicates = [];
   mapping.forEach(function (group) {
@@ -82,7 +101,7 @@ test('score professional codes are non-empty for every year', () => {
   const years = ['2024', '2025', '2026'];
   const failures = [];
   years.forEach(function (year) {
-    const scores = loadJson('data/分数线' + year + '.json');
+    const scores = loadJson('data/省控线/省控线_' + year + '.json');
     scores.forEach(function (row, index) {
       if (!row['专业代号'] || !String(row['专业代号']).trim()) {
         failures.push('分数线' + year + ' 第' + (index + 1) + '行专业代号缺失：' + row['专业名称']);
