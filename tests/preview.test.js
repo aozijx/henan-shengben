@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPreviewHtml, formatFieldValue, getPreviewFields, paginate } from '../js/preview.js';
+import { buildPreviewHtml, formatFieldValue, getPreviewFields, paginate, resizeColumnWidth } from '../js/preview.js';
 
 const metadata = {
   pageSize: 2,
@@ -62,4 +62,10 @@ test('renders effective school statistics and only the current page rows', () =>
 test('formats null and numeric values consistently for preview and export', () => {
   assert.equal(formatFieldValue({ score: null }, metadata.fields[0]), '—');
   assert.equal(formatFieldValue({ score: 180 }, metadata.fields[0]), '180');
+});
+
+test('column resizing is keyboard-friendly and clamped to safe bounds', () => {
+  assert.equal(resizeColumnWidth(180, -10), 170);
+  assert.equal(resizeColumnWidth(80, -10), 80);
+  assert.equal(resizeColumnWidth(600, 10), 600);
 });

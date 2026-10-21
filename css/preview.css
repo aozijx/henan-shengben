@@ -7,6 +7,10 @@
 .preview-table{width:100%;min-width:720px;border-collapse:collapse;}
 .preview-table th,.preview-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;}
 .preview-table th{background:var(--surface-2);color:var(--muted);font-size:12px;font-weight:700;}
+.preview-table th{position:relative;}
+.column-resizer{position:absolute;top:0;right:-5px;width:10px;height:100%;padding:0;border:0;background:transparent;cursor:col-resize;z-index:1;}
+.column-resizer::after{content:"";position:absolute;top:20%;bottom:20%;left:4px;width:1px;background:var(--line-strong);}
+.column-resizer:focus{outline:2px solid var(--blue);outline-offset:-2px;}
 .preview-table td{font-size:13px;font-variant-numeric:tabular-nums;}
 .preview-table tbody tr:hover td{background:var(--surface-3);}
 .preview-pagination{display:flex;justify-content:center;align-items:center;gap:12px;padding:12px 14px;}

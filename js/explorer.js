@@ -2,6 +2,8 @@ import { getCollegesByYear, getScore } from './data.js';
 import { buildPreviewRows, sortPreviewRows, validateScoreRange } from './pipeline.js';
 import { renderPreview } from './preview.js';
 import { downloadCsv, getExportFields } from './export.js';
+import { clearPreferences, readColumnWidths, writeColumnWidths } from './preferences.js';
+import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 
 var activeExplorer = null;
@@ -22,7 +24,8 @@ export function createInitialState(metadata) {
     sort: { key: metadata.defaultSort.key, direction: metadata.defaultSort.direction },
     page: 1,
     rows: [],
-    effectiveSchoolCount: 0
+    effectiveSchoolCount: 0,
+    columnWidths: {}
   };
 }
 
@@ -35,6 +38,9 @@ export function reduceExplorerState(state, event, metadata) {
   }
   if (event.type === 'SET_SORT') return { ...state, sort: { ...event.sort }, page: 1 };
   if (event.type === 'SET_PAGE') return { ...state, page: Math.max(1, Number(event.page) || 1) };
+  if (event.type === 'SET_COLUMN_WIDTH') {
+    return { ...state, columnWidths: { ...state.columnWidths, [event.key]: Number(event.width) } };
+  }
   if (event.type === 'SET_SEARCH_RESULT') {
     return {
       ...state,
@@ -52,6 +58,9 @@ export function reduceExplorerState(state, event, metadata) {
       page: 1,
       validationError: ''
     };
+  }
+  if (event.type === 'CLEAR_ALL') {
+    return { ...createInitialState(metadata), status: 'ready', columnWidths: event.columnWidths || {} };
   }
   return state;
 }
@@ -122,7 +131,7 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
       '<select data-sort' + (unavailable ? ' disabled' : '') + '>' + sortOptions(metadata, selectedSort) + '</select></label></section>' +
     '<section class="explorer-actions" aria-label="操作按钮">' +
       '<button type="button" data-action="reset"' + (unavailable ? ' disabled' : '') + '>重置筛选</button>' +
-      '<button type="button" data-action="clear-storage" disabled title="将在本地偏好任务中启用">清除本地存储</button>' +
+      '<button type="button" data-action="clear-storage"' + (state.status !== 'ready' ? ' disabled' : '') + '>清除本地存储</button>' +
     '</section>' +
     '<section class="preview-section"><div id="preview-table" class="preview-placeholder" aria-live="polite">' +
       (state.majors.length ? '预览表格准备中…' : '请先查询专科专业，再使用筛选与导出。') +
@@ -155,6 +164,18 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
   });
   var reset = root.querySelector('[data-action="reset"]');
   if (reset) reset.addEventListener('click', function () { dispatch({ type: 'RESET_FILTERS' }); });
+  var clearStorage = root.querySelector('[data-action="clear-storage"]');
+  if (clearStorage) clearStorage.addEventListener('click', function () {
+    clearPreferences(localStorage);
+    resetTheme();
+    var search = document.getElementById('q');
+    var hint = document.getElementById('hint');
+    var result = document.getElementById('result');
+    if (search) search.value = '';
+    if (hint) hint.textContent = '';
+    if (result) result.innerHTML = '<div class="empty">输入专业名称，回车或点「查询」开始检索</div>';
+    dispatch({ type: 'CLEAR_ALL', columnWidths: readColumnWidths(localStorage, metadata) });
+  });
   var exportButton = root.querySelector('#exportCsv');
   if (exportButton) exportButton.addEventListener('click', function () {
     downloadCsv({ rows: state.rows, fields: getExportFields(metadata), year: state.year, date: new Date() });
@@ -165,7 +186,8 @@ export function renderExplorerControls(root, metadata, state, dispatch) {
     effectiveSchoolCount: state.effectiveSchoolCount,
     hasSearch: state.majors.length > 0,
     status: state.status,
-    error: state.error
+    error: state.error,
+    columnWidths: state.columnWidths
   }, metadata, dispatch);
 }
 
@@ -191,8 +213,10 @@ function recompute(state, metadata) {
 
 export function initExplorer(root, metadata) {
   var state = reduceExplorerState(createInitialState(metadata), { type: 'LOAD_SUCCESS' }, metadata);
+  state = { ...state, columnWidths: readColumnWidths(localStorage, metadata) };
   function dispatch(event) {
     state = reduceExplorerState(state, event, metadata);
+    if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
   }

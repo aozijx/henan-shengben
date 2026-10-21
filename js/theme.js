@@ -8,7 +8,7 @@
 export var THEME_KEY = 'henan-theme';
 export var THEME_MODES = ['light', 'dark', 'auto'];
 
-var themeMedia = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+var themeMedia = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 var themeMode = 'auto';
 
 export function themeLabel(m) {
@@ -17,6 +17,7 @@ export function themeLabel(m) {
 
 export function readThemeMode() {
   try {
+    if (typeof localStorage === 'undefined') return 'auto';
     var m = localStorage.getItem(THEME_KEY);
     if (THEME_MODES.indexOf(m) > -1) return m;
   } catch (e) { }
@@ -34,12 +35,13 @@ function systemPrefersDark() {
 /* 应用配色：设置根节点 data-theme-mode / data-theme，可选持久化，并更新按钮提示 */
 export function applyTheme(m, persist) {
   themeMode = m;
+  if (typeof document === 'undefined') return;
   var root = document.documentElement;
   var dark = m === 'dark' || (m === 'auto' && systemPrefersDark());
   root.setAttribute('data-theme-mode', m);
   root.setAttribute('data-theme', dark ? 'dark' : 'light');
   if (persist) {
-    try { localStorage.setItem(THEME_KEY, m); } catch (e) { }
+    try { if (typeof localStorage !== 'undefined') localStorage.setItem(THEME_KEY, m); } catch (e) { }
   }
   var btn = document.getElementById('themeToggle');
   if (btn) {
@@ -47,6 +49,10 @@ export function applyTheme(m, persist) {
     btn.setAttribute('aria-label', label);
     btn.setAttribute('title', label);
   }
+}
+
+export function resetTheme() {
+  applyTheme('auto', false);
 }
 
 /* 系统主题跟随（仅 auto 模式） */

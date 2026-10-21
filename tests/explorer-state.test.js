@@ -77,3 +77,18 @@ test('score input sanitizer blocks letters, punctuation and negative signs', () 
   assert.equal(sanitizeScoreInput('12a-3.4'), '1234');
   assert.equal(sanitizeScoreInput(' 200 '), '200');
 });
+
+test('column width updates and full reset have explicit state transitions', () => {
+  const populated = {
+    ...createInitialState(metadata),
+    status: 'ready',
+    majors: [{ 专业名称: '软件工程' }],
+    columnWidths: { majorName: 180 }
+  };
+  const resized = reduceExplorerState(populated, { type: 'SET_COLUMN_WIDTH', key: 'majorName', width: 220 }, metadata);
+  assert.equal(resized.columnWidths.majorName, 220);
+  const cleared = reduceExplorerState(resized, { type: 'CLEAR_ALL' }, metadata);
+  assert.equal(cleared.status, 'ready');
+  assert.deepEqual(cleared.majors, []);
+  assert.deepEqual(cleared.filters, { schoolType: '全部', povertyStatus: '全部', minScore: '', maxScore: '' });
+});
