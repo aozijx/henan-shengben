@@ -41,6 +41,8 @@ henan-shengben/
 │   ├── 招生计划2026.json               # 2026 年招生计划全量（1259 条，含建档立卡专项）
 │   └── 招生高校及专业2026.json         # 2026 年招生高校及专业总表（46 所院校、987 个条目，兜底数据源）
 ├── pdf/                    # 上表 JSON 的官方源文件（表格抽取自这些 PDF）
+├── tools/
+│   └── convert.py          # PDF → JSON 重新抽取与校验脚本（python tools/convert.py 校验，--write 写回）
 ├── tests/                  # Node 内置测试：元数据、流水线、预览、导出与年度升级
 ├── 转换说明.md             # PDF → JSON 的转换方式与核验结果
 └── README.md
