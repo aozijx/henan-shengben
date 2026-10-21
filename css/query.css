@@ -106,16 +106,52 @@ tbody tr.major-row:hover td{background:var(--surface-3);}
 .school-sum.is-open .arr{transform:rotate(90deg);}
 tr.major-row.is-open td{background:var(--surface-3);}
 
-/* ---------- 专业行下方的院校明细（二级折叠） ---------- */
+/* ---------- 专业行下方的年份折叠层（三级折叠） ---------- */
 tr.college-row td{
   padding:0 14px 14px;background:var(--surface-3);
   border-bottom:1px solid var(--line-strong);
 }
 tr.college-row:last-child td{border-bottom:none;}
-.college-detail>summary{display:none;}
-.school-list{
+tr.college-row:not(.is-open) td{padding:0 14px 8px;}
+tr.college-row:not(.is-open) .year-stack{display:none;}
+
+.year-stack{display:flex;flex-direction:column;gap:8px;padding-top:12px;}
+
+/* 整行可点击 */
+tbody tr.major-row{cursor:pointer;}
+tbody tr.major-row:hover td{background:var(--surface-3);}
+tr.major-row.is-open td{background:var(--surface-3);}
+.major-row .major-name::before{
+  content:"▸";display:inline-block;color:var(--blue);font-size:11px;
+  margin-right:6px;transition:transform .15s;
+}
+tr.major-row.is-open .major-name::before{transform:rotate(90deg);}
+
+/* 年份分组 */
+.year-group{
   border:1px solid var(--line);border-radius:var(--radius);
   background:var(--card);overflow:hidden;box-shadow:var(--shadow);
+}
+.year-group>summary{
+  cursor:pointer;list-style:none;display:flex;align-items:baseline;gap:10px;
+  padding:10px 16px;font-size:13.5px;color:var(--ink);
+  background:var(--surface-2);border-bottom:1px solid var(--line);
+  transition:background-color .15s;
+}
+.year-group>summary::-webkit-details-marker{display:none;}
+.year-group>summary:hover{background:var(--surface-3);}
+.year-group[open]>summary{border-bottom-color:var(--line-strong);}
+.yg-year{font-weight:700;font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--blue-deep);}
+.yg-sum{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--muted);}
+.yg-pub{color:var(--pub-fg);}
+.yg-min{color:var(--min-fg);}
+.yg-plan{color:var(--blue-deep);font-family:var(--mono);}
+.yg-na{color:var(--na);}
+.yg-arr{margin-left:auto;color:var(--blue);font-size:11px;transition:transform .15s;line-height:1;}
+.year-group[open] .yg-arr{transform:rotate(90deg);}
+
+.school-list{
+  border:none;border-radius:0;background:var(--card);overflow:hidden;box-shadow:none;
 }
 .school-list-head{
   padding:9px 16px;font-size:13px;font-weight:600;color:var(--blue-deep);
@@ -149,7 +185,7 @@ tr.college-row:last-child td{border-bottom:none;}
 
 /* 详细信息：JSON 全部字段 */
 .school-meta{
-  display:grid;grid-template-columns:repeat(7,1fr);
+  display:grid;grid-template-columns:repeat(2,1fr);
   gap:0 16px;margin:0;padding:10px 16px 12px;
   background:var(--surface-3);
 }
@@ -183,4 +219,5 @@ tr.college-row:last-child td{border-bottom:none;}
 @media (min-width:768px){
   .search-row input{height:52px;font-size:17px;}
   .clear,.go{height:52px;}
+  .school-meta{grid-template-columns:repeat(4,1fr);}
 }

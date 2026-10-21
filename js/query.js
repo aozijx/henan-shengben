@@ -24,12 +24,20 @@ export function fillSuggest($suggest, kw) {
   });
 }
 
+/* 最近一次查询的可报本科专业列表（供汇总表等模块复用） */
+var lastMajors = [];
+var lastSpecName = '';
+export function getLastMajors() { return lastMajors; }
+export function getLastSpecName() { return lastSpecName; }
+
 /* ---------- 查询入口 ---------- */
 export function doQuery($q, $hint, $result) {
   if (!isReady()) return;
   var kw = ($q.value || '').trim();
   if (!kw) {
     $hint.textContent = '';
+    lastMajors = [];
+    lastSpecName = '';
     $result.innerHTML = '<div class="empty">输入专业名称，回车或点「查询」开始检索</div>';
     return;
   }
@@ -37,6 +45,8 @@ export function doQuery($q, $hint, $result) {
   var matches = MAPPING.filter(function (m) { return m['专科专业'].indexOf(kw) > -1; });
   if (!matches.length) {
     $hint.textContent = '';
+    lastMajors = [];
+    lastSpecName = '';
     $result.innerHTML = '<div class="msg-notfound">未找到专科专业「' + esc(kw) + '」。<br>' +
       '可尝试：关键词的一部分（如「物联网」）；' +
       '本工具收录 2026 年对照一览表中的 ' + MAPPING.length + ' 个专科专业。</div>';
@@ -58,6 +68,8 @@ function findSpecByName(name) {
 function showSpec($hint, $result, spec) {
   if (!spec) return;
   var majors = spec['可报本科专业'] || [];
+  lastMajors = majors;
+  lastSpecName = spec['专科专业'];
   $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（2026 对照一览表）';
   if (!majors.length) {
     $result.innerHTML = '<div class="empty">「' + esc(spec['专科专业']) + '」暂无可报本科专业数据</div>';

@@ -8,6 +8,7 @@ import { esc } from './utils.js';
 import * as theme from './theme.js';
 import * as data from './data.js';
 import * as query from './query.js';
+import * as table from './table.js';
 import { initCharts } from './stats.js';
 
 var $ = function (id) { return document.getElementById(id); };
@@ -15,7 +16,7 @@ var $q = $('q'), $result = $('result'), $hint = $('hint');
 var $suggest = $('suggest');
 
 var currentView = 'query';
-var VIEWS = ['query', 'stats', 'about'];
+var VIEWS = ['query', 'table', 'stats', 'about'];
 
 /* ---------- 头部统计数字 ---------- */
 function initStats() {
@@ -42,6 +43,7 @@ function switchView(v) {
     tab.setAttribute('aria-selected', String(on));
   });
   if (v === 'stats' && data.isReady()) initCharts();
+  if (v === 'table' && data.isReady()) table.refreshTable();
   if (location.hash !== '#' + v) location.hash = v;
 }
 window.addEventListener('hashchange', function () {
@@ -102,10 +104,11 @@ data.loadAll().then(function () {
   data.buildIndexes();
   window.__henanReady = true;
   initStats();
+  table.initTable();
   afterLoad();
 }).catch(function (err) {
   $result.innerHTML = '<div class="msg-notfound"><b>数据加载失败：</b>' + esc(err.message) + '<br>' +
-    '请确认 <code>data/</code> 目录完整（6 个 JSON 文件）后刷新页面重试。</div>';
+    '请确认 <code>data/</code> 目录完整（8 个 JSON 文件）后刷新页面重试。</div>';
   $hint.textContent = '';
 });
 

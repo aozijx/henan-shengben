@@ -1,0 +1,67 @@
+/* ============================================================
+   河南专升本 · 查询工具  —  汇总表样式
+   字段配置（年份 / 指标勾选）与汇总表格
+   ============================================================ */
+
+/* ---------- 字段配置 ---------- */
+.field-config{
+  display:flex;flex-wrap:wrap;gap:12px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:12px 14px;margin-bottom:10px;
+}
+.fc-group{
+  margin:0;padding:0;border:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.fc-group legend{
+  font-size:12.5px;font-weight:700;color:var(--muted);padding:0 8px 0 0;
+}
+.fc-opt{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:13.5px;color:var(--ink);cursor:pointer;
+  padding:4px 10px;border:1px solid var(--line-strong);border-radius:999px;
+  background:var(--surface-2);transition:border-color .15s,background-color .15s;
+}
+.fc-opt:has(input:checked){
+  border-color:var(--blue);background:var(--blue-soft);
+}
+.fc-opt input{accent-color:var(--blue);width:15px;height:15px;cursor:pointer;}
+.fc-note{margin:0 0 12px;font-size:12.5px;color:var(--muted);}
+
+/* ---------- 汇总表格 ---------- */
+.sum-head{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;
+  padding:10px 14px 0;font-size:14px;
+}
+.sum-head b{font-family:var(--serif);font-size:16px;}
+.sum-head .count{color:var(--muted);font-size:12.5px;}
+
+.sum-table{
+  min-width:640px;width:100%;table-layout:fixed;
+}
+.sum-table col.c-major-sum{width:22%;}
+.sum-table col.c-metric-sum{width:auto;}
+.sum-table thead th{
+  background:var(--surface-2);color:var(--muted);font-weight:600;font-size:11.5px;
+  text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-strong);
+  white-space:nowrap;line-height:1.5;
+}
+.sum-table thead th .sum-metric{display:block;font-weight:400;}
+.sum-table thead th .sum-year{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);}
+.sum-table tbody td{padding:8px 10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle;}
+.sum-table tbody tr:hover td{background:var(--surface-3);}
+.sum-score{font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums;color:var(--vermill);}
+.sum-num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.sum-num .n-pub{color:var(--pub-fg);font-weight:700;}
+.sum-num .n-min{color:var(--min-fg);font-weight:700;}
+.sum-num .na{color:var(--na);font-weight:400;}
+.sum-table .major-name .tag{
+  display:inline-block;margin-left:6px;padding:0 6px;border-radius:4px;
+  font-size:11px;font-weight:600;color:var(--blue-deep);background:var(--blue-soft);
+  vertical-align:1px;white-space:nowrap;
+}
+.sum-table .empty{padding:44px 16px;text-align:center;color:var(--muted);font-size:14px;}
+
+/* ---------- 桌面扩展 ---------- */
+@media (min-width:768px){
+  .sum-table{min-width:720px;}
+}

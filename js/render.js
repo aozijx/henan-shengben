@@ -1,11 +1,12 @@
 /* ============================================================
    河南专升本 · 查询工具  —  渲染模块
-   分数线结果表：每个专业行下方直接展开该专业的招生院校明细
-   （两级折叠：专业行 → 院校条目 → 详细信息，JSON 全部字段）。
+   分数线结果表：每个专业行下方展开「年份折叠」层
+   （三级折叠：专业行 → 年份分组（2024/2025/2026）→ 院校条目 → 详细信息）。
+   专业行为整行可点击；年份分组内按公办/民办展示院校；院校条目展开显示 JSON 全部字段。
    只负责把数据渲染成 HTML 并绑定结果区内部交互，不持有查询状态。
    ============================================================ */
 
-import { getScore, getColleges } from './data.js';
+import { getScore, getCollegesByYear, getMajorYearStats } from './data.js';
 import { esc } from './utils.js';
 
 function subjectBadge(subject, code) {
@@ -34,7 +35,7 @@ function scoreCell(major, year) {
   return '<span class="score' + hot + '">' + s + '</span>';
 }
 
-/* ---------- 招生院校明细（挂在每个专业行下方） ---------- */
+/* ---------- 年份折叠：招生院校明细（挂在每个专业行下方） ---------- */
 
 /* 办学性质 / 建档立卡标签 */
 function schoolTags(c) {
@@ -114,27 +115,55 @@ function schoolItemHtml(c, seenName) {
     '<dl class="school-meta">' + metaHtml + '</dl></details>';
 }
 
-/* 一级：某个专业的院校明细（含全部院校条目） */
-function collegeDetailHtml(m) {
-  var list = getColleges(m);
-  if (!list.length) {
-    return '<div class="cb-empty">2026 年普通本科专业总表未单列（职业本科或计划另文下达）</div>';
-  }
-  var schoolSet = {};
-  list.forEach(function (c) { schoolSet[c['院校名称'] || c['学校名称']] = 1; });
-  var schools = Object.keys(schoolSet).length;
-  var countLabel = list.length === schools
-    ? schools + ' 所院校'
-    : schools + ' 所院校（' + list.length + ' 条）';
+/* 单个年份分组：summary 显示 公办/民办院校数与计划人数合计，组内为院校条目 */
+function yearGroupHtml(m, year, openDefault) {
+  var list = getCollegesByYear(year, m);
   var seenName = {};
-  var items = list.map(function (c) { return schoolItemHtml(c, seenName); }).join('');
-  return '<div class="school-list">' +
-    '<div class="school-list-head">' + esc(m['专业名称']) +
-    '<span class="count">' + countLabel + '</span></div>' +
-    items + '</div>';
+  var schoolSet = {}, pubSet = {}, minSet = {};
+  var planPub = 0, planMin = 0;
+  list.forEach(function (c) {
+    var sn = c['院校名称'] || c['学校名称'] || '';
+    schoolSet[sn] = 1;
+    if (c['办学性质'] === '民办') minSet[sn] = 1; else pubSet[sn] = 1;
+    var n = Number(c['计划人数']) || 0;
+    if (c['办学性质'] === '民办') planMin += n; else planPub += n;
+  });
+  var pubN = Object.keys(pubSet).length, minN = Object.keys(minSet).length;
+  var sumParts = [];
+  if (!list.length) {
+    sumParts.push('<span class="yg-na">该年无招生院校</span>');
+  } else {
+    sumParts.push('<span class="yg-pub">公办 ' + pubN + ' 所</span>');
+    sumParts.push('<span class="yg-min">民办 ' + minN + ' 所</span>');
+    sumParts.push('<span class="yg-plan">计划 ' + (planPub + planMin) + ' 人</span>');
+  }
+  var countLabel = list.length
+    ? (Object.keys(schoolSet).length === list.length
+        ? Object.keys(schoolSet).length + ' 所院校'
+        : Object.keys(schoolSet).length + ' 所院校（' + list.length + ' 条）')
+    : '';
+  var items = list.length
+    ? '<div class="school-list"><div class="school-list-head">' + year + ' 年招生院校<span class="count">' + countLabel + '</span></div>' +
+      list.map(function (c) { return schoolItemHtml(c, seenName); }).join('') + '</div>'
+    : '<div class="cb-empty">该年招生计划与总表均未收录该校年该专业。</div>';
+
+  return '<details class="year-group" data-year="' + year + '"' + (openDefault ? ' open' : '') + '>' +
+    '<summary><span class="yg-year">' + year + ' 年</span>' +
+    '<span class="yg-sum">' + sumParts.join('') + '</span>' +
+    '<span class="yg-arr">▸</span></summary>' +
+    items + '</details>';
 }
 
-/* ---------- 分数线结果表（每行下挂院校明细） ---------- */
+/* 一级：某个专业的「年份折叠」层（三年分组） */
+function yearStackHtml(m) {
+  return '<div class="year-stack">' +
+    yearGroupHtml(m, 2026, true) +
+    yearGroupHtml(m, 2025, false) +
+    yearGroupHtml(m, 2024, false) +
+    '</div>';
+}
+
+/* ---------- 分数线结果表（每行下挂年份折叠层） ---------- */
 export function renderTable($result, title, majors, countNote) {
   var body = [];
   var total = 0;
@@ -143,17 +172,19 @@ export function renderTable($result, title, majors, countNote) {
     var nameHtml = esc(m['专业名称']);
     if (/职业教育/.test(m['专业名称'])) nameHtml += '<span class="tag">职教本科</span>';
 
-    var list = getColleges(m);
-    total += list.length;
+    var stats = getMajorYearStats(m);
+    var union = stats.union.total;
+    var list26 = getCollegesByYear(2026, m);
+    total += list26.length;
     var id = 'cd-' + Math.random().toString(36).slice(2, 8);
 
-    var schoolBtn = list.length
-      ? '<button type="button" class="school-sum" data-target="' + id + '" aria-expanded="false" title="点击展开该专业招生院校明细">' +
-        '院校 ' + list.length + ' 所 <span class="arr">▸</span></button>'
+    var schoolBtn = union
+      ? '<button type="button" class="school-sum" aria-expanded="false">' +
+        '3 年 ' + union + ' 所 <span class="arr">▸</span></button>'
       : '<span class="na">—</span>';
 
     body.push(
-      '<tr class="major-row">' +
+      '<tr class="major-row" data-id="' + id + '" tabindex="0">' +
         '<td class="major-name">' + nameHtml + '</td>' +
         '<td><span class="code">' + (m['专业代号'] ? esc(m['专业代号']) : '—') + '</span></td>' +
         '<td class="public">' + publicLabel(m['专业名称']) + '</td>' +
@@ -165,50 +196,69 @@ export function renderTable($result, title, majors, countNote) {
         '<td class="school-cell">' + schoolBtn + '</td>' +
       '</tr>',
       '<tr class="college-row" data-id="' + id + '"><td colspan="9">' +
-        '<details class="college-detail" id="' + id + '">' +
-        '<summary class="sr-only">招生院校明细</summary>' +
-        collegeDetailHtml(m) +
-        '</details></td></tr>'
+        yearStackHtml(m) +
+      '</td></tr>'
     );
   });
 
   $result.innerHTML =
     '<div class="result-head"><b>' + esc(title) + '</b>' +
     (countNote ? '<span class="count">' + esc(countNote) + '</span>' : '') +
-    '<span class="count">共 ' + total + ' 个院校条目</span>' +
+    '<span class="count">共 ' + total + ' 个 2026 院校条目</span>' +
     '<button type="button" class="cb-toggle" id="cbToggle">全部展开</button></div>' +
     '<div class="table-wrap"><table><colgroup>' +
     '<col class="c-name"><col class="c-code"><col class="c-public"><col class="c-subject">' +
     '<col class="c-y"><col class="c-y"><col class="c-y"><col class="c-trend"><col class="c-school">' +
     '</colgroup><thead><tr>' +
     '<th>本科专业</th><th>代号</th><th>公共课</th><th>专业基础课</th>' +
-    '<th>2024</th><th>2025</th><th>2026</th><th>较2025</th><th>2026招生</th>' +
+    '<th>2024</th><th>2025</th><th>2026</th><th>较2025</th><th>招生院校</th>' +
     '</tr></thead><tbody>' + body.join('') + '</tbody></table></div>';
 
-  /* 展开 / 收起单个专业的院校明细 */
-  $result.querySelectorAll('.school-sum').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var det = document.getElementById(btn.getAttribute('data-target'));
-      var open = det.open;
-      det.open = !open;
-      btn.classList.toggle('is-open', !open);
-      btn.setAttribute('aria-expanded', String(!open));
-      var row = btn.closest('tr');
-      if (row) row.classList.toggle('is-open', !open);
+  /* 整行点击：展开 / 收起该专业下方的年份折叠层 */
+  function toggleRow(row) {
+    var id = row.getAttribute('data-id');
+    var holder = $result.querySelector('.college-row[data-id="' + id + '"]');
+    if (!holder) return;
+    var open = !row.classList.contains('is-open');
+    row.classList.toggle('is-open', open);
+    var btn = row.querySelector('.school-sum');
+    if (btn) {
+      btn.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    }
+    holder.classList.toggle('is-open', open);
+    if (!open) {
+      holder.querySelectorAll('.year-group').forEach(function (g) { g.open = false; });
+      holder.querySelectorAll('.school-item').forEach(function (s) { s.open = false; });
+    }
+  }
+  $result.querySelector('tbody').addEventListener('click', function (e) {
+    var row = e.target.closest('tr.major-row');
+    if (row) toggleRow(row);
+  });
+  /* 键盘可达：整行可聚焦（Enter / 空格切换） */
+  $result.querySelectorAll('tr.major-row').forEach(function (row) {
+    row.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRow(row); }
     });
   });
 
-  /* 全部展开 / 全部收起 */
+  /* 全部展开 / 全部收起（年份层 + 院校条目层） */
   var toggle = document.getElementById('cbToggle');
   if (toggle) {
     toggle.addEventListener('click', function () {
-      var anyOpen = $result.querySelectorAll('.college-detail[open]').length > 0;
-      $result.querySelectorAll('.college-detail').forEach(function (d) { d.open = !anyOpen; });
-      $result.querySelectorAll('.major-row').forEach(function (r) { r.classList.toggle('is-open', !anyOpen); });
-      $result.querySelectorAll('.school-sum').forEach(function (b) {
-        b.classList.toggle('is-open', !anyOpen);
-        b.setAttribute('aria-expanded', String(!anyOpen));
+      var anyOpen = $result.querySelectorAll('.major-row.is-open').length > 0;
+      $result.querySelectorAll('.major-row').forEach(function (r) {
+        r.classList.toggle('is-open', !anyOpen);
+        var b = r.querySelector('.school-sum');
+        if (b) {
+          b.classList.toggle('is-open', !anyOpen);
+          b.setAttribute('aria-expanded', String(!anyOpen));
+        }
       });
+      $result.querySelectorAll('.college-row').forEach(function (h) { h.classList.toggle('is-open', !anyOpen); });
+      $result.querySelectorAll('.year-group').forEach(function (g) { g.open = !anyOpen; });
+      $result.querySelectorAll('.school-item').forEach(function (s) { s.open = false; });
       toggle.textContent = anyOpen ? '全部展开' : '全部收起';
     });
   }
