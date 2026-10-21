@@ -2,7 +2,7 @@ import { getCollegesByYear, getScore } from './data.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { renderPreview } from './preview.js';
 import { downloadCsv, getExportFields } from './export.js';
-import { clearPreferences, readColumnWidths, writeColumnWidths } from './preferences.js';
+import { clearPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 
@@ -209,9 +209,15 @@ export function initExplorer(root, metadata, options) {
   options = options || {};
   var state = reduceExplorerState(createInitialState(metadata), { type: 'LOAD_SUCCESS' }, metadata);
   state = { ...state, columnWidths: readColumnWidths(localStorage, metadata) };
+  var saved = readExplorerState(localStorage, metadata);
+  state = { ...state, filters: saved.filters, sort: saved.sort };
   function dispatch(event) {
     state = reduceExplorerState(state, event, metadata);
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
+    if (event.type === 'SET_FILTER' || event.type === 'SET_SORT' || event.type === 'RESET_FILTERS') {
+      writeExplorerState(localStorage, state.filters, state.sort);
+    }
+    if (event.type === 'CLEAR_ALL') localStorage.removeItem('henan-explorer-v1');
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
     notifyFilteredResult(state, options);

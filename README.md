@@ -124,7 +124,7 @@ npm test
 ## 本地存储与导出约束
 
 - 禁止把原始业务数据或筛选结果写入 `localStorage`。
-- 允许的键只有主题 `henan-theme` 和表格列宽 `henan-table-widths-v1`。
+- 允许的键只有主题 `henan-theme`、表格列宽 `henan-table-widths-v1` 与筛选/排序状态 `henan-explorer-v1`。
 - “清除本地存储”会调用完整清理，并同时恢复默认主题、筛选、排序、分页和列宽。
 - 无有效预览数据时不能导出。CSV 使用 UTF-8 BOM，按 CSV 规则转义逗号、双引号和换行；文件名为 `院校数据_<年份>_<YYYYMMDD>.csv`。
 
