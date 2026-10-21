@@ -94,6 +94,12 @@ def extract_scorelines(name):
 
 # ---------- 2026 代号对照表：本科专业 → 专业代号 / 考试科目代号 ----------
 
+def baseName(name):
+    """去除「本科层次职业教育…」括号与「试点」字样，用于对照表与代号表名称对齐。"""
+    base = re.sub(r'[（(]本科层次职业[^（）()]*[）)]', '', name or '')
+    return base.replace('试点', '')
+
+
 def extract_code_table():
     out = {}
     prev_code, prev_subject = '', ''
@@ -103,7 +109,6 @@ def extract_code_table():
         title = squash(row[1])
         if not title:
             continue
-        # 代号 / 考试科目代号为纵向合并单元格时空白，沿承上一行
         code_raw = squash(row[0])
         code = code_raw if re.fullmatch(r'[0-9A-Z]{1,2}', code_raw or '') else prev_code
         prev_code = code
@@ -114,11 +119,16 @@ def extract_code_table():
 
 
 def code_ref(code_table, name):
-    """按名称查代号；一览表与代号表的括号注释措辞可能不同，回退到去注释名称。"""
+    """按名称查代号；对照表与代号表的括号注释措辞可能不同，回退到基础名匹配。"""
     if name in code_table:
         return code_table[name]
-    base = re.sub(r'[（(]本科层次职业[^（）()]*[）)]', '', name).replace('试点', '')
-    return code_table.get(base, {})
+    base = baseName(name)
+    if base and base in code_table:
+        return code_table[base]
+    for title, ref in code_table.items():
+        if baseName(title) == base:
+            return ref
+    return {}
 
 
 # ---------- 2026 对照一览表：专科专业 → 可报本科专业 ----------
@@ -168,11 +178,15 @@ def extract_mapping():
             edges.append((major, item))
     grouped = {}
     order = []
+    seen = set()
     for major, item in edges:
+        key = (major, item['专业名称'], item['代码6位'])
+        if key in seen:
+            continue
+        seen.add(key)
         if major not in grouped:
             grouped[major] = []
             order.append(major)
-        item['专业名称'] = item.pop('专业名称')
         grouped[major].append(item)
     code_table = extract_code_table()
     out = []
