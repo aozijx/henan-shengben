@@ -21,7 +21,8 @@
             "专业代号": { "type": "string", "minLength": 1 },
             "考试科目代码": { "type": "string", "minLength": 1 },
             "考试科目": { "type": "string", "minLength": 1 },
-            "代码6位": { "type": "string", "pattern": "^[0-9]{6}[0-9A-Z]{0,2}$" }
+            "代码6位": { "type": "string", "pattern": "^[0-9]{6}[0-9A-Z]{0,2}$" },
+            "_代号备注": { "type": "string" }
           }
         }
       }

@@ -2,31 +2,14 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ProcessPoolExecutor
-import json
 from pathlib import Path
 import sys
 from typing import Any
 
-if __package__ in (None, ""):
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-from convert.pdf_tables import RawPdfRow, extract_rows
-from convert.issue_reports import apply_manual_correction
-from convert.score_segments import parse_score_segments
-
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATA_ROOT = REPO_ROOT / "data"
-DEFAULT_REGISTRY = DEFAULT_DATA_ROOT / "source-registry.json"
-
-
-def _read_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+from .common import DATA_ROOT, _ensure_stdout_utf8, load_registry, read_json, write_json
+from .issue_reports import apply_manual_correction
+from .pdf_tables import RawPdfRow, extract_rows
+from .score_segments import parse_score_segments
 
 
 def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]) -> dict[str, Any]:
@@ -109,16 +92,17 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
 
 
 def main() -> int:
+    _ensure_stdout_utf8()
     parser = argparse.ArgumentParser(description="批量抽取官方一分一段 PDF")
     parser.add_argument("--dataset", default="score-segments")
     parser.add_argument("--year", dest="years", action="append", type=int)
     parser.add_argument("--major", dest="major_codes", action="append")
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
+    parser.add_argument("--registry", type=Path, default=None)
     args = parser.parse_args()
 
-    registry = _read_json(args.registry)
-    data_root = args.registry.resolve().parent
+    registry = load_registry(args.registry)
+    data_root = (Path(args.registry).resolve().parent if args.registry else DATA_ROOT)
     targets = [
         item for item in registry["crawlTargets"]
         if item["dataset"] == args.dataset and (not args.years or item["year"] in args.years)

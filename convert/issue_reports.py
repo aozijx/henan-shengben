@@ -1,27 +1,11 @@
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
-import sys
 from typing import Any
 
-if __package__ in (None, ""):
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-from convert.pdf_tables import RawPdfRow, extract_rows
-
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-
-
-def _read_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+from .common import DATA_ROOT, REGISTRY_PATH, _ensure_stdout_utf8, load_registry, read_json, write_json
+from .pdf_tables import RawPdfRow, extract_rows
 
 
 def _analyze_rows(rows: list[RawPdfRow]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -111,7 +95,7 @@ def ensure_manual_corrections(path: Path, reports: list[dict[str, Any]]) -> bool
                 "replacementSegments": [],
                 "evidenceNote": "",
             })
-    _write_json(path, {"schemaVersion": 1, "corrections": corrections})
+    write_json(path, {"schemaVersion": 1, "corrections": corrections})
     return True
 
 
@@ -137,16 +121,16 @@ def apply_manual_correction(
 
 def generate_reports(registry_path: Path) -> list[dict[str, Any]]:
     data_root = registry_path.resolve().parent
-    registry = _read_json(registry_path)
+    registry = read_json(registry_path)
     score_paths = {int(item["year"]): item["outputPath"] for item in registry["sources"] if item["parser"] == "scorelines"}
     reports = []
     for target in registry["crawlTargets"]:
-        extraction = _read_json(data_root / target["extractionPath"])
-        controls = {row["专业代号"]: row["分数线"] for row in _read_json(data_root / score_paths[int(target["year"])])}
-        manifest = _read_json(data_root / target["manifestPath"])
+        extraction = read_json(data_root / target["extractionPath"])
+        controls = {row["专业代号"]: row["分数线"] for row in read_json(data_root / score_paths[int(target["year"])])}
+        manifest = read_json(data_root / target["manifestPath"])
         source_entries = {entry["majorCode"]: entry for entry in manifest["entries"]}
         report = build_issue_report(extraction, data_root, controls, source_entries)
-        _write_json(data_root / "reports" / f"异常数据_{target['year']}.json", report)
+        write_json(data_root / "reports" / f"异常数据_{target['year']}.json", report)
         reports.append(report)
     ensure_manual_corrections(data_root / "一分一段" / "人工修正.json", reports)
     return reports
@@ -154,7 +138,7 @@ def generate_reports(registry_path: Path) -> list[dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成一分一段 OCR 异常人工核对报告")
-    parser.add_argument("--registry", type=Path, default=REPO_ROOT / "data" / "source-registry.json")
+    parser.add_argument("--registry", type=Path, default=REGISTRY_PATH)
     args = parser.parse_args()
     reports = generate_reports(args.registry)
     for report in reports:
@@ -164,3 +148,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
