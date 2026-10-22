@@ -10,7 +10,8 @@ from typing import Any
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from convert.pdf_tables import extract_rows
+from convert.pdf_tables import RawPdfRow, extract_rows
+from convert.issue_reports import apply_manual_correction
 from convert.score_segments import parse_score_segments
 
 
@@ -28,15 +29,25 @@ def _write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def _convert_entry(arguments: tuple[dict[str, Any], Path]) -> dict[str, Any]:
-    entry, data_root = arguments
+def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]) -> dict[str, Any]:
+    entry, data_root, correction = arguments
     pdf_path = data_root / entry["localPath"]
     try:
-        rows = extract_rows(pdf_path)
-        segments, issues = parse_score_segments(rows)
-        if not segments and any(issue.code in {"duplicate-score", "non-monotonic-count"} for issue in issues):
+        if correction and correction.get("status") == "confirmed":
             rows = extract_rows(pdf_path, thorough=True)
+            rows, replacement = apply_manual_correction(rows, correction)
+            if replacement:
+                rows = [
+                    RawPdfRow(0, (str(item["score"]), str(item["cumulativeCount"])))
+                    for item in replacement
+                ]
             segments, issues = parse_score_segments(rows)
+        else:
+            rows = extract_rows(pdf_path)
+            segments, issues = parse_score_segments(rows)
+            if not segments and any(issue.code in {"duplicate-score", "non-monotonic-count"} for issue in issues):
+                rows = extract_rows(pdf_path, thorough=True)
+                segments, issues = parse_score_segments(rows)
     except Exception as exc:  # keep a full batch running and report the source failure
         segments = []
         issues = []
@@ -63,7 +74,10 @@ def _convert_entry(arguments: tuple[dict[str, Any], Path]) -> dict[str, Any]:
 def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None, workers: int = 1) -> dict[str, Any]:
     manifest = _read_json(data_root / target["manifestPath"])
     entries = [entry for entry in manifest["entries"] if not major_codes or entry["majorCode"] in major_codes]
-    arguments = [(entry, data_root) for entry in entries]
+    correction_path = data_root / "一分一段" / "人工修正.json"
+    correction_values = _read_json(correction_path).get("corrections", []) if correction_path.exists() else []
+    corrections = {(int(item["year"]), item["majorCode"]): item for item in correction_values}
+    arguments = [(entry, data_root, corrections.get((int(target["year"]), entry["majorCode"]))) for entry in entries]
     if workers > 1 and len(entries) > 1:
         with ProcessPoolExecutor(max_workers=workers) as executor:
             majors = list(executor.map(_convert_entry, arguments))

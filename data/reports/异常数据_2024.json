@@ -1,0 +1,2181 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "issueCount": 4,
+  "issues": [
+    {
+      "issueId": "2024-53",
+      "year": 2024,
+      "majorCode": "53",
+      "majorName": "网络工程",
+      "officialControlScore": 80,
+      "sourcePdf": "一分一段/原始PDF/2024/53_网络工程.pdf",
+      "officialPdfUrl": "https://www.haeea.cn/attach/file/20240419ZSB/2024%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(53%E7%BD%91%E7%BB%9C%E5%B7%A5%E7%A8%8B).pdf",
+      "sourcePageUrl": "https://www.haeea.cn/a/202404/43297_fd486546.shtml",
+      "sourceSha256": "56dfb7fce5e8394141a8d42011dbd8d152a0843e6c49dfb82408ad3e13fa5e89",
+      "sourceBytes": 255304,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 801→238 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "238",
+            "1",
+            "184",
+            "62"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "229",
+            "2",
+            "183",
+            "64"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "227",
+            "3",
+            "182",
+            "67"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "226",
+            "4",
+            "181",
+            "70"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "220",
+            "5",
+            "180",
+            "72"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "211",
+            "6",
+            "179",
+            "76"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "208",
+            "8",
+            "178",
+            "77"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "207",
+            "9",
+            "177",
+            "87"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "206",
+            "11",
+            "176",
+            "90"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "203",
+            "13",
+            "175",
+            "92"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "202",
+            "14",
+            "174",
+            "99"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "201",
+            "18",
+            "173",
+            "106"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "200",
+            "19",
+            "172",
+            "108"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "198",
+            "21",
+            "171",
+            "112"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "197",
+            "24",
+            "170",
+            "118"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "196",
+            "26",
+            "169",
+            "119"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "195",
+            "28",
+            "168",
+            "123"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "194",
+            "30",
+            "167",
+            "128"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "193",
+            "33",
+            "166",
+            "131"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "192",
+            "38",
+            "165",
+            "140"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "191",
+            "40",
+            "164",
+            "147"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "190",
+            "41",
+            "163",
+            "151"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "189",
+            "44",
+            "162",
+            "155"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "188",
+            "47",
+            "161",
+            "160"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "187",
+            "49",
+            "160",
+            "165"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "186",
+            "53",
+            "159",
+            "171"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "185",
+            "58",
+            "158",
+            "180"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 27,
+          "cells": [
+            "130",
+            "399",
+            "103",
+            "628"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 28,
+          "cells": [
+            "129",
+            "406",
+            "102",
+            "636"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 29,
+          "cells": [
+            "128",
+            "413",
+            "101",
+            "641"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 30,
+          "cells": [
+            "127",
+            "424",
+            "100",
+            "647"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 31,
+          "cells": [
+            "126",
+            "434",
+            "99",
+            "651"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 32,
+          "cells": [
+            "125",
+            "442",
+            "98",
+            "660"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 33,
+          "cells": [
+            "124",
+            "454",
+            "97",
+            "667"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 34,
+          "cells": [
+            "123",
+            "465",
+            "96",
+            "675"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 35,
+          "cells": [
+            "122",
+            "475",
+            "95",
+            "686"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 36,
+          "cells": [
+            "121",
+            "483",
+            "94",
+            "693"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 37,
+          "cells": [
+            "120",
+            "492",
+            "93",
+            "699"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 38,
+          "cells": [
+            "119",
+            "500",
+            "92",
+            "707"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 39,
+          "cells": [
+            "118",
+            "508",
+            "91",
+            "711"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 40,
+          "cells": [
+            "117",
+            "512",
+            "90",
+            "713"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 41,
+          "cells": [
+            "116",
+            "520",
+            "89",
+            "723"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "115",
+            "527",
+            "88",
+            "730"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 43,
+          "cells": [
+            "114",
+            "532",
+            "87",
+            "739"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 44,
+          "cells": [
+            "113",
+            "539",
+            "86",
+            "749"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 45,
+          "cells": [
+            "112",
+            "555",
+            "85",
+            "758"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 46,
+          "cells": [
+            "111",
+            "562",
+            "84",
+            "764"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 47,
+          "cells": [
+            "110",
+            "568",
+            "83",
+            "774"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 48,
+          "cells": [
+            "109",
+            "575",
+            "82",
+            "786"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 49,
+          "cells": [
+            "108",
+            "583",
+            "81",
+            "792"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "107",
+            "592",
+            "801",
+            "800"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 51,
+          "cells": [
+            "106",
+            "604",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 52,
+          "cells": [
+            "105",
+            "610",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 53,
+          "cells": [
+            "104",
+            "618",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "107",
+            "592",
+            "801",
+            "800"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 2,
+              "rowIndex": 49,
+              "cells": [
+                "108",
+                "583",
+                "81",
+                "792"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 50,
+              "cells": [
+                "107",
+                "592",
+                "801",
+                "800"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 51,
+              "cells": [
+                "106",
+                "604",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2024-83",
+      "year": 2024,
+      "majorCode": "83",
+      "majorName": "农学",
+      "officialControlScore": 175,
+      "sourcePdf": "一分一段/原始PDF/2024/83_农学.pdf",
+      "officialPdfUrl": "https://www.haeea.cn/attach/file/20240419ZSB/2024%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(83%E5%86%9C%E5%AD%A6).pdf",
+      "sourcePageUrl": "https://www.haeea.cn/a/202404/43297_fd486546.shtml",
+      "sourceSha256": "cbe231918089bc596a70652d2c5758105d36ccc902018cc667adc0443b954e03",
+      "sourceBytes": 97239,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 1755→232 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "232",
+            "1",
+            "191",
+            "56"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "227",
+            "2",
+            "190",
+            "60"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "226",
+            "4",
+            "189",
+            "62"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "223",
+            "6",
+            "188",
+            "65"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "222",
+            "7",
+            "187",
+            "67"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "220",
+            "8",
+            "186",
+            "74"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "218",
+            "11",
+            "185",
+            "77"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "216",
+            "12",
+            "184",
+            "81"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "215",
+            "13",
+            "183",
+            "82"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "214",
+            "14",
+            "182",
+            "87"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "213",
+            "15",
+            "181",
+            "91"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "212",
+            "16",
+            "180",
+            "93"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "208",
+            "18",
+            "178",
+            "95"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "207",
+            "19",
+            "177",
+            "98"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "206",
+            "20",
+            "176",
+            "100"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "204",
+            "23",
+            "1755",
+            "104"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "203",
+            "24",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "202",
+            "28",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "201",
+            "30",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "200",
+            "34",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "199",
+            "35",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "197",
+            "37",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "196",
+            "42",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "195",
+            "44",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "194",
+            "46",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "193",
+            "50",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "192",
+            "51",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "204",
+            "23",
+            "1755",
+            "104"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 1,
+              "rowIndex": 14,
+              "cells": [
+                "206",
+                "20",
+                "176",
+                "100"
+              ]
+            },
+            {
+              "pageNumber": 1,
+              "rowIndex": 15,
+              "cells": [
+                "204",
+                "23",
+                "1755",
+                "104"
+              ]
+            },
+            {
+              "pageNumber": 1,
+              "rowIndex": 16,
+              "cells": [
+                "203",
+                "24",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2024-93",
+      "year": 2024,
+      "majorCode": "93",
+      "majorName": "信息管理与信息系统",
+      "officialControlScore": 85,
+      "sourcePdf": "一分一段/原始PDF/2024/93_信息管理与信息系统.pdf",
+      "officialPdfUrl": "https://www.haeea.cn/attach/file/20240419ZSB/2024%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(93%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F).pdf",
+      "sourcePageUrl": "https://www.haeea.cn/a/202404/43297_fd486546.shtml",
+      "sourceSha256": "b4f3afdce235f924ad5d4b81e0c5188bec1ff6f50b19a53ebf0645808cd80d79",
+      "sourceBytes": 258349,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 851→226 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "226",
+            "2",
+            "189",
+            "49"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "224",
+            "3",
+            "188",
+            "52"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "222",
+            "4",
+            "187",
+            "59"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "221",
+            "5",
+            "186",
+            "62"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "219",
+            "6",
+            "185",
+            "64"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "218",
+            "7",
+            "184",
+            "68"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "217",
+            "8",
+            "183",
+            "71"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "216",
+            "9",
+            "182",
+            "73"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "214",
+            "12",
+            "181",
+            "76"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "211",
+            "13",
+            "180",
+            "77"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "208",
+            "16",
+            "179",
+            "81"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "207",
+            "17",
+            "178",
+            "84"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "206",
+            "20",
+            "177",
+            "92"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "204",
+            "21",
+            "176",
+            "107"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "203",
+            "24",
+            "175",
+            "112"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "202",
+            "26",
+            "174",
+            "119"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "200",
+            "27",
+            "173",
+            "123"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "199",
+            "29",
+            "172",
+            "126"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "198",
+            "30",
+            "171",
+            "129"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "197",
+            "31",
+            "170",
+            "132"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "196",
+            "33",
+            "169",
+            "138"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "195",
+            "36",
+            "168",
+            "143"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "194",
+            "38",
+            "167",
+            "150"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "193",
+            "41",
+            "166",
+            "157"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "192",
+            "43",
+            "165",
+            "162"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "191",
+            "44",
+            "164",
+            "169"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "190",
+            "47",
+            "163",
+            "183"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 27,
+          "cells": [
+            "135",
+            "411",
+            "108",
+            "643"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 28,
+          "cells": [
+            "134",
+            "424",
+            "107",
+            "651"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 29,
+          "cells": [
+            "133",
+            "434",
+            "106",
+            "665"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 30,
+          "cells": [
+            "132",
+            "442",
+            "105",
+            "667"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 31,
+          "cells": [
+            "131",
+            "453",
+            "104",
+            "684"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 32,
+          "cells": [
+            "130",
+            "463",
+            "103",
+            "697"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 33,
+          "cells": [
+            "129",
+            "472",
+            "102",
+            "702"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 34,
+          "cells": [
+            "128",
+            "479",
+            "101",
+            "709"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 35,
+          "cells": [
+            "127",
+            "483",
+            "100",
+            "722"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 36,
+          "cells": [
+            "126",
+            "488",
+            "99",
+            "737"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 37,
+          "cells": [
+            "125",
+            "493",
+            "98",
+            "748"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 38,
+          "cells": [
+            "124",
+            "502",
+            "97",
+            "756"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 39,
+          "cells": [
+            "123",
+            "513",
+            "96",
+            "766"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 40,
+          "cells": [
+            "122",
+            "518",
+            "95",
+            "774"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 41,
+          "cells": [
+            "121",
+            "530",
+            "94",
+            "792"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "120",
+            "534",
+            "93",
+            "803"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 43,
+          "cells": [
+            "119",
+            "539",
+            "92",
+            "822"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 44,
+          "cells": [
+            "118",
+            "551",
+            "91",
+            "832"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 45,
+          "cells": [
+            "117",
+            "562",
+            "90",
+            "842"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 46,
+          "cells": [
+            "116",
+            "569",
+            "89",
+            "861"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 47,
+          "cells": [
+            "115",
+            "578",
+            "88",
+            "875"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 48,
+          "cells": [
+            "114",
+            "587",
+            "87",
+            "886"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 49,
+          "cells": [
+            "113",
+            "597",
+            "86",
+            "902"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "112",
+            "611",
+            "851",
+            "915"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 51,
+          "cells": [
+            "111",
+            "624",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 52,
+          "cells": [
+            "110",
+            "630",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 53,
+          "cells": [
+            "109",
+            "634",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "112",
+            "611",
+            "851",
+            "915"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 2,
+              "rowIndex": 49,
+              "cells": [
+                "113",
+                "597",
+                "86",
+                "902"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 50,
+              "cells": [
+                "112",
+                "611",
+                "851",
+                "915"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 51,
+              "cells": [
+                "111",
+                "624",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2024-A4",
+      "year": 2024,
+      "majorCode": "A4",
+      "majorName": "人力资源管理",
+      "officialControlScore": 120,
+      "sourcePdf": "一分一段/原始PDF/2024/A4_人力资源管理.pdf",
+      "officialPdfUrl": "https://www.haeea.cn/attach/file/20240419ZSB/2024%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(A4%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86).pdf",
+      "sourcePageUrl": "https://www.haeea.cn/a/202404/43297_fd486546.shtml",
+      "sourceSha256": "1407632fb02ee1373b45507931dbc44b2d2910d5733666507204d4c000942a04",
+      "sourceBytes": 249252,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 1205→258 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "258",
+            "1",
+            "216",
+            "62"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "252",
+            "2",
+            "215",
+            "67"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "243",
+            "4",
+            "214",
+            "73"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "242",
+            "5",
+            "213",
+            "79"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "241",
+            "7",
+            "212",
+            "83"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "240",
+            "8",
+            "211",
+            "87"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "239",
+            "9",
+            "210",
+            "93"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "238",
+            "13",
+            "209",
+            "99"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "237",
+            "14",
+            "208",
+            "104"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "235",
+            "16",
+            "207",
+            "108"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "234",
+            "18",
+            "206",
+            "112"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "233",
+            "19",
+            "205",
+            "117"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "232",
+            "20",
+            "204",
+            "121"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "231",
+            "21",
+            "203",
+            "124"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "229",
+            "22",
+            "202",
+            "129"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "228",
+            "27",
+            "201",
+            "131"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "227",
+            "32",
+            "200",
+            "138"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "226",
+            "35",
+            "199",
+            "146"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "225",
+            "37",
+            "198",
+            "153"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "224",
+            "41",
+            "197",
+            "158"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "223",
+            "44",
+            "196",
+            "168"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "222",
+            "46",
+            "195",
+            "170"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "221",
+            "49",
+            "194",
+            "174"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "220",
+            "52",
+            "193",
+            "179"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "219",
+            "54",
+            "192",
+            "185"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "218",
+            "55",
+            "191",
+            "188"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "217",
+            "60",
+            "190",
+            "192"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 27,
+          "cells": [
+            "162",
+            "319",
+            "135",
+            "436"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 28,
+          "cells": [
+            "161",
+            "324",
+            "134",
+            "444"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 29,
+          "cells": [
+            "160",
+            "327",
+            "133",
+            "449"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 30,
+          "cells": [
+            "159",
+            "334",
+            "132",
+            "453"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 31,
+          "cells": [
+            "158",
+            "340",
+            "131",
+            "455"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 32,
+          "cells": [
+            "157",
+            "349",
+            "130",
+            "459"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 33,
+          "cells": [
+            "156",
+            "351",
+            "129",
+            "460"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 34,
+          "cells": [
+            "155",
+            "357",
+            "128",
+            "468"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 35,
+          "cells": [
+            "154",
+            "362",
+            "127",
+            "474"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 36,
+          "cells": [
+            "153",
+            "368",
+            "126",
+            "481"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 37,
+          "cells": [
+            "152",
+            "372",
+            "125",
+            "486"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 38,
+          "cells": [
+            "151",
+            "375",
+            "124",
+            "489"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 39,
+          "cells": [
+            "150",
+            "380",
+            "123",
+            "495"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 40,
+          "cells": [
+            "149",
+            "384",
+            "122",
+            "496"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 41,
+          "cells": [
+            "148",
+            "387",
+            "121",
+            "499"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "147",
+            "388",
+            "1205",
+            "504"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 43,
+          "cells": [
+            "146",
+            "393",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 44,
+          "cells": [
+            "145",
+            "396",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 45,
+          "cells": [
+            "144",
+            "399",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 46,
+          "cells": [
+            "143",
+            "405",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 47,
+          "cells": [
+            "142",
+            "407",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 48,
+          "cells": [
+            "141",
+            "413",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 49,
+          "cells": [
+            "140",
+            "415",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "139",
+            "418",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 51,
+          "cells": [
+            "138",
+            "426",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 52,
+          "cells": [
+            "137",
+            "430",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 53,
+          "cells": [
+            "136",
+            "433",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "147",
+            "388",
+            "1205",
+            "504"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 2,
+              "rowIndex": 41,
+              "cells": [
+                "148",
+                "387",
+                "121",
+                "499"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 42,
+              "cells": [
+                "147",
+                "388",
+                "1205",
+                "504"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 43,
+              "cells": [
+                "146",
+                "393",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    }
+  ]
+}

@@ -1,0 +1,2551 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "issueCount": 6,
+  "issues": [
+    {
+      "issueId": "2026-53",
+      "year": 2026,
+      "majorCode": "53",
+      "majorName": "网络工程",
+      "officialControlScore": 80,
+      "sourcePdf": "一分一段/原始PDF/2026/53_网络工程.pdf",
+      "officialPdfUrl": "https://news.haeea.cn:8168/attach/file/20260409dkszb27040D5/2026%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(53%E7%BD%91%E7%BB%9C%E5%B7%A5%E7%A8%8B).PDF",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml",
+      "sourceSha256": "c34ca6854f93a13e4c65e946e009434d3923cf18b51b9859823df1b92d15fb1d",
+      "sourceBytes": 249630,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 805→231 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "231",
+            "1",
+            "176",
+            "65"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "227",
+            "2",
+            "175",
+            "73"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "211",
+            "3",
+            "174",
+            "77"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "210",
+            "4",
+            "173",
+            "81"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "206",
+            "5",
+            "172",
+            "84"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "203",
+            "6",
+            "171",
+            "86"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "202",
+            "8",
+            "170",
+            "93"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "197",
+            "9",
+            "169",
+            "100"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "196",
+            "10",
+            "168",
+            "112"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "194",
+            "12",
+            "167",
+            "116"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "193",
+            "16",
+            "166",
+            "121"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "192",
+            "18",
+            "165",
+            "125"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "191",
+            "22",
+            "164",
+            "131"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "190",
+            "26",
+            "163",
+            "134"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "189",
+            "28",
+            "162",
+            "142"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "188",
+            "32",
+            "161",
+            "147"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "187",
+            "33",
+            "160",
+            "150"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "186",
+            "36",
+            "159",
+            "159"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "185",
+            "38",
+            "158",
+            "164"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "184",
+            "39",
+            "157",
+            "176"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "183",
+            "41",
+            "156",
+            "183"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "182",
+            "46",
+            "155",
+            "199"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "181",
+            "49",
+            "154",
+            "207"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "180",
+            "51",
+            "153",
+            "219"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "179",
+            "54",
+            "152",
+            "231"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "178",
+            "58",
+            "151",
+            "238"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "177",
+            "63",
+            "150",
+            "250"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 27,
+          "cells": [
+            "122",
+            "783",
+            "95",
+            "1668"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 28,
+          "cells": [
+            "121",
+            "811",
+            "94",
+            "1695"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 29,
+          "cells": [
+            "120",
+            "841",
+            "93",
+            "1733"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 30,
+          "cells": [
+            "119",
+            "872",
+            "92",
+            "1773"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 31,
+          "cells": [
+            "118",
+            "900",
+            "91",
+            "1804"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 32,
+          "cells": [
+            "117",
+            "939",
+            "90",
+            "1840"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 33,
+          "cells": [
+            "116",
+            "966",
+            "89",
+            "1870"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 34,
+          "cells": [
+            "115",
+            "994",
+            "88",
+            "1896"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 35,
+          "cells": [
+            "114",
+            "1022",
+            "87",
+            "1935"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 36,
+          "cells": [
+            "113",
+            "1055",
+            "86",
+            "1973"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 37,
+          "cells": [
+            "112",
+            "1073",
+            "85",
+            "2010"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 38,
+          "cells": [
+            "111",
+            "1106",
+            "84",
+            "2050"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 39,
+          "cells": [
+            "110",
+            "1135",
+            "83",
+            "2087"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 40,
+          "cells": [
+            "109",
+            "1170",
+            "82",
+            "2123"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 41,
+          "cells": [
+            "108",
+            "1203",
+            "81",
+            "2158"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "107",
+            "1232",
+            "805",
+            "2192"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 43,
+          "cells": [
+            "106",
+            "1265",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 44,
+          "cells": [
+            "105",
+            "1295",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 45,
+          "cells": [
+            "104",
+            "1345",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 46,
+          "cells": [
+            "103",
+            "1382",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 47,
+          "cells": [
+            "102",
+            "1428",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 48,
+          "cells": [
+            "101",
+            "1461",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 49,
+          "cells": [
+            "100",
+            "1490",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "99",
+            "1515",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 51,
+          "cells": [
+            "98",
+            "1550",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 52,
+          "cells": [
+            "97",
+            "1589",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 53,
+          "cells": [
+            "96",
+            "1628",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "107",
+            "1232",
+            "805",
+            "2192"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 2,
+              "rowIndex": 41,
+              "cells": [
+                "108",
+                "1203",
+                "81",
+                "2158"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 42,
+              "cells": [
+                "107",
+                "1232",
+                "805",
+                "2192"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 43,
+              "cells": [
+                "106",
+                "1265",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2026-60",
+      "year": 2026,
+      "majorCode": "60",
+      "majorName": "城乡规划",
+      "officialControlScore": 99,
+      "sourcePdf": "一分一段/原始PDF/2026/60_城乡规划.pdf",
+      "officialPdfUrl": "https://news.haeea.cn:8168/attach/file/20260409dkszb27040D5/2026%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(60%E5%9F%8E%E4%B9%A1%E8%A7%84%E5%88%92).PDF",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml",
+      "sourceSha256": "f016c8fea8d88014337a320f1db54356b1f83d4809c4996c3e58af15d662fbed",
+      "sourceBytes": 247554,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 995→241 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "241",
+            "1",
+            "198",
+            "61"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "235",
+            "2",
+            "197",
+            "65"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "232",
+            "3",
+            "195",
+            "72"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "230",
+            "4",
+            "194",
+            "77"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "228",
+            "5",
+            "193",
+            "81"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "227",
+            "6",
+            "192",
+            "84"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "226",
+            "8",
+            "191",
+            "87"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "225",
+            "10",
+            "190",
+            "92"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "223",
+            "12",
+            "189",
+            "94"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "221",
+            "14",
+            "188",
+            "97"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "218",
+            "17",
+            "187",
+            "101"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "217",
+            "18",
+            "186",
+            "102"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "216",
+            "21",
+            "185",
+            "105"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "213",
+            "23",
+            "184",
+            "110"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "212",
+            "26",
+            "183",
+            "112"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "211",
+            "30",
+            "182",
+            "118"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "210",
+            "34",
+            "181",
+            "120"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "209",
+            "35",
+            "180",
+            "124"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "208",
+            "36",
+            "179",
+            "132"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "206",
+            "37",
+            "178",
+            "138"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "205",
+            "39",
+            "177",
+            "144"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "204",
+            "42",
+            "176",
+            "153"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "203",
+            "46",
+            "175",
+            "160"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "202",
+            "51",
+            "174",
+            "165"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "201",
+            "53",
+            "173",
+            "175"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "200",
+            "57",
+            "172",
+            "178"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "199",
+            "60",
+            "171",
+            "186"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 27,
+          "cells": [
+            "142",
+            "362",
+            "114",
+            "532"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 28,
+          "cells": [
+            "141",
+            "366",
+            "113",
+            "541"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 29,
+          "cells": [
+            "140",
+            "373",
+            "112",
+            "548"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 30,
+          "cells": [
+            "139",
+            "376",
+            "111",
+            "551"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 31,
+          "cells": [
+            "138",
+            "383",
+            "110",
+            "556"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 32,
+          "cells": [
+            "137",
+            "390",
+            "109",
+            "562"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 33,
+          "cells": [
+            "136",
+            "397",
+            "108",
+            "567"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 34,
+          "cells": [
+            "134",
+            "401",
+            "107",
+            "571"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 35,
+          "cells": [
+            "133",
+            "408",
+            "106",
+            "573"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 36,
+          "cells": [
+            "132",
+            "414",
+            "105",
+            "576"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 37,
+          "cells": [
+            "131",
+            "424",
+            "104",
+            "579"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 38,
+          "cells": [
+            "130",
+            "432",
+            "103",
+            "588"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 39,
+          "cells": [
+            "129",
+            "442",
+            "102",
+            "593"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 40,
+          "cells": [
+            "128",
+            "453",
+            "101",
+            "597"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 41,
+          "cells": [
+            "127",
+            "458",
+            "100",
+            "603"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "126",
+            "461",
+            "995",
+            "606"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 43,
+          "cells": [
+            "125",
+            "467",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 44,
+          "cells": [
+            "124",
+            "478",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 45,
+          "cells": [
+            "123",
+            "486",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 46,
+          "cells": [
+            "122",
+            "493",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 47,
+          "cells": [
+            "121",
+            "500",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 48,
+          "cells": [
+            "120",
+            "505",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 49,
+          "cells": [
+            "119",
+            "509",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "118",
+            "512",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 51,
+          "cells": [
+            "117",
+            "517",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 52,
+          "cells": [
+            "116",
+            "522",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 53,
+          "cells": [
+            "115",
+            "528",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "126",
+            "461",
+            "995",
+            "606"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 2,
+              "rowIndex": 41,
+              "cells": [
+                "127",
+                "458",
+                "100",
+                "603"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 42,
+              "cells": [
+                "126",
+                "461",
+                "995",
+                "606"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 43,
+              "cells": [
+                "125",
+                "467",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2026-A4",
+      "year": 2026,
+      "majorCode": "A4",
+      "majorName": "人力资源管理",
+      "officialControlScore": 119,
+      "sourcePdf": "一分一段/原始PDF/2026/A4_人力资源管理.pdf",
+      "officialPdfUrl": "https://news.haeea.cn:8168/attach/file/20260409dkszb27040D5/2026%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(A4%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86).PDF",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml",
+      "sourceSha256": "a3ca7e25318b6c155c9a7e7a2e77eeb0c76534b888dbb2cb58b4c0fb58cc4b37",
+      "sourceBytes": 250559,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 1195→248 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "248",
+            "1",
+            "215",
+            "108"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "247",
+            "3",
+            "214",
+            "113"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "242",
+            "4",
+            "213",
+            "123"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "241",
+            "5",
+            "212",
+            "127"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "240",
+            "7",
+            "211",
+            "136"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "239",
+            "9",
+            "210",
+            "145"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "237",
+            "12",
+            "209",
+            "156"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "236",
+            "15",
+            "208",
+            "164"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "235",
+            "18",
+            "207",
+            "180"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "234",
+            "19",
+            "206",
+            "194"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "233",
+            "22",
+            "205",
+            "206"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "232",
+            "27",
+            "204",
+            "214"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "231",
+            "28",
+            "203",
+            "228"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "230",
+            "35",
+            "202",
+            "234"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "228",
+            "37",
+            "201",
+            "247"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "227",
+            "40",
+            "200",
+            "260"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "226",
+            "45",
+            "199",
+            "274"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "225",
+            "49",
+            "198",
+            "283"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "224",
+            "54",
+            "197",
+            "294"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "223",
+            "59",
+            "196",
+            "302"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "222",
+            "62",
+            "195",
+            "313"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "221",
+            "65",
+            "194",
+            "321"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "220",
+            "78",
+            "193",
+            "328"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "219",
+            "86",
+            "192",
+            "338"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "218",
+            "89",
+            "191",
+            "346"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "217",
+            "95",
+            "190",
+            "356"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "216",
+            "100",
+            "189",
+            "371"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 27,
+          "cells": [
+            "161",
+            "678",
+            "134",
+            "940"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 28,
+          "cells": [
+            "160",
+            "690",
+            "133",
+            "949"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 29,
+          "cells": [
+            "159",
+            "703",
+            "132",
+            "958"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 30,
+          "cells": [
+            "158",
+            "712",
+            "131",
+            "971"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 31,
+          "cells": [
+            "157",
+            "723",
+            "130",
+            "979"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 32,
+          "cells": [
+            "156",
+            "729",
+            "129",
+            "987"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 33,
+          "cells": [
+            "155",
+            "741",
+            "128",
+            "993"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 34,
+          "cells": [
+            "154",
+            "746",
+            "127",
+            "997"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 35,
+          "cells": [
+            "153",
+            "755",
+            "126",
+            "1003"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 36,
+          "cells": [
+            "152",
+            "767",
+            "125",
+            "1013"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 37,
+          "cells": [
+            "151",
+            "778",
+            "124",
+            "1023"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 38,
+          "cells": [
+            "150",
+            "788",
+            "123",
+            "1031"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 39,
+          "cells": [
+            "149",
+            "799",
+            "122",
+            "1043"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 40,
+          "cells": [
+            "148",
+            "808",
+            "121",
+            "1056"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 41,
+          "cells": [
+            "147",
+            "815",
+            "120",
+            "1068"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "146",
+            "821",
+            "1195",
+            "1079"
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 43,
+          "cells": [
+            "145",
+            "832",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 44,
+          "cells": [
+            "144",
+            "838",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 45,
+          "cells": [
+            "143",
+            "851",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 46,
+          "cells": [
+            "142",
+            "861",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 47,
+          "cells": [
+            "141",
+            "871",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 48,
+          "cells": [
+            "140",
+            "882",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 49,
+          "cells": [
+            "139",
+            "891",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 50,
+          "cells": [
+            "138",
+            "902",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 51,
+          "cells": [
+            "137",
+            "909",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 52,
+          "cells": [
+            "136",
+            "918",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 2,
+          "rowIndex": 53,
+          "cells": [
+            "135",
+            "933",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 2,
+          "rowIndex": 42,
+          "cells": [
+            "146",
+            "821",
+            "1195",
+            "1079"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 2,
+              "rowIndex": 41,
+              "cells": [
+                "147",
+                "815",
+                "120",
+                "1068"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 42,
+              "cells": [
+                "146",
+                "821",
+                "1195",
+                "1079"
+              ]
+            },
+            {
+              "pageNumber": 2,
+              "rowIndex": 43,
+              "cells": [
+                "145",
+                "832",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2026-N8",
+      "year": 2026,
+      "majorCode": "N8",
+      "majorName": "金融工程",
+      "officialControlScore": null,
+      "sourcePdf": "一分一段/原始PDF/2026/N8_金融工程.pdf",
+      "officialPdfUrl": "https://news.haeea.cn:8168/attach/file/20260409dkszb27040D5/2026%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(N8%E9%87%91%E8%9E%8D%E5%B7%A5%E7%A8%8B).PDF",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml",
+      "sourceSha256": "d908a62389f5a309529b3f50de47f8675b9c5153f88625853ca099134b329a79",
+      "sourceBytes": 34980,
+      "errors": [
+        {
+          "code": "no-segments",
+          "pageNumber": null,
+          "message": "未识别到任何分数段",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [],
+      "suspiciousRows": [],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2026-P8",
+      "year": 2026,
+      "majorCode": "P8",
+      "majorName": "工业设计",
+      "officialControlScore": 81,
+      "sourcePdf": "一分一段/原始PDF/2026/P8_工业设计.pdf",
+      "officialPdfUrl": "https://news.haeea.cn:8168/attach/file/20260409dkszb27040D5/2026%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(P8%E5%B7%A5%E4%B8%9A%E8%AE%BE%E8%AE%A1).PDF",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml",
+      "sourceSha256": "a72bed115185b20c2ae3ab64a59996a02faf5afd616d9fe98b04a27458cbdf16",
+      "sourceBytes": 95888,
+      "errors": [
+        {
+          "code": "incomplete-pair",
+          "pageNumber": 1,
+          "message": "分数与累计人数未能成对识别",
+          "cells": [
+            "118",
+            "18",
+            "",
+            "72"
+          ]
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "203",
+            "1",
+            "101",
+            "40"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "163",
+            "2",
+            "100",
+            "41"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "160",
+            "3",
+            "99",
+            "42"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "158",
+            "4",
+            "98",
+            "45"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "147",
+            "5",
+            "96",
+            "47"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "146",
+            "6",
+            "94",
+            "49"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "136",
+            "8",
+            "93",
+            "50"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "135",
+            "9",
+            "91",
+            "52"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "134",
+            "11",
+            "90",
+            "55"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "133",
+            "12",
+            "88",
+            "59"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "132",
+            "13",
+            "87",
+            "62"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "130",
+            "14",
+            "86",
+            "65"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "129",
+            "15",
+            "85",
+            "66"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "128",
+            "16",
+            "83",
+            "69"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "121",
+            "17",
+            "82",
+            "70"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "118",
+            "18",
+            "",
+            "72"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "116",
+            "19",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "114",
+            "20",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "113",
+            "22",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "110",
+            "23",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "109",
+            "25",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "108",
+            "26",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "107",
+            "27",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "106",
+            "29",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "105",
+            "32",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "104",
+            "36",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "103",
+            "39",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "118",
+            "18",
+            "",
+            "72"
+          ],
+          "reasons": [
+            "incomplete-pair"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 1,
+              "rowIndex": 14,
+              "cells": [
+                "121",
+                "17",
+                "82",
+                "70"
+              ]
+            },
+            {
+              "pageNumber": 1,
+              "rowIndex": 15,
+              "cells": [
+                "118",
+                "18",
+                "",
+                "72"
+              ]
+            },
+            {
+              "pageNumber": 1,
+              "rowIndex": 16,
+              "cells": [
+                "116",
+                "19",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    },
+    {
+      "issueId": "2026-T4",
+      "year": 2026,
+      "majorCode": "T4",
+      "majorName": "智能工程与创意设计",
+      "officialControlScore": 80,
+      "sourcePdf": "一分一段/原始PDF/2026/T4_智能工程与创意设计.pdf",
+      "officialPdfUrl": "https://news.haeea.cn:8168/attach/file/20260409dkszb27040D5/2026%E5%B9%B4%E6%B2%B3%E5%8D%97%E7%9C%81%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC%E6%8B%9B%E7%94%9F%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8(T4%E6%99%BA%E8%83%BD%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%88%9B%E6%84%8F%E8%AE%BE%E8%AE%A1).PDF",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml",
+      "sourceSha256": "8f4e9c064590466307829e160c0c3ca41f90f8ce26dbe8d07d6f6625b2534711",
+      "sourceBytes": 96942,
+      "errors": [
+        {
+          "code": "non-monotonic-count",
+          "pageNumber": null,
+          "message": "累计人数在 805→158 时减少",
+          "cells": []
+        }
+      ],
+      "extractionError": null,
+      "rawRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 0,
+          "cells": [
+            "158",
+            "1",
+            "102",
+            "39"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 1,
+          "cells": [
+            "154",
+            "2",
+            "98",
+            "41"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 2,
+          "cells": [
+            "153",
+            "3",
+            "96",
+            "43"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 3,
+          "cells": [
+            "150",
+            "4",
+            "94",
+            "44"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 4,
+          "cells": [
+            "144",
+            "5",
+            "93",
+            "45"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 5,
+          "cells": [
+            "140",
+            "6",
+            "92",
+            "46"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 6,
+          "cells": [
+            "138",
+            "7",
+            "90",
+            "47"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 7,
+          "cells": [
+            "137",
+            "8",
+            "89",
+            "48"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 8,
+          "cells": [
+            "132",
+            "9",
+            "88",
+            "50"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 9,
+          "cells": [
+            "131",
+            "10",
+            "87",
+            "54"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 10,
+          "cells": [
+            "130",
+            "11",
+            "86",
+            "55"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 11,
+          "cells": [
+            "129",
+            "12",
+            "85",
+            "56"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 12,
+          "cells": [
+            "128",
+            "13",
+            "84",
+            "59"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 13,
+          "cells": [
+            "126",
+            "14",
+            "82",
+            "60"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 14,
+          "cells": [
+            "125",
+            "16",
+            "81",
+            "61"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "120",
+            "17",
+            "805",
+            "64"
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 16,
+          "cells": [
+            "119",
+            "20",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 17,
+          "cells": [
+            "118",
+            "21",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 18,
+          "cells": [
+            "116",
+            "22",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 19,
+          "cells": [
+            "114",
+            "23",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 20,
+          "cells": [
+            "112",
+            "24",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 21,
+          "cells": [
+            "111",
+            "27",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 22,
+          "cells": [
+            "110",
+            "29",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 23,
+          "cells": [
+            "109",
+            "30",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 24,
+          "cells": [
+            "108",
+            "33",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 25,
+          "cells": [
+            "107",
+            "34",
+            "",
+            ""
+          ]
+        },
+        {
+          "pageNumber": 1,
+          "rowIndex": 26,
+          "cells": [
+            "104",
+            "37",
+            "",
+            ""
+          ]
+        }
+      ],
+      "suspiciousRows": [
+        {
+          "pageNumber": 1,
+          "rowIndex": 15,
+          "cells": [
+            "120",
+            "17",
+            "805",
+            "64"
+          ],
+          "reasons": [
+            "score-out-of-range"
+          ],
+          "contextRows": [
+            {
+              "pageNumber": 1,
+              "rowIndex": 14,
+              "cells": [
+                "125",
+                "16",
+                "81",
+                "61"
+              ]
+            },
+            {
+              "pageNumber": 1,
+              "rowIndex": 15,
+              "cells": [
+                "120",
+                "17",
+                "805",
+                "64"
+              ]
+            },
+            {
+              "pageNumber": 1,
+              "rowIndex": 16,
+              "cells": [
+                "119",
+                "20",
+                "",
+                ""
+              ]
+            }
+          ]
+        }
+      ],
+      "reviewInstructions": "对照 sourcePdf 核对 suspiciousRows；在 data/一分一段/人工修正.json 填写修正并将 status 改为 confirmed。"
+    }
+  ]
+}
