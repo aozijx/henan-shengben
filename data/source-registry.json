@@ -70,6 +70,8 @@
       "manifestPath": "来源清单/来源清单_2024.json",
       "downloadDirectory": "一分一段/原始PDF/2024",
       "extractionPath": "一分一段/提取结果/提取结果_2024.json",
+      "normalizedPath": "一分一段/一分一段_2024.json",
+      "conversionReportPath": "reports/转换报告_2024.json",
       "parser": "score-segments"
     },
     {
@@ -80,6 +82,8 @@
       "manifestPath": "来源清单/来源清单_2025.json",
       "downloadDirectory": "一分一段/原始PDF/2025",
       "extractionPath": "一分一段/提取结果/提取结果_2025.json",
+      "normalizedPath": "一分一段/一分一段_2025.json",
+      "conversionReportPath": "reports/转换报告_2025.json",
       "parser": "score-segments"
     },
     {
@@ -90,6 +94,8 @@
       "manifestPath": "来源清单/来源清单_2026.json",
       "downloadDirectory": "一分一段/原始PDF/2026",
       "extractionPath": "一分一段/提取结果/提取结果_2026.json",
+      "normalizedPath": "一分一段/一分一段_2026.json",
+      "conversionReportPath": "reports/转换报告_2026.json",
       "parser": "score-segments"
     }
   ]

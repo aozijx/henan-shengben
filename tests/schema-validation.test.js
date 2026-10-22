@@ -17,6 +17,10 @@ function loadSchema(name) {
   return loadJson(join('metadata', name));
 }
 
+function loadDataSchema(name) {
+  return loadJson(join('data', 'schemas', name));
+}
+
 function formatAjvErrors(errors) {
   return (errors || []).map(function (err) {
     return (err.instancePath || '') + ' ' + (err.message || '');
@@ -107,6 +111,24 @@ test('score professional codes are non-empty for every year', () => {
         failures.push('分数线' + year + ' 第' + (index + 1) + '行专业代号缺失：' + row['专业名称']);
       }
     });
+  });
+  assert.deepEqual(failures, [], failures.join('\n'));
+});
+
+test('normalized score segment files and source manifests pass their schemas', () => {
+  const ajv = new Ajv({ allErrors: true, strict: false });
+  const scoreValidate = ajv.compile(loadDataSchema('score-segments.schema.json'));
+  const manifestValidate = ajv.compile(loadDataSchema('source-manifest.schema.json'));
+  const failures = [];
+  ['2024', '2025', '2026'].forEach(function (year) {
+    const scorePath = 'data/一分一段/一分一段_' + year + '.json';
+    if (!scoreValidate(loadJson(scorePath))) {
+      failures.push(scorePath + ': ' + formatAjvErrors(scoreValidate.errors));
+    }
+    const manifestPath = 'data/来源清单/来源清单_' + year + '.json';
+    if (!manifestValidate(loadJson(manifestPath))) {
+      failures.push(manifestPath + ': ' + formatAjvErrors(manifestValidate.errors));
+    }
   });
   assert.deepEqual(failures, [], failures.join('\n'));
 });

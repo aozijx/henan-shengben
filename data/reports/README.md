@@ -38,3 +38,5 @@
 ```
 
 再次运行 `convert/convert_all.py` 时只应用 `confirmed` 修正，并重新执行分数严格降序及累计人数单调校验。`pending` 记录始终不会参与正式数据。
+
+如果官方 PDF 明确为空表且官方省控线也没有该专业，可将状态写为 `official-empty` 并在 `evidenceNote` 记录依据。归一化阶段会在转换报告中列出该专业，但不会生成虚假分数段。
