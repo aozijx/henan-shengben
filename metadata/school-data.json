@@ -102,8 +102,8 @@
     },
     {
       "key": "schoolCount",
-      "label": "院校数(最新年份)",
-      "exportLabel": "院校数(最新年份)",
+      "label": "院校数({latestYear})",
+      "exportLabel": "院校数({latestYear})",
       "type": "number",
       "min": 0,
       "filterEnable": true,

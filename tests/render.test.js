@@ -15,3 +15,11 @@ test('places public and private plan totals after their matching school counts',
     '<span class="yg-pub">公办 1 所 · 计划 25 人</span>' +
     '<span class="yg-min">民办 1 所 · 计划 30 人</span>');
 });
+
+test('derives result-table years from metadata instead of a fixed three-year list', () => {
+  assert.deepEqual(render.buildYearContext({ supportedYears: [2027, 2025, 2026], defaultYear: 2025 }), {
+    years: [2025, 2026, 2027],
+    latestYear: 2027,
+    previousYear: 2026
+  });
+});

@@ -1,6 +1,7 @@
 /* 数据加载、索引与读取。数据源和年份完全由 metadata 声明。 */
 import { normCode6, schoolName } from './utils.js';
 import { createDataRepository } from './data-source.js';
+import { getSortedYears } from './metadata.js';
 
 export var YEARS = [];
 export var SCORE_BY_YEAR = {};
@@ -42,7 +43,7 @@ export async function loadAll(metadata, fetchImpl) {
   var cache = {};
   var store = {
     metadata: metadata,
-    years: metadata.supportedYears.slice(),
+    years: getSortedYears(metadata),
     mappingByYear: {}, scoresByYear: {}, plansByYear: {}, fallbacksByYear: {}, mapping: []
   };
   await Promise.all(store.years.map(async function (year) {
@@ -114,6 +115,10 @@ export function getMappingByYear(year) {
   return activeStore && activeStore.mappingByYear[year] ? activeStore.mappingByYear[year] : [];
 }
 
+export function getPlansByYear(year) {
+  return activeStore && activeStore.plansByYear[year] ? activeStore.plansByYear[year] : [];
+}
+
 export function getScoreIndex() {
   return activeIndex ? activeIndex.scoreByYear : {};
 }
@@ -162,16 +167,17 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
   });
 }
 
-export function getPlanStats() {
+export function getPlanStats(year) {
   var schools = {}, privateRows = 0, povertyRows = 0, regularRows = 0, total = 0;
-  PLANS.forEach(function (row) {
+  var rows = year == null ? PLANS : getPlansByYear(year);
+  rows.forEach(function (row) {
     schools[schoolName(row)] = true;
     if (row['办学性质'] === '民办') privateRows += 1;
     if (row['建档立卡'] === '是') povertyRows += 1;
     if (row['招生类别'] === '普通专升本') regularRows += 1;
     total += Number(row['计划人数']) || 0;
   });
-  return { 条数: PLANS.length, 院校数: Object.keys(schools).length, 民办条目: privateRows, 建档立卡专项: povertyRows, 普通计划: regularRows, 计划人数合计: total };
+  return { 条数: rows.length, 院校数: Object.keys(schools).length, 民办条目: privateRows, 建档立卡专项: povertyRows, 普通计划: regularRows, 计划人数合计: total };
 }
 
 export function uniqueMajors() {

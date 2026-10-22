@@ -50,9 +50,6 @@
 
   /* ---- 图表配色 ---- */
   --chart-grid:#edf0f3;
-  --chart-2024:#a8bccd;
-  --chart-2025:#2e5f8a;
-  --chart-2026:#c2410c;
   --trend-1:#1f4e79;
   --trend-2:#c2410c;
   --trend-3:#4d7c0f;
@@ -112,9 +109,6 @@
   --card-fg:#b393e0;
 
   --chart-grid:#242d37;
-  --chart-2024:#5d7286;
-  --chart-2025:#4b8cc4;
-  --chart-2026:#e0703d;
   --trend-1:#6aa9e0;
   --trend-2:#f08a5c;
   --trend-3:#9ed45a;

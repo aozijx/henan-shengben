@@ -4,7 +4,7 @@
    ECharts 加载失败时自动降级为静态表格，展示同样数字。
    ============================================================ */
 
-import { SCORE_BY_YEAR, YEARS, getScoreIndex, getPlanStats, PLANS } from './data.js';
+import { SCORE_BY_YEAR, YEARS, getScoreIndex, getPlanStats, getPlansByYear } from './data.js';
 import { chartPalette } from './theme.js';
 import { esc, schoolName } from './utils.js';
 
@@ -19,6 +19,11 @@ var TREND_MAJORS = [
   { name: '护理学', code: 'D2' }, { name: '临床医学', code: 'C4' }
 ];
 var BINS = [[80, 100], [100, 120], [120, 140], [140, 160], [160, 180], [180, 200], [200, 220], [220, 240], [240, 261]];
+
+export function buildStatsYearContext(years) {
+  var sorted = (years || []).slice().sort(function (a, b) { return a - b; });
+  return { years: sorted, latestYear: sorted.length ? sorted[sorted.length - 1] : null };
+}
 
 function binLabel(b) { return (b[1] > 250 ? '240+' : b[0] + '–' + (b[1] - 1)); }
 
@@ -39,27 +44,29 @@ export function initCharts() {
   if (!distEl || !topEl || !trendEl) return;
 
   var C = chartPalette();
+  var yearContext = buildStatsYearContext(YEARS);
+  var years = yearContext.years;
+  var latestYear = yearContext.latestYear;
+  var yearColor = function (index) { return C.trends[index % C.trends.length]; };
 
   var distOpt = {
     animation: false, grid: { left: 42, right: 16, top: 34, bottom: 30 },
     tooltip: { trigger: 'axis', confine: true },
-    legend: { data: ['2024', '2025', '2026'], top: 2, icon: 'rect', textStyle: { color: C.muted } },
+    legend: { data: years.map(String), top: 2, icon: 'rect', textStyle: { color: C.muted } },
     xAxis: { type: 'category', data: BINS.map(binLabel), axisLabel: { color: C.muted, fontSize: 11 } },
     yAxis: { type: 'value', minInterval: 1, name: '专业数', nameTextStyle: { color: C.faint }, axisLabel: { color: C.muted }, splitLine: { lineStyle: { color: C.grid } } },
-    series: [
-      { name: '2024', type: 'bar', data: binCounts(2024), itemStyle: { color: C.y2024, borderRadius: [2, 2, 0, 0] }, barGap: '20%' },
-      { name: '2025', type: 'bar', data: binCounts(2025), itemStyle: { color: C.y2025, borderRadius: [2, 2, 0, 0] } },
-      { name: '2026', type: 'bar', data: binCounts(2026), itemStyle: { color: C.y2026, borderRadius: [2, 2, 0, 0] } }
-    ]
+    series: years.map(function (year, index) {
+      return { name: String(year), type: 'bar', data: binCounts(year), itemStyle: { color: yearColor(index), borderRadius: [2, 2, 0, 0] }, barGap: index ? undefined : '20%' };
+    })
   };
 
-  var top15 = (SCORE_BY_YEAR[2026] || []).slice().sort(function (a, b) { return b['分数线'] - a['分数线']; }).slice(0, 15).reverse();
+  var top15 = (SCORE_BY_YEAR[latestYear] || []).slice().sort(function (a, b) { return b['分数线'] - a['分数线']; }).slice(0, 15).reverse();
   var topOpt = {
     animation: false, grid: { left: 120, right: 44, top: 8, bottom: 8 },
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, confine: true },
     xAxis: { type: 'value', name: '分数线', nameTextStyle: { color: C.faint }, axisLabel: { color: C.muted }, splitLine: { lineStyle: { color: C.grid } } },
     yAxis: { type: 'category', data: top15.map(function (e) { return e['专业名称']; }), axisLabel: { color: C.ink, fontSize: 12 } },
-    series: [{ type: 'bar', data: top15.map(function (e) { return e['分数线']; }), itemStyle: { color: C.y2026, borderRadius: [0, 3, 3, 0] }, label: { show: true, position: 'right', fontSize: 11, color: C.ink, fontFamily: 'monospace' } }]
+    series: [{ type: 'bar', data: top15.map(function (e) { return e['分数线']; }), itemStyle: { color: yearColor(years.length - 1), borderRadius: [0, 3, 3, 0] }, label: { show: true, position: 'right', fontSize: 11, color: C.ink, fontFamily: 'monospace' } }]
   };
 
   var scoreIndex = getScoreIndex();
@@ -80,7 +87,7 @@ export function initCharts() {
     animation: false, grid: { left: 44, right: 150, top: 20, bottom: 30 },
     tooltip: { trigger: 'axis', confine: true },
     legend: { show: false },
-    xAxis: { type: 'category', data: ['2024', '2025', '2026'], axisLabel: { color: C.muted } },
+    xAxis: { type: 'category', data: years.map(String), axisLabel: { color: C.muted } },
     yAxis: { type: 'value', name: '控制线', nameTextStyle: { color: C.faint }, axisLabel: { color: C.muted }, splitLine: { lineStyle: { color: C.grid } } },
     series: trendSeries
   };
@@ -102,14 +109,16 @@ export function initCharts() {
   }
 }
 
-/* 2026 招生计划概览（独立于图表库，纯 HTML 统计卡） */
+/* 最新已发布年份招生计划概览（独立于图表库，纯 HTML 统计卡） */
 export function renderPlanOverview() {
   var box = document.getElementById('plan-overview');
   if (!box || box.dataset.rendered) return;
-  var s = getPlanStats();
+  var latestYear = buildStatsYearContext(YEARS).latestYear;
+  var plans = getPlansByYear(latestYear);
+  var s = getPlanStats(latestYear);
   var schools = {};
   var minS = {}, pubS = {};
-  PLANS.forEach(function (r) {
+  plans.forEach(function (r) {
     var sn = schoolName(r);
     schools[sn] = 1;
     if (r['办学性质'] === '民办') minS[sn] = 1;
@@ -127,26 +136,30 @@ export function renderPlanOverview() {
 
 function renderFallbackStats() {
   if (fallbackRendered) return;
-  var distHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:40%">区间</th><th>2024</th><th>2025</th><th>2026</th></tr></thead><tbody>' +
+  var yearContext = buildStatsYearContext(YEARS);
+  var years = yearContext.years;
+  var latestYear = yearContext.latestYear;
+  var yearHeaders = years.map(function (year) { return '<th>' + year + '</th>'; }).join('');
+  var distHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:40%">区间</th>' + yearHeaders + '</tr></thead><tbody>' +
     BINS.map(function (b) {
       var cell = function (y) {
         return (SCORE_BY_YEAR[y] || []).filter(function (e) { return e['分数线'] >= b[0] && e['分数线'] < b[1]; }).length;
       };
-      return '<tr><td>' + binLabel(b) + '</td><td>' + cell(2024) + '</td><td>' + cell(2025) + '</td><td>' + cell(2026) + '</td></tr>';
+      return '<tr><td>' + binLabel(b) + '</td>' + years.map(function (year) { return '<td>' + cell(year) + '</td>'; }).join('') + '</tr>';
     }).join('') + '</tbody></table></div>';
-  var topHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:12%">名次</th><th>专业</th><th style="width:20%">2026 控制线</th></tr></thead><tbody>' +
-    (SCORE_BY_YEAR[2026] || []).slice().sort(function (a, b) { return b['分数线'] - a['分数线']; }).slice(0, 15).map(function (e, i) {
+  var topHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:12%">名次</th><th>专业</th><th style="width:20%">' + latestYear + ' 控制线</th></tr></thead><tbody>' +
+    (SCORE_BY_YEAR[latestYear] || []).slice().sort(function (a, b) { return b['分数线'] - a['分数线']; }).slice(0, 15).map(function (e, i) {
       return '<tr><td>' + (i + 1) + '</td><td>' + esc(e['专业名称']) + '</td><td class="score hot">' + e['分数线'] + '</td></tr>';
     }).join('') + '</tbody></table></div>';
   var scoreIndex = getScoreIndex();
   var trendRows = TREND_MAJORS.map(function (tm) {
     var cell = function (y) { var db = scoreIndex[y]; return db && db[tm.code] ? db[tm.code].score : '—'; };
-    return '<tr><td>' + tm.name + '</td><td>' + cell(2024) + '</td><td>' + cell(2025) + '</td><td>' + cell(2026) + '</td></tr>';
+    return '<tr><td>' + tm.name + '</td>' + years.map(function (year) { return '<td>' + cell(year) + '</td>'; }).join('') + '</tr>';
   }).join('');
-  var trendHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:44%">专业</th><th>2024</th><th>2025</th><th>2026</th></tr></thead><tbody>' + trendRows + '</tbody></table></div>';
+  var trendHtml = '<div class="table-wrap"><table style="min-width:0"><thead><tr><th style="width:44%">专业</th>' + yearHeaders + '</tr></thead><tbody>' + trendRows + '</tbody></table></div>';
 
   document.getElementById('chart-dist').outerHTML = '<div class="chart-card"><h3>近三年控制线区间分布（离线表格版）</h3>' + distHtml + '</div>';
-  document.getElementById('chart-top').outerHTML = '<div class="chart-card"><h3>2026 年控制线 TOP 15（离线表格版）</h3>' + topHtml + '</div>';
+  document.getElementById('chart-top').outerHTML = '<div class="chart-card"><h3>' + latestYear + ' 年控制线 TOP 15（离线表格版）</h3>' + topHtml + '</div>';
   document.getElementById('chart-trend').outerHTML = '<div class="chart-card"><h3>八个常见专业三年走势（离线表格版）</h3>' + trendHtml + '</div>';
   fallbackRendered = true;
 }

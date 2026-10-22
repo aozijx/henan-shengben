@@ -12,6 +12,7 @@ import * as query from './query.js';
 import * as explorer from './explorer.js';
 import { initCharts } from './stats.js';
 import { bootstrapData } from './bootstrap.js';
+import { getLatestYear, getSortedYears } from './metadata.js';
 
 var $ = function (id) { return document.getElementById(id); };
 var $q = $('q'), $result = $('result'), $hint = $('hint');
@@ -24,12 +25,21 @@ var VIEWS = ['query', 'stats', 'about'];
 function initStats() {
   data.uniqueMajors();
   var metadata = data.getMetadata();
-  var activeYear = metadata ? metadata.defaultYear : null;
+  var activeYear = getLatestYear(metadata);
   $('stat-spec').textContent = String(data.MAPPING.length);
   $('stat-major').textContent = String(data.ALL_MAJORS.length);
   $('stat-score').textContent = String((data.SCORE_BY_YEAR[activeYear] || []).length);
   $('stat-school').textContent = String(data.getPlanStats()['院校数']);
-  $('stat-plan').textContent = String(data.PLANS.length);
+  $('stat-plan').textContent = String(data.getPlansByYear(activeYear).length);
+}
+
+function applyYearLabels(metadata) {
+  var years = getSortedYears(metadata);
+  var latestYear = getLatestYear(metadata);
+  document.querySelectorAll('[data-latest-year]').forEach(function (node) { node.textContent = String(latestYear || ''); });
+  document.querySelectorAll('[data-year-range]').forEach(function (node) {
+    node.textContent = years.length ? years[0] + '–' + years[years.length - 1] : '';
+  });
 }
 
 /* ---------- 页签与路由 ---------- */
@@ -103,6 +113,7 @@ theme.applyTheme(theme.readThemeMode(), false);
 
 bootstrapData('metadata/school-data.json').then(function (loaded) {
   window.__henanReady = true;
+  applyYearLabels(loaded.metadata);
   initStats();
   explorer.initExplorer($('explorer'), loaded.metadata, {
     onFilteredResult: function (majors, note) {

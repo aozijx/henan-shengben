@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandMetadata, loadMetadata, validateMetadata } from '../js/metadata.js';
+import { expandMetadata, getLatestYear, getPreviousYear, getSortedYears, loadMetadata, validateMetadata } from '../js/metadata.js';
 
 function validMetadata() {
   return {
@@ -111,4 +111,21 @@ test('adding 2027 only changes metadata sources and supported years', () => {
     filterEnable: false, sortEnable: true, tableShow: true, exportEnable: true
   }];
   assert.deepEqual(expandMetadata(metadata).fields.slice(-2).map((field) => field.key), ['score2026', 'score2027']);
+});
+
+test('derives latest and previous years from an unsorted metadata year list', () => {
+  const metadata = { supportedYears: [2025, 2027, 2024, 2026], defaultYear: 2025 };
+  assert.deepEqual(getSortedYears(metadata), [2024, 2025, 2026, 2027]);
+  assert.equal(getLatestYear(metadata), 2027);
+  assert.equal(getPreviousYear(metadata), 2026);
+});
+
+test('expanded metadata exposes derived years without treating defaultYear as latest', () => {
+  const metadata = validMetadata();
+  metadata.supportedYears = [2027, 2025, 2026];
+  metadata.defaultYear = 2025;
+  const expanded = expandMetadata(metadata);
+  assert.equal(expanded.latestYear, 2027);
+  assert.equal(expanded.previousYear, 2026);
+  assert.deepEqual(expanded.supportedYears, [2025, 2026, 2027]);
 });

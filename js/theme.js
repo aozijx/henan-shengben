@@ -73,9 +73,6 @@ export function chartPalette() {
     muted: g('--muted') || '#5b6b7a',
     faint: g('--faint') || '#8b99a6',
     grid: g('--chart-grid') || '#edf0f3',
-    y2024: g('--chart-2024') || '#a8bccd',
-    y2025: g('--chart-2025') || '#2e5f8a',
-    y2026: g('--chart-2026') || '#c2410c',
     trends: [1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
       return g('--trend-' + i) || FALLBACK_TRENDS[i - 1];
     })

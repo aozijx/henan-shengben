@@ -1,5 +1,35 @@
 var FIELD_TYPES = { string: true, number: true, enum: true, boolean: true };
 
+export function getSortedYears(metadata) {
+  return (metadata && Array.isArray(metadata.supportedYears) ? metadata.supportedYears : [])
+    .slice().sort(function (a, b) { return a - b; });
+}
+
+export function getLatestYear(metadata) {
+  var years = getSortedYears(metadata);
+  return years.length ? years[years.length - 1] : null;
+}
+
+export function getPreviousYear(metadata) {
+  var years = getSortedYears(metadata);
+  return years.length > 1 ? years[years.length - 2] : null;
+}
+
+function replaceMetadataTokens(value, metadata) {
+  if (typeof value === 'string') {
+    return value
+      .replace(/\{latestYear\}/g, String(getLatestYear(metadata) || ''))
+      .replace(/\{previousYear\}/g, String(getPreviousYear(metadata) || ''));
+  }
+  if (Array.isArray(value)) return value.map(function (item) { return replaceMetadataTokens(item, metadata); });
+  if (value && typeof value === 'object') {
+    var output = {};
+    Object.keys(value).forEach(function (key) { output[key] = replaceMetadataTokens(value[key], metadata); });
+    return output;
+  }
+  return value;
+}
+
 function replaceYearTokens(value, year) {
   if (typeof value === 'string') return value.replace(/\{year\}/g, String(year));
   if (Array.isArray(value)) return value.map(function (item) { return replaceYearTokens(item, year); });
@@ -13,12 +43,15 @@ function replaceYearTokens(value, year) {
 
 export function expandMetadata(metadata) {
   var expanded = { ...metadata };
-  expanded.supportedYears = (metadata.supportedYears || []).slice();
+  expanded.supportedYears = getSortedYears(metadata);
+  expanded.latestYear = getLatestYear(metadata);
+  expanded.previousYear = getPreviousYear(metadata);
   expanded.yearSources = { ...(metadata.yearSources || {}) };
-  expanded.fields = (metadata.fields || []).map(function (field) { return { ...field }; });
+  expanded.fields = (metadata.fields || []).map(function (field) { return replaceMetadataTokens(field, metadata); });
+  expanded.defaultSort = replaceMetadataTokens(metadata.defaultSort, metadata);
   (metadata.yearFieldTemplates || []).forEach(function (template) {
     expanded.supportedYears.forEach(function (year) {
-      expanded.fields.push(replaceYearTokens(template, year));
+      expanded.fields.push(replaceMetadataTokens(replaceYearTokens(template, year), metadata));
     });
   });
   return expanded;
@@ -113,7 +146,7 @@ export function validateMetadata(value) {
   if (!fields.some(function (field) { return field && field.exportEnable === true; })) {
     errors.push('必须配置至少一个导出字段');
   }
-  var defaultSort = value.defaultSort;
+  var defaultSort = expandMetadata(value).defaultSort;
   var sortField = defaultSort && fields.find(function (field) { return field.key === defaultSort.key; });
   if (!defaultSort || !sortField || !sortField.sortEnable) {
     errors.push('默认排序字段 ' + (defaultSort && defaultSort.key) + ' 不存在或未启用排序');

@@ -1,12 +1,13 @@
 /* ============================================================
    河南专升本 · 查询工具  —  渲染模块
    分数线结果表：每个专业行下方展开「年份折叠」层
-   （三级折叠：专业行 → 年份分组（2024/2025/2026）→ 院校条目 → 详细信息）。
+   （三级折叠：专业行 → metadata 年份分组 → 院校条目 → 详细信息）。
    专业行为整行可点击；年份分组内按公办/民办展示院校；院校条目展开显示 JSON 全部字段。
    只负责把数据渲染成 HTML 并绑定结果区内部交互，不持有查询状态。
    ============================================================ */
 
-import { getScore, getCollegesByYear } from './data.js';
+import { getScore, getCollegesByYear, getMetadata } from './data.js';
+import { getLatestYear, getPreviousYear, getSortedYears } from './metadata.js';
 import { esc, schoolName } from './utils.js';
 
 function subjectBadge(subject, code) {
@@ -28,10 +29,18 @@ function trendCell(s26, s25) {
   return '<span class="trend flat">＝ ±0</span>';
 }
 
-function scoreCell(major, year) {
+export function buildYearContext(metadata) {
+  return {
+    years: getSortedYears(metadata),
+    latestYear: getLatestYear(metadata),
+    previousYear: getPreviousYear(metadata)
+  };
+}
+
+function scoreCell(major, year, latestYear) {
   var s = getScore(major, year);
   if (s == null) return '<span class="score na">—</span>';
-  var hot = year === 2026 ? ' hot' : '';
+  var hot = year === latestYear ? ' hot' : '';
   return '<span class="score' + hot + '">' + s + '</span>';
 }
 
@@ -201,35 +210,40 @@ function yearGroupHtml(m, year, openDefault) {
 
 /* 一级：某个专业的「年份折叠」层（三年分组，默认全部收起） */
 function yearStackHtml(m) {
-  return '<div class="year-stack">' +
-    yearGroupHtml(m, 2026, false) +
-    yearGroupHtml(m, 2025, false) +
-    yearGroupHtml(m, 2024, false) +
-    '</div>';
+  var years = getSortedYears(getMetadata()).reverse();
+  return '<div class="year-stack">' + years.map(function (year) {
+    return yearGroupHtml(m, year, false);
+  }).join('') + '</div>';
 }
 
 /* ---------- 分数线结果表（每行下挂年份折叠层） ---------- */
 export function renderTable($result, title, majors, countNote) {
+  var yearContext = buildYearContext(getMetadata());
+  var years = yearContext.years;
+  var latestYear = yearContext.latestYear;
+  var previousYear = yearContext.previousYear;
   var body = [];
   var total = 0;
   majors.forEach(function (m) {
-    var s26 = getScore(m, 2026), s25 = getScore(m, 2025);
+    var latestScore = getScore(m, latestYear), previousScore = getScore(m, previousYear);
     var nameHtml = esc(m['专业名称']);
     if (/职业教育/.test(m['专业名称'])) nameHtml += '<span class="tag">职教本科</span>';
 
-    var list26 = mergePlanEntries(getCollegesByYear(2026, m));
-    total += list26.length;
-    var pub26 = {}, min26 = {};
-    list26.forEach(function (c) {
+    var latestList = mergePlanEntries(getCollegesByYear(latestYear, m));
+    total += latestList.length;
+    var publicSchools = {}, privateSchools = {};
+    latestList.forEach(function (c) {
       var sn = schoolName(c);
-      if (c['办学性质'] === '民办') min26[sn] = 1; else pub26[sn] = 1;
+      if (c['办学性质'] === '民办') privateSchools[sn] = 1; else publicSchools[sn] = 1;
     });
     var id = 'cd-' + Math.random().toString(36).slice(2, 8);
 
-    var schoolBtn = list26.length
-      ? '<button type="button" class="school-sum" aria-expanded="false" title="2026 年公办院校数/民办院校数">' +
-        '2026年 ' + Object.keys(pub26).length + '/' + Object.keys(min26).length + ' 所 <span class="arr">▸</span></button>'
+    var schoolBtn = latestList.length
+      ? '<button type="button" class="school-sum" aria-expanded="false" title="' + latestYear + ' 年公办院校数/民办院校数">' +
+        latestYear + '年 ' + Object.keys(publicSchools).length + '/' + Object.keys(privateSchools).length + ' 所 <span class="arr">▸</span></button>'
       : '<span class="na">—</span>';
+
+    var scoreCells = years.map(function (year) { return '<td>' + scoreCell(m, year, latestYear) + '</td>'; }).join('');
 
     body.push(
       '<tr class="major-row" data-id="' + id + '" tabindex="0">' +
@@ -237,13 +251,11 @@ export function renderTable($result, title, majors, countNote) {
         '<td><span class="code">' + (m['专业代号'] ? esc(m['专业代号']) : '—') + '</span></td>' +
         '<td class="public">' + publicLabel(m['专业名称']) + '</td>' +
         '<td>' + subjectBadge(m['考试科目'] || '—', m['考试科目代码']) + '</td>' +
-        '<td>' + scoreCell(m, 2024) + '</td>' +
-        '<td>' + scoreCell(m, 2025) + '</td>' +
-        '<td>' + scoreCell(m, 2026) + '</td>' +
-        '<td>' + trendCell(s26, s25) + '</td>' +
+        scoreCells +
+        '<td>' + trendCell(latestScore, previousScore) + '</td>' +
         '<td class="school-cell">' + schoolBtn + '</td>' +
       '</tr>',
-      '<tr class="college-row" data-id="' + id + '"><td colspan="9">' +
+      '<tr class="college-row" data-id="' + id + '"><td colspan="' + (years.length + 6) + '">' +
         yearStackHtml(m) +
       '</td></tr>'
     );
@@ -252,14 +264,15 @@ export function renderTable($result, title, majors, countNote) {
   $result.innerHTML =
     '<div class="result-head"><b>' + esc(title) + '</b>' +
     (countNote ? '<span class="count">' + esc(countNote) + '</span>' : '') +
-    '<span class="count">共 ' + total + ' 个 2026 院校条目</span>' +
+    '<span class="count">共 ' + total + ' 个 ' + latestYear + ' 院校条目</span>' +
     '<button type="button" class="cb-toggle" id="cbToggle">全部展开</button></div>' +
     '<div class="table-wrap"><table><colgroup>' +
     '<col class="c-name"><col class="c-code"><col class="c-public"><col class="c-subject">' +
-    '<col class="c-y"><col class="c-y"><col class="c-y"><col class="c-trend"><col class="c-school">' +
+    years.map(function () { return '<col class="c-y">'; }).join('') + '<col class="c-trend"><col class="c-school">' +
     '</colgroup><thead><tr>' +
     '<th>本科专业</th><th>代号</th><th>公共课</th><th>专业基础课</th>' +
-    '<th>2024</th><th>2025</th><th>2026</th><th>较2025</th><th>招生院校</th>' +
+    years.map(function (year) { return '<th>' + year + '</th>'; }).join('') +
+    '<th>' + (previousYear == null ? '变化' : '较' + previousYear) + '</th><th>招生院校</th>' +
     '</tr></thead><tbody>' + body.join('') + '</tbody></table></div>';
 
   /* 整行点击：展开 / 收起该专业下方的年份折叠层 */

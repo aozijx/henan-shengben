@@ -33,7 +33,7 @@
 
   <header class="masthead">
     <div class="masthead-top">
-      <p class="eyebrow">河南省普通高校专升本 · 2026 招生季</p>
+      <p class="eyebrow">河南省普通高校专升本 · <span data-latest-year>最新</span> 招生季</p>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换配色" title="切换配色">
         <svg class="ico ico-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
@@ -49,13 +49,13 @@
       </button>
     </div>
     <h1>专科专业 · 可报本科专业 · 分数线 查询</h1>
-    <p class="lede">输入你的专科专业，查看可以报考的本科专业、考试科目、近三年录取控制分数线，以及 2024–2026 三年招收该专业的院校（公办 / 民办分别列出）。数据来源与口径见「数据说明」。</p>
+      <p class="lede">输入你的专科专业，查看可以报考的本科专业、考试科目、历年录取控制分数线，以及 <span data-year-range>已配置年份</span> 招收该专业的院校（公办 / 民办分别列出）。数据来源与口径见「数据说明」。</p>
     <dl class="stats" id="stats" aria-label="数据规模">
       <div><dt id="stat-spec">–</dt><dd>专科专业</dd></div>
       <div><dt id="stat-major">–</dt><dd>本科专业</dd></div>
-      <div><dt id="stat-score">–</dt><dd>条 2026 年控制线</dd></div>
+      <div><dt id="stat-score">–</dt><dd>条 <span data-latest-year>最新</span> 年控制线</dd></div>
       <div><dt id="stat-school">–</dt><dd>招生院校</dd></div>
-      <div><dt id="stat-plan">–</dt><dd>条 2026 招生计划</dd></div>
+      <div><dt id="stat-plan">–</dt><dd>条 <span data-latest-year>最新</span> 招生计划</dd></div>
     </dl>
   </header>
 
@@ -88,10 +88,10 @@
     <!-- ========== 视图：数据分析 ========== -->
     <section class="view" id="view-stats" role="tabpanel" hidden>
       <h2 class="view-title">分数线怎么看</h2>
-      <p class="view-sub">以下图表由本工具内置的 2024 / 2025 / 2026 三年录取控制分数线实时计算。</p>
+      <p class="view-sub">以下图表由本工具配置的 <span data-year-range>历年</span> 录取控制分数线实时计算。</p>
       <div class="chart-card">
-        <h3>2026 招生计划概览</h3>
-        <p class="chart-note">按《河南省 2026 年普通高等学校专科毕业生升入本科阶段学习招生计划》统计：院校办学性质（公办 / 民办）、建档立卡专项与计划招生人数。</p>
+        <h3><span data-latest-year>最新</span> 招生计划概览</h3>
+        <p class="chart-note">按 metadata 声明的最新年份招生计划统计：院校办学性质（公办 / 民办）、建档立卡专项与计划招生人数。</p>
         <div class="plan-grid" id="plan-overview"></div>
       </div>
       <div class="chart-card">
@@ -100,8 +100,8 @@
         <div id="chart-dist" class="chart"></div>
       </div>
       <div class="chart-card">
-        <h3>2026 年控制线 TOP 15</h3>
-        <p class="chart-note">按 2026 年录取控制分数线从高到低排列，便于识别竞争激烈的专业。</p>
+        <h3><span data-latest-year>最新</span> 年控制线 TOP 15</h3>
+        <p class="chart-note">按最新年份录取控制分数线从高到低排列，便于识别竞争激烈的专业。</p>
         <div id="chart-top" class="chart"></div>
       </div>
       <div class="chart-card">
