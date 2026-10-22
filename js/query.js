@@ -18,6 +18,12 @@ export function findMappingMatches(mapping, keyword) {
   return (mapping || []).filter(function (item) { return String(item['专科专业'] || '').indexOf(kw) > -1; });
 }
 
+export function resolveMappingMatch(mapping, keyword) {
+  var kw = String(keyword || '').trim();
+  var matches = findMappingMatches(mapping, kw);
+  return matches.find(function (item) { return String(item['专科专业'] || '').trim() === kw; }) || matches[0] || null;
+}
+
 /* ---------- 建议填充（datalist） ---------- */
 export function fillSuggest($suggest, kw) {
   $suggest.innerHTML = '';
@@ -66,7 +72,7 @@ export function doQuery($q, $hint, $result) {
       '本工具收录 ' + ((metadata && metadata.defaultYear) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
     return;
   }
-  var spec = matches[0];
+  var spec = resolveMappingMatch(mapping, kw);
   if (matches.length > 1) {
     renderMatchList($result, matches.map(function (m) { return { name: m['专科专业'] }; }),
       function (it) { showSpec($q, $hint, $result, findSpecByName(it.name)); }, '专科专业');

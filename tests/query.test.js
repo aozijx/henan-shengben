@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { doQuery, findMappingMatches } from '../js/query.js';
+import { doQuery, findMappingMatches, resolveMappingMatch } from '../js/query.js';
 import { loadAll } from '../js/data.js';
 
 test('searches only the mapping supplied for the selected year', () => {
@@ -9,6 +9,15 @@ test('searches only the mapping supplied for the selected year', () => {
 
   assert.equal(findMappingMatches(mapping2026, '软件')[0].可报本科专业[0].专业名称, '旧专业');
   assert.equal(findMappingMatches(mapping2027, '软件')[0].可报本科专业[0].专业名称, '新专业');
+});
+
+test('prefers an exact specialty name before completing a partial match', () => {
+  const mapping = [
+    { 专科专业: '软件技术（开发）', 可报本科专业: [] },
+    { 专科专业: '软件技术', 可报本科专业: [] }
+  ];
+  assert.equal(resolveMappingMatch(mapping, '软件技术')['专科专业'], '软件技术');
+  assert.equal(resolveMappingMatch(mapping, '软件')['专科专业'], '软件技术（开发）');
 });
 
 test('completes a successful partial query to the selected specialty name', async () => {

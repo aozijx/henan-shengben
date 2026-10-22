@@ -78,6 +78,17 @@ test('filters by professional basic course and ignores whitespace differences', 
   assert.deepEqual(run({ subject: '大学语文、专业英语' }).rows.map((row) => row.majorName), ['英语']);
 });
 
+test('filters by public course and latest-year score range together', () => {
+  assert.deepEqual(run({ publicCourse: '专业英语' }).rows.map((row) => row.majorName), ['英语']);
+  assert.deepEqual(run({ scoreMin: '160', scoreMax: '200' }).rows.map((row) => row.majorName), ['软件工程']);
+  assert.deepEqual(run({ publicCourse: '公共英语', scoreMin: '140', scoreMax: '160' }).rows.map((row) => row.majorName), ['会计学']);
+});
+
+test('ignores invalid score bounds and rejects a reversed valid range', () => {
+  assert.equal(run({ scoreMin: '-1x' }).rows.length, 3);
+  assert.deepEqual(run({ scoreMin: '200', scoreMax: '180' }).rows, []);
+});
+
 test('school count bound keeps majors whose latest-year count is greater than the value', () => {
   assert.deepEqual(run({ schoolCount: '1' }).rows.map((row) => row.majorName), ['软件工程']);
   assert.deepEqual(run({ schoolCount: '2' }).rows.map((row) => row.majorName), []);

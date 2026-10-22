@@ -10,9 +10,21 @@ function schoolCountLimit(value) {
   return /^\d+$/.test(text) ? Number(text) : null;
 }
 
+function scoreBound(value) {
+  if (value == null || value === '') return null;
+  return /^\d+$/.test(String(value)) ? Number(value) : null;
+}
+
 function rowMatchesFilters(row, filters, latestYear) {
+  if (filters.publicCourse && filters.publicCourse !== '全部' && row.publicCourse !== filters.publicCourse) return false;
   if (filters.subject && filters.subject !== '全部' &&
       normalizeText(row.subject) !== normalizeText(filters.subject)) return false;
+  var minScore = scoreBound(filters.scoreMin);
+  var maxScore = scoreBound(filters.scoreMax);
+  if (minScore != null && maxScore != null && minScore > maxScore) return false;
+  var score = latestYear == null ? null : row['score' + latestYear];
+  if (minScore != null && (score == null || score < minScore)) return false;
+  if (maxScore != null && (score == null || score > maxScore)) return false;
   var limit = schoolCountLimit(filters.schoolCount);
   if (limit != null && latestYear != null && (row['schoolCount' + latestYear] || 0) <= limit) return false;
   return true;
@@ -45,6 +57,7 @@ export function buildPreviewRows(input) {
     var row = {
       majorName: major['专业名称'] || '',
       subject: major['考试科目'] || '',
+      publicCourse: normalizeText(major['考试科目']).indexOf('专业英语') >= 0 ? '专业英语' : '公共英语',
       originalOrder: originalOrder
     };
     var latestSchools = {};

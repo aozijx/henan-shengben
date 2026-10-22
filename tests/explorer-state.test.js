@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createInitialState, reduceExplorerState, sanitizeNumberInput } from '../js/explorer.js';
+import { createInitialState, reduceExplorerState, sanitizeNumberInput } from '../js/explorer-state.js';
 
 const metadata = {
   defaultYear: 2026,
