@@ -9,13 +9,16 @@
     "defaultYear",
     "supportedYears",
     "yearSources",
+    "sourceFields",
+    "derivedFields",
     "fields",
+    "yearFieldTemplates",
     "defaultSort",
     "pageSize",
     "exportFormat"
   ],
   "properties": {
-    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "schemaVersion": { "const": 2 },
     "defaultYear": { "type": "integer", "minimum": 2000 },
     "supportedYears": {
       "type": "array",
@@ -28,12 +31,46 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["mappingSource", "scoreSource", "planSource"],
+        "required": ["mappingSource", "scoreSource", "planSource", "scoreSegmentSource"],
         "properties": {
           "mappingSource": { "type": "string", "minLength": 1 },
+          "queryIndexSource": { "type": "string", "minLength": 1 },
           "scoreSource": { "type": "string", "minLength": 1 },
           "planSource": { "type": "string", "minLength": 1 },
+          "scoreSegmentSource": { "type": "string", "minLength": 1 },
           "collegeFallbackSource": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "sourceFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "majorCode", "majorName", "disciplineCode6",
+        "professionalCourseCode", "professionalCourseName"
+      ],
+      "properties": {
+        "majorCode": { "type": "string", "minLength": 1 },
+        "majorName": { "type": "string", "minLength": 1 },
+        "disciplineCode6": { "type": "string", "minLength": 1 },
+        "professionalCourseCode": { "type": "string", "minLength": 1 },
+        "professionalCourseName": { "type": "string", "minLength": 1 }
+      }
+    },
+    "derivedFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publicCourse"],
+      "properties": {
+        "publicCourse": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["defaultLabel", "professionalEnglishPattern", "professionalEnglishLabel"],
+          "properties": {
+            "defaultLabel": { "type": "string", "minLength": 1 },
+            "professionalEnglishPattern": { "type": "string", "minLength": 1 },
+            "professionalEnglishLabel": { "type": "string", "minLength": 1 }
+          }
         }
       }
     },
@@ -73,6 +110,11 @@
           }
         ]
       }
+    },
+    "yearFieldTemplates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/properties/fields/items" }
     },
     "defaultSort": {
       "type": "object",

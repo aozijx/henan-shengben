@@ -1,23 +1,43 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "defaultYear": 2026,
   "supportedYears": [2024, 2025, 2026],
   "yearSources": {
     "2024": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
       "scoreSource": "data/省控线/省控线_2024.json",
-      "planSource": "data/招生计划/招生计划_2024.json"
+      "planSource": "data/招生计划/招生计划_2024.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2024.json"
     },
     "2025": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
       "scoreSource": "data/省控线/省控线_2025.json",
-      "planSource": "data/招生计划/招生计划_2025.json"
+      "planSource": "data/招生计划/招生计划_2025.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2025.json"
     },
     "2026": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
       "scoreSource": "data/省控线/省控线_2026.json",
       "planSource": "data/招生计划/招生计划_2026.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
       "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
+    }
+  },
+  "sourceFields": {
+    "majorCode": "专业代号",
+    "majorName": "专业名称",
+    "disciplineCode6": "代码6位",
+    "professionalCourseCode": "考试科目代码",
+    "professionalCourseName": "考试科目"
+  },
+  "derivedFields": {
+    "publicCourse": {
+      "defaultLabel": "公共英语",
+      "professionalEnglishPattern": "专业英语",
+      "professionalEnglishLabel": "专业英语"
     }
   },
   "fields": [
@@ -30,115 +50,6 @@
       "sortEnable": false,
       "tableShow": true,
       "exportEnable": true
-    },
-    {
-      "key": "score2024",
-      "label": "2024分数线",
-      "exportLabel": "2024分数线",
-      "type": "number",
-      "min": 0,
-      "max": 750,
-      "filterEnable": false,
-      "sortEnable": true,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "score2025",
-      "label": "2025分数线",
-      "exportLabel": "2025分数线",
-      "type": "number",
-      "min": 0,
-      "max": 750,
-      "filterEnable": false,
-      "sortEnable": true,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "score2026",
-      "label": "2026分数线",
-      "exportLabel": "2026分数线",
-      "type": "number",
-      "min": 0,
-      "max": 750,
-      "filterEnable": false,
-      "sortEnable": true,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "schoolSplit2024",
-      "label": "2024院校数(公/民)",
-      "exportLabel": "2024院校数(公/民)",
-      "type": "string",
-      "filterEnable": false,
-      "sortEnable": false,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "schoolSplit2025",
-      "label": "2025院校数(公/民)",
-      "exportLabel": "2025院校数(公/民)",
-      "type": "string",
-      "filterEnable": false,
-      "sortEnable": false,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "schoolSplit2026",
-      "label": "2026院校数(公/民)",
-      "exportLabel": "2026院校数(公/民)",
-      "type": "string",
-      "sortKey": "schoolCount2026",
-      "filterEnable": false,
-      "sortEnable": false,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "planSplit2024",
-      "label": "2024计划人数(公/民)",
-      "exportLabel": "2024计划人数(公/民)",
-      "type": "string",
-      "filterEnable": false,
-      "sortEnable": false,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "planSplit2025",
-      "label": "2025计划人数(公/民)",
-      "exportLabel": "2025计划人数(公/民)",
-      "type": "string",
-      "filterEnable": false,
-      "sortEnable": false,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "planSplit2026",
-      "label": "2026计划人数(公/民)",
-      "exportLabel": "2026计划人数(公/民)",
-      "type": "string",
-      "sortKey": "planCount2026",
-      "filterEnable": false,
-      "sortEnable": false,
-      "tableShow": true,
-      "exportEnable": true
-    },
-    {
-      "key": "planCount2026",
-      "label": "2026计划人数",
-      "exportLabel": "2026计划人数",
-      "type": "number",
-      "min": 0,
-      "filterEnable": false,
-      "sortEnable": true,
-      "tableShow": false,
-      "exportEnable": false
     },
     {
       "key": "schoolType",
@@ -190,20 +101,9 @@
       "exportEnable": false
     },
     {
-      "key": "schoolCount2026",
-      "label": "2026院校数",
-      "exportLabel": "2026院校数",
-      "type": "number",
-      "min": 0,
-      "filterEnable": false,
-      "sortEnable": true,
-      "tableShow": false,
-      "exportEnable": false
-    },
-    {
       "key": "schoolCount",
-      "label": "院校数(2026)",
-      "exportLabel": "院校数(2026)",
+      "label": "院校数(最新年份)",
+      "exportLabel": "院校数(最新年份)",
       "type": "number",
       "min": 0,
       "filterEnable": true,
@@ -215,6 +115,64 @@
       "key": "originalOrder",
       "label": "原始顺序",
       "exportLabel": "原始顺序",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": true,
+      "tableShow": false,
+      "exportEnable": false
+    }
+  ],
+  "yearFieldTemplates": [
+    {
+      "key": "score{year}",
+      "label": "{year}分数线",
+      "exportLabel": "{year}分数线",
+      "type": "number",
+      "min": 0,
+      "max": 750,
+      "filterEnable": false,
+      "sortEnable": true,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "schoolSplit{year}",
+      "label": "{year}院校数(公/民)",
+      "exportLabel": "{year}院校数(公/民)",
+      "type": "string",
+      "sortKey": "schoolCount{year}",
+      "filterEnable": false,
+      "sortEnable": false,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "planSplit{year}",
+      "label": "{year}计划人数(公/民)",
+      "exportLabel": "{year}计划人数(公/民)",
+      "type": "string",
+      "sortKey": "planCount{year}",
+      "filterEnable": false,
+      "sortEnable": false,
+      "tableShow": true,
+      "exportEnable": true
+    },
+    {
+      "key": "planCount{year}",
+      "label": "{year}计划人数",
+      "exportLabel": "{year}计划人数",
+      "type": "number",
+      "min": 0,
+      "filterEnable": false,
+      "sortEnable": true,
+      "tableShow": false,
+      "exportEnable": false
+    },
+    {
+      "key": "schoolCount{year}",
+      "label": "{year}院校数",
+      "exportLabel": "{year}院校数",
       "type": "number",
       "min": 0,
       "filterEnable": false,

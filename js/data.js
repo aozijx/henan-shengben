@@ -1,5 +1,6 @@
 /* 数据加载、索引与读取。数据源和年份完全由 metadata 声明。 */
 import { normCode6, schoolName } from './utils.js';
+import { createDataRepository } from './data-source.js';
 
 export var YEARS = [];
 export var SCORE_BY_YEAR = {};
@@ -14,6 +15,11 @@ var ready = false;
 
 export function isReady() { return ready; }
 export function getMetadata() { return activeMetadata; }
+
+/* 新页面按需加载入口；保留 loadAll 供现有页面迁移期间使用。 */
+export function createLazyStore(metadata, fetchImpl) {
+  return createDataRepository(metadata, fetchImpl);
+}
 
 function normName(value) { return String(value || '').replace(/\s+/g, ''); }
 

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildIndexes,
+  createLazyStore,
   getCollegesByYear,
   getMappingByYear,
   getScore,
@@ -43,6 +44,19 @@ function createFetch(payloads, calls) {
     return { ok: true, json: async () => structuredClone(payloads[url]) };
   };
 }
+
+test('exposes the lazy repository through the data module', async () => {
+  const calls = [];
+  const metadata = metadata2027({
+    queryIndexSource: 'fixtures/mapping-2027.json',
+    scoreSegmentSource: 'fixtures/segments-2027.json'
+  });
+  const repository = createLazyStore(metadata, createFetch(fixturePayloads(), calls));
+
+  await repository.ensureQueryIndex(2027);
+
+  assert.deepEqual(calls, ['fixtures/mapping-2027.json']);
+});
 
 test('loads only source paths and years declared by metadata', async () => {
   const calls = [];
