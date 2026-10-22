@@ -9,4 +9,5 @@ coverage/
 *.log
 __pycache__/
 *.pyc
+.superpowers/
 

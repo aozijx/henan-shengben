@@ -1,5 +1,29 @@
 var FIELD_TYPES = { string: true, number: true, enum: true, boolean: true };
 
+function replaceYearTokens(value, year) {
+  if (typeof value === 'string') return value.replace(/\{year\}/g, String(year));
+  if (Array.isArray(value)) return value.map(function (item) { return replaceYearTokens(item, year); });
+  if (value && typeof value === 'object') {
+    var output = {};
+    Object.keys(value).forEach(function (key) { output[key] = replaceYearTokens(value[key], year); });
+    return output;
+  }
+  return value;
+}
+
+export function expandMetadata(metadata) {
+  var expanded = { ...metadata };
+  expanded.supportedYears = (metadata.supportedYears || []).slice();
+  expanded.yearSources = { ...(metadata.yearSources || {}) };
+  expanded.fields = (metadata.fields || []).map(function (field) { return { ...field }; });
+  (metadata.yearFieldTemplates || []).forEach(function (template) {
+    expanded.supportedYears.forEach(function (year) {
+      expanded.fields.push(replaceYearTokens(template, year));
+    });
+  });
+  return expanded;
+}
+
 /* 枚举字段的全部可选项（含「全部」） */
 export function enumOptions(field) {
   return ['全部'].concat(field.enumValues || []);
@@ -44,9 +68,12 @@ export function validateMetadata(value) {
     if (source && source.collegeFallbackSource != null && !isNonEmptyString(source.collegeFallbackSource)) {
       errors.push(year + ' 年 collegeFallbackSource 必须是非空路径');
     }
+    if (value.schemaVersion >= 2 && (!source || !isNonEmptyString(source.scoreSegmentSource))) {
+      errors.push(year + ' 年缺少 scoreSegmentSource');
+    }
   });
 
-  var fields = Array.isArray(value.fields) ? value.fields : [];
+  var fields = expandMetadata(value).fields;
   if (!fields.length) errors.push('fields 必须包含至少一个字段');
   var seen = {};
   fields.forEach(function (field, index) {
@@ -117,5 +144,5 @@ export async function loadMetadata(url, fetchImpl) {
   }
   var result = validateMetadata(value);
   if (!result.valid) throw new Error('元数据无效：' + result.errors.join('；'));
-  return value;
+  return expandMetadata(value);
 }

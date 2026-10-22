@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { loadMetadata, validateMetadata } from '../js/metadata.js';
+import { expandMetadata, loadMetadata, validateMetadata } from '../js/metadata.js';
 
 function validMetadata() {
   return {
@@ -80,4 +80,35 @@ test('loadMetadata rejects invalid parsed metadata with friendly details', async
   metadata.fields = [];
   const fetchImpl = async () => ({ ok: true, json: async () => metadata });
   await assert.rejects(loadMetadata('metadata/school-data.json', fetchImpl), /元数据无效.*字段/);
+});
+
+test('metadata v2 expands yearly fields and requires score segment sources', () => {
+  const metadata = validMetadata();
+  metadata.schemaVersion = 2;
+  metadata.yearSources[2026].scoreSegmentSource = 'data/segments-2026.json';
+  metadata.yearFieldTemplates = [{
+    key: 'score{year}', label: '{year}分数线', exportLabel: '{year}分数线', type: 'number', min: 0, max: 750,
+    filterEnable: false, sortEnable: true, tableShow: true, exportEnable: true
+  }];
+  const expanded = expandMetadata(metadata);
+  assert.equal(expanded.fields.at(-1).key, 'score2026');
+  assert.deepEqual(validateMetadata(metadata), { valid: true, errors: [] });
+  delete metadata.yearSources[2026].scoreSegmentSource;
+  assert.match(validateMetadata(metadata).errors.join('\n'), /2026.*scoreSegmentSource/);
+});
+
+test('adding 2027 only changes metadata sources and supported years', () => {
+  const metadata = validMetadata();
+  metadata.schemaVersion = 2;
+  metadata.supportedYears = [2026, 2027];
+  metadata.yearSources[2026].scoreSegmentSource = 'data/segments-2026.json';
+  metadata.yearSources[2027] = {
+    mappingSource: 'data/mapping.json', scoreSource: 'data/scores-2027.json',
+    planSource: 'data/plans-2027.json', scoreSegmentSource: 'data/segments-2027.json'
+  };
+  metadata.yearFieldTemplates = [{
+    key: 'score{year}', label: '{year}分数线', exportLabel: '{year}分数线', type: 'number',
+    filterEnable: false, sortEnable: true, tableShow: true, exportEnable: true
+  }];
+  assert.deepEqual(expandMetadata(metadata).fields.slice(-2).map((field) => field.key), ['score2026', 'score2027']);
 });

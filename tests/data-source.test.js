@@ -1,0 +1,45 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createDataRepository } from '../js/data-source.js';
+
+function metadata() {
+  return {
+    defaultYear: 2027,
+    supportedYears: [2027],
+    yearSources: { 2027: {
+      queryIndexSource: 'index.json', mappingSource: 'mapping.json', scoreSource: 'scores.json',
+      planSource: 'plans.json', scoreSegmentSource: 'segments.json'
+    } }
+  };
+}
+
+test('repository is lazy and shares one promise for the same URL', async () => {
+  const calls = [];
+  const fetchImpl = async (url) => { calls.push(url); return { ok: true, json: async () => ({ url }) }; };
+  const repository = createDataRepository(metadata(), fetchImpl);
+  assert.deepEqual(calls, []);
+  const first = repository.ensureMapping(2027);
+  const second = repository.ensureMapping(2027);
+  assert.equal(first, second);
+  await first;
+  assert.deepEqual(calls, ['mapping.json']);
+});
+
+test('first-screen query index does not request plans or score segments', async () => {
+  const calls = [];
+  const fetchImpl = async (url) => { calls.push(url); return { ok: true, json: async () => [] }; };
+  const repository = createDataRepository(metadata(), fetchImpl);
+  await repository.ensureQueryIndex(2027);
+  assert.deepEqual(calls, ['index.json']);
+});
+
+test('retry evicts a failed URL and requests it again', async () => {
+  let attempt = 0;
+  const repository = createDataRepository(metadata(), async () => {
+    attempt += 1;
+    return attempt === 1 ? { ok: false, status: 503 } : { ok: true, json: async () => [] };
+  });
+  await assert.rejects(repository.ensureScoreSegments(2027), /segments\.json.*503/);
+  await repository.retry('segments.json');
+  assert.equal(attempt, 2);
+});
