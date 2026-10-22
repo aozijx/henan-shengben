@@ -33,6 +33,48 @@
   background:var(--card);border:1px dashed var(--line-strong);border-radius:var(--radius);
   font-size:14px;
 }
+
+/* 查询工作区顺序：搜索 → 上下文 → 筛选/排序 → 聚合结果 → 预览 → 导出。 */
+#view-query.is-active{display:flex;flex-direction:column;}
+#view-query .search-row{order:1;}
+#view-query .hint{order:2;}
+#view-query .explorer{display:contents;}
+#view-query .explorer-status{order:3;}
+#view-query .filter-panel{order:4;}
+#view-query .explorer-actions{order:5;}
+#view-query .result{order:6;}
+#view-query .preview-section{order:7;}
+#view-query .export-actions{order:8;}
+
+.aggregate-list{display:grid;gap:14px;}
+.aggregate-card{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden;}
+.aggregate-card>header{padding:14px 16px;border-bottom:1px solid var(--line);}
+.aggregate-card h3,.aggregate-card h4,.aggregate-card h5{margin:0;}
+.aggregate-card header p{margin:6px 0 0;color:var(--muted);font-size:13px;}
+.aggregate-years{display:grid;gap:0;overflow-x:auto;}
+.aggregate-year{min-width:680px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.aggregate-year:last-child{border-bottom:0;}
+.year-summary{display:flex;flex-wrap:wrap;gap:7px 14px;margin:8px 0;font-size:13px;}
+.year-score,.year-rank{font-weight:700;}
+.year-kind-public{color:var(--blue-deep);}
+.year-kind-private{color:var(--min-fg);}
+.aggregate-year button{min-height:34px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-2);color:var(--ink);cursor:pointer;}
+.school-detail-list{display:grid;gap:8px;margin-top:10px;}
+.school-detail{padding:10px 12px;border-radius:8px;background:var(--surface-2);}
+.school-detail h5 span{font-weight:400;color:var(--muted);}
+.school-detail dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 10px;margin:8px 0 0;font-size:12px;}
+.school-detail dt{color:var(--muted);}
+.school-detail dd{margin:0;}
+.score-segments{margin-top:12px;}
+.score-segments-scroll{max-height:320px;overflow:auto;}
+.score-segments table{width:100%;border-collapse:collapse;}
+.score-segments th,.score-segments td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;}
+.result-state{padding:28px 16px;text-align:center;color:var(--muted);}
+
+@media (max-width:720px){
+  .aggregate-year{min-width:620px;}
+  .aggregate-card{overflow-x:auto;}
+}
 .result-head{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;
   margin:0 0 10px;font-size:14px;

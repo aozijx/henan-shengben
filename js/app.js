@@ -13,6 +13,9 @@ import * as explorer from './explorer.js';
 import { initCharts } from './stats.js';
 import { bootstrapData } from './bootstrap.js';
 import { getLatestYear, getSortedYears } from './metadata.js';
+import { normalizeMajorOption, normalizePlanEntry, normalizeScoreSegmentSeries } from './model.js';
+import { buildMajorAggregates } from './aggregate.js';
+import { renderResultWorkspace } from './results-view.js';
 
 var $ = function (id) { return document.getElementById(id); };
 var $q = $('q'), $result = $('result'), $hint = $('hint');
@@ -20,6 +23,43 @@ var $suggest = $('suggest');
 
 var currentView = 'query';
 var VIEWS = ['query', 'stats', 'about'];
+var aggregateRequestId = 0;
+
+function createAggregateRenderer(loaded) {
+  var years = getSortedYears(loaded.metadata);
+  var normalizedPlans = {};
+  years.forEach(function (year) {
+    normalizedPlans[year] = (loaded.store.plansByYear[year] || []).map(normalizePlanEntry);
+  });
+  return function renderAggregates(majors) {
+    if (!majors.length) return;
+    var requestId = ++aggregateRequestId;
+    renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [] }, loaded.metadata);
+    Promise.all(years.map(function (year) { return loaded.repository.ensureScoreSegments(year); }))
+      .then(function (segmentFiles) {
+        if (requestId !== aggregateRequestId) return;
+        var segmentsByYear = {};
+        years.forEach(function (year, index) {
+          segmentsByYear[year] = (segmentFiles[index].majors || []).map(normalizeScoreSegmentSeries);
+        });
+        var aggregates = buildMajorAggregates({
+          majors: majors.map(function (major) {
+            return normalizeMajorOption(major, loaded.metadata.derivedFields && loaded.metadata.derivedFields.publicCourse);
+          }),
+          years: years,
+          plansByYear: normalizedPlans,
+          scoresByYear: loaded.store.scoresByYear,
+          segmentsByYear: segmentsByYear,
+          fallbacksByYear: loaded.store.fallbacksByYear
+        });
+        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: aggregates }, loaded.metadata);
+      })
+      .catch(function (error) {
+        if (requestId !== aggregateRequestId) return;
+        renderResultWorkspace($result, { status: 'error', hasQuery: true, aggregates: [], error: error.message }, loaded.metadata);
+      });
+  };
+}
 
 /* ---------- 头部统计数字 ---------- */
 function initStats() {
@@ -115,9 +155,10 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   window.__henanReady = true;
   applyYearLabels(loaded.metadata);
   initStats();
+  var renderAggregates = createAggregateRenderer(loaded);
   explorer.initExplorer($('explorer'), loaded.metadata, {
-    onFilteredResult: function (majors, note) {
-      query.renderFilteredResult($result, majors, note);
+    onFilteredResult: function (majors) {
+      renderAggregates(majors);
     }
   });
   query.setResultListener(explorer.setSearchResult);
