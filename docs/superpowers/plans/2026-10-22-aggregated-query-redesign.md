@@ -171,7 +171,7 @@ Expected: FAIL，模块尚不存在。
 
 - [ ] **Step 4: 实现 `pdfplumber` 抽取与纯解析器**
 
-`pdf_tables.py` 只负责 PDF 单元格和页码；`score_segments.py` 负责表头识别、整数转换、排序和问题记录，不联网、不读取 metadata。
+官方一分一段 PDF 实测为扫描图：`pdf_tables.py` 使用 `pdfplumber` 负责页面、内嵌图片与文本表格提取，并在无文本层时调用 RapidOCR；`score_segments.py` 只负责表头识别、整数转换、排序和问题记录，不联网、不读取 metadata。测试直接复用已纳入版本管理的官方 PDF，避免再复制一份二进制 fixture。
 
 - [ ] **Step 5: 实现全量/单年入口并验证**
 
