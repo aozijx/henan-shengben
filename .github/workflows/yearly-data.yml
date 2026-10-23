@@ -1,0 +1,73 @@
+name: Validate yearly data seed
+
+on:
+  workflow_dispatch:
+    inputs:
+      seed_path:
+        description: Path to one data/year-links/YYYY.json file
+        required: true
+        type: string
+  pull_request:
+    paths:
+      - 'data/year-links/*.json'
+      - 'crawler/**'
+      - 'convert/**'
+      - 'metadata/school-data.template.json'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install project dependencies
+        run: |
+          python -m pip install -r crawler/requirements.txt -r convert/requirements.txt
+          npm ci
+      - name: Discover changed yearly seed files
+        id: seeds
+        shell: bash
+        env:
+          SEED_PATH: ${{ inputs.seed_path }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.sha }}" -- 'data/year-links/*.json' > changed-seeds.txt
+          else
+            printf '%s\n' "$SEED_PATH" > changed-seeds.txt
+          fi
+          if [[ ! -s changed-seeds.txt ]]; then
+            echo "No yearly seed files to validate" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Validate seeds and generate review reports
+        id: validate
+        shell: bash
+        run: |
+          mkdir -p yearly-ingest-reports
+          status=0
+          while IFS= read -r seed; do
+            [[ -n "$seed" ]] || continue
+            name="$(basename "$seed" .json)"
+            python -m convert.ingest_year --seed "$seed" --check > "yearly-ingest-reports/${name}.json" || status=1
+          done < changed-seeds.txt
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit "$status"
+      - name: Upload review reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yearly-ingest-review
+          path: yearly-ingest-reports/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Run application regression suite
+        run: npm test
