@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildResultWorkspaceHtml, buildExpandedYearHtml, buildYearDialogHtml } from '../js/results-view.js';
+import { buildResultWorkspaceHtml, buildExpandedYearHtml, buildYearDialogHtml, buildResultViewModel, toggleYearDetail } from '../js/results-view.js';
 import { buildSchoolDetailHtml, buildYearSummaryHtml } from '../js/year-stack.js';
 
 const aggregate = {
@@ -91,14 +91,80 @@ test('table layout renders one major row from the same selected-year aggregate',
   assert.match(html, /软件工程/);
   assert.match(html, /180/);
   assert.match(html, /1\/1/);
+  assert.match(html, /class="aggregate-table-detail" hidden/);
+  assert.match(html, /查看院校详情/);
   assert.doesNotMatch(html, /0371-12345678|完整分数段/);
+});
+
+test('year controls make selected years and focus year visible', () => {
+  const metadata = { supportedYears: [2024, 2025, 2026] };
+  const workspace = buildResultWorkspaceHtml({
+    aggregates: [aggregate], status: 'ready', hasQuery: true,
+    selectedYears: [2024, 2026], resultLayout: 'cards'
+  }, metadata);
+  const dialog = buildYearDialogHtml(metadata, [2024, 2026]);
+
+  assert.match(workspace, /年份：2024、2026/);
+  assert.match(dialog, /已选 2\/3 年/);
+  assert.match(dialog, /当前基准：2026 年/);
+});
+
+test('result view model normalizes shared years and layout without mutating metadata', () => {
+  const metadata = { supportedYears: [2024, 2025, 2026] };
+  const model = buildResultViewModel({
+    aggregates: [aggregate], selectedYears: [2026, 2024, 2026], resultLayout: 'unknown'
+  }, metadata);
+
+  assert.deepEqual(model.selectedYears, [2024, 2026]);
+  assert.equal(model.resultLayout, 'cards');
+  assert.equal(metadata.__selectedYears, undefined);
+});
+
+test('workspace renders expanded details from explicit view state', () => {
+  const html = buildResultWorkspaceHtml(buildResultViewModel({
+    aggregates: [aggregate], selectedYears: [2026], expandedDetails: { '0-2026': true }
+  }, { supportedYears: [2026] }), { supportedYears: [2026] });
+
+  assert.match(html, /aria-expanded="true"/);
+  assert.match(html, /收起详情/);
+  assert.match(html, /0371-12345678/);
 });
 
 test('year dialog exposes metadata years and all required actions', () => {
   const html = buildYearDialogHtml({ supportedYears: [2024, 2025, 2026] }, [2024, 2026]);
-  assert.match(html, /年份范围/);
+  assert.match(html, /显示年份/);
   assert.match(html, /2024 年/);
   assert.match(html, /2025 年/);
   assert.match(html, /全选|仅最新年份/);
   assert.match(html, /取消|应用/);
+});
+
+test('detail toggle keeps table detail mounted without dispatching a global render', () => {
+  const detailRow = { hidden: true, classList: { contains: (name) => name === 'aggregate-table-detail' } };
+  const holder = {
+    innerHTML: '',
+    hasChildNodes() { return this.innerHTML.length > 0; },
+    closest() { return detailRow; }
+  };
+  const root = { querySelector: () => holder };
+  const button = {
+    dataset: { expandLabel: '查看院校详情' },
+    getAttribute: (name) => name === 'data-major-index' ? '0' : '2026',
+    setAttribute() {},
+    textContent: '查看院校详情'
+  };
+  const model = { aggregates: [aggregate] };
+  const viewState = {};
+
+  assert.equal(toggleYearDetail(root, model.aggregates, button, viewState), true);
+  assert.match(holder.innerHTML, /河南大学/);
+  assert.equal(viewState['0-2026'], true);
+  assert.equal(detailRow.hidden, false);
+  assert.equal(button.textContent, '收起详情');
+
+  assert.equal(toggleYearDetail(root, model.aggregates, button, viewState), false);
+  assert.equal(holder.innerHTML, '');
+  assert.equal(viewState['0-2026'], undefined);
+  assert.equal(detailRow.hidden, true);
+  assert.equal(button.textContent, '查看院校详情');
 });
