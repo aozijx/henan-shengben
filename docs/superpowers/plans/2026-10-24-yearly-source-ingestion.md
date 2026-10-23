@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - New years use their own mapping; preserve only the existing explicit old-year `mappingReferences`.
-- Search results and mirrors are discovery hints, never authority; ambiguous, inaccessible or incomplete official sources fail closed.
+- Search results and school mirrors are discovery hints, never authority; ambiguous, inaccessible or incomplete official sources fail closed. Verified official PDF hosts include `xcoss.henan.gov.cn` in addition to examination-agency hosts.
 - No existing canonical JSON, PDF or manual correction is overwritten by the new-year default command.
 - Keep the existing `yearSources` and analytics/index/shard contract; do not add a per-year UI branch.
 - Metadata is the final published pointer; no automatic merge or publication with unresolved OCR issues.
@@ -50,11 +50,11 @@
 - Modify: `crawler/source_rules.py`
 
 **Interfaces:**
-- Produces: `load_year_links(path: Path) -> dict` with `year`, optional `searchPageUrl`, and a `sources` map keyed by `scoreSegments`, `scorelines`, `plans`, `mappingCodeTable`, `mappingOverview`; each source contains an optional `pageUrl` and optional `attachmentUrl`. Missing links may be discovered, but all five roles must resolve before download.
+- Produces: `load_year_links(path: Path) -> dict` with `year`, optional `searchPageUrl`, and a `sources` map keyed by `scoreSegments`, `scorelines`, `plans`, `mappingCodeTable`, `mappingOverview`, `master`; each source contains an optional `pageUrl` and optional `attachmentUrl`. Missing links may be discovered, but all six roles must resolve before download.
 - Produces: `resolve_year_sources(seed: dict, session) -> dict` (one official page per required type, discovered official attachments and provenance; raises `DiscoveryBlockedError` on missing/ambiguous source).
-- Produces: `registry_rows_for_year(resolved: dict) -> tuple[list[dict], dict]` (existing `sources` rows and one score-segments `crawlTargets` row, with conventional year paths and no `expectedCount` guess).
+- Produces: `registry_rows_for_year(resolved: dict) -> tuple[list[dict], dict]` (existing `sources` rows including `招生高校及专业`, plus one score-segments `crawlTargets` row, with conventional year paths and no `expectedCount` guess).
 
-- [ ] **Step 1: Write failing tests** for the three supplied 2026 seed URLs, exact year/type match, duplicate candidate announcements, missing mapping/plan links, and HTML anti-bot page. Assert that ambiguous/missing cases raise and that registry rows have year-specific mapping and conventional output paths.
+- [ ] **Step 1: Write failing tests** for supplied 2026 seed URLs, exact year/type match, duplicate candidate announcements, missing required links, the official `xcoss.henan.gov.cn` attachment host, and HTML anti-bot page. Assert that ambiguous/missing cases raise and that registry rows have year-specific mapping and conventional output paths.
 - [ ] **Step 2: Run `python -m unittest crawler.tests.test_year_sources -v`**; expect the new interfaces to be unavailable.
 - [ ] **Step 3: Implement seed schema and source resolution.** A declared exact page wins only after official-host/year/type validation; search may supply a candidate only when it is unique. Parse official page links by their visible title and URL, never by filename alone; treat unsupported HTML-only tables or changed attachment formats as a precise failure pending parser support. Reuse `discover_year` for score-segment attachments; add an explicit fetched-page base URL for direct official pages, while leaving the legacy registry crawler's current behavior compatible. Mirror-relative URLs alone cannot establish an official attachment.
 - [ ] **Step 4: Run the task tests and existing `crawler.tests.test_discover`**; expect all to pass.
@@ -147,10 +147,27 @@
 - [ ] **Step 4: Run the workflow contract test and full local test suites; validate workflow YAML syntax with the repository's available validator if present.**
 - [ ] **Step 5: Commit exact workflow/test/documentation files.**
 
+### Task 7: Include the official admissions master list in each new-year ingestion
+
+**Files:**
+- Modify: `crawler/year_sources.py`
+- Modify: `crawler/source_rules.py`
+- Modify: `crawler/tests/test_year_sources.py`
+- Modify: `convert/ingest_year.py` and create `convert/tests/test_ingest_year.py` for parser-to-source provenance mapping; the current orchestrator indexes only `scorelines`/`plans` and `mapping`, so a `master` row currently fails.
+- Modify: this plan and `docs/superpowers/specs/2026-10-23-yearly-source-ingestion-design.md`
+
+**Reason:** 2026 already publishes a separate `招生高校及专业_2026.json` from the official `招生高校及专业总表`; the annual ingestion contract currently has no role for this dataset. The 2026 PDF is officially hosted on `xcoss.henan.gov.cn`, also absent from the URL allowlist.
+
+- [x] **Step 1: Write failing tests** asserting `master` is required, a `xcoss.henan.gov.cn` official attachment passes validation while an unrelated mirror fails, and `registry_rows_for_year` emits the conventional master JSON/PDF row with parser `master`.
+- [x] **Step 2: Run `python -m unittest crawler.tests.test_year_sources -v`**; the new assertions failed first for the missing role/host/row.
+- [x] **Step 3: Implement the smallest contract update** by adding the source role/markers, allowing the verified government attachment host, and emitting the existing `招生高校及专业` registry row. Reuse the current parser and staged ingestion path; do not special-case 2026 or change UI behavior.
+- [x] **Step 4: Run the source resolver and ingestion tests, then all Python tests**; metadata publication remains in staging until complete; no existing-year files were changed.
+- [x] **Step 5: Document the six-role source contract and commit exact files.**
+
 ## Final verification
 
-- [ ] `python -m unittest discover -s crawler/tests -v`
-- [ ] `python -m unittest discover -s convert/tests -v`
-- [ ] `npm test`
+- [x] `python -m unittest discover -s crawler/tests -v`
+- [x] `python -m unittest discover -s convert/tests -v`
+- [x] `npm test` (133/133; after `npm ci` installed locked dev dependencies)
 - [ ] Run a 2026 offline replay and a synthetic 2027 end-to-end run; inspect source hashes, yearly mapping, coverage report, analytics/index/shards and metadata diff.
 - [ ] Check `git diff --check`, exact staged paths and existing-year file hashes; do not claim live official-site ingestion without a successful network run.

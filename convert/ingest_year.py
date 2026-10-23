@@ -26,6 +26,17 @@ def _write(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
+def source_role_for_attachment(parser: str, index: int) -> str:
+    """Map a registry parser row and PDF position to its source provenance role."""
+    if parser == 'mapping':
+        if index not in (0, 1):
+            raise ValueError(f'unsupported mapping attachment index: {index}')
+        return 'mappingCodeTable' if index == 0 else 'mappingOverview'
+    if parser in {'scorelines', 'plans', 'master'} and index == 0:
+        return parser
+    raise ValueError(f'unsupported parser attachment: {parser}[{index}]')
+
+
 def _run_in_staging(seed: dict, root: Path, session) -> dict:
     year = seed['year']
     registry_path = root / 'source-registry.json'
@@ -45,7 +56,7 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
             result = download_entry(url, root / relative, session)
             if result['downloadStatus'] != 'downloaded':
                 raise ValueError(f"{year}: failed source download {url}: {result.get('error')}")
-            role = {'scorelines': 'scorelines', 'plans': 'plans'}[row['parser']] if row['parser'] != 'mapping' else ('mappingCodeTable' if index == 0 else 'mappingOverview')
+            role = source_role_for_attachment(row['parser'], index)
             validate_attachment(role, year, (root / relative).read_bytes())
             provenance.append({'year': year, 'type': role, 'sourcePageUrl': row['pageUrls'][index],
                 'sourceUrl': url, 'finalUrl': result['finalUrl'], 'localPath': relative,

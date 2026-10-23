@@ -4,7 +4,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 
-OFFICIAL_PDF_HOSTS = {'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn'}
+OFFICIAL_PDF_HOSTS = {'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn', 'xcoss.henan.gov.cn'}
 
 
 @dataclass(frozen=True)

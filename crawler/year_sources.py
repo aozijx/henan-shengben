@@ -22,11 +22,13 @@ SOURCE_ROLES = {
     'plans': ('招生计划',),
     'mappingCodeTable': ('专业代号对照', '代号对照表'),
     'mappingOverview': ('专业对照一览', '专业对照表', '可报本科专业'),
+    'master': ('招生高校及专业总表', '招生高校及专业'),
 }
 PDF_MARKERS = {
     'scoreSegments': ('分数', '人数'), 'scorelines': ('分数线', '控制分数'),
     'plans': ('招生计划', '计划人数'), 'mappingCodeTable': ('代号', '考试科目'),
     'mappingOverview': ('专科专业', '本科专业'),
+    'master': ('招生高校及专业总表',),
 }
 
 
@@ -137,10 +139,12 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
     for role, page_url in pages.items():
         exact = seed.get('sources', {}).get(role, {}).get('attachmentUrl')
         files = [(exact, '')] if exact else _page_attachments(page_url, session, year)
-        if role == 'mappingCodeTable':
+        if not exact and role == 'mappingCodeTable':
             files = [item for item in files if any(word in (item[0] + item[1]) for word in ('代号', '代码'))]
-        elif role == 'mappingOverview':
+        elif not exact and role == 'mappingOverview':
             files = [item for item in files if any(word in (item[0] + item[1]) for word in ('对照', '一览'))]
+        elif not exact and role == 'master':
+            files = [item for item in files if any(word in (item[0] + item[1]) for word in ('招生高校及专业', '高校及专业总表'))]
         if role == 'scoreSegments':
             if not files:
                 raise SourceResolutionError(f'{year} {role}: no official major PDFs found')
@@ -159,6 +163,7 @@ def registry_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
     sources = [
         {'outputPath': f'省控线/省控线_{year}.json', 'pdfPaths': [f'省控线/原始PDF/省控线_{year}.pdf'], 'pdfUrls': [attachments['scorelines'][0]['url']], 'pageUrls': [resolved['pages']['scorelines']], 'parser': 'scorelines', 'year': year},
         {'outputPath': f'招生计划/招生计划_{year}.json', 'pdfPaths': [f'招生计划/原始PDF/招生计划_{year}.pdf'], 'pdfUrls': [attachments['plans'][0]['url']], 'pageUrls': [resolved['pages']['plans']], 'parser': 'plans', 'year': year},
+        {'outputPath': f'招生高校及专业/招生高校及专业_{year}.json', 'pdfPaths': [f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf'], 'pdfUrls': [attachments['master'][0]['url']], 'pageUrls': [resolved['pages']['master']], 'parser': 'master', 'year': year},
         {'outputPath': f'专业对照/专业对照_{year}.json', 'pdfPaths': [f'专业对照/原始PDF/专业代号对照_{year}.pdf', f'专业对照/原始PDF/专业对照一览_{year}.pdf'], 'pdfUrls': [attachments['mappingCodeTable'][0]['url'], attachments['mappingOverview'][0]['url']], 'pageUrls': [resolved['pages']['mappingCodeTable'], resolved['pages']['mappingOverview']], 'parser': 'mapping', 'year': year},
     ]
     crawl = {
