@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { bootstrapData } from '../js/bootstrap.js';
-import { getCollegesByYear, getScore } from '../js/data.js';
+import { buildMajorAggregates } from '../js/aggregate.js';
 import { canExport, createInitialState, reduceExplorerState } from '../js/explorer.js';
-import { buildExportFilename, getExportFields, serializeCsv } from '../js/export.js';
-import { buildPreviewRows, sortPreviewRows } from '../js/pipeline.js';
+import { buildExportFilename, prepareExport, serializeCsv } from '../js/export.js';
+import { createPreviewModel } from '../js/preview.js';
+import { buildResultWorkspaceHtml } from '../js/results-view.js';
+import { normalizeMajorOption, normalizePlanEntry } from '../js/model.js';
 
 async function fixture(name) {
   return JSON.parse(await readFile(new URL('./fixtures/' + name, import.meta.url), 'utf8'));
@@ -25,23 +27,36 @@ async function fixtureFetch(overrides = {}) {
   };
 }
 
-test('a metadata-only new year flows through load, filter, sort, preview and export', async () => {
+test('a metadata-only new year flows through selection, table, preview and export', async () => {
   const loaded = await bootstrapData('fixtures/metadata-2027.json', await fixtureFetch());
-  const majors = loaded.store.mapping[0].可报本科专业;
-  const preview = buildPreviewRows({
+  const majors = loaded.store.mapping[0].可报本科专业.map((major) => normalizeMajorOption(major));
+  const state = reduceExplorerState(createInitialState(loaded.metadata), { type: 'LOAD_SUCCESS' }, loaded.metadata);
+  const aggregates = buildMajorAggregates({
     majors,
     years: loaded.metadata.supportedYears,
-    filters: { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' },
-    getScore: (major, year) => getScore(loaded.index, major, year),
-    getPlans: (major, year) => getCollegesByYear(loaded.index, year, major)
+    scoresByYear: loaded.store.scoresByYear,
+    plansByYear: Object.fromEntries(loaded.metadata.supportedYears.map((year) => [
+      year, (loaded.store.plansByYear[year] || []).map(normalizePlanEntry)
+    ])),
+    fallbacksByYear: loaded.store.fallbacksByYear
   });
-  const rows = sortPreviewRows(preview.rows, loaded.metadata.defaultSort);
-  const csv = serializeCsv(rows, getExportFields(loaded.metadata));
+  const preview = createPreviewModel(aggregates, loaded.metadata, { ...state, status: 'ready', hasSearch: true });
+  const exported = prepareExport(preview, loaded.metadata, state.focusYear);
+  const csv = serializeCsv(exported.rows, exported.fields);
+  const tableHtml = buildResultWorkspaceHtml({
+    status: 'ready', hasQuery: true, aggregates: aggregates,
+    selectedYears: state.selectedYears, resultLayout: 'table'
+  }, loaded.metadata);
 
   assert.deepEqual(loaded.store.years, [2027]);
-  assert.deepEqual(rows.map((row) => row.majorName), ['数据工程', '智能工程']);
+  assert.deepEqual(state.selectedYears, loaded.metadata.supportedYears);
+  assert.equal(state.focusYear, loaded.metadata.defaultYear);
+  assert.deepEqual(preview.allRows.map((row) => row.majorName), ['数据工程', '智能工程']);
+  assert.deepEqual(preview.selectedYears, loaded.metadata.supportedYears);
+  assert.match(tableHtml, /year-selection-dialog/);
+  assert.match(tableHtml, /2027 省控线/);
   assert.match(csv, /^\uFEFF本科专业,2027分数线,2027院校数\(公\/民\),2027计划人数\(公\/民\)\r\n数据工程,220,0\/1,0\/0\r\n智能工程,180,1\/0,20\/0/);
-  assert.equal(buildExportFilename(loaded.metadata.defaultYear, new Date(2026, 9, 21)), '院校数据_2027_20261021.csv');
+  assert.equal(buildExportFilename(state.focusYear, new Date(2026, 9, 21)), '院校数据_2027_20261021.csv');
 });
 
 test('a missing configured source names its path and leaves export disabled', async () => {

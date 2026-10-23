@@ -98,18 +98,13 @@ function renderExplorerControls(root, metadata, state, dispatch) {
     page: state.page,
     sort: state.sort,
     effectiveSchoolCount: state.effectiveSchoolCount,
-    effectiveSchoolYear: latestSupportedYear(metadata),
+    effectiveSchoolYear: state.focusYear,
     hasSearch: state.majors.length > 0,
     status: state.status,
     error: state.error,
     columnWidths: state.columnWidths,
     selectedYears: state.selectedYears
   }, metadata, dispatch);
-}
-
-function latestSupportedYear(metadata) {
-  var years = metadata.supportedYears || [];
-  return years.length ? Math.max.apply(null, years) : null;
 }
 
 /* ---------- 筛选联动结果区 ----------

@@ -12,6 +12,8 @@
 
 **Related plan:** 增补并完成 `docs/superpowers/plans/2026-10-22-aggregated-query-redesign.md` 的 Task 6–9；已完成的数据采集、metadata v2、聚合卡片基础实现不重做。
 
+**实施状态（2026-10-23）：** 已完成。Task 1–3 分别落在 `fe30d6d`、`c15049f`、`8b5a12d`；Task 4 的 2027 metadata-only 演练、维护文档和全量验收随本文档更新提交。未纳入提交的 `.superpowers/` 仅为本地执行账本。
+
 ## Global Constraints
 
 - 数据流水线固定为“原始数据 → 归一化 → 聚合 → 筛选 → 排序 → 预览表格 → 导出”。
