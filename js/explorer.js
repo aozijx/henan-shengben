@@ -3,7 +3,7 @@ import { enumOptions } from './metadata.js';
 import { createInitialState, reduceExplorerState, sanitizeNumberInput, canExport } from './explorer-state.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { renderPreview } from './preview.js';
-import { downloadCsv, getExportFields } from './export.js';
+import { downloadCsv, prepareExport } from './export.js';
 import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
 import { setQueryYear } from './query.js';
 import { resetTheme } from './theme.js';
@@ -87,10 +87,14 @@ function renderExplorerControls(root, metadata, state, dispatch) {
   });
   var exportButton = root.querySelector('#exportCsv');
   if (exportButton) exportButton.addEventListener('click', function () {
-    downloadCsv({ rows: state.rows, fields: getExportFields(metadata), year: state.year, date: new Date() });
+    downloadCsv({ ...prepareExport({
+      status: state.status,
+      allRows: state.rows,
+      selectedYears: state.selectedYears
+    }, metadata, state.focusYear), date: new Date() });
   });
   renderPreview(root.querySelector('#preview-table'), {
-    rows: state.rows,
+    allRows: state.rows,
     page: state.page,
     sort: state.sort,
     effectiveSchoolCount: state.effectiveSchoolCount,
@@ -98,7 +102,8 @@ function renderExplorerControls(root, metadata, state, dispatch) {
     hasSearch: state.majors.length > 0,
     status: state.status,
     error: state.error,
-    columnWidths: state.columnWidths
+    columnWidths: state.columnWidths,
+    selectedYears: state.selectedYears
   }, metadata, dispatch);
 }
 
@@ -125,14 +130,14 @@ function notifyFilteredResult(state, options) {
   var majors = state.rows.slice()
     .sort(function (a, b) { return a.originalOrder - b.originalOrder; })
     .map(function (row) { return state.majors[row.originalOrder]; });
-  options.onFilteredResult(majors, activeFilterNote(state));
+  options.onFilteredResult(majors, state, activeFilterNote(state));
 }
 
 function recompute(state, metadata) {
   if (state.status !== 'ready' || !state.majors.length) return { ...state, rows: [], effectiveSchoolCount: 0 };
   var preview = buildPreviewRows({
     majors: state.majors,
-    years: metadata.supportedYears,
+    years: state.selectedYears,
     filters: state.filters,
     getScore: function (major, year) { return getScore(major, year); },
     getPlans: function (major, year) { return getCollegesByYear(year, major); }

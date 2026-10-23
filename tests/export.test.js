@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildExportFilename, downloadCsv, getExportFields, serializeCsv } from '../js/export.js';
+import { buildExportFilename, downloadCsv, getExportFields, prepareExport, serializeCsv } from '../js/export.js';
 
 const fields = [
   { key: 'majorName', label: '专业', exportLabel: '本科专业', type: 'string', exportEnable: true },
@@ -62,4 +62,21 @@ test('download creates and revokes one CSV object URL', () => {
   assert.deepEqual(events, [
     ['create'], ['append'], ['click', '院校数据_2026_20261021.csv'], ['remove'], ['revoke', 'blob:test']
   ]);
+});
+
+test('prepareExport uses the complete preview result instead of the current page', () => {
+  const previewModel = {
+    status: 'ready',
+    allRows: [{ majorName: '一', score: 1 }, { majorName: '二', score: 2 }, { majorName: '三', score: 3 }],
+    pageRows: [{ majorName: '三', score: 3 }]
+  };
+  const prepared = prepareExport(previewModel, { fields }, 2027);
+  assert.equal(prepared.rows.length, 3);
+  assert.deepEqual(prepared.fields.map((field) => field.key), ['majorName', 'score']);
+  assert.equal(prepared.year, 2027);
+});
+
+test('prepareExport rejects unavailable or empty preview data', () => {
+  assert.throws(() => prepareExport({ status: 'error', allRows: [] }, { fields }, 2027), /不可导出/);
+  assert.throws(() => prepareExport({ status: 'ready', allRows: [] }, { fields }, 2027), /没有可导出/);
 });

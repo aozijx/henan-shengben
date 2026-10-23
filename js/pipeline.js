@@ -15,18 +15,22 @@ function scoreBound(value) {
   return /^\d+$/.test(String(value)) ? Number(value) : null;
 }
 
-function rowMatchesFilters(row, filters, latestYear) {
+function rowMatchesStaticFilters(row, filters) {
   if (filters.publicCourse && filters.publicCourse !== '全部' && row.publicCourse !== filters.publicCourse) return false;
   if (filters.subject && filters.subject !== '全部' &&
       normalizeText(row.subject) !== normalizeText(filters.subject)) return false;
+  return true;
+}
+
+function rowMatchesYearFilters(row, filters, year) {
   var minScore = scoreBound(filters.scoreMin);
   var maxScore = scoreBound(filters.scoreMax);
   if (minScore != null && maxScore != null && minScore > maxScore) return false;
-  var score = latestYear == null ? null : row['score' + latestYear];
+  var score = year == null ? null : row['score' + year];
   if (minScore != null && (score == null || score < minScore)) return false;
   if (maxScore != null && (score == null || score > maxScore)) return false;
   var limit = schoolCountLimit(filters.schoolCount);
-  if (limit != null && latestYear != null && (row['schoolCount' + latestYear] || 0) <= limit) return false;
+  if (limit != null && year != null && (row['schoolCount' + year] || 0) <= limit) return false;
   return true;
 }
 
@@ -62,14 +66,19 @@ export function buildPreviewRows(input) {
     };
     var latestSchools = {};
     var hasPlans = false;
+    var matchingYears = [];
+
+    if (!rowMatchesStaticFilters(row, filters)) return;
 
     years.forEach(function (year) {
       var publicSchools = {}, privateSchools = {};
       var publicPlan = 0, privatePlan = 0, planCount = 0;
       var publicPovertyPlan = 0, privatePovertyPlan = 0, povertyPlanCount = 0;
+      var hasPlansForYear = false;
       (input.getPlans(major, year) || []).forEach(function (planRow) {
         if (!rowMatchesPlan(planRow, filters)) return;
         hasPlans = true;
+        hasPlansForYear = true;
         var school = schoolName(planRow);
         var isPrivate = planRow['办学性质'] === '民办';
         var isPoverty = planRow['建档立卡'] === '是';
@@ -96,10 +105,11 @@ export function buildPreviewRows(input) {
       row['planSplit' + year] = publicPlan + '/' + privatePlan;
       row['povertyPlanSplit' + year] = publicPovertyPlan + '/' + privatePovertyPlan;
       if (year === latestYear) latestSchools = allSchoolsFor(publicSchools, privateSchools);
+      if (hasPlansForYear && rowMatchesYearFilters(row, filters, year)) matchingYears.push(year);
     });
 
     if (!hasPlans) return;
-    if (!rowMatchesFilters(row, filters, latestYear)) return;
+    if (!matchingYears.length) return;
     if (latestYear != null) {
       Object.keys(latestSchools).forEach(function (school) { effectiveSchools[school] = true; });
     }

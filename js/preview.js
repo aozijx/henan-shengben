@@ -1,7 +1,17 @@
 import { esc } from './utils.js';
+import { buildResultModel } from './result-model.js';
 
-export function getPreviewFields(metadata) {
-  return (metadata.fields || []).filter(function (field) { return field.tableShow; });
+function isSelectedYearField(field, metadata, selectedYears) {
+  var years = metadata.supportedYears || [];
+  var matchedYear = years.find(function (year) { return String(field.key).endsWith(String(year)); });
+  return matchedYear == null || selectedYears.indexOf(matchedYear) >= 0;
+}
+
+export function getPreviewFields(metadata, selectedYears) {
+  var years = Array.isArray(selectedYears) ? selectedYears : (metadata.supportedYears || []);
+  return (metadata.fields || []).filter(function (field) {
+    return field.tableShow && isSelectedYearField(field, metadata, years);
+  });
 }
 
 export function formatFieldValue(row, field) {
@@ -33,14 +43,46 @@ export function resizeColumnWidth(current, delta) {
   return Math.min(600, Math.max(80, Number(current) + Number(delta)));
 }
 
+export function createPreviewModel(aggregates, metadata, state) {
+  var result = buildResultModel({
+    aggregates: aggregates,
+    metadata: metadata,
+    selectedYears: state && state.selectedYears,
+    filters: state && state.filters,
+    sort: state && state.sort
+  });
+  var fields = getPreviewFields(metadata, result.selectedYears);
+  var allRows = result.allRows.map(function (row) {
+    return fields.reduce(function (projected, field) {
+      projected[field.key] = row[field.key];
+      return projected;
+    }, {});
+  });
+  var page = paginate(allRows, state && state.page, metadata.pageSize);
+  return {
+    status: state && state.status || 'ready',
+    hasSearch: state ? state.hasSearch !== false : true,
+    allRows: allRows,
+    pageRows: page.rows,
+    page: page.page,
+    pageCount: page.pageCount,
+    selectedYears: result.selectedYears,
+    focusYear: result.focusYear,
+    effectiveSchoolCount: result.effectiveSchoolCount,
+    effectiveSchoolYear: result.effectiveSchoolYear,
+    fields: fields
+  };
+}
+
 export function buildPreviewHtml(model, metadata) {
   if (model.status === 'loading') return '<div class="preview-state loading">正在生成预览…</div>';
   if (model.status === 'error') return '<div class="preview-state msg-notfound">' + esc(model.error || '数据加载失败') + '</div>';
   if (!model.hasSearch) return '<div class="preview-state empty">请先查询专科专业，再使用筛选与导出。</div>';
-  if (!model.rows.length) return '<div class="preview-state empty">筛选后没有匹配数据，请调整条件或重置筛选。</div>';
+  var allRows = model.allRows || model.rows || [];
+  if (!allRows.length) return '<div class="preview-state empty">筛选后没有匹配数据，请调整条件或重置筛选。</div>';
 
-  var fields = getPreviewFields(metadata);
-  var page = paginate(model.rows, model.page, metadata.pageSize);
+  var fields = model.fields || getPreviewFields(metadata, model.selectedYears);
+  var page = paginate(allRows, model.page, metadata.pageSize);
   var widths = model.columnWidths || {};
   var columns = fields.map(function (field) {
     var width = widths[field.key];

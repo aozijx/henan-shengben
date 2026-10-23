@@ -26,13 +26,14 @@ var VIEWS = ['query', 'stats', 'about'];
 var aggregateRequestId = 0;
 
 function createAggregateRenderer(loaded) {
-  var years = getSortedYears(loaded.metadata);
+  var supportedYears = getSortedYears(loaded.metadata);
   var normalizedPlans = {};
-  years.forEach(function (year) {
+  supportedYears.forEach(function (year) {
     normalizedPlans[year] = (loaded.store.plansByYear[year] || []).map(normalizePlanEntry);
   });
-  return function renderAggregates(majors) {
+  return function renderAggregates(majors, state) {
     if (!majors.length) return;
+    var years = (state && state.selectedYears) || supportedYears;
     var requestId = ++aggregateRequestId;
     renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [] }, loaded.metadata);
     Promise.all(years.map(function (year) { return loaded.repository.ensureScoreSegments(year); }))
@@ -157,8 +158,8 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   initStats();
   var renderAggregates = createAggregateRenderer(loaded);
   explorer.initExplorer($('explorer'), loaded.metadata, {
-    onFilteredResult: function (majors) {
-      renderAggregates(majors);
+    onFilteredResult: function (majors, state) {
+      renderAggregates(majors, state);
     }
   });
   query.setResultListener(explorer.setSearchResult);

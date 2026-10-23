@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPreviewHtml, formatFieldValue, getPreviewFields, nextSortDirection, paginate, resizeColumnWidth } from '../js/preview.js';
+import { buildPreviewHtml, createPreviewModel, formatFieldValue, getPreviewFields, nextSortDirection, paginate, resizeColumnWidth } from '../js/preview.js';
 
 const metadata = {
   pageSize: 2,
@@ -98,4 +98,29 @@ test('column resizing is keyboard-friendly and clamped to safe bounds', () => {
   assert.equal(resizeColumnWidth(180, -10), 170);
   assert.equal(resizeColumnWidth(80, -10), 80);
   assert.equal(resizeColumnWidth(600, 10), 600);
+});
+
+test('projects aggregates into complete rows while pagination only slices rendering', () => {
+  const aggregateMetadata = {
+    pageSize: 2, latestYear: 2027, supportedYears: [2027],
+    fields: [
+      { key: 'majorName', type: 'string', tableShow: true },
+      { key: 'score2027', type: 'number', tableShow: true },
+      { key: 'schoolSplit2027', type: 'string', tableShow: true }
+    ]
+  };
+  const aggregates = Array.from({ length: 3 }, (_, index) => ({
+    major: { majorName: '专业' + index },
+    years: { 2027: {
+      score: 180 + index,
+      publicSummary: { schoolCount: 1, ordinaryPlanCount: 10, povertyPlanCount: 1 },
+      privateSummary: { schoolCount: index, ordinaryPlanCount: 5, povertyPlanCount: 0 },
+      schools: [{ schoolId: '学校' + index }]
+    } }
+  }));
+  const model = createPreviewModel(aggregates, aggregateMetadata, { page: 2, hasSearch: true });
+  assert.equal(model.allRows.length, 3);
+  assert.equal(model.pageRows.length, 1);
+  assert.deepEqual(model.allRows[2], { majorName: '专业2', score2027: 182, schoolSplit2027: '1/2' });
+  assert.equal(model.effectiveSchoolYear, 2027);
 });

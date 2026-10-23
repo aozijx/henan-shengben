@@ -29,15 +29,24 @@ const plans = {
   ]
 };
 
-function run(filters = {}) {
+function run(filters = {}, selectedYears = years) {
   return buildPreviewRows({
     majors,
-    years,
+    years: selectedYears,
     filters: { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '', ...filters },
     getScore: (major, year) => scores[major.专业名称][year],
     getPlans: (major) => plans[major.专业名称]
   });
 }
+
+test('keeps a major when any selected year meets year-bound filters and omits other year fields', () => {
+  const result = run({ scoreMax: '170' }, [2024, 2025]);
+  assert.deepEqual(result.rows.map((row) => row.majorName), ['软件工程', '会计学']);
+  assert.equal(result.rows[0].score2024, 170);
+  assert.equal(result.rows[0].score2025, 175);
+  assert.equal('score2026' in result.rows[0], false);
+  assert.equal('schoolSplit2026' in result.rows[0], false);
+});
 
 test('aggregates every year side by side in one row', () => {
   const row = run().rows[0];
@@ -80,8 +89,8 @@ test('filters by professional basic course and ignores whitespace differences', 
 
 test('filters by public course and latest-year score range together', () => {
   assert.deepEqual(run({ publicCourse: '专业英语' }).rows.map((row) => row.majorName), ['英语']);
-  assert.deepEqual(run({ scoreMin: '160', scoreMax: '200' }).rows.map((row) => row.majorName), ['软件工程']);
-  assert.deepEqual(run({ publicCourse: '公共英语', scoreMin: '140', scoreMax: '160' }).rows.map((row) => row.majorName), ['会计学']);
+  assert.deepEqual(run({ scoreMin: '160', scoreMax: '200' }, [2026]).rows.map((row) => row.majorName), ['软件工程']);
+  assert.deepEqual(run({ publicCourse: '公共英语', scoreMin: '140', scoreMax: '160' }, [2026]).rows.map((row) => row.majorName), ['会计学']);
 });
 
 test('ignores invalid score bounds and rejects a reversed valid range', () => {
