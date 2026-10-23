@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { doQuery, findMappingMatches, resolveMappingMatch, setQueryYear } from '../js/query.js';
+import { doQuery, findMappingMatches, resolveMappingMatch, setQueryYear, setResultListener } from '../js/query.js';
 import { loadAll } from '../js/data.js';
 
 test('searches only the mapping supplied for the selected year', () => {
@@ -65,4 +65,30 @@ test('switches completion and context to the focused query year', async () => {
   doQuery(input, hint, { innerHTML: '' });
   assert.equal(input.value, '软件技术（2024）');
   assert.match(hint.textContent, /2024 对照一览表/);
+});
+
+test('hands successful matches to the aggregate workspace without legacy table markup', async () => {
+  const metadata = {
+    defaultYear: 2027,
+    supportedYears: [2027],
+    yearSources: { 2027: { mappingSource: 'mapping.json', scoreSource: 'scores.json', planSource: 'plans.json' } }
+  };
+  const payloads = {
+    'mapping.json': [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '软件工程' }] }],
+    'scores.json': [], 'plans.json': []
+  };
+  await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
+  const input = { value: '软件' };
+  const hint = { textContent: '' };
+  const result = { innerHTML: '' };
+  let received = null;
+  setResultListener((majors, name) => { received = { majors, name }; });
+
+  doQuery(input, hint, result);
+
+  assert.equal(input.value, '软件技术');
+  assert.equal(received.name, '软件技术');
+  assert.equal(received.majors[0].专业名称, '软件工程');
+  assert.equal(result.innerHTML, '');
+  setResultListener(null);
 });
