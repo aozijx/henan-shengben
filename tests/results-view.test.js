@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildResultWorkspaceHtml, buildExpandedYearHtml } from '../js/results-view.js';
+import { buildResultWorkspaceHtml, buildExpandedYearHtml, buildYearDialogHtml } from '../js/results-view.js';
 import { buildSchoolDetailHtml, buildYearSummaryHtml } from '../js/year-stack.js';
 
 const aggregate = {
@@ -62,4 +62,43 @@ test('workspace distinguishes empty query filtered empty unpublished year and lo
   assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'ready', hasQuery: true }, metadata), /筛选条件下没有/);
   assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'unpublished' }, metadata), /尚未发布/);
   assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'error', error: '计划加载失败' }, metadata), /计划加载失败/);
+});
+
+test('cards render only selected years and keep lazy detail content out of the initial DOM', () => {
+  const threeYearAggregate = {
+    ...aggregate,
+    years: {
+      2024: { ...aggregate.years[2026], year: 2024, score: 160 },
+      2025: { ...aggregate.years[2026], year: 2025, score: 170 },
+      2026: aggregate.years[2026]
+    }
+  };
+  const html = buildResultWorkspaceHtml({
+    aggregates: [threeYearAggregate], status: 'ready', hasQuery: true,
+    selectedYears: [2024, 2026], resultLayout: 'cards'
+  }, { supportedYears: [2024, 2025, 2026] });
+  assert.match(html, /2024 年/);
+  assert.match(html, /2026 年/);
+  assert.doesNotMatch(html, /<h4>2025 年<\/h4>|0371-12345678|完整分数段/);
+});
+
+test('table layout renders one major row from the same selected-year aggregate', () => {
+  const html = buildResultWorkspaceHtml({
+    aggregates: [aggregate], status: 'ready', hasQuery: true,
+    selectedYears: [2026], resultLayout: 'table'
+  }, { supportedYears: [2026] });
+  assert.match(html, /class="aggregate-table-wrap"/);
+  assert.match(html, /软件工程/);
+  assert.match(html, /180/);
+  assert.match(html, /1\/1/);
+  assert.doesNotMatch(html, /0371-12345678|完整分数段/);
+});
+
+test('year dialog exposes metadata years and all required actions', () => {
+  const html = buildYearDialogHtml({ supportedYears: [2024, 2025, 2026] }, [2024, 2026]);
+  assert.match(html, /年份范围/);
+  assert.match(html, /2024 年/);
+  assert.match(html, /2025 年/);
+  assert.match(html, /全选|仅最新年份/);
+  assert.match(html, /取消|应用/);
 });

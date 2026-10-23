@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as render from '../js/render.js';
+import { buildResultWorkspaceHtml } from '../js/results-view.js';
 
 test('places public and private plan totals after their matching school counts', () => {
   const rows = [
@@ -22,4 +23,15 @@ test('derives result-table years from metadata instead of a fixed three-year lis
     latestYear: 2027,
     previousYear: 2026
   });
+});
+
+test('table result markup has a horizontally scrollable container for narrow screens', () => {
+  const html = buildResultWorkspaceHtml({
+    status: 'ready', hasQuery: true, resultLayout: 'table', selectedYears: [2026],
+    aggregates: [{ major: { majorName: '软件工程', majorCode: '80', publicCourse: '公共英语', professionalCourse: { name: '高等数学' } }, years: {
+      2026: { score: 180, publicSummary: { schoolCount: 1, ordinaryPlanCount: 20, povertyPlanCount: 3 }, privateSummary: { schoolCount: 0, ordinaryPlanCount: 0, povertyPlanCount: 0 }, schools: [] }
+    } }]
+  }, { supportedYears: [2026] });
+  assert.match(html, /aggregate-table-wrap/);
+  assert.match(html, /aggregate-table/);
 });

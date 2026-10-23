@@ -70,10 +70,34 @@
 .score-segments table{width:100%;border-collapse:collapse;}
 .score-segments th,.score-segments td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;}
 .result-state{padding:28px 16px;text-align:center;color:var(--muted);}
+.result-toolbar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:0 0 10px;}
+.result-toolbar button,.aggregate-table button{
+  min-height:34px;padding:6px 10px;border:1px solid var(--line-strong);border-radius:8px;
+  background:var(--surface-2);color:var(--ink);font:inherit;font-size:13px;cursor:pointer;
+}
+.result-toolbar button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-deep);}
+.result-layout-label{font-size:12px;color:var(--muted);margin-left:4px;}
+.aggregate-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);}
+.aggregate-table{min-width:980px;width:100%;border-collapse:collapse;table-layout:auto;}
+.aggregate-table th,.aggregate-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;}
+.aggregate-table th{background:var(--surface-2);color:var(--muted);font-size:12px;position:sticky;top:0;z-index:1;}
+.aggregate-table-detail td{padding:0;background:var(--surface-3);}
+.aggregate-table-detail .aggregate-year-detail:not(:empty){padding:10px 12px;}
+.year-selection-dialog{width:min(420px,calc(100vw - 32px));border:1px solid var(--line-strong);border-radius:12px;background:var(--card);color:var(--ink);box-shadow:var(--shadow);}
+.year-selection-dialog::backdrop{background:rgb(0 0 0 / .35);}
+.year-selection-dialog h2{margin:0;font-size:18px;}
+.year-selection-dialog p{color:var(--muted);font-size:13px;}
+.year-selection-dialog fieldset{display:grid;gap:8px;border:0;padding:0;margin:16px 0;}
+.year-selection-dialog legend{font-size:13px;color:var(--muted);margin-bottom:6px;}
+.year-selection-dialog label{display:flex;gap:8px;align-items:center;min-height:32px;}
+.year-selection-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;}
+.year-selection-actions button{min-height:36px;padding:6px 11px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-2);color:var(--ink);font:inherit;cursor:pointer;}
+.year-selection-error{min-height:18px;color:var(--vermill)!important;margin:0;}
 
 @media (max-width:720px){
   .aggregate-year{min-width:620px;}
   .aggregate-card{overflow-x:auto;}
+  .result-toolbar{justify-content:flex-start;overflow-x:auto;white-space:nowrap;}
 }
 .result-head{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;

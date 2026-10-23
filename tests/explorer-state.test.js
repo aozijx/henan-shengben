@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createInitialState, reduceExplorerState, sanitizeNumberInput } from '../js/explorer-state.js';
+import { orderedMajorsFromRows } from '../js/explorer.js';
 
 const metadata = {
   defaultYear: 2026,
@@ -109,4 +110,11 @@ test('year selection keeps a valid ordered set and layout accepts only known mod
   state = reduceExplorerState(state, { type: 'SET_RESULT_LAYOUT', resultLayout: 'table' }, metadata);
   assert.equal(state.resultLayout, 'table');
   assert.equal(reduceExplorerState(state, { type: 'SET_RESULT_LAYOUT', resultLayout: 'unknown' }, metadata).resultLayout, 'table');
+});
+
+test('keeps aggregate results in the filtered and sorted row order', () => {
+  const majors = [{ 专业名称: '甲' }, { 专业名称: '乙' }, { 专业名称: '丙' }];
+  const rows = [{ originalOrder: 2 }, { originalOrder: 0 }];
+
+  assert.deepEqual(orderedMajorsFromRows(rows, majors), [majors[2], majors[0]]);
 });

@@ -31,11 +31,11 @@ function createAggregateRenderer(loaded) {
   supportedYears.forEach(function (year) {
     normalizedPlans[year] = (loaded.store.plansByYear[year] || []).map(normalizePlanEntry);
   });
-  return function renderAggregates(majors, state) {
+  return function renderAggregates(majors, state, dispatch) {
     if (!majors.length) return;
     var years = (state && state.selectedYears) || supportedYears;
     var requestId = ++aggregateRequestId;
-    renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [] }, loaded.metadata);
+    renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout }, loaded.metadata, dispatch);
     Promise.all(years.map(function (year) { return loaded.repository.ensureScoreSegments(year); }))
       .then(function (segmentFiles) {
         if (requestId !== aggregateRequestId) return;
@@ -53,11 +53,11 @@ function createAggregateRenderer(loaded) {
           segmentsByYear: segmentsByYear,
           fallbacksByYear: loaded.store.fallbacksByYear
         });
-        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: aggregates }, loaded.metadata);
+        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: aggregates, selectedYears: years, resultLayout: state && state.resultLayout }, loaded.metadata, dispatch);
       })
       .catch(function (error) {
         if (requestId !== aggregateRequestId) return;
-        renderResultWorkspace($result, { status: 'error', hasQuery: true, aggregates: [], error: error.message }, loaded.metadata);
+        renderResultWorkspace($result, { status: 'error', hasQuery: true, aggregates: [], error: error.message, selectedYears: years, resultLayout: state && state.resultLayout }, loaded.metadata, dispatch);
       });
   };
 }
@@ -157,9 +157,9 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   applyYearLabels(loaded.metadata);
   initStats();
   var renderAggregates = createAggregateRenderer(loaded);
-  explorer.initExplorer($('explorer'), loaded.metadata, {
+  var explorerController = explorer.initExplorer($('explorer'), loaded.metadata, {
     onFilteredResult: function (majors, state) {
-      renderAggregates(majors, state);
+      renderAggregates(majors, state, explorerController && explorerController.dispatch);
     }
   });
   query.setResultListener(explorer.setSearchResult);

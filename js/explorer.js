@@ -125,11 +125,13 @@ function activeFilterNote(state) {
   return '筛选后 ' + state.rows.length + ' / ' + state.majors.length + ' 个专业';
 }
 
+export function orderedMajorsFromRows(rows, majors) {
+  return rows.map(function (row) { return majors[row.originalOrder]; });
+}
+
 function notifyFilteredResult(state, options) {
   if (typeof options.onFilteredResult !== 'function') return;
-  var majors = state.rows.slice()
-    .sort(function (a, b) { return a.originalOrder - b.originalOrder; })
-    .map(function (row) { return state.majors[row.originalOrder]; });
+  var majors = orderedMajorsFromRows(state.rows, state.majors);
   options.onFilteredResult(majors, state, activeFilterNote(state));
 }
 
