@@ -210,27 +210,23 @@ def _normalized_major_name(value):
     return name.removesuffix('(本科层次职业教育专业)')
 
 
-def _major_name_aliases(code: str, value: str) -> set[str]:
-    name = _normalized_major_name(value)
-    aliases = {name}
-    if code in ('99', 'A1') and '(' in name:
-        aliases.add(name.split('(', 1)[0])
-    return aliases
-
-
 def _major_name_matches(code: str, expected_name: str, mapping_names: dict, plan_names: dict) -> bool:
-    related_codes = {code}
-    if code in ('99', 'A1'):
-        related_codes.update(('99', 'A1'))
-    mapped_names = set().union(*(
-        set().union(*(_major_name_aliases(code, name) for name in mapping_names.get(candidate, set())))
-        for candidate in related_codes
-    ))
-    planned_names = set().union(*(
-        set().union(*(_major_name_aliases(code, name) for name in plan_names.get(candidate, set())))
-        for candidate in related_codes
-    ))
-    return bool(_major_name_aliases(code, expected_name) & mapped_names) or bool(mapped_names & planned_names)
+    expected = _normalized_major_name(expected_name)
+    mapped = {_normalized_major_name(name) for name in mapping_names.get(code, set())}
+    planned = {_normalized_major_name(name) for name in plan_names.get(code, set())}
+    if expected in mapped or mapped & planned:
+        return True
+
+    # The 2026 official A1 scoreline uses this qualified name, while the
+    # same major is listed as 财务管理 under mapping code 99 and plan code A1.
+    # Keep this as an evidence-backed exception rather than stripping arbitrary
+    # parentheses or merging names across the two codes.
+    return (
+        code == 'A1'
+        and expected == '财务管理(含大数据与财务管理)'
+        and '财务管理' in planned
+        and '财务管理' in {_normalized_major_name(name) for name in mapping_names.get('99', set())}
+    )
 
 
 def _matching_plan_rows(major, plan_by_code, plans):

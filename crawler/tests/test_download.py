@@ -91,6 +91,19 @@ class DownloadTest(unittest.TestCase):
                 download_manifest(manifest, root, session)
             self.assertEqual(session.calls, 0)
 
+    def test_manifest_preflights_all_urls_before_starting_any_download(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / 'data'
+            root.mkdir()
+            manifest = root / 'manifest.json'
+            session = CountingSession(Response(b'%PDF-1.4 test'))
+            manifest.write_text(json.dumps({'entries': [
+                {'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '2027/a.pdf'},
+                {'pdfUrl': 'https://evil.example/b.pdf', 'localPath': '2027/b.pdf'}]}), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'official host allowlist'):
+                download_manifest(manifest, root, session)
+            self.assertEqual(session.calls, 0)
+
     def test_downloads_pdf_atomically_and_skips_matching_hash(self):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / '01.pdf'

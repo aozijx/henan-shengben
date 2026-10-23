@@ -18,6 +18,18 @@ class RefreshCatalogTest(unittest.TestCase):
         self.assertTrue(_major_name_matches(
             'A1', '财务管理（含大数据与财务管理）', mapping_names, plan_names))
 
+    def test_special_99_a1_alias_does_not_accept_parenthetical_name_for_other_code(self):
+        mapping_names = {'99': {'财务管理', '会计学'}}
+        plan_names = {'A1': {'财务管理'}}
+        self.assertFalse(_major_name_matches(
+            '99', '财务管理（含大数据与财务管理）', mapping_names, plan_names))
+
+    def test_special_99_a1_alias_does_not_strip_arbitrary_parenthetical_suffix(self):
+        mapping_names = {'99': {'财务管理'}}
+        plan_names = {'A1': {'财务管理'}}
+        self.assertFalse(_major_name_matches(
+            'A1', '财务管理（错配）', mapping_names, plan_names))
+
     def test_unchanged_published_legacy_coverage_gap_is_retained_but_changed_input_is_revalidated(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
