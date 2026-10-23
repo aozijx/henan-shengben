@@ -15,6 +15,7 @@ import { bootstrapData } from './bootstrap.js';
 import { getLatestYear, getSortedYears } from './metadata.js';
 import { normalizeMajorOption, normalizePlanEntry, normalizeScoreSegmentSeries } from './model.js';
 import { buildMajorAggregates } from './aggregate.js';
+import { buildResultModel } from './result-model.js';
 import { renderResultWorkspace } from './results-view.js';
 
 var $ = function (id) { return document.getElementById(id); };
@@ -35,7 +36,7 @@ function createAggregateRenderer(loaded) {
     if (!majors.length) return;
     var years = (state && state.selectedYears) || supportedYears;
     var requestId = ++aggregateRequestId;
-    renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout }, loaded.metadata, dispatch);
+    renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
     Promise.all(years.map(function (year) { return loaded.repository.ensureScoreSegments(year); }))
       .then(function (segmentFiles) {
         if (requestId !== aggregateRequestId) return;
@@ -53,11 +54,18 @@ function createAggregateRenderer(loaded) {
           segmentsByYear: segmentsByYear,
           fallbacksByYear: loaded.store.fallbacksByYear
         });
-        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: aggregates, selectedYears: years, resultLayout: state && state.resultLayout }, loaded.metadata, dispatch);
+        var resultModel = buildResultModel({
+          aggregates: aggregates,
+          metadata: loaded.metadata,
+          selectedYears: years,
+          filters: state && state.filters,
+          sort: state && state.sort
+        });
+        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: resultModel.aggregates, selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
       })
       .catch(function (error) {
         if (requestId !== aggregateRequestId) return;
-        renderResultWorkspace($result, { status: 'error', hasQuery: true, aggregates: [], error: error.message, selectedYears: years, resultLayout: state && state.resultLayout }, loaded.metadata, dispatch);
+        renderResultWorkspace($result, { status: 'error', hasQuery: true, aggregates: [], error: error.message, selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
       });
   };
 }

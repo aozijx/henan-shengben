@@ -1,13 +1,18 @@
 import { esc } from './utils.js';
+import { resultFieldVisible } from './result-visibility.js';
 
-function summaryPart(label, summary) {
-  var value = summary || {};
-  return '<span class="year-kind year-kind-' + (label === '公办' ? 'public' : 'private') + '">' + label + ' ' +
-    (value.schoolCount || 0) + ' 所 · 普通 ' + (value.ordinaryPlanCount || 0) + ' 人 · 专项 ' +
-    (value.povertyPlanCount || 0) + ' 人</span>';
+function text(value) {
+  return value == null || value === '' ? '—' : esc(String(value));
 }
 
-export function buildYearSummaryHtml(yearAggregate) {
+function summaryPart(label, summary, hiddenFields) {
+  var value = summary || {};
+  return '<span class="year-kind year-kind-' + (label === '公办' ? 'public' : 'private') + '">' + label + ' ' +
+    (value.schoolCount || 0) + ' 所 · 普通 ' + (value.ordinaryPlanCount || 0) + ' 人' +
+    (resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 专项 ' + (value.povertyPlanCount || 0) + ' 人' : '') + '</span>';
+}
+
+export function buildYearSummaryHtml(yearAggregate, hiddenFields) {
   if (!yearAggregate) return '<span class="year-unpublished">该年份数据尚未发布</span>';
   var context = yearAggregate.scoreContext || {};
   var score = yearAggregate.score == null ? '—' : yearAggregate.score;
@@ -15,21 +20,68 @@ export function buildYearSummaryHtml(yearAggregate) {
   return '<div class="year-summary">' +
     '<span class="year-score">省控线 ' + esc(String(score)) + '</span>' +
     '<span class="year-rank">参考位次 ' + esc(String(rank)) + '</span>' +
-    summaryPart('公办', yearAggregate.publicSummary) +
-    summaryPart('民办', yearAggregate.privateSummary) +
+    summaryPart('公办', yearAggregate.publicSummary, hiddenFields) +
+    summaryPart('民办', yearAggregate.privateSummary, hiddenFields) +
     '</div>';
 }
 
-export function buildSchoolDetailHtml(school) {
+function planRecordHtml(entry) {
+  var detail = entry || {};
+  var charter = detail.charterUrl
+    ? '<a href="' + esc(detail.charterUrl) + '" target="_blank" rel="noopener noreferrer">招生章程</a>'
+    : '—';
+  return '<section class="school-plan-record">' +
+    '<div class="school-plan-record-title">' + text(detail.admissionCategory) + '</div>' +
+    '<dl>' +
+    '<dt>院校代码</dt><dd>' + text(detail.schoolCode) + '</dd>' +
+    '<dt>专业代号</dt><dd>' + text(detail.majorCode) + '</dd>' +
+    '<dt>专业名称</dt><dd>' + text(detail.majorName) + '</dd>' +
+    '<dt>学制</dt><dd>' + (detail.duration == null ? '—' : esc(String(detail.duration)) + ' 年') + '</dd>' +
+    '<dt>学费</dt><dd>' + (detail.tuition == null ? '—' : '¥' + esc(String(detail.tuition)) + ' / 年') + '</dd>' +
+    '<dt>住宿费</dt><dd>' + (detail.accommodation == null ? '—' : '¥' + esc(String(detail.accommodation)) + ' / 年') + '</dd>' +
+    '<dt>地址</dt><dd>' + text(detail.address) + '</dd>' +
+    '<dt>咨询电话</dt><dd>' + text(detail.phone) + '</dd>' +
+    '<dt>办学地点/备注</dt><dd>' + text(detail.notes) + '</dd>' +
+    '<dt>招生章程</dt><dd>' + charter + '</dd>' +
+    '</dl></section>';
+}
+
+export function buildSchoolDetailHtml(school, year, hiddenFields) {
   var entries = school.planEntries || [];
-  var detail = entries[0] || {};
+  var yearLabel = year == null ? '' : '<span class="school-year-badge">' + esc(String(year)) + ' 年</span>';
+  var records = entries.length
+    ? entries.map(planRecordHtml).join('')
+    : '<p class="school-detail-empty">该院校仅有招生高校总表回退信息，暂无计划明细。</p>';
   return '<article class="school-detail">' +
-    '<h5>' + esc(school.schoolName || '') + ' <span>' + esc(school.schoolType || '') + '</span></h5>' +
-    '<p>普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人 · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人</p>' +
-    '<dl><dt>学费</dt><dd>' + esc(detail.tuition == null ? '—' : String(detail.tuition)) + '</dd>' +
-    '<dt>地址</dt><dd>' + esc(detail.address || '—') + '</dd>' +
-    '<dt>咨询电话</dt><dd>' + esc(detail.phone || '—') + '</dd></dl>' +
+    '<header><h5>' + esc(school.schoolName || '') + '</h5>' + yearLabel +
+    '<span class="school-type">' + esc(school.schoolType || '—') + '</span></header>' +
+    '<p class="school-plan-summary">普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人' +
+    (resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人' : '') + '</p>' +
+    records +
     '</article>';
+}
+
+function schoolKey(school) {
+  return school.schoolId || school.schoolName || '';
+}
+
+export function buildSchoolComparisonHtml(aggregate, years, hiddenFields) {
+  var groups = new Map();
+  (years || []).forEach(function (year) {
+    var yearAggregate = aggregate && aggregate.years && aggregate.years[year];
+    (yearAggregate && yearAggregate.schools || []).forEach(function (school) {
+      var key = schoolKey(school);
+      if (!key) return;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push({ year: year, school: school });
+    });
+  });
+  if (!groups.size) return '<div class="result-state">所选年份暂无院校招生计划。</div>';
+  return '<div class="school-comparison-list">' + Array.from(groups.values()).map(function (records) {
+    return '<section class="school-comparison-card">' + records.map(function (record) {
+      return buildSchoolDetailHtml(record.school, record.year, hiddenFields);
+    }).join('') + '</section>';
+  }).join('') + '</div>';
 }
 
 export function buildScoreSegmentsHtml(series) {

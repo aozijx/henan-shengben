@@ -5,6 +5,12 @@
     "selectedYears": "allSupportedYears",
     "resultLayout": "cards"
   },
+  "resultVisibilityRules": [
+    {
+      "when": { "filterKey": "povertyStatus", "equals": "否" },
+      "hide": ["povertyPlan"]
+    }
+  ],
   "supportedYears": [2024, 2025, 2026],
   "yearSources": {
     "2024": {

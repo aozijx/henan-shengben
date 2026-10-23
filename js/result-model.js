@@ -16,17 +16,30 @@ function summaryFor(schools, type) {
     }, { schoolCount: 0, ordinaryPlanCount: 0, povertyPlanCount: 0 });
 }
 
+function isPovertyPlan(entry) {
+  return entry && (entry.povertyStatus === '是' || entry['建档立卡'] === '是' || /建档立卡/.test(String(entry.admissionCategory || entry['招生类别'] || '')));
+}
+
+function planCount(entry) {
+  return Number(entry && (entry.planCount == null ? entry['计划人数'] : entry.planCount)) || 0;
+}
+
 function filterYear(yearAggregate, filters) {
   if ((!filters.schoolType || filters.schoolType === '全部') &&
       (!filters.povertyStatus || filters.povertyStatus === '全部')) return yearAggregate;
-  var schools = (yearAggregate && yearAggregate.schools || []).filter(function (school) {
+  var schools = (yearAggregate && yearAggregate.schools || []).map(function (school) {
     if (filters.schoolType && filters.schoolType !== '全部' && school.schoolType !== filters.schoolType) return false;
-    if (filters.povertyStatus === '否' && !(Number(school.ordinaryPlanCount) > 0)) return false;
-    return true;
-  }).map(function (school) {
-    if (filters.povertyStatus !== '否') return school;
-    return { ...school, povertyPlanCount: 0 };
-  });
+    var entries = Array.isArray(school.planEntries) ? school.planEntries : [];
+    var visibleEntries = filters.povertyStatus === '否' ? entries.filter(function (entry) { return !isPovertyPlan(entry); }) : entries;
+    if (entries.length && !visibleEntries.length) return false;
+    if (!entries.length && filters.povertyStatus === '否' && !(Number(school.ordinaryPlanCount) > 0)) return false;
+    return {
+      ...school,
+      planEntries: visibleEntries,
+      ordinaryPlanCount: visibleEntries.length ? visibleEntries.filter(function (entry) { return !isPovertyPlan(entry); }).reduce(function (sum, entry) { return sum + planCount(entry); }, 0) : Number(school.ordinaryPlanCount) || 0,
+      povertyPlanCount: visibleEntries.length ? visibleEntries.filter(isPovertyPlan).reduce(function (sum, entry) { return sum + planCount(entry); }, 0) : (filters.povertyStatus === '否' ? 0 : Number(school.povertyPlanCount) || 0)
+    };
+  }).filter(Boolean);
   return {
     ...yearAggregate,
     schools: schools,

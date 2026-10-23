@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildResultWorkspaceHtml, buildExpandedYearHtml, buildYearDialogHtml, buildResultViewModel, toggleYearDetail } from '../js/results-view.js';
+import { buildResultWorkspaceHtml, buildExpandedMajorHtml, buildYearDialogHtml, buildResultViewModel, toggleMajorDetail } from '../js/results-view.js';
 import { buildSchoolDetailHtml, buildYearSummaryHtml } from '../js/year-stack.js';
 
 const aggregate = {
@@ -40,8 +40,8 @@ test('initial aggregate summary includes courses scores ranks and split plan tot
   assert.doesNotMatch(html, /0371-12345678|郑州市|完整分数段/);
 });
 
-test('expanded year content creates school contact details and the complete score segment table lazily', () => {
-  const html = buildExpandedYearHtml(aggregate, 2026);
+test('expanded major content creates school comparison and score segment tables lazily', () => {
+  const html = buildExpandedMajorHtml(aggregate, [2026]);
   assert.match(html, /0371-12345678/);
   assert.match(html, /郑州市/);
   assert.match(html, /完整分数段/);
@@ -54,6 +54,42 @@ test('year and school renderers preserve ordinary and poverty semantics', () => 
   const schoolHtml = buildSchoolDetailHtml(aggregate.years[2026].schools[0]);
   assert.match(schoolHtml, /学费/);
   assert.match(schoolHtml, /4400/);
+});
+
+test('metadata visibility rule hides poverty labels after selecting ordinary plans only', () => {
+  const metadata = {
+    supportedYears: [2026],
+    resultVisibilityRules: [{
+      when: { filterKey: 'povertyStatus', equals: '否' },
+      hide: ['povertyPlan']
+    }]
+  };
+  const html = buildResultWorkspaceHtml({
+    aggregates: [aggregate], status: 'ready', hasQuery: true, selectedYears: [2026],
+    filters: { povertyStatus: '否' }
+  }, metadata);
+
+  assert.match(html, /普通 20 人/);
+  assert.doesNotMatch(html, /专项 3 人|建档立卡专项/);
+});
+
+test('school details expose the complete plan record instead of only contact fields', () => {
+  const school = {
+    ...aggregate.years[2026].schools[0],
+    planEntries: [{
+      schoolCode: '6001', majorCode: '80', majorName: '软件工程', admissionCategory: '普通专升本',
+      duration: 2, tuition: 4400, accommodation: 800, address: '郑州市', phone: '0371-12345678',
+      notes: '办学地点：主校区', charterUrl: 'https://example.edu/charter'
+    }]
+  };
+  const html = buildSchoolDetailHtml(school);
+
+  assert.match(html, /6001/);
+  assert.match(html, /普通专升本/);
+  assert.match(html, /住宿费/);
+  assert.match(html, /800/);
+  assert.match(html, /招生章程/);
+  assert.match(html, /https:\/\/example.edu\/charter/);
 });
 
 test('workspace distinguishes empty query filtered empty unpublished year and load failure', () => {
@@ -90,7 +126,9 @@ test('table layout renders one major row from the same selected-year aggregate',
   assert.match(html, /class="aggregate-table-wrap"/);
   assert.match(html, /软件工程/);
   assert.match(html, /180/);
-  assert.match(html, /1\/1/);
+  assert.match(html, /公办 1 所/);
+  assert.match(html, /历年概览/);
+  assert.doesNotMatch(html, /2026 省控线|2026 院校\(公\/民\)/);
   assert.match(html, /class="aggregate-table-detail" hidden/);
   assert.match(html, /查看院校详情/);
   assert.doesNotMatch(html, /0371-12345678|完整分数段/);
@@ -122,11 +160,11 @@ test('result view model normalizes shared years and layout without mutating meta
 
 test('workspace renders expanded details from explicit view state', () => {
   const html = buildResultWorkspaceHtml(buildResultViewModel({
-    aggregates: [aggregate], selectedYears: [2026], expandedDetails: { '0-2026': true }
+    aggregates: [aggregate], selectedYears: [2026], expandedDetails: { 0: true }
   }, { supportedYears: [2026] }), { supportedYears: [2026] });
 
   assert.match(html, /aria-expanded="true"/);
-  assert.match(html, /收起详情/);
+  assert.match(html, /收起院校详情/);
   assert.match(html, /0371-12345678/);
 });
 
@@ -149,22 +187,22 @@ test('detail toggle keeps table detail mounted without dispatching a global rend
   const root = { querySelector: () => holder };
   const button = {
     dataset: { expandLabel: '查看院校详情' },
-    getAttribute: (name) => name === 'data-major-index' ? '0' : '2026',
+    getAttribute: () => '0',
     setAttribute() {},
     textContent: '查看院校详情'
   };
   const model = { aggregates: [aggregate] };
   const viewState = {};
 
-  assert.equal(toggleYearDetail(root, model.aggregates, button, viewState), true);
+  assert.equal(toggleMajorDetail(root, model.aggregates, button, viewState, [2026]), true);
   assert.match(holder.innerHTML, /河南大学/);
-  assert.equal(viewState['0-2026'], true);
+  assert.equal(viewState['0'], true);
   assert.equal(detailRow.hidden, false);
-  assert.equal(button.textContent, '收起详情');
+  assert.equal(button.textContent, '收起院校详情');
 
-  assert.equal(toggleYearDetail(root, model.aggregates, button, viewState), false);
+  assert.equal(toggleMajorDetail(root, model.aggregates, button, viewState, [2026]), false);
   assert.equal(holder.innerHTML, '');
-  assert.equal(viewState['0-2026'], undefined);
+  assert.equal(viewState['0'], undefined);
   assert.equal(detailRow.hidden, true);
   assert.equal(button.textContent, '查看院校详情');
 });

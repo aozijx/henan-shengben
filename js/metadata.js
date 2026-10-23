@@ -120,6 +120,23 @@ export function validateMetadata(value) {
     }
   }
 
+  if (value.resultVisibilityRules != null) {
+    if (!Array.isArray(value.resultVisibilityRules)) {
+      errors.push('resultVisibilityRules 必须是数组');
+    } else {
+      value.resultVisibilityRules.forEach(function (rule, index) {
+        var prefix = '结果可见性规则 #' + (index + 1);
+        var condition = rule && rule.when;
+        if (!condition || !isNonEmptyString(condition.filterKey) || !isNonEmptyString(condition.equals)) {
+          errors.push(prefix + ' 缺少有效条件');
+        }
+        if (!rule || !Array.isArray(rule.hide) || !rule.hide.length || rule.hide.some(function (key) { return !isNonEmptyString(key); })) {
+          errors.push(prefix + ' 必须声明至少一个隐藏字段');
+        }
+      });
+    }
+  }
+
   var yearSources = value.yearSources && typeof value.yearSources === 'object' ? value.yearSources : {};
   years.forEach(function (year) {
     var source = yearSources[year];

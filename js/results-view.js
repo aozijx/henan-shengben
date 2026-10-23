@@ -1,6 +1,7 @@
 import { esc } from './utils.js';
 import { getSortedYears, normalizeSelectedYears } from './metadata.js';
-import { buildSchoolDetailHtml, buildScoreSegmentsHtml, buildYearSummaryHtml } from './year-stack.js';
+import { buildSchoolComparisonHtml, buildScoreSegmentsHtml, buildYearSummaryHtml } from './year-stack.js';
+import { hiddenResultFields } from './result-visibility.js';
 
 var resultViewStates = new WeakMap();
 
@@ -12,50 +13,50 @@ function statusHtml(model) {
   return '<div class="result-state">当前筛选条件下没有符合的本科专业</div>';
 }
 
-function selectedYears(model, metadata) {
-  return normalizeSelectedYears(model.selectedYears, metadata);
-}
-
 export function buildResultViewModel(model, metadata) {
   var source = model || {};
-  var years = selectedYears(source, metadata);
   return {
     ...source,
     aggregates: Array.isArray(source.aggregates) ? source.aggregates : [],
-    selectedYears: years,
+    selectedYears: normalizeSelectedYears(source.selectedYears, metadata),
     resultLayout: source.resultLayout === 'table' ? 'table' : 'cards',
-    expandedDetails: { ...(source.expandedDetails || {}) }
+    expandedDetails: { ...(source.expandedDetails || {}) },
+    hiddenFields: hiddenResultFields(metadata, source.filters)
   };
 }
 
-function detailKey(index, year) {
-  return index + '-' + year;
+function detailKey(index) {
+  return String(index);
 }
 
-function detailButtonHtml(year, index, label, expanded) {
-  var buttonLabel = expanded ? '收起详情' : label;
-  return '<button type="button" data-expand-year="' + year + '" data-major-index="' + index +
-    '" data-expand-label="' + esc(label) + '" aria-expanded="' + String(expanded) + '">' + esc(buttonLabel) + '</button>';
+function detailButtonHtml(index, label, expanded) {
+  return '<button type="button" data-expand-major="' + index + '" data-expand-label="' + esc(label) +
+    '" aria-expanded="' + String(expanded) + '">' + esc(expanded ? '收起院校详情' : label) + '</button>';
 }
 
-function detailHtml(aggregate, year, expanded) {
-  return expanded ? buildExpandedYearHtml(aggregate, year) : '';
-}
-
-function majorSummaryHtml(aggregate, years, index, expandedDetails) {
+function majorHeaderHtml(aggregate) {
   var major = aggregate.major || {};
   var course = major.professionalCourse || {};
-  return '<article class="aggregate-card" data-major-index="' + index + '">' +
-    '<header><div><h3>' + esc(major.majorName || '') + '</h3>' +
+  return '<header><div><h3>' + esc(major.majorName || '') + '</h3>' +
     '<p>专业代码 ' + esc(major.majorCode || '—') + ' · 公共课 ' + esc(major.publicCourse || '—') +
-    ' · 专业基础课 ' + esc(course.name || '—') + (course.code ? ' (' + esc(course.code) + ')' : '') + '</p></div></header>' +
-    '<div class="aggregate-years">' + years.map(function (year) {
-      var yearAggregate = aggregate.years && aggregate.years[year];
-      return '<section class="aggregate-year"><h4>' + year + ' 年</h4>' + buildYearSummaryHtml(yearAggregate) +
-        detailButtonHtml(year, index, '展开院校与分数段', Boolean(expandedDetails[detailKey(index, year)])) +
-        '<div class="aggregate-year-detail" data-year-detail="' + detailKey(index, year) + '">' +
-        detailHtml(aggregate, year, Boolean(expandedDetails[detailKey(index, year)])) + '</div></section>';
-    }).join('') + '</div></article>';
+    ' · 专业基础课 ' + esc(course.name || '—') + (course.code ? ' (' + esc(course.code) + ')' : '') + '</p></div></header>';
+}
+
+function yearOverviewHtml(aggregate, years, compact, hiddenFields) {
+  return '<div class="year-overview' + (compact ? ' year-overview-compact' : '') + '">' + years.map(function (year) {
+    var value = aggregate.years && aggregate.years[year];
+    return '<section class="year-overview-item"><h4>' + year + ' 年</h4>' + buildYearSummaryHtml(value, hiddenFields) + '</section>';
+  }).join('') + '</div>';
+}
+
+function majorSummaryHtml(aggregate, years, index, expandedDetails, hiddenFields) {
+  var expanded = Boolean(expandedDetails[detailKey(index)]);
+  return '<article class="aggregate-card" data-major-index="' + index + '">' +
+    majorHeaderHtml(aggregate) +
+    yearOverviewHtml(aggregate, years, false, hiddenFields) +
+    '<div class="aggregate-detail-action">' + detailButtonHtml(index, '查看院校详情', expanded) + '</div>' +
+    '<div class="aggregate-major-detail" data-major-detail="' + index + '">' +
+    (expanded ? buildExpandedMajorHtml(aggregate, years, hiddenFields) : '') + '</div></article>';
 }
 
 function selectedYearsLabel(years, metadata) {
@@ -76,41 +77,26 @@ function toolbarHtml(model, metadata) {
     '</div>';
 }
 
-function tableHeaderHtml(years) {
-  return '<thead><tr><th>本科专业</th><th>公共课</th><th>专业基础课</th>' + years.map(function (year) {
-    return '<th>' + year + ' 省控线</th><th>' + year + ' 院校(公/民)</th><th>' + year + ' 普通计划(公/民)</th><th>' + year + ' 专项计划(公/民)</th><th>' + year + ' 明细</th>';
-  }).join('') + '</tr></thead>';
+function tableHeaderHtml() {
+  return '<thead><tr><th>本科专业</th><th>公共课</th><th>专业基础课</th><th>历年概览</th><th>院校对比</th></tr></thead>';
 }
 
-function tableRowsHtml(aggregates, years, expandedDetails) {
+function tableRowsHtml(aggregates, years, expandedDetails, hiddenFields) {
   return aggregates.map(function (aggregate, index) {
     var major = aggregate.major || {};
     var course = major.professionalCourse || {};
-    var values = years.map(function (year) {
-      var value = (aggregate.years || {})[year] || {};
-      var pub = value.publicSummary || {};
-      var priv = value.privateSummary || {};
-      return '<td>' + esc(value.score == null ? '—' : value.score) + '</td>' +
-        '<td>' + esc((pub.schoolCount || 0) + '/' + (priv.schoolCount || 0)) + '</td>' +
-        '<td>' + esc((pub.ordinaryPlanCount || 0) + '/' + (priv.ordinaryPlanCount || 0)) + '</td>' +
-        '<td>' + esc((pub.povertyPlanCount || 0) + '/' + (priv.povertyPlanCount || 0)) + '</td>' +
-        '<td>' + detailButtonHtml(year, index, '查看院校详情', Boolean(expandedDetails[detailKey(index, year)])) + '</td>';
-    }).join('');
-    var details = years.map(function (year) {
-      var expanded = Boolean(expandedDetails[detailKey(index, year)]);
-      return '<tr class="aggregate-table-detail"' + (expanded ? '' : ' hidden') + '><td colspan="' + (3 + years.length * 5) + '"><div class="aggregate-year-detail" data-year-detail="' + detailKey(index, year) + '">' +
-        detailHtml(aggregate, year, expanded) + '</div></td></tr>';
-    }).join('');
+    var expanded = Boolean(expandedDetails[detailKey(index)]);
     return '<tr class="aggregate-table-row"><td>' + esc(major.majorName || '') + '</td><td>' + esc(major.publicCourse || '—') +
-      '</td><td>' + esc(course.name || '—') + '</td>' + values + '</tr>' +
-      details;
+      '</td><td>' + esc(course.name || '—') + '</td><td>' + yearOverviewHtml(aggregate, years, true, hiddenFields) + '</td><td>' +
+      detailButtonHtml(index, '查看院校详情', expanded) + '</td></tr>' +
+      '<tr class="aggregate-table-detail"' + (expanded ? '' : ' hidden') + '><td colspan="5"><div class="aggregate-major-detail" data-major-detail="' + index + '">' +
+      (expanded ? buildExpandedMajorHtml(aggregate, years, hiddenFields) : '') + '</div></td></tr>';
   }).join('');
 }
 
 function tableHtml(model, metadata) {
-  var years = model.selectedYears || getSortedYears(metadata);
-  return '<div class="aggregate-table-wrap"><table class="aggregate-table">' + tableHeaderHtml(years) +
-    '<tbody>' + tableRowsHtml(model.aggregates || [], years, model.expandedDetails || {}) + '</tbody></table></div>';
+  return '<div class="aggregate-table-wrap"><table class="aggregate-table">' + tableHeaderHtml() +
+    '<tbody>' + tableRowsHtml(model.aggregates, model.selectedYears || getSortedYears(metadata), model.expandedDetails, model.hiddenFields) + '</tbody></table></div>';
 }
 
 export function buildYearDialogHtml(metadata, selectedYears) {
@@ -131,53 +117,55 @@ export function buildYearDialogHtml(metadata, selectedYears) {
 export function buildResultWorkspaceHtml(model, metadata) {
   var viewModel = buildResultViewModel(model, metadata);
   if (!viewModel.aggregates.length) return statusHtml(viewModel);
-  var content = viewModel.resultLayout === 'table' ? tableHtml(viewModel, metadata) : '<div class="aggregate-list">' + viewModel.aggregates.map(function (aggregate, index) {
-    return majorSummaryHtml(aggregate, viewModel.selectedYears, index, viewModel.expandedDetails);
-  }).join('') + '</div>';
+  var content = viewModel.resultLayout === 'table'
+    ? tableHtml(viewModel, metadata)
+    : '<div class="aggregate-list">' + viewModel.aggregates.map(function (aggregate, index) {
+      return majorSummaryHtml(aggregate, viewModel.selectedYears, index, viewModel.expandedDetails, viewModel.hiddenFields);
+    }).join('') + '</div>';
   return toolbarHtml(viewModel, metadata) + content + buildYearDialogHtml(metadata, viewModel.selectedYears);
 }
 
-export function buildExpandedYearHtml(aggregate, year) {
-  var yearAggregate = aggregate && aggregate.years && aggregate.years[year];
-  if (!yearAggregate) return '<div class="result-state">该年份数据尚未发布</div>';
-  return '<div class="school-detail-list">' + (yearAggregate.schools || []).map(buildSchoolDetailHtml).join('') + '</div>' +
-    buildScoreSegmentsHtml(yearAggregate.scoreSegments);
+export function buildExpandedMajorHtml(aggregate, years, hiddenFields) {
+  var segments = (years || []).map(function (year) {
+    var yearAggregate = aggregate && aggregate.years && aggregate.years[year];
+    return '<details class="score-segment-year"><summary>' + year + ' 年一分一段</summary>' +
+      buildScoreSegmentsHtml(yearAggregate && yearAggregate.scoreSegments) + '</details>';
+  }).join('');
+  return '<section class="school-comparison"><h4>院校计划对比</h4>' + buildSchoolComparisonHtml(aggregate, years, hiddenFields) +
+    '</section><section class="score-segment-comparison"><h4>一分一段</h4>' + segments + '</section>';
 }
 
-export function toggleYearDetail(root, aggregates, button, expandedDetails) {
-  var majorIndex = Number(button.getAttribute('data-major-index'));
-  var year = Number(button.getAttribute('data-expand-year'));
-  var key = detailKey(majorIndex, year);
-  var holder = root.querySelector('[data-year-detail="' + majorIndex + '-' + year + '"]');
+export function toggleMajorDetail(root, aggregates, button, expandedDetails, years, hiddenFields) {
+  var majorIndex = Number(button.getAttribute('data-expand-major'));
+  var key = detailKey(majorIndex);
+  var holder = root.querySelector('[data-major-detail="' + majorIndex + '"]');
   if (!holder || !expandedDetails) return false;
   var opening = !expandedDetails[key];
   if (opening) expandedDetails[key] = true;
   else delete expandedDetails[key];
-  holder.innerHTML = opening ? buildExpandedYearHtml(aggregates[majorIndex], year) : '';
+  holder.innerHTML = opening ? buildExpandedMajorHtml(aggregates[majorIndex], years, hiddenFields) : '';
   var detailRow = typeof holder.closest === 'function' ? holder.closest('.aggregate-table-detail') : null;
   if (detailRow) detailRow.hidden = !opening;
-  button.textContent = opening ? '收起详情' : (button.dataset.expandLabel || '展开院校与分数段');
+  button.textContent = opening ? '收起院校详情' : (button.dataset.expandLabel || '查看院校详情');
   button.setAttribute('aria-expanded', String(opening));
   return opening;
 }
 
 function resultSignature(model) {
-  var aggregateIds = (model.aggregates || []).map(function (aggregate) {
+  return model.selectedYears.join(',') + '|' + model.aggregates.map(function (aggregate) {
     var major = aggregate.major || {};
     return major.majorId || major.majorCode || major.majorName || '';
-  });
-  return model.selectedYears.join(',') + '|' + aggregateIds.join('|');
+  }).join('|');
 }
 
 function getResultViewState(root, model) {
   var state = resultViewStates.get(root);
   var signature = resultSignature(model);
-  var isTransientLoading = model.status === 'loading';
-  if (!state || (!isTransientLoading && state.signature !== signature)) {
+  if (!state || (model.status !== 'loading' && state.signature !== signature)) {
     state = { signature: signature, expandedDetails: {} };
     resultViewStates.set(root, state);
   }
-  if (!isTransientLoading) state.signature = signature;
+  if (model.status !== 'loading') state.signature = signature;
   return state;
 }
 
@@ -207,9 +195,7 @@ function applyYearPreset(root, metadata, preset) {
 function applySelectedYears(root, dispatch) {
   var dialog = root.querySelector('.year-selection-dialog');
   if (!dialog) return;
-  var years = Array.from(dialog.querySelectorAll('input[name="selected-year"]:checked')).map(function (input) {
-    return Number(input.value);
-  });
+  var years = Array.from(dialog.querySelectorAll('input[name="selected-year"]:checked')).map(function (input) { return Number(input.value); });
   var error = dialog.querySelector('.year-selection-error');
   if (!years.length) {
     if (error) error.textContent = '请至少选择一个年份。';
@@ -226,23 +212,12 @@ function handleResultClick(root, model, metadata, dispatch, event, expandedDetai
     if (dispatch) dispatch({ type: 'SET_RESULT_LAYOUT', resultLayout: layout.dataset.resultLayout });
     return;
   }
-  var yearAction = within(root, event.target, '[data-result-action="years"]');
-  if (yearAction) {
-    openYearDialog(root);
-    return;
-  }
+  if (within(root, event.target, '[data-result-action="years"]')) return openYearDialog(root);
   var preset = within(root, event.target, '[data-year-select]');
-  if (preset) {
-    applyYearPreset(root, metadata, preset.dataset.yearSelect);
-    return;
-  }
-  var apply = within(root, event.target, '[data-year-apply]');
-  if (apply) {
-    applySelectedYears(root, dispatch);
-    return;
-  }
-  var detailButton = within(root, event.target, '[data-expand-year]');
-  if (detailButton) toggleYearDetail(root, model.aggregates || [], detailButton, expandedDetails);
+  if (preset) return applyYearPreset(root, metadata, preset.dataset.yearSelect);
+  if (within(root, event.target, '[data-year-apply]')) return applySelectedYears(root, dispatch);
+  var detailButton = within(root, event.target, '[data-expand-major]');
+  if (detailButton) toggleMajorDetail(root, model.aggregates, detailButton, expandedDetails, model.selectedYears, model.hiddenFields);
 }
 
 export function renderResultWorkspace(root, model, metadata, dispatch) {
@@ -250,7 +225,5 @@ export function renderResultWorkspace(root, model, metadata, dispatch) {
   var viewState = getResultViewState(root, viewModel);
   viewModel = { ...viewModel, expandedDetails: viewState.expandedDetails };
   root.innerHTML = buildResultWorkspaceHtml(viewModel, metadata);
-  root.onclick = function (event) {
-    handleResultClick(root, viewModel, metadata, dispatch, event, viewState.expandedDetails);
-  };
+  root.onclick = function (event) { handleResultClick(root, viewModel, metadata, dispatch, event, viewState.expandedDetails); };
 }

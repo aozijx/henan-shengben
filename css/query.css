@@ -46,29 +46,50 @@
 #view-query .preview-section{order:7;}
 #view-query .export-actions{order:8;}
 
-.aggregate-list{display:grid;gap:14px;}
+.aggregate-list{display:grid;gap:16px;}
 .aggregate-card{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden;}
 .aggregate-card>header{padding:14px 16px;border-bottom:1px solid var(--line);}
 .aggregate-card h3,.aggregate-card h4,.aggregate-card h5{margin:0;}
 .aggregate-card header p{margin:6px 0 0;color:var(--muted);font-size:13px;}
-.aggregate-years{display:grid;gap:0;overflow-x:auto;}
-.aggregate-year{min-width:680px;padding:12px 16px;border-bottom:1px solid var(--line);}
-.aggregate-year:last-child{border-bottom:0;}
+.year-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);}
+.year-overview-item{min-width:0;padding:12px 16px;background:var(--card);}
+.year-overview-item h4{font-size:13px;color:var(--blue-deep);font-variant-numeric:tabular-nums;}
+.year-overview-compact{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;background:none;min-width:360px;}
+.year-overview-compact .year-overview-item{padding:0;background:none;}
+.year-overview-compact .year-overview-item h4{margin-bottom:4px;font-size:12px;}
 .year-summary{display:flex;flex-wrap:wrap;gap:7px 14px;margin:8px 0;font-size:13px;}
+.year-overview-compact .year-summary{display:grid;gap:3px;margin:0;font-size:12px;}
 .year-score,.year-rank{font-weight:700;}
 .year-kind-public{color:var(--blue-deep);}
 .year-kind-private{color:var(--min-fg);}
-.aggregate-year button{min-height:34px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-2);color:var(--ink);cursor:pointer;}
-.school-detail-list{display:grid;gap:8px;margin-top:10px;}
-.school-detail{padding:10px 12px;border-radius:8px;background:var(--surface-2);}
-.school-detail h5 span{font-weight:400;color:var(--muted);}
-.school-detail dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 10px;margin:8px 0 0;font-size:12px;}
-.school-detail dt{color:var(--muted);}
-.school-detail dd{margin:0;}
+.aggregate-detail-action{padding:12px 16px;border-top:1px solid var(--line);}
+.aggregate-detail-action button{min-height:34px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-2);color:var(--ink);cursor:pointer;font:inherit;}
+.aggregate-major-detail{background:var(--surface-3);}
+.school-comparison,.score-segment-comparison{padding:16px;}
+.school-comparison>h4,.score-segment-comparison>h4{margin:0 0 10px;font-size:14px;}
+.school-comparison-list{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));}
+.school-comparison-card{display:grid;gap:1px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line);}
+.school-detail{padding:14px 16px;background:var(--card);min-width:0;}
+.school-detail>header{display:flex;align-items:center;flex-wrap:wrap;gap:7px;border:0;padding:0;}
+.school-detail h5{font-size:15px;}
+.school-year-badge,.school-type{display:inline-block;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;line-height:1.5;}
+.school-year-badge{background:var(--blue-soft);color:var(--blue-deep);}
+.school-type{background:var(--surface-2);color:var(--muted);}
+.school-plan-summary{margin:8px 0;color:var(--muted);font-size:13px;}
+.school-plan-record{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;}
+.school-plan-record-title{font-size:12px;font-weight:700;color:var(--blue-deep);margin-bottom:8px;}
+.school-plan-record dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin:0;font-size:12px;}
+.school-plan-record dt{color:var(--muted);font-size:11px;}
+.school-plan-record dd{margin:2px 0 0;overflow-wrap:anywhere;}
+.school-plan-record a{color:var(--blue-deep);}
+.school-detail-empty{margin:0;color:var(--muted);font-size:12px;}
 .score-segments{margin-top:12px;}
 .score-segments-scroll{max-height:320px;overflow:auto;}
 .score-segments table{width:100%;border-collapse:collapse;}
 .score-segments th,.score-segments td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;}
+.score-segment-year{border:1px solid var(--line);border-radius:8px;background:var(--card);margin-top:8px;overflow:hidden;}
+.score-segment-year>summary{padding:9px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--blue-deep);}
+.score-segment-year .score-segments{padding:0 12px 12px;margin:0;}
 .result-state{padding:28px 16px;text-align:center;color:var(--muted);}
 .result-toolbar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:0 0 10px;}
 .result-toolbar button,.aggregate-table button{
@@ -78,12 +99,13 @@
 .result-toolbar [data-result-action="years"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-deep);font-weight:600;}
 .result-toolbar button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-deep);}
 .result-layout-label{font-size:12px;color:var(--muted);margin-left:4px;}
-.aggregate-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);}
-.aggregate-table{min-width:980px;width:100%;border-collapse:collapse;table-layout:auto;}
+.aggregate-table-wrap{max-height:min(72vh,760px);overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);}
+.aggregate-table{min-width:1040px;width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;}
 .aggregate-table th,.aggregate-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;}
-.aggregate-table th{background:var(--surface-2);color:var(--muted);font-size:12px;position:sticky;top:0;z-index:1;}
+.aggregate-table th{background:var(--surface-2);color:var(--muted);font-size:12px;position:sticky;top:0;z-index:2;box-shadow:inset 0 -1px 0 var(--line-strong);}
+.aggregate-table td:nth-child(4){white-space:normal;min-width:430px;}
 .aggregate-table-detail td{padding:0;background:var(--surface-3);}
-.aggregate-table-detail .aggregate-year-detail:not(:empty){padding:10px 12px;}
+.aggregate-table-detail .aggregate-major-detail:not(:empty){padding:0;}
 .year-selection-dialog{width:min(420px,calc(100vw - 32px));border:1px solid var(--line-strong);border-radius:12px;background:var(--card);color:var(--ink);box-shadow:var(--shadow);}
 .year-selection-dialog::backdrop{background:rgb(0 0 0 / .35);}
 .year-selection-dialog h2{margin:0;font-size:18px;}
