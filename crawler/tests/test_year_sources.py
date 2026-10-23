@@ -36,6 +36,22 @@ class FakeSession:
         raise AssertionError(f'unexpected URL: {url}')
 
 
+class SearchSession(FakeSession):
+    def __init__(self, search_html, pages=None, blocked_url=None):
+        self.search_html = search_html
+        self.pages = pages or {}
+        self.blocked_url = blocked_url
+
+    def get(self, url, timeout=60):
+        if url == 'https://www.haeea.cn/search':
+            return FakeResponse(self.search_html)
+        if url == self.blocked_url:
+            raise RuntimeError('HTTP 412')
+        if url in self.pages:
+            return FakeResponse(self.pages[url])
+        return super().get(url, timeout)
+
+
 class YearSourcesTests(unittest.TestCase):
     def setUp(self):
         self.seed = {
@@ -79,6 +95,57 @@ class YearSourcesTests(unittest.TestCase):
     def test_master_type_marker_matches_committed_official_2026_pdf(self):
         source_pdf = Path(__file__).resolve().parents[2] / 'data/招生高校及专业/原始PDF/招生高校及专业_2026.pdf'
         validate_attachment('master', 2026, source_pdf.read_bytes())
+
+    def test_accepts_the_user_supplied_2026_official_page_and_scoreline_pdf_urls(self):
+        seed = {
+            'year': 2026,
+            'sources': {
+                'scoreSegments': {'pageUrl': 'https://www.haeea.cn/a/202604/43664_744774c0.shtml'},
+                'scorelines': {'attachmentUrl': 'https://www.haeea.cn/attach/file/20260409/20260409072504_5957_16c52a46.pdf'},
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'year-links.json'
+            path.write_text(json.dumps(seed), encoding='utf-8')
+            self.assertEqual(load_year_links(path), seed)
+
+    def test_discovers_one_unique_missing_role_and_keeps_year_specific_paths(self):
+        seed = dict(self.seed, searchPageUrl='https://www.haeea.cn/search', sources=dict(self.seed['sources']))
+        seed['sources']['scorelines'] = dict(seed['sources']['scorelines'])
+        seed['sources']['scorelines'].pop('pageUrl')
+        candidate = 'https://www.haeea.cn/a/scorelines-2027'
+        session = SearchSession(
+            f'<div><a href="{candidate}">2027年专升本招生录取控制分数线</a></div>',
+            pages={candidate: '2027 录取控制分数线'},
+        )
+        resolved = resolve_year_sources(seed, session)
+        rows, _target = registry_rows_for_year(resolved)
+        self.assertEqual(resolved['pages']['scorelines'], candidate)
+        self.assertTrue(all(row['year'] == 2027 for row in rows))
+        self.assertTrue(all('_2027.' in row['outputPath'] for row in rows))
+
+    def test_rejects_ambiguous_search_candidates_for_same_year_and_role(self):
+        seed = dict(self.seed, searchPageUrl='https://www.haeea.cn/search', sources=dict(self.seed['sources']))
+        seed['sources']['scorelines'] = dict(seed['sources']['scorelines'])
+        seed['sources']['scorelines'].pop('pageUrl')
+        html = ('<div><a href="/a/first">2027年招生录取控制分数线</a></div>'
+                '<div><a href="/a/second">2027年招生录取控制分数线</a></div>')
+        with self.assertRaisesRegex(SourceResolutionError, 'expected one official page, found 2'):
+            resolve_year_sources(seed, SearchSession(html))
+
+    def test_rejects_missing_required_role_and_html_412(self):
+        seed = dict(self.seed, sources={k: v for k, v in self.seed['sources'].items() if k != 'master'})
+        with self.assertRaisesRegex(SourceResolutionError, 'master'):
+            resolve_year_sources(seed, FakeSession())
+        with self.assertRaisesRegex(RuntimeError, '412'):
+            resolve_year_sources(self.seed, SearchSession('', blocked_url=self.seed['sources']['scorelines']['pageUrl']))
+
+    def test_rejects_explicit_page_that_has_wrong_year_or_type(self):
+        seed = dict(self.seed, sources=dict(self.seed['sources']))
+        seed['sources']['scorelines'] = dict(seed['sources']['scorelines'])
+        seed['sources']['scorelines']['pageUrl'] = self.seed['sources']['scoreSegments']['pageUrl']
+        with self.assertRaisesRegex(SourceResolutionError, 'does not confirm the year and source type'):
+            resolve_year_sources(seed, FakeSession())
 
 
 if __name__ == '__main__':

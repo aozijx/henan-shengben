@@ -1,16 +1,19 @@
 import json
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
 
-from crawler.download import download_entry, download_targets
+from crawler.download import download_entry, download_manifest, download_targets
 
 
 class Response:
-    def __init__(self, content, status_code=200, content_type='application/pdf'):
+    def __init__(self, content, status_code=200, content_type='application/pdf', url=None):
         self.content = content
         self.status_code = status_code
         self.headers = {'content-type': content_type}
+        if url is not None:
+            self.url = url
 
     def raise_for_status(self):
         if self.status_code >= 400:
@@ -34,7 +37,60 @@ class RecordingSession:
         return Response(b'%PDF-1.4 test')
 
 
+class CountingSession(Session):
+    def __init__(self, response):
+        super().__init__(response)
+        self.calls = 0
+
+    def get(self, *_args, **_kwargs):
+        self.calls += 1
+        return self.response
+
+
 class DownloadTest(unittest.TestCase):
+    def test_rejects_official_allowlist_escape_before_and_after_redirect(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / '01.pdf'
+            target.write_bytes(b'%PDF-existing')
+            unused = CountingSession(Response(b'%PDF-1.4 test'))
+            result = download_entry('https://evil.example/01.pdf', target, unused)
+            self.assertEqual(result['downloadStatus'], 'failed')
+            self.assertEqual(unused.calls, 0)
+            offsite_redirect = CountingSession(Response(
+                b'%PDF-1.4 test', url='https://evil.example/01.pdf'))
+            result = download_entry('https://www.haeea.cn/01.pdf', target, offsite_redirect)
+            self.assertEqual(result['downloadStatus'], 'failed')
+            self.assertEqual(target.read_bytes(), b'%PDF-existing')
+            self.assertNotIn('sha256', result)
+            self.assertNotIn('finalUrl', result)
+
+    def test_records_final_official_redirect_url_only_for_successful_pdf(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / '01.pdf'
+            response = Response(b'%PDF-1.4 test', url='https://news.haeea.cn/redirected.pdf')
+            result = download_entry('https://www.haeea.cn/01.pdf', target, Session(response))
+            self.assertEqual(result['downloadStatus'], 'downloaded')
+            self.assertEqual(result['finalUrl'], response.url)
+            self.assertEqual(result['sha256'], hashlib.sha256(response.content).hexdigest())
+
+    def test_manifest_rejects_traversal_and_duplicate_destinations_before_download(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / 'data'
+            root.mkdir()
+            manifest = root / 'manifest.json'
+            session = CountingSession(Response(b'%PDF-1.4 test'))
+            manifest.write_text(json.dumps({'entries': [
+                {'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '../outside.pdf'}]}), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'escapes data root'):
+                download_manifest(manifest, root, session)
+            self.assertEqual(session.calls, 0)
+            manifest.write_text(json.dumps({'entries': [
+                {'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '2027/a.pdf'},
+                {'pdfUrl': 'https://www.haeea.cn/b.pdf', 'localPath': '2027/a.pdf'}]}), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'duplicate manifest destination'):
+                download_manifest(manifest, root, session)
+            self.assertEqual(session.calls, 0)
+
     def test_downloads_pdf_atomically_and_skips_matching_hash(self):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / '01.pdf'

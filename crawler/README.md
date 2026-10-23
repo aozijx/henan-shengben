@@ -1,6 +1,6 @@
 # 官方一分一段采集
 
-爬虫从 `data/source-registry.json` 的 `crawlTargets` 读取年份、发现页、官方来源页、清单路径和下载目录。教育网镜像页仅用于发现链接；只有 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 官方域名的 PDF 会进入清单。
+爬虫从 `data/source-registry.json` 的 `crawlTargets` 读取年份、发现页、官方来源页、清单路径和下载目录。教育网镜像页仅用于发现链接；PDF 下载仅允许 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和已验证的政府附件域名 `xcoss.henan.gov.cn`。
 
 ```powershell
 pip install -r crawler/requirements.txt

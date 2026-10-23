@@ -48,13 +48,18 @@ def download_manifest(manifest_path: Path, data_root: Path, session):
     document = json.loads(manifest_path.read_text(encoding='utf-8'))
     counts = {'downloaded': 0, 'skipped': 0, 'failed': 0}
     destinations = set()
+    targets = []
     for entry in document['entries']:
         target = (data_root / entry['localPath']).resolve()
         if not target.is_relative_to(data_root.resolve()):
             raise ValueError(f"manifest path escapes data root: {entry['localPath']}")
         if target in destinations:
             raise ValueError(f"duplicate manifest destination: {entry['localPath']}")
+        if not is_official_pdf_url(entry['pdfUrl']):
+            raise ValueError(f"manifest PDF URL is not on the official host allowlist: {entry['pdfUrl']}")
         destinations.add(target)
+        targets.append(target)
+    for entry, target in zip(document['entries'], targets):
         result = download_entry(entry['pdfUrl'], target, session, entry.get('sha256'))
         entry.update(result)
         counts[result['downloadStatus']] += 1

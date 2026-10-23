@@ -54,11 +54,11 @@
 - Produces: `resolve_year_sources(seed: dict, session) -> dict` (one official page per required type, discovered official attachments and provenance; raises `DiscoveryBlockedError` on missing/ambiguous source).
 - Produces: `registry_rows_for_year(resolved: dict) -> tuple[list[dict], dict]` (existing `sources` rows including `招生高校及专业`, plus one score-segments `crawlTargets` row, with conventional year paths and no `expectedCount` guess).
 
-- [ ] **Step 1: Write failing tests** for supplied 2026 seed URLs, exact year/type match, duplicate candidate announcements, missing required links, the official `xcoss.henan.gov.cn` attachment host, and HTML anti-bot page. Assert that ambiguous/missing cases raise and that registry rows have year-specific mapping and conventional output paths.
-- [ ] **Step 2: Run `python -m unittest crawler.tests.test_year_sources -v`**; expect the new interfaces to be unavailable.
-- [ ] **Step 3: Implement seed schema and source resolution.** A declared exact page wins only after official-host/year/type validation; search may supply a candidate only when it is unique. Parse official page links by their visible title and URL, never by filename alone; treat unsupported HTML-only tables or changed attachment formats as a precise failure pending parser support. Reuse `discover_year` for score-segment attachments; add an explicit fetched-page base URL for direct official pages, while leaving the legacy registry crawler's current behavior compatible. Mirror-relative URLs alone cannot establish an official attachment.
-- [ ] **Step 4: Run the task tests and existing `crawler.tests.test_discover`**; expect all to pass.
-- [ ] **Step 5: Commit exact Task 1 files** with the tests and a short source contract note in `crawler/README.md`.
+- [x] **Step 1: Add acceptance tests** for the user-supplied 2026 official page/PDF URLs, exact year/type match, unique and duplicate search candidates, missing roles, `xcoss.henan.gov.cn`, and HTTP 412. Assert registry rows use year-specific mappings and conventional paths.
+- [x] **Step 2: Run `python -m unittest crawler.tests.test_year_sources -v`**; resolver interfaces pre-existed, so tests verified their acceptance behavior.
+- [x] **Step 3: Implement source resolution** with official-host/year/type validation, unique-candidate discovery and explicit failure for unsupported/ambiguous sources; preserve the legacy registry crawler.
+- [x] **Step 4: Run the task tests and existing `crawler.tests.test_discover`**; all pass.
+- [x] **Step 5: Commit exact Task 1 acceptance tests**; the source contract is documented in `crawler/README.md`.
 
 ### Task 2: Safe attachment download and provenance
 
@@ -72,11 +72,11 @@
 - Produces: `download_entry(url: str, target: Path, session, expected_sha256: str | None = None) -> dict` retaining current status/hash/bytes keys, adding final URL for provenance.
 - Produces: `download_manifest(manifest_path: Path, data_root: Path, session) -> dict[str, int]` with path containment and duplicate-destination checks.
 
-- [ ] **Step 1: Write failing tests** for offsite redirect, on-site redirect, invalid PDF/HTML response, traversal path, duplicate local path and failed download preserving an existing file. Assert final URL/hash are recorded only on successful downloads.
-- [ ] **Step 2: Run `python -m unittest crawler.tests.test_download -v`**; expect the new safety cases to fail.
-- [ ] **Step 3: Implement URL checks before and after redirect, resolved-path containment, duplicate detection and atomic replacement.** Keep the current registry-driven year selection and return a nonzero CLI exit on any failed entry.
-- [ ] **Step 4: Run `python -m unittest discover -s crawler/tests -v`**; expect all to pass.
-- [ ] **Step 5: Commit exact Task 2 files** with tests.
+- [x] **Step 1: Write failing tests** for offsite/on-site redirect, invalid PDF/HTML, traversal, duplicate destination preflight and failed downloads preserving files; only successful downloads retain final URL/hash.
+- [x] **Step 2: Run `python -m unittest crawler.tests.test_download -v`**; duplicate destinations initially triggered a download before rejection, and the test failed as expected.
+- [x] **Step 3: Implement URL checks before/after redirect, path containment, full-manifest duplicate/URL preflight and atomic replacement.** Keep registry-driven selection and a nonzero CLI exit on failure.
+- [x] **Step 4: Run `python -m unittest discover -s crawler/tests -v`**; all pass.
+- [x] **Step 5: Commit exact Task 2 code and tests.**
 
 ### Task 3: Extract a brand-new registered year without overwriting old data
 
@@ -89,11 +89,11 @@
 - Produces: `extract_registered_year(registry: dict, data_root: Path, year: int, *, write: bool, parser: str | None = None) -> list[dict]` using `extract_entry` and returning parser, output path, row count and diff status per source.
 - CLI delegates to the function, preserving `--year`, `--parser` and `--write` behavior for established years.
 
-- [ ] **Step 1: Write failing tests** for new-year missing output JSON (permitted only with `write=True`), existing-year dry-run diff, wrong-year registry rows ignored, optional `expectedCount`, and refusal to overwrite an existing output in the new-year ingestion path.
-- [ ] **Step 2: Run `python -m unittest convert.tests.test_extract_cli -v`**; expect new-year extraction to fail at `read_json(output_path)`.
-- [ ] **Step 3: Factor the extraction loop into `extract_registered_year`, read existing JSON only if present, and keep the current human-readable CLI diff.** `ingest_year` will call this against staging, so existing outputs in the real data root are never written by default.
-- [ ] **Step 4: Run `python -m unittest discover -s convert/tests -v`**; expect all to pass.
-- [ ] **Step 5: Commit exact Task 3 files** with documentation.
+- [x] **Step 1: Add tests** for new-year missing output (write-only creation), existing-year dry-run diff, wrong-year rows ignored, optional `expectedCount`, and no-overwrite in the ingestion path.
+- [x] **Step 2: Run `python -m unittest convert.tests.test_extract_cli -v`**; the extraction interface pre-existed, so tests verify its behavior rather than expecting it to be unavailable.
+- [x] **Step 3: Factor the extraction loop into `extract_registered_year`; it reads existing JSON only if present and preserves the CLI diff.** Staged ingestion does not write real-root outputs before validation.
+- [x] **Step 4: Run `python -m unittest discover -s convert/tests -v`**; all pass.
+- [x] **Step 5: Commit exact Task 3 acceptance tests**; command and rerun procedure are documented in `convert/README.md`.
 
 ### Task 4: Enforce complete yearly coverage before catalog publication
 
@@ -141,11 +141,11 @@
 - Consumes Task 5 `--check` mode for one changed `data/year-links/YYYY.json`.
 - Produces an uploaded source/coverage/diff artifact for PR review; the workflow does not commit or merge data.
 
-- [ ] **Step 1: Write failing workflow contract tests** asserting the workflow uses read-only permissions, targets link-file changes, runs `python -m convert.ingest_year --check`, uploads the report even on a failed ingest, and has no push/merge step.
-- [ ] **Step 2: Run `python -m unittest crawler.tests.test_yearly_workflow -v`**; expect missing workflow failure.
-- [ ] **Step 3: Add the workflow with pinned Python/Node setup and dependency installation, run Python/JS tests plus the local check command, and upload review artifacts.** Describe that official-site 403/412 is a reviewable failure, not a fallback to unverified mirrors. Generated-data commits remain a human-reviewed local step until CI network reliability and bot permissions are proven.
-- [ ] **Step 4: Run the workflow contract test and full local test suites; validate workflow YAML syntax with the repository's available validator if present.**
-- [ ] **Step 5: Commit exact workflow/test/documentation files.**
+- [x] **Step 1: Add workflow contract tests** for read-only permissions, seed-change trigger, `--check`, always-uploaded reports, and no publish step.
+- [x] **Step 2: Run `python -m unittest crawler.tests.test_yearly_workflow -v`**; workflow already existed, and contract tests passed.
+- [x] **Step 3: Keep the review-only workflow** with Python 3.12/Node 22 setup, local validation, artifact upload and explicit 403/412 failure behavior. Generated-data commits remain human-reviewed.
+- [x] **Step 4: Run workflow contract and full local suites; parse workflow YAML with PyYAML.**
+- [x] **Step 5: Commit exact workflow acceptance tests; workflow and procedure are documented.**
 
 ### Task 7: Include the official admissions master list in each new-year ingestion
 
