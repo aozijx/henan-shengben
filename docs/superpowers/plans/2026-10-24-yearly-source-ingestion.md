@@ -107,7 +107,7 @@
 
 - [x] **Step 1: Write failing tests** proving a missing segment for a scoreline, duplicate manifest major code, mismatched manifest/extraction/report counts, and an undocumented official-empty exception reject publication without changing metadata. Keep the valid synthetic 2027 and old-year mapping-reference cases passing; also prove an unchanged previously published legacy snapshot is retained while any changed input is revalidated.
 - [x] **Step 2: Run `python -m unittest convert.tests.test_refresh_catalog -v`**; duplicate-manifest test failed before implementation and passed after.
-- [x] **Step 3: Extract `validate_year_sources(...)` and require `scoreline_codes == segment_codes` except explicit, evidenced official-empty codes; check manifest completeness and report totals.** Preserve the existing historical 2026 `N8` exception (official empty but absent from scorelines); exceptions are year-scoped records, not global code allowlists.
+- [x] **Step 3: Extract `validate_year_sources(...)` and require `scoreline_codes == segment_codes` except explicit, evidenced official-empty codes; check manifest completeness and report totals.** Preserve the existing historical 2026 `N8` exception (official empty but absent from scorelines); exceptions are year-scoped records, not global code allowlists. Test the documented `99`/`A1` code alias and official parenthetical name variant.
 - [x] **Step 4: Run `python -m unittest convert.tests.test_refresh_catalog -v`** and full convert tests; all pass.
 - [x] **Step 5: Commit exact Task 4 files** with tests.
 
@@ -170,5 +170,5 @@
 - [x] `python -m unittest discover -s convert/tests -v`
 - [x] `npm test` (133/133; after `npm ci` installed locked dev dependencies)
 - [x] Run synthetic 2027 end-to-end tests; inspect source hashes, yearly mapping, coverage report, analytics/index/shards and metadata diff.
-- [ ] Run the full 2026 offline PDF-to-OCR replay (the 186-PDF attempt was interrupted); catalog-only replay from committed normalized data was successful and preserved `yearSources`.
+- [x] Run the full 2026 offline PDF-to-OCR replay in batches; 186/186 manifest entries processed (185 `ok`, N8 `needs-review`), all 185 published segment arrays match canonical JSON, strict validation passes, and catalog replay preserves `yearSources`.
 - [x] Check `git diff --check`, exact staged paths and existing-year file hashes; do not claim live official-site ingestion without a successful network run.

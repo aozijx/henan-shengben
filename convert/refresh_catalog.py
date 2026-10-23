@@ -166,8 +166,7 @@ def validate_year_sources(year: int, files: dict, canonical: dict, report: dict,
     for row in scores:
         code = str(row['专业代号'])
         expected_name = _normalized_major_name(row['专业名称'])
-        if expected_name not in mapping_names.get(code, set()) and not (
-                plan_names.get(code, set()) & mapping_names.get(code, set())):
+        if not _major_name_matches(code, expected_name, mapping_names, plan_names):
             raise ValueError(f'{year}: major name mismatch across mapping, scorelines and plans for {code}')
     if files.get('mappingReferenceYear', year) == year and not (score_codes | plan_codes) <= mapping_codes | {'A1'}:
         raise ValueError(f'{year}: yearly mapping is missing published major codes')
@@ -209,6 +208,29 @@ def _major_rows(mapping):
 def _normalized_major_name(value):
     name = ''.join(str(value or '').split()).replace('（', '(').replace('）', ')')
     return name.removesuffix('(本科层次职业教育专业)')
+
+
+def _major_name_aliases(code: str, value: str) -> set[str]:
+    name = _normalized_major_name(value)
+    aliases = {name}
+    if code in ('99', 'A1') and '(' in name:
+        aliases.add(name.split('(', 1)[0])
+    return aliases
+
+
+def _major_name_matches(code: str, expected_name: str, mapping_names: dict, plan_names: dict) -> bool:
+    related_codes = {code}
+    if code in ('99', 'A1'):
+        related_codes.update(('99', 'A1'))
+    mapped_names = set().union(*(
+        set().union(*(_major_name_aliases(code, name) for name in mapping_names.get(candidate, set())))
+        for candidate in related_codes
+    ))
+    planned_names = set().union(*(
+        set().union(*(_major_name_aliases(code, name) for name in plan_names.get(candidate, set())))
+        for candidate in related_codes
+    ))
+    return bool(_major_name_aliases(code, expected_name) & mapped_names) or bool(mapped_names & planned_names)
 
 
 def _matching_plan_rows(major, plan_by_code, plans):

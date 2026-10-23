@@ -5,12 +5,18 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.refresh_catalog import _analytics, _source_map, refresh_catalog, validate_year_sources
+from convert.refresh_catalog import _analytics, _major_name_matches, _source_map, refresh_catalog, validate_year_sources
 
 
 class RefreshCatalogTest(unittest.TestCase):
     def test_year_validator_is_public_for_ingestion_and_tools(self):
         self.assertTrue(callable(validate_year_sources))
+
+    def test_special_99_a1_code_alias_accepts_official_parenthetical_name(self):
+        mapping_names = {'99': {'财务管理', '会计学'}}
+        plan_names = {'A1': {'财务管理'}}
+        self.assertTrue(_major_name_matches(
+            'A1', '财务管理（含大数据与财务管理）', mapping_names, plan_names))
 
     def test_unchanged_published_legacy_coverage_gap_is_retained_but_changed_input_is_revalidated(self):
         with tempfile.TemporaryDirectory() as folder:
