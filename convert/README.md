@@ -20,6 +20,29 @@ python -m unittest discover -s convert/tests -v
 异常报告写入 `data/reports/异常数据_<年份>.json`，人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖；转换器仅应用其中 `status: confirmed` 的修正。
 
 归一化结果写入注册表声明的 `normalizedPath`，转换报告写入 `conversionReportPath`。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业；官方空表通过人工文件的 `official-empty` 状态显式记录，但不伪造分数段。
+
+## 新年度链接导入
+
+先创建 `data/year-links/YYYY.json`。`sources` 按以下六种角色声明官方公告页；每项可同时给出 `pageUrl` 和精确 `attachmentUrl`。一分一段的 PDF 仍由其公告页自动发现，其他来源在页面附件唯一时可省略精确链接。
+
+```json
+{
+  "year": 2027,
+  "searchPageUrl": "https://www.haeea.cn/govsearch?words=专升本&page=1",
+  "sources": {
+    "scoreSegments": {"pageUrl": "https://www.haeea.cn/..."},
+    "scorelines": {"pageUrl": "https://www.haeea.cn/...", "attachmentUrl": "https://www.haeea.cn/...pdf"},
+    "plans": {"pageUrl": "https://www.haeea.cn/..."},
+    "mappingCodeTable": {"pageUrl": "https://www.haeea.cn/..."},
+    "mappingOverview": {"pageUrl": "https://www.haeea.cn/..."},
+    "master": {"pageUrl": "https://www.haeea.cn/...", "attachmentUrl": "https://xcoss.henan.gov.cn/...pdf"}
+  }
+}
+```
+
+先执行 `python -m convert.ingest_year --seed data/year-links/YYYY.json --check`，检查 JSON 报告中的来源 URL/最终 URL/哈希、转换行数、覆盖情况和 metadata diff。检查模式只在临时目录生成结果，不写入 `data/` 或 metadata。人工确认后，去掉 `--check` 发布；已有年份会被拒绝，不能用此命令重跑覆盖。若发现官方网页返回 403/412、来源不唯一或缺附件，导入会失败且保留当前 metadata；不要用学校转载链接绕过官方来源校验。可先补齐或修正官方链接种子，再重试。当前命令要求官方公告页可读取；直接本地 PDF 离线导入尚未支持。
+
+PDF/OCR 产生 `needs-review` 或字段冲突时，不发布。按 `data/reports/README.md` 审阅异常，并仅在 `data/一分一段/人工修正.json` 中添加有官方依据的确认修正，然后重新执行 `--check`。成功发布后，生成物按版本不可变；若需回滚，使用版本控制回退该年度发布提交（包括 metadata 和新增数据），不要手工覆盖旧 catalog 或 shard。
 # Automated yearly ingestion
 
 After adding an official source seed at `data/year-links/YYYY.json`, run:

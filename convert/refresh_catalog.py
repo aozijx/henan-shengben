@@ -35,7 +35,21 @@ def _source_path(data_root: Path, relative: str) -> Path:
     return path
 
 
-def _validate_sources(year: int, files: dict, canonical: dict, report: dict, data_root: Path) -> None:
+def _previous_input_hashes(data_root: Path, metadata: dict) -> dict:
+    """Read the prior catalog only when metadata explicitly points to it."""
+    source = metadata.get('catalogSource')
+    if not isinstance(source, str) or not source.startswith('data/'):
+        return {}
+    path = _source_path(data_root, source.removeprefix('data/'))
+    if not path.is_file():
+        return {}
+    catalog = _json(path)
+    hashes = catalog.get('inputSha256', {})
+    return hashes if isinstance(hashes, dict) else {}
+
+
+def validate_year_sources(year: int, files: dict, canonical: dict, report: dict, data_root: Path,
+                          manifest: dict | None = None) -> None:
     for parser, directory in [('mapping', '专业对照'), ('scorelines', '省控线'),
                               ('plans', '招生计划'), ('score-segments', '一分一段')]:
         path = Path(files[parser])
@@ -93,6 +107,42 @@ def _validate_sources(year: int, files: dict, canonical: dict, report: dict, dat
         if (not CODE_RE.fullmatch(str(item.get('majorCode', ''))) or
                 item.get('reason') != 'official-empty' or not str(item.get('evidenceNote', '')).strip()):
             raise ValueError(f'{year}: official-empty exception requires a code and evidence note')
+    manifest_path = segments.get('sourceManifest')
+    if manifest is None and isinstance(manifest_path, str):
+        manifest = _json(_source_path(data_root, manifest_path))
+    if manifest is not None:
+        entries = manifest.get('entries')
+        if manifest.get('year') != year or manifest.get('dataset') != 'score-segments' or not isinstance(entries, list):
+            raise ValueError(f'{year}: invalid score segment source manifest')
+        manifest_codes = [str(item.get('majorCode', '')) for item in entries if isinstance(item, dict)]
+        if len(manifest_codes) != len(entries) or any(not CODE_RE.fullmatch(code) for code in manifest_codes):
+            raise ValueError(f'{year}: invalid source manifest major code')
+        if len(set(manifest_codes)) != len(manifest_codes):
+            raise ValueError(f'{year}: duplicate manifest major code')
+        if any(item.get('year') != year for item in entries):
+            raise ValueError(f'{year}: source manifest year mismatch')
+        if report.get('inputMajorCount') != len(entries):
+            raise ValueError(f'{year}: report major count mismatch with source manifest')
+        if report.get('publishedMajorCount') != len(segment_codes):
+            raise ValueError(f'{year}: report published major count mismatch')
+        if not official_empty_codes <= set(manifest_codes):
+            raise ValueError(f'{year}: official-empty code absent from source manifest')
+        if set(manifest_codes) != segment_codes | official_empty_codes:
+            raise ValueError(f'{year}: source manifest coverage does not match published and official-empty majors')
+        extraction_path = _source_path(data_root, f'一分一段/提取结果/提取结果_{year}.json')
+        extraction = _json(extraction_path)
+        extraction_majors = extraction.get('majors')
+        if (extraction.get('year') != year or extraction.get('dataset') != 'score-segments' or
+                not isinstance(extraction_majors, list) or len(extraction_majors) != len(entries)):
+            raise ValueError(f'{year}: extraction major count mismatch')
+        extraction_by_code = {str(item.get('majorCode', '')): item for item in extraction_majors
+                              if isinstance(item, dict)}
+        if len(extraction_by_code) != len(extraction_majors) or set(extraction_by_code) != set(manifest_codes):
+            raise ValueError(f'{year}: extraction major codes do not match source manifest')
+        extraction_ok = {code for code, item in extraction_by_code.items() if item.get('status') == 'ok'}
+        extraction_review = {code for code, item in extraction_by_code.items() if item.get('status') == 'needs-review'}
+        if extraction_ok != segment_codes or extraction_review != official_empty_codes:
+            raise ValueError(f'{year}: extraction statuses do not match published and official-empty majors')
     missing_segments = score_codes - segment_codes
     if missing_segments - official_empty_codes:
         missing = ', '.join(sorted(missing_segments - official_empty_codes))
@@ -253,6 +303,8 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
             files['mapping'] = f'专业对照/专业对照_{reference_year}.json'
             files['mappingReferenceYear'] = reference_year
     previous = _json(Path(metadata_path)) if Path(metadata_path).is_file() else {}
+    previous_years = {int(item) for item in previous.get('supportedYears', [])}
+    previously_published_inputs = _previous_input_hashes(data_root, previous)
     publish = {}
     input_hashes = {}
     output = {}
@@ -266,12 +318,31 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
             raise ValueError(f'{year}: missing conversion report')
         canonical = {key: _json(_source_path(data_root, files[key])) for key in required}
         report = _json(report_file)
-        _validate_sources(year, files, canonical, report, data_root)
-        input_hashes[str(year)] = {key: hashlib.sha256(_source_path(data_root, files[key]).read_bytes()).hexdigest()
-                                   for key in required}
-        input_hashes[str(year)]['report'] = hashlib.sha256(report_file.read_bytes()).hexdigest()
+        year_hashes = {key: hashlib.sha256(_source_path(data_root, files[key]).read_bytes()).hexdigest()
+                       for key in required}
+        year_hashes['report'] = hashlib.sha256(report_file.read_bytes()).hexdigest()
+        derivation_hashes = dict(year_hashes)
+        manifest_path = canonical['score-segments'].get('sourceManifest')
+        if isinstance(manifest_path, str):
+            year_hashes['manifest'] = hashlib.sha256(_source_path(data_root, manifest_path).read_bytes()).hexdigest()
+            extraction_path = f'一分一段/提取结果/提取结果_{year}.json'
+            year_hashes['extraction'] = hashlib.sha256(_source_path(data_root, extraction_path).read_bytes()).hexdigest()
+        input_hashes[str(year)] = year_hashes
+        previous_year_hashes = previously_published_inputs.get(str(year), {})
+        legacy_hashes_unchanged = (
+            previous_year_hashes == {key: value for key, value in year_hashes.items()
+                                     if key in (*required, 'report')}
+        )
+        unchanged_published_year = (
+            year in previous_years and
+            (previous_year_hashes == year_hashes or legacy_hashes_unchanged)
+        )
+        # Retain previously published legacy inputs as a pinned snapshot. Any changed
+        # or newly added year still must satisfy today's complete validation rules.
+        if not unchanged_published_year:
+            validate_year_sources(year, files, canonical, report, data_root)
         version = hashlib.sha256(json.dumps({'derivationVersion': DERIVATION_VERSION,
-                                             'inputs': input_hashes[str(year)]}, sort_keys=True).encode('utf-8')).hexdigest()[:16]
+                                             'inputs': derivation_hashes}, sort_keys=True).encode('utf-8')).hexdigest()[:16]
         prefix = f'generated/{year}/{version}'
         analytics = _analytics(year, canonical['mapping'], canonical['scorelines'], canonical['plans'])
         index, shards = _shards(year, canonical['score-segments'])

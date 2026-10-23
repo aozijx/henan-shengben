@@ -105,11 +105,11 @@
 - Produces: `validate_year_sources(year: int, files: dict, canonical: dict, report: dict, data_root: Path, manifest: dict | None = None) -> None` by extracting the existing `_validate_sources` logic and strengthening it.
 - `refresh_catalog(...) -> dict` keeps its existing signature and calls that validator; existing `mappingReferences` for 2024/2025 remain valid.
 
-- [ ] **Step 1: Write failing tests** proving a missing segment for a scoreline, duplicate manifest major code, mismatched manifest/extraction/report counts, and an undocumented official-empty exception reject publication without changing metadata. Keep the valid synthetic 2027 and old-year mapping-reference cases passing.
-- [ ] **Step 2: Run `python -m unittest convert.tests.test_refresh_catalog -v`**; expect at least the missing-segment case to fail.
-- [ ] **Step 3: Extract the validator and require `scoreline_codes == segment_codes` except explicit, evidenced official-empty codes; check manifest completeness and report totals where a manifest exists.** Preserve the existing historical 2026 `N8` exception (official empty but absent from scorelines); exceptions are year-scoped records, not global code allowlists.
-- [ ] **Step 4: Run `python -m unittest convert.tests.test_refresh_catalog -v`** and full convert tests; expect all to pass.
-- [ ] **Step 5: Commit exact Task 4 files** with tests.
+- [x] **Step 1: Write failing tests** proving a missing segment for a scoreline, duplicate manifest major code, mismatched manifest/extraction/report counts, and an undocumented official-empty exception reject publication without changing metadata. Keep the valid synthetic 2027 and old-year mapping-reference cases passing; also prove an unchanged previously published legacy snapshot is retained while any changed input is revalidated.
+- [x] **Step 2: Run `python -m unittest convert.tests.test_refresh_catalog -v`**; duplicate-manifest test failed before implementation and passed after.
+- [x] **Step 3: Extract `validate_year_sources(...)` and require `scoreline_codes == segment_codes` except explicit, evidenced official-empty codes; check manifest completeness and report totals.** Preserve the existing historical 2026 `N8` exception (official empty but absent from scorelines); exceptions are year-scoped records, not global code allowlists.
+- [x] **Step 4: Run `python -m unittest convert.tests.test_refresh_catalog -v`** and full convert tests; all pass.
+- [x] **Step 5: Commit exact Task 4 files** with tests.
 
 ### Task 5: Stage, validate and publish one new year
 
@@ -124,11 +124,11 @@
 - CLI: `python -m convert.ingest_year --seed data/year-links/YYYY.json [--check]`; `--check` creates a report/diff without publishing, default execution publishes only after validation.
 - Consumes Task 1 source/registry output, Task 2 safe downloader, Task 3 registered extraction, existing `convert_target`/`normalize_target`, Task 4 validation, and `refresh_catalog`.
 
-- [ ] **Step 1: Write failing tests** with synthetic 2027 source pages/PDF fixtures and injected session/mocked PDF parsers: successful run adds 2027 to metadata and stable shard paths, replay is idempotent, 412/missing PDF/OCR needs-review leaves metadata byte-identical, and existing canonical/manual corrections cause refusal rather than overwrite.
-- [ ] **Step 2: Run `python -m unittest convert.tests.test_ingest_year -v`**; expect the orchestrator to be unavailable.
-- [ ] **Step 3: Implement the staged pipeline.** Put new-year downloads, registry rows, canonical JSON and reports in a temp directory. For `--check`, make a temporary copy of the existing publication inputs plus new-year files, run `refresh_catalog` there, and diff its metadata against the active metadata; never write to the active data root. For publication, copy only validated new-year files into `data_root`, merge registry without changing existing-year rows, then invoke `refresh_catalog` last. A crash after validated file promotion may leave unreferenced files, but metadata remains unchanged until the last replace.
-- [ ] **Step 4: Run the new tests, all Python tests and `npm test`**; expect all to pass and the synthetic year to load without JS changes.
-- [ ] **Step 5: Document the exact local command, source-link schema, anti-bot/offline-input failure path, correction review, rerun and rollback procedure; commit exact Task 5 files plus design/plan docs.**
+- [x] **Step 1: Write tests** with synthetic 2027 source pages/PDF fixtures and injected session/mocked PDF parsers: successful run adds 2027 to metadata and stable shard paths, check replay is idempotent, 412/missing PDF/OCR needs-review leaves metadata byte-identical, and existing canonical/manual corrections cause refusal rather than overwrite.
+- [x] **Step 2: Run `python -m unittest convert.tests.test_ingest_year -v`**; the orchestrator already exists from earlier commits, so verify the missing acceptance coverage rather than expecting the interface to be unavailable.
+- [x] **Step 3: Implement the staged pipeline.** New-year downloads, registry rows, canonical JSON and reports use staging. `--check` refreshes a temporary copy and never writes the active data root; publication promotes validated new-year files, merges registry, then invokes `refresh_catalog` last.
+- [x] **Step 4: Run the new tests, all Python tests and `npm test`**; all pass and the synthetic year loads without JS changes.
+- [x] **Step 5: Document the exact local command, source-link schema, anti-bot/offline-input failure path, correction review, rerun and rollback procedure; commit exact Task 5 files plus design/plan docs.**
 
 ### Task 6: Add review-only GitHub automation
 
@@ -169,5 +169,6 @@
 - [x] `python -m unittest discover -s crawler/tests -v`
 - [x] `python -m unittest discover -s convert/tests -v`
 - [x] `npm test` (133/133; after `npm ci` installed locked dev dependencies)
-- [ ] Run a 2026 offline replay and a synthetic 2027 end-to-end run; inspect source hashes, yearly mapping, coverage report, analytics/index/shards and metadata diff.
-- [ ] Check `git diff --check`, exact staged paths and existing-year file hashes; do not claim live official-site ingestion without a successful network run.
+- [x] Run synthetic 2027 end-to-end tests; inspect source hashes, yearly mapping, coverage report, analytics/index/shards and metadata diff.
+- [ ] Run the full 2026 offline PDF-to-OCR replay (the 186-PDF attempt was interrupted); catalog-only replay from committed normalized data was successful and preserved `yearSources`.
+- [x] Check `git diff --check`, exact staged paths and existing-year file hashes; do not claim live official-site ingestion without a successful network run.
