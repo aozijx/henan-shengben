@@ -10,6 +10,7 @@ if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from crawler.source_rules import load_crawl_targets
+from crawler.source_rules import is_official_pdf_url
 
 
 def _sha256(content):
@@ -18,10 +19,15 @@ def _sha256(content):
 
 def download_entry(url, target: Path, session, expected_sha256=None):
     try:
+        if not is_official_pdf_url(url):
+            raise ValueError('PDF URL is not on the official host allowlist')
         if expected_sha256 and target.is_file() and _sha256(target.read_bytes()) == expected_sha256:
             return {'downloadStatus': 'skipped', 'sha256': expected_sha256, 'bytes': target.stat().st_size}
         response = session.get(url, timeout=60)
         response.raise_for_status()
+        final_url = getattr(response, 'url', url)
+        if not is_official_pdf_url(final_url):
+            raise ValueError('PDF redirect left the official host allowlist')
         content = response.content
         content_type = response.headers.get('content-type', '').lower()
         if 'pdf' not in content_type or not content.startswith(b'%PDF-'):
@@ -30,7 +36,7 @@ def download_entry(url, target: Path, session, expected_sha256=None):
         part = target.with_suffix(target.suffix + '.part')
         part.write_bytes(content)
         part.replace(target)
-        return {'downloadStatus': 'downloaded', 'sha256': _sha256(content), 'bytes': len(content)}
+        return {'downloadStatus': 'downloaded', 'sha256': _sha256(content), 'bytes': len(content), 'finalUrl': final_url}
     except Exception as error:
         part = target.with_suffix(target.suffix + '.part')
         if part.exists():
@@ -41,8 +47,15 @@ def download_entry(url, target: Path, session, expected_sha256=None):
 def download_manifest(manifest_path: Path, data_root: Path, session):
     document = json.loads(manifest_path.read_text(encoding='utf-8'))
     counts = {'downloaded': 0, 'skipped': 0, 'failed': 0}
+    destinations = set()
     for entry in document['entries']:
-        result = download_entry(entry['pdfUrl'], data_root / entry['localPath'], session, entry.get('sha256'))
+        target = (data_root / entry['localPath']).resolve()
+        if not target.is_relative_to(data_root.resolve()):
+            raise ValueError(f"manifest path escapes data root: {entry['localPath']}")
+        if target in destinations:
+            raise ValueError(f"duplicate manifest destination: {entry['localPath']}")
+        destinations.add(target)
+        result = download_entry(entry['pdfUrl'], target, session, entry.get('sha256'))
         entry.update(result)
         counts[result['downloadStatus']] += 1
     manifest_path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

@@ -32,11 +32,11 @@ class SourceEntry:
 MAJOR_PATTERN = re.compile(r'[（(]([0-9A-Z]{2})([^（）()]+)[）)]', re.IGNORECASE)
 
 
-def discover_year(target, html):
+def discover_year(target, html, base_url=None):
     soup = BeautifulSoup(html or '', 'html.parser')
     found = {}
     for link in soup.find_all('a', href=True):
-        url = urljoin(target.source_page_url, link['href'])
+        url = urljoin(base_url or target.source_page_url, link['href'])
         if not is_official_pdf_url(url):
             continue
         decoded = unquote(url)
