@@ -20,3 +20,12 @@ python -m unittest discover -s convert/tests -v
 异常报告写入 `data/reports/异常数据_<年份>.json`，人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖；转换器仅应用其中 `status: confirmed` 的修正。
 
 归一化结果写入注册表声明的 `normalizedPath`，转换报告写入 `conversionReportPath`。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业；官方空表通过人工文件的 `official-empty` 状态显式记录，但不伪造分数段。
+# Automated yearly ingestion
+
+After adding an official source seed at `data/year-links/YYYY.json`, run:
+
+```powershell
+python -m convert.ingest_year --seed data/year-links/YYYY.json --check
+```
+
+Review source provenance, row counts, score-segment coverage and the metadata diff. If all sources and OCR rows are confirmed, rerun without `--check` to publish the yearly canonical JSON, versioned analytics/index/shards and metadata. Existing years cannot be re-ingested by this command. Resolve OCR issues through the normal conversion review/correction process before publishing.

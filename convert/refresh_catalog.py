@@ -85,6 +85,18 @@ def _validate_sources(year: int, files: dict, canonical: dict, report: dict, dat
     segment_codes = {str(row['majorCode']) for row in segments['majors']}
     if not segment_codes <= score_codes:
         raise ValueError(f'{year}: score segments contain codes absent from scorelines')
+    official_empty_codes = {str(item.get('majorCode')) for item in report.get('officialEmpty', [])}
+    official_empty_rows = report.get('officialEmpty', [])
+    if report.get('officialEmptyCount', len(official_empty_rows)) != len(official_empty_rows):
+        raise ValueError(f'{year}: official-empty count does not match evidence records')
+    for item in official_empty_rows:
+        if (not CODE_RE.fullmatch(str(item.get('majorCode', ''))) or
+                item.get('reason') != 'official-empty' or not str(item.get('evidenceNote', '')).strip()):
+            raise ValueError(f'{year}: official-empty exception requires a code and evidence note')
+    missing_segments = score_codes - segment_codes
+    if missing_segments - official_empty_codes:
+        missing = ', '.join(sorted(missing_segments - official_empty_codes))
+        raise ValueError(f'{year}: scorelines missing score segments without official-empty evidence: {missing}')
     for row in segments['majors']:
         matching_score = next(item['分数线'] for item in scores if str(item['专业代号']) == str(row['majorCode']))
         if row.get('controlScore') != matching_score:
@@ -92,6 +104,21 @@ def _validate_sources(year: int, files: dict, canonical: dict, report: dict, dat
     if not score_codes <= plan_codes or not plan_codes <= score_codes | {
             str(item.get('majorCode')) for item in report.get('officialEmpty', [])}:
         raise ValueError(f'{year}: scorelines and plans use inconsistent major codes')
+    mapping_names = {}
+    for entry in mapping:
+        for major in entry.get('可报本科专业', []):
+            mapping_names.setdefault(str(major.get('专业代号', '')), set()).add(
+                _normalized_major_name(major.get('专业名称')))
+    plan_names = {}
+    for row in plans:
+        plan_names.setdefault(str(row.get('专业代号', '')), set()).add(
+            _normalized_major_name(row.get('专业名称')))
+    for row in scores:
+        code = str(row['专业代号'])
+        expected_name = _normalized_major_name(row['专业名称'])
+        if expected_name not in mapping_names.get(code, set()) and not (
+                plan_names.get(code, set()) & mapping_names.get(code, set())):
+            raise ValueError(f'{year}: major name mismatch across mapping, scorelines and plans for {code}')
     if files.get('mappingReferenceYear', year) == year and not (score_codes | plan_codes) <= mapping_codes | {'A1'}:
         raise ValueError(f'{year}: yearly mapping is missing published major codes')
 
