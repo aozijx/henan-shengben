@@ -34,12 +34,13 @@ function detailButtonHtml(index, label, expanded) {
     '" aria-expanded="' + String(expanded) + '">' + esc(expanded ? '收起院校详情' : label) + '</button>';
 }
 
-function majorHeaderHtml(aggregate) {
+function majorHeaderHtml(aggregate, index, expanded) {
   var major = aggregate.major || {};
   var course = major.professionalCourse || {};
-  return '<header><div><h3>' + esc(major.majorName || '') + '</h3>' +
+  return '<header><div class="aggregate-card-heading"><div><h3>' + esc(major.majorName || '') + '</h3>' +
     '<p>专业代码 ' + esc(major.majorCode || '—') + ' · 公共课 ' + esc(major.publicCourse || '—') +
-    ' · 专业基础课 ' + esc(course.name || '—') + (course.code ? ' (' + esc(course.code) + ')' : '') + '</p></div></header>';
+    ' · 专业基础课 ' + esc(course.name || '—') + (course.code ? ' (' + esc(course.code) + ')' : '') + '</p></div>' +
+    '<div class="aggregate-detail-action">' + detailButtonHtml(index, '查看院校详情', expanded) + '</div></div></header>';
 }
 
 function yearOverviewHtml(aggregate, years, compact, hiddenFields) {
@@ -52,9 +53,8 @@ function yearOverviewHtml(aggregate, years, compact, hiddenFields) {
 function majorSummaryHtml(aggregate, years, index, expandedDetails, hiddenFields) {
   var expanded = Boolean(expandedDetails[detailKey(index)]);
   return '<article class="aggregate-card" data-major-index="' + index + '">' +
-    majorHeaderHtml(aggregate) +
+    majorHeaderHtml(aggregate, index, expanded) +
     yearOverviewHtml(aggregate, years, false, hiddenFields) +
-    '<div class="aggregate-detail-action">' + detailButtonHtml(index, '查看院校详情', expanded) + '</div>' +
     '<div class="aggregate-major-detail" data-major-detail="' + index + '">' +
     (expanded ? buildExpandedMajorHtml(aggregate, years, hiddenFields) : '') + '</div></article>';
 }
@@ -66,14 +66,22 @@ function selectedYearsLabel(years, metadata) {
   return '年份：' + years.join('、');
 }
 
+function layoutIconHtml(layout) {
+  var shape = layout === 'cards'
+    ? '<rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="9" width="5.5" height="5.5" rx="1"></rect>'
+    : '<path d="M2 3.25h12M2 8h12M2 12.75h12"></path><circle cx="3" cy="3.25" r=".5"></circle><circle cx="3" cy="8" r=".5"></circle><circle cx="3" cy="12.75" r=".5"></circle>';
+  return '<svg class="layout-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">' + shape + '</svg>';
+}
+
 function toolbarHtml(model, metadata) {
   var cards = model.resultLayout !== 'table';
   var yearsLabel = selectedYearsLabel(model.selectedYears, metadata);
   return '<div class="result-toolbar" aria-label="结果显示设置">' +
     '<button type="button" data-result-action="years" aria-haspopup="dialog" aria-label="选择展示年份，' + esc(yearsLabel) + '">' + esc(yearsLabel) + '</button>' +
-    '<span class="result-layout-label">布局</span>' +
-    '<button type="button" data-result-layout="cards"' + (cards ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>聚合卡片</button>' +
-    '<button type="button" data-result-layout="table"' + (!cards ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>表格</button>' +
+    '<div class="result-layout-switch" role="group" aria-label="结果布局">' +
+    '<button type="button" data-result-layout="cards" aria-label="切换为聚合卡片" title="聚合卡片"' + (cards ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + layoutIconHtml('cards') + '</button>' +
+    '<button type="button" data-result-layout="table" aria-label="切换为表格" title="表格"' + (!cards ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + layoutIconHtml('table') + '</button>' +
+    '</div>' +
     '</div>';
 }
 

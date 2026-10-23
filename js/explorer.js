@@ -34,12 +34,9 @@ function minControl(field, state, disabled) {
     (disabled ? ' disabled' : '') + '></label>';
 }
 
-function renderExplorerControls(root, metadata, state, dispatch) {
-  if (!root) return;
+export function buildExplorerControlsHtml(metadata, state) {
   var unavailable = state.status !== 'ready' || !state.majors.length;
-
-  root.innerHTML =
-    '<div class="explorer-status" aria-live="polite">' +
+  return '<div class="explorer-status" aria-live="polite">' +
       (state.status === 'loading' ? '<span class="loading">正在加载院校数据…</span>' : '') +
       (state.status === 'error' ? '<span class="msg-notfound">' + esc(state.error) + '</span>' : '') +
     '</div>' +
@@ -50,16 +47,20 @@ function renderExplorerControls(root, metadata, state, dispatch) {
         enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
         minControl(filterField(metadata, 'schoolCount'), state, unavailable) +
       '</div></div>' +
-    '</section>' +
-    '<section class="explorer-actions" aria-label="操作按钮">' +
+      '<div class="filter-group filter-operations"><h3>筛选操作</h3><div class="filter-row">' +
       '<button type="button" data-action="reset"' + (unavailable ? ' disabled' : '') + '>重置筛选</button>' +
       '<button type="button" data-action="clear-storage"' + (state.status !== 'ready' ? ' disabled' : '') + '>清除本地存储</button>' +
-    '</section>' +
+      '</div></div></section>' +
     '<section class="preview-section"><div id="preview-table" class="preview-placeholder" aria-live="polite">' +
       (state.majors.length ? '预览表格准备中…' : '请先查询专科专业，再使用筛选与导出。') +
     '</div></section>' +
     '<section class="export-actions"><button type="button" id="exportCsv"' +
       (!canExport(state) ? ' disabled' : '') + '>导出 CSV</button></section>';
+}
+
+function renderExplorerControls(root, metadata, state, dispatch) {
+  if (!root) return;
+  root.innerHTML = buildExplorerControlsHtml(metadata, state);
 
   root.querySelectorAll('[data-filter]').forEach(function (control) {
     control.addEventListener('change', function () { dispatch({ type: 'SET_FILTER', key: control.dataset.filter, value: control.value }); });

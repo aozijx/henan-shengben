@@ -40,6 +40,27 @@ test('initial aggregate summary includes courses scores ranks and split plan tot
   assert.doesNotMatch(html, /0371-12345678|郑州市|完整分数段/);
 });
 
+test('card places its detail action beside the major title before yearly summaries', () => {
+  const html = buildResultWorkspaceHtml({ aggregates: [aggregate], status: 'ready', hasQuery: true }, {
+    supportedYears: [2026], latestYear: 2026
+  });
+
+  assert.match(html, /<header><div class="aggregate-card-heading"><div><h3>软件工程/);
+  assert.match(html, /data-expand-major="0"[^>]*>查看院校详情/);
+  assert.ok(html.indexOf('data-expand-major="0"') < html.indexOf('class="year-overview"'));
+});
+
+test('layout switch uses compact labelled icon buttons', () => {
+  const html = buildResultWorkspaceHtml({ aggregates: [aggregate], status: 'ready', hasQuery: true }, {
+    supportedYears: [2026], latestYear: 2026
+  });
+
+  assert.match(html, /data-result-layout="cards"[^>]*aria-label="切换为聚合卡片"/);
+  assert.match(html, /data-result-layout="table"[^>]*aria-label="切换为表格"/);
+  assert.match(html, /class="layout-icon"/);
+  assert.doesNotMatch(html, />聚合卡片<|>表格</);
+});
+
 test('expanded major content creates school comparison and score segment tables lazily', () => {
   const html = buildExpandedMajorHtml(aggregate, [2026]);
   assert.match(html, /0371-12345678/);
