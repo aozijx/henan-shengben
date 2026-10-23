@@ -15,6 +15,8 @@ python -m unittest discover -s convert/tests -v
 
 年度中间结果路径由注册表的 `extractionPath` 指定。`status: needs-review` 的专业不能直接进入前端；下一阶段会结合官方专业对照、省控线和跨表约束完成权威归一化与冲突报告。
 
+批量转换和归一化均从 `data/source-registry.json` 的 `crawlTargets` 读取年份、来源清单和输出路径；新增年份不在 Python 中增加文件名分支。转换空清单也会生成完整的零计数结果，便于自动化流程稳定处理。
+
 异常报告写入 `data/reports/异常数据_<年份>.json`，人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖；转换器仅应用其中 `status: confirmed` 的修正。
 
 归一化结果写入注册表声明的 `normalizedPath`，转换报告写入 `conversionReportPath`。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业；官方空表通过人工文件的 `official-empty` 状态显式记录，但不伪造分数段。

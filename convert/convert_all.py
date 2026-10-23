@@ -55,10 +55,10 @@ def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]
 
 
 def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None, workers: int = 1) -> dict[str, Any]:
-    manifest = _read_json(data_root / target["manifestPath"])
+    manifest = read_json(data_root / target["manifestPath"])
     entries = [entry for entry in manifest["entries"] if not major_codes or entry["majorCode"] in major_codes]
     correction_path = data_root / "一分一段" / "人工修正.json"
-    correction_values = _read_json(correction_path).get("corrections", []) if correction_path.exists() else []
+    correction_values = read_json(correction_path).get("corrections", []) if correction_path.exists() else []
     corrections = {(int(item["year"]), item["majorCode"]): item for item in correction_values}
     arguments = [(entry, data_root, corrections.get((int(target["year"]), entry["majorCode"]))) for entry in entries]
     if workers > 1 and len(entries) > 1:
@@ -70,7 +70,7 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
         print(f"[{target['year']}] {position}/{len(majors)} {item['majorCode']} {item['status']}", flush=True)
     output_path = data_root / target["extractionPath"]
     if major_codes and output_path.exists():
-        existing = _read_json(output_path)
+        existing = read_json(output_path)
         replacements = {item["majorCode"]: item for item in majors}
         majors = [replacements.get(item["majorCode"], item) for item in existing.get("majors", [])]
         known = {item["majorCode"] for item in majors}
@@ -87,7 +87,7 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
             "needsReview": sum(item["status"] != "ok" for item in majors),
         },
     }
-    _write_json(output_path, result)
+    write_json(output_path, result)
     return result
 
 

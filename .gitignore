@@ -9,5 +9,6 @@ coverage/
 *.log
 __pycache__/
 *.pyc
+# Superpowers 执行台账与临时评审包；正式设计和计划保留在 docs/superpowers/。
 .superpowers/
 

@@ -2,8 +2,14 @@ import hashlib
 import argparse
 import json
 from pathlib import Path
+import sys
 
 import requests
+
+if __package__ in {None, ''}:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from crawler.source_rules import load_crawl_targets
 
 
 def _sha256(content):
@@ -43,16 +49,24 @@ def download_manifest(manifest_path: Path, data_root: Path, session):
     return counts
 
 
+def download_targets(registry_path: Path, data_root: Path, years: set[int] | None, session) -> dict[int, dict[str, int]]:
+    counts_by_year = {}
+    for target in load_crawl_targets(registry_path, years):
+        counts_by_year[target.year] = download_manifest(data_root / target.manifest_path, data_root, session)
+    return counts_by_year
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--manifests', default='data/来源清单')
-    parser.add_argument('--data-root', default='data')
+    parser.add_argument('--registry', type=Path, default=Path('data/source-registry.json'))
+    parser.add_argument('--years', nargs='*', type=int)
+    parser.add_argument('--data-root', type=Path, default=None)
     args = parser.parse_args()
     session = requests.Session()
     session.headers['User-Agent'] = 'henan-shengben-data/1.0'
-    for manifest in sorted(Path(args.manifests).glob('来源清单_*.json')):
-        counts = download_manifest(manifest, Path(args.data_root), session)
-        print(f'{manifest.name}: {counts}')
+    data_root = args.data_root or args.registry.resolve().parent
+    for year, counts in download_targets(args.registry, data_root, set(args.years) if args.years else None, session).items():
+        print(f'{year}: {counts}')
 
 
 if __name__ == '__main__':

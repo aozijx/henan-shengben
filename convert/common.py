@@ -1,7 +1,7 @@
 """convert/ 包内的共用常量与文件 IO 工具。
 
-所有脚本都从这里拿 REPO_ROOT / DATA_ROOT / _read_json / _write_json，
-避免每个文件各自写一份 `REPO_ROOT = Path(__file__).resolve().parents[1]` 和 `_read_json`。
+所有脚本都从这里拿 REPO_ROOT / DATA_ROOT / read_json / write_json，
+避免每个文件各自写一份 `REPO_ROOT = Path(__file__).resolve().parents[1]` 和 JSON 文件读写逻辑。
 """
 from __future__ import annotations
 
