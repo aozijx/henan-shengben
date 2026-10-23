@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandMetadata, getLatestYear, getPreviousYear, getSortedYears, loadMetadata, validateMetadata } from '../js/metadata.js';
+import { expandMetadata, getFocusYear, getLatestYear, getPreviousYear, getSortedYears, loadMetadata, normalizeSelectedYears, validateMetadata } from '../js/metadata.js';
 
 function validMetadata() {
   return {
@@ -128,4 +128,11 @@ test('expanded metadata exposes derived years without treating defaultYear as la
   assert.equal(expanded.latestYear, 2027);
   assert.equal(expanded.previousYear, 2026);
   assert.deepEqual(expanded.supportedYears, [2025, 2026, 2027]);
+});
+
+test('normalizes selected years from metadata and derives their focus year', () => {
+  const metadata = { supportedYears: [2026, 2024, 2025] };
+  assert.deepEqual(normalizeSelectedYears([2026, 2024, 2026, 2030], metadata), [2024, 2026]);
+  assert.deepEqual(normalizeSelectedYears(null, metadata), [2024, 2025, 2026]);
+  assert.equal(getFocusYear([2024, 2026], metadata), 2026);
 });

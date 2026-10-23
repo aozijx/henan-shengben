@@ -1,4 +1,5 @@
-import { enumOptions, filterDefaultValue } from './metadata.js';
+import { enumOptions, filterDefaultValue, normalizeSelectedYears } from './metadata.js';
+import { createInitialState } from './explorer-state.js';
 
 export var COLUMN_WIDTHS_KEY = 'henan-table-widths-v1';
 export var EXPLORER_STATE_KEY = 'henan-explorer-v1';
@@ -77,14 +78,29 @@ export function readExplorerState(storage, metadata) {
   } catch (error) { saved = {}; }
   return {
     filters: sanitizeFilters(saved.filters || {}, metadata),
-    sort: sanitizeSort(saved.sort || {}, metadata)
+    sort: sanitizeSort(saved.sort || {}, metadata),
+    selectedYears: (function () {
+      var years = normalizeSelectedYears(saved.selectedYears, metadata);
+      return years.length ? years : normalizeSelectedYears(null, metadata);
+    })(),
+    resultLayout: saved.resultLayout === 'table' ? 'table' : 'cards'
   };
 }
 
-export function writeExplorerState(storage, filters, sort) {
-  storage.setItem(EXPLORER_STATE_KEY, JSON.stringify({ filters: filters, sort: sort }));
+export function writeExplorerState(storage, state) {
+  storage.setItem(EXPLORER_STATE_KEY, JSON.stringify({
+    filters: state.filters,
+    sort: state.sort,
+    selectedYears: state.selectedYears,
+    resultLayout: state.resultLayout
+  }));
 }
 
 export function clearPreferences(storage) {
   storage.clear();
+}
+
+export function clearUiPreferences(storage, metadata) {
+  storage.clear();
+  return createInitialState(metadata);
 }

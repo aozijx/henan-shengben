@@ -15,6 +15,21 @@ export function getPreviousYear(metadata) {
   return years.length > 1 ? years[years.length - 2] : null;
 }
 
+export function normalizeSelectedYears(years, metadata) {
+  var supported = getSortedYears(metadata);
+  if (!Array.isArray(years)) return supported;
+  var selected = {};
+  years.forEach(function (year) {
+    if (supported.indexOf(year) >= 0) selected[year] = true;
+  });
+  return supported.filter(function (year) { return selected[year]; });
+}
+
+export function getFocusYear(selectedYears, metadata) {
+  var years = normalizeSelectedYears(selectedYears, metadata);
+  return years.length ? years[years.length - 1] : null;
+}
+
 function replaceMetadataTokens(value, metadata) {
   if (typeof value === 'string') {
     return value
@@ -90,6 +105,19 @@ export function validateMetadata(value) {
   }
   if (!years.includes(value.defaultYear)) {
     errors.push('默认年份 ' + value.defaultYear + ' 不在 supportedYears 中');
+  }
+  if (value.uiDefaults != null) {
+    var uiDefaults = value.uiDefaults;
+    if (!uiDefaults || typeof uiDefaults !== 'object' || Array.isArray(uiDefaults)) {
+      errors.push('uiDefaults 必须是对象');
+    } else {
+      if (uiDefaults.selectedYears != null && uiDefaults.selectedYears !== 'allSupportedYears') {
+        errors.push('uiDefaults.selectedYears 仅支持 allSupportedYears');
+      }
+      if (uiDefaults.resultLayout != null && ['cards', 'table'].indexOf(uiDefaults.resultLayout) < 0) {
+        errors.push('uiDefaults.resultLayout 必须是 cards 或 table');
+      }
+    }
   }
 
   var yearSources = value.yearSources && typeof value.yearSources === 'object' ? value.yearSources : {};

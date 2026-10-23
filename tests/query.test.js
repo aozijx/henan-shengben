@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { doQuery, findMappingMatches, resolveMappingMatch } from '../js/query.js';
+import { doQuery, findMappingMatches, resolveMappingMatch, setQueryYear } from '../js/query.js';
 import { loadAll } from '../js/data.js';
 
 test('searches only the mapping supplied for the selected year', () => {
@@ -42,4 +42,27 @@ test('completes a successful partial query to the selected specialty name', asyn
 
   assert.equal(input.value, '物联网应用技术');
   assert.match(hint.textContent, /物联网应用技术/);
+});
+
+test('switches completion and context to the focused query year', async () => {
+  const metadata = {
+    defaultYear: 2026,
+    supportedYears: [2024, 2026],
+    yearSources: {
+      2024: { mappingSource: 'mapping-2024.json', scoreSource: 'scores-2024.json', planSource: 'plans-2024.json' },
+      2026: { mappingSource: 'mapping-2026.json', scoreSource: 'scores-2026.json', planSource: 'plans-2026.json' }
+    }
+  };
+  const payloads = {
+    'mapping-2024.json': [{ 专科专业: '软件技术（2024）', 可报本科专业: [] }],
+    'mapping-2026.json': [{ 专科专业: '软件技术（2026）', 可报本科专业: [] }],
+    'scores-2024.json': [], 'scores-2026.json': [], 'plans-2024.json': [], 'plans-2026.json': []
+  };
+  await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
+  setQueryYear(2024);
+  const input = { value: '软件技术' };
+  const hint = { textContent: '' };
+  doQuery(input, hint, { innerHTML: '' });
+  assert.equal(input.value, '软件技术（2024）');
+  assert.match(hint.textContent, /2024 对照一览表/);
 });

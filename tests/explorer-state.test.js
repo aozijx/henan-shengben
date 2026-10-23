@@ -4,6 +4,8 @@ import { createInitialState, reduceExplorerState, sanitizeNumberInput } from '..
 
 const metadata = {
   defaultYear: 2026,
+  supportedYears: [2024, 2025, 2026],
+  uiDefaults: { selectedYears: 'allSupportedYears', resultLayout: 'cards' },
   defaultSort: { key: 'originalOrder', direction: 'original' },
   fields: [
     { key: 'schoolType', type: 'enum', filterEnable: true },
@@ -88,4 +90,23 @@ test('column width updates and full reset have explicit state transitions', () =
   assert.equal(cleared.status, 'ready');
   assert.deepEqual(cleared.majors, []);
   assert.deepEqual(cleared.filters, { schoolType: '全部', povertyStatus: '全部', subject: '全部', schoolCount: '' });
+});
+
+test('year selection keeps a valid ordered set and layout accepts only known modes', () => {
+  let state = { ...createInitialState(metadata), status: 'ready', page: 3 };
+  assert.deepEqual(state.selectedYears, [2024, 2025, 2026]);
+  assert.equal(state.focusYear, 2026);
+  assert.equal(state.resultLayout, 'cards');
+
+  state = reduceExplorerState(state, { type: 'SET_SELECTED_YEARS', years: [2026, 2024, 2026, 2030] }, metadata);
+  assert.deepEqual(state.selectedYears, [2024, 2026]);
+  assert.equal(state.focusYear, 2026);
+  assert.equal(state.page, 1);
+
+  const rejectedEmpty = reduceExplorerState(state, { type: 'SET_SELECTED_YEARS', years: [] }, metadata);
+  assert.deepEqual(rejectedEmpty.selectedYears, [2024, 2026]);
+
+  state = reduceExplorerState(state, { type: 'SET_RESULT_LAYOUT', resultLayout: 'table' }, metadata);
+  assert.equal(state.resultLayout, 'table');
+  assert.equal(reduceExplorerState(state, { type: 'SET_RESULT_LAYOUT', resultLayout: 'unknown' }, metadata).resultLayout, 'table');
 });

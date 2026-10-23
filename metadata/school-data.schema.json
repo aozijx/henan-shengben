@@ -26,6 +26,14 @@
       "items": { "type": "integer", "minimum": 2000 },
       "uniqueItems": true
     },
+    "uiDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selectedYears": { "const": "allSupportedYears" },
+        "resultLayout": { "enum": ["cards", "table"] }
+      }
+    },
     "yearSources": {
       "type": "object",
       "additionalProperties": {

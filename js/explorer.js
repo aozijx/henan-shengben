@@ -4,7 +4,8 @@ import { createInitialState, reduceExplorerState, sanitizeNumberInput, canExport
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { renderPreview } from './preview.js';
 import { downloadCsv, getExportFields } from './export.js';
-import { EXPLORER_STATE_KEY, clearPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
+import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
+import { setQueryYear } from './query.js';
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 
@@ -74,7 +75,7 @@ function renderExplorerControls(root, metadata, state, dispatch) {
   if (reset) reset.addEventListener('click', function () { dispatch({ type: 'RESET_FILTERS' }); });
   var clearStorage = root.querySelector('[data-action="clear-storage"]');
   if (clearStorage) clearStorage.addEventListener('click', function () {
-    clearPreferences(localStorage);
+    clearUiPreferences(localStorage, metadata);
     resetTheme();
     var search = document.getElementById('q');
     var hint = document.getElementById('hint');
@@ -148,12 +149,22 @@ export function initExplorer(root, metadata, options) {
   var state = reduceExplorerState(createInitialState(metadata), { type: 'LOAD_SUCCESS' }, metadata);
   state = { ...state, columnWidths: readColumnWidths(localStorage, metadata) };
   var saved = readExplorerState(localStorage, metadata);
-  state = { ...state, filters: saved.filters, sort: saved.sort };
+  state = {
+    ...state,
+    filters: saved.filters,
+    sort: saved.sort,
+    selectedYears: saved.selectedYears,
+    focusYear: saved.selectedYears[saved.selectedYears.length - 1] || state.focusYear,
+    resultLayout: saved.resultLayout
+  };
+  setQueryYear(state.focusYear);
   function dispatch(event) {
     state = reduceExplorerState(state, event, metadata);
+    if (event.type === 'SET_SELECTED_YEARS') setQueryYear(state.focusYear);
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
-    if (event.type === 'SET_FILTER' || event.type === 'SET_SORT' || event.type === 'RESET_FILTERS') {
-      writeExplorerState(localStorage, state.filters, state.sort);
+    if (event.type === 'SET_FILTER' || event.type === 'SET_SORT' || event.type === 'RESET_FILTERS' ||
+        event.type === 'SET_SELECTED_YEARS' || event.type === 'SET_RESULT_LAYOUT') {
+      writeExplorerState(localStorage, state);
     }
     if (event.type === 'CLEAR_ALL') localStorage.removeItem(EXPLORER_STATE_KEY);
     state = recompute(state, metadata);

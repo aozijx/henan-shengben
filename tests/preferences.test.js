@@ -1,8 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { COLUMN_WIDTHS_KEY, clearPreferences, readColumnWidths, writeColumnWidths } from '../js/preferences.js';
+import { COLUMN_WIDTHS_KEY, clearPreferences, clearUiPreferences, readColumnWidths, readExplorerState, writeColumnWidths, writeExplorerState } from '../js/preferences.js';
 
 const metadata = {
+  supportedYears: [2024, 2025, 2026],
+  uiDefaults: { selectedYears: 'allSupportedYears', resultLayout: 'cards' },
+  defaultSort: { key: 'originalOrder', direction: 'original' },
   fields: [
     { key: 'majorName', type: 'string', tableShow: true },
     { key: 'score', type: 'number', tableShow: true },
@@ -46,4 +49,31 @@ test('clear preferences invokes full storage clear', () => {
   const target = storage({ theme: 'dark', [COLUMN_WIDTHS_KEY]: '{}' });
   clearPreferences(target);
   assert.deepEqual(target.calls, [['clear']]);
+});
+
+test('clearing UI preferences restores defaults without clearing repository memory', () => {
+  const target = storage({ theme: 'dark' });
+  let repositoryClears = 0;
+  const reset = clearUiPreferences(target, {
+    ...metadata,
+    defaultSort: { key: 'originalOrder', direction: 'original' }
+  }, { clear() { repositoryClears += 1; } });
+  assert.equal(repositoryClears, 0);
+  assert.deepEqual(reset.sort, { key: 'originalOrder', direction: 'original' });
+  assert.equal(reset.page, 1);
+  assert.deepEqual(target.calls, [['clear']]);
+});
+
+test('persists only valid selected years and result layout as explorer UI state', () => {
+  const target = storage();
+  writeExplorerState(target, {
+    filters: {}, sort: metadata.defaultSort, selectedYears: [2026, 2024, 2030], resultLayout: 'table'
+  });
+  assert.deepEqual(readExplorerState(target, metadata).selectedYears, [2024, 2026]);
+  assert.equal(readExplorerState(target, metadata).resultLayout, 'table');
+
+  target.setItem('henan-explorer-v1', JSON.stringify({ selectedYears: [], resultLayout: 'bad' }));
+  const fallback = readExplorerState(target, metadata);
+  assert.deepEqual(fallback.selectedYears, [2024, 2025, 2026]);
+  assert.equal(fallback.resultLayout, 'cards');
 });

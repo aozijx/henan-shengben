@@ -8,9 +8,20 @@ import { getMappingByYear, getMetadata, isReady } from './data.js';
 import { esc } from './utils.js';
 import { renderTable, renderMatchList } from './render.js';
 
+var activeQueryYear = null;
+
+export function setQueryYear(year) {
+  activeQueryYear = Number.isInteger(year) ? year : null;
+}
+
+function currentQueryYear(metadata) {
+  if (metadata && (metadata.supportedYears || []).indexOf(activeQueryYear) >= 0) return activeQueryYear;
+  return metadata && metadata.defaultYear;
+}
+
 function currentMapping() {
   var metadata = getMetadata();
-  return getMappingByYear(metadata && metadata.defaultYear);
+  return getMappingByYear(currentQueryYear(metadata));
 }
 
 export function findMappingMatches(mapping, keyword) {
@@ -69,7 +80,7 @@ export function doQuery($q, $hint, $result) {
     var metadata = getMetadata();
     $result.innerHTML = '<div class="msg-notfound">未找到专科专业「' + esc(kw) + '」。<br>' +
       '可尝试：关键词的一部分（如「物联网」）；' +
-      '本工具收录 ' + ((metadata && metadata.defaultYear) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
+      '本工具收录 ' + (currentQueryYear(metadata) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
     return;
   }
   var spec = resolveMappingMatch(mapping, kw);
@@ -94,7 +105,7 @@ function showSpec($q, $hint, $result, spec) {
   lastSpecName = spec['专科专业'];
   if (resultListener) resultListener(majors, lastSpecName);
   var metadata = getMetadata();
-  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + ((metadata && metadata.defaultYear) || '') + ' 对照一览表）';
+  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + (currentQueryYear(metadata) || '') + ' 对照一览表）';
   if (!majors.length) {
     $result.innerHTML = '<div class="empty">「' + esc(spec['专科专业']) + '」暂无可报本科专业数据</div>';
     return;
