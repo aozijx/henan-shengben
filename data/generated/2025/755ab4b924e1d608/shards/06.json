@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "06",
+  "majorName": "投资学",
+  "controlScore": 198,
+  "sourceId": "score-segments:2025:06:b233f33569ce",
+  "segments": [
+    {
+      "score": 242,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 239,
+      "segmentCount": 2,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 237,
+      "segmentCount": 2,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 234,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 232,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 231,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 228,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 224,
+      "segmentCount": 2,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 216,
+      "segmentCount": 2,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 214,
+      "segmentCount": 2,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 206,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 205,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 204,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 202,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 201,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 198,
+      "segmentCount": 1,
+      "cumulativeCount": 21
+    }
+  ]
+}

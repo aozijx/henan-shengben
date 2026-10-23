@@ -6,7 +6,7 @@ import { hiddenResultFields } from './result-visibility.js';
 var resultViewStates = new WeakMap();
 
 function statusHtml(model) {
-  if (model.status === 'loading') return '<div class="result-state"><span class="loading">正在加载历年院校与一分一段数据…</span></div>';
+  if (model.status === 'loading') return '<div class="result-state"><span class="loading">正在整理历年专业摘要…</span></div>';
   if (model.status === 'error') return '<div class="result-state result-error">加载失败：' + esc(model.error || '未知错误') + '</div>';
   if (model.status === 'unpublished') return '<div class="result-state">该年份数据尚未发布</div>';
   if (!model.hasQuery) return '<div class="result-state">输入专科专业，回车或点击查询开始检索</div>';
@@ -59,13 +59,6 @@ function majorSummaryHtml(aggregate, years, index, expandedDetails, hiddenFields
     (expanded ? buildExpandedMajorHtml(aggregate, years, hiddenFields) : '') + '</div></article>';
 }
 
-function selectedYearsLabel(years, metadata) {
-  var supported = getSortedYears(metadata);
-  if (!years.length) return '年份：未选择';
-  if (years.length === supported.length) return '年份：全部（' + years[0] + '–' + years[years.length - 1] + '）';
-  return '年份：' + years.join('、');
-}
-
 function layoutIconHtml(layout) {
   var shape = layout === 'cards'
     ? '<rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="9" width="5.5" height="5.5" rx="1"></rect>'
@@ -75,9 +68,7 @@ function layoutIconHtml(layout) {
 
 function toolbarHtml(model, metadata) {
   var cards = model.resultLayout !== 'table';
-  var yearsLabel = selectedYearsLabel(model.selectedYears, metadata);
   return '<div class="result-toolbar" aria-label="结果显示设置">' +
-    '<button type="button" data-result-action="years" aria-haspopup="dialog" aria-label="选择展示年份，' + esc(yearsLabel) + '">' + esc(yearsLabel) + '</button>' +
     '<div class="result-layout-switch" role="group" aria-label="结果布局">' +
     '<button type="button" data-result-layout="cards" aria-label="切换为聚合卡片" title="聚合卡片"' + (cards ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + layoutIconHtml('cards') + '</button>' +
     '<button type="button" data-result-layout="table" aria-label="切换为表格" title="表格"' + (!cards ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + layoutIconHtml('table') + '</button>' +
@@ -130,7 +121,7 @@ export function buildResultWorkspaceHtml(model, metadata) {
     : '<div class="aggregate-list">' + viewModel.aggregates.map(function (aggregate, index) {
       return majorSummaryHtml(aggregate, viewModel.selectedYears, index, viewModel.expandedDetails, viewModel.hiddenFields);
     }).join('') + '</div>';
-  return toolbarHtml(viewModel, metadata) + content + buildYearDialogHtml(metadata, viewModel.selectedYears);
+  return toolbarHtml(viewModel, metadata) + content;
 }
 
 export function buildExpandedMajorHtml(aggregate, years, hiddenFields) {
@@ -183,55 +174,24 @@ function within(root, target, selector) {
   return match && root.contains(match) ? match : null;
 }
 
-function openYearDialog(root) {
-  var dialog = root.querySelector('.year-selection-dialog');
-  if (!dialog) return;
-  if (typeof dialog.showModal === 'function') dialog.showModal();
-  else dialog.setAttribute('open', '');
-}
-
-function applyYearPreset(root, metadata, preset) {
-  var dialog = root.querySelector('.year-selection-dialog');
-  if (!dialog) return;
-  var years = getSortedYears(metadata);
-  var selected = preset === 'latest' ? [years[years.length - 1]] : years;
-  dialog.querySelectorAll('input[name="selected-year"]').forEach(function (input) {
-    input.checked = selected.indexOf(Number(input.value)) >= 0;
-  });
-}
-
-function applySelectedYears(root, dispatch) {
-  var dialog = root.querySelector('.year-selection-dialog');
-  if (!dialog) return;
-  var years = Array.from(dialog.querySelectorAll('input[name="selected-year"]:checked')).map(function (input) { return Number(input.value); });
-  var error = dialog.querySelector('.year-selection-error');
-  if (!years.length) {
-    if (error) error.textContent = '请至少选择一个年份。';
-    return;
-  }
-  if (dispatch) dispatch({ type: 'SET_SELECTED_YEARS', years: years });
-  if (typeof dialog.close === 'function') dialog.close();
-  else dialog.removeAttribute('open');
-}
-
-function handleResultClick(root, model, metadata, dispatch, event, expandedDetails) {
+function handleResultClick(root, model, metadata, dispatch, event, expandedDetails, onExpand) {
   var layout = within(root, event.target, '[data-result-layout]');
   if (layout) {
     if (dispatch) dispatch({ type: 'SET_RESULT_LAYOUT', resultLayout: layout.dataset.resultLayout });
     return;
   }
-  if (within(root, event.target, '[data-result-action="years"]')) return openYearDialog(root);
-  var preset = within(root, event.target, '[data-year-select]');
-  if (preset) return applyYearPreset(root, metadata, preset.dataset.yearSelect);
-  if (within(root, event.target, '[data-year-apply]')) return applySelectedYears(root, dispatch);
   var detailButton = within(root, event.target, '[data-expand-major]');
-  if (detailButton) toggleMajorDetail(root, model.aggregates, detailButton, expandedDetails, model.selectedYears, model.hiddenFields);
+  if (detailButton) {
+    var opening = toggleMajorDetail(root, model.aggregates, detailButton, expandedDetails, model.selectedYears, model.hiddenFields);
+    if (opening && onExpand) onExpand(model.aggregates[Number(detailButton.dataset.expandMajor)], model.selectedYears,
+      root.querySelector('[data-major-detail="' + detailButton.dataset.expandMajor + '"]'), model.hiddenFields);
+  }
 }
 
-export function renderResultWorkspace(root, model, metadata, dispatch) {
+export function renderResultWorkspace(root, model, metadata, dispatch, onExpand) {
   var viewModel = buildResultViewModel(model, metadata);
   var viewState = getResultViewState(root, viewModel);
   viewModel = { ...viewModel, expandedDetails: viewState.expandedDetails };
   root.innerHTML = buildResultWorkspaceHtml(viewModel, metadata);
-  root.onclick = function (event) { handleResultClick(root, viewModel, metadata, dispatch, event, viewState.expandedDetails); };
+  root.onclick = function (event) { handleResultClick(root, viewModel, metadata, dispatch, event, viewState.expandedDetails, onExpand); };
 }

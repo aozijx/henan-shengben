@@ -1,3 +1,5 @@
+import { selectMajorRows } from './major-match.js';
+
 function numberOrNull(value) {
   if (value == null || value === '') return null;
   var number = Number(value);
@@ -26,6 +28,13 @@ function valuesForYear(collection, year) {
   var value = collection && collection[year];
   if (Array.isArray(value)) return value;
   return value && Array.isArray(value.majors) ? value.majors : [];
+}
+
+function planRowsForMajor(collection, year, major) {
+  var rows = valuesForYear(collection, year);
+  return selectMajorRows(rows, major.majorCode, major.majorName,
+    function (row) { return row.majorCode == null ? row['专业代号'] : row.majorCode; },
+    function (row) { return row.majorName == null ? row['专业名称'] : row.majorName; });
 }
 
 function cumulativeAt(series, target) {
@@ -108,8 +117,8 @@ export function buildMajorAggregates(input) {
   return (input.majors || []).map(function (major, originalOrder) {
     var aggregate = { major: major, originalOrder: originalOrder, years: {} };
     years.forEach(function (year) {
-      var planRows = valuesForYear(input.plansByYear, year).filter(function (row) { return belongsToMajor(row, major); });
-      var fallbackRows = valuesForYear(input.fallbacksByYear, year).filter(function (row) { return belongsToMajor(row, major); });
+      var planRows = planRowsForMajor(input.plansByYear, year, major);
+      var fallbackRows = planRowsForMajor(input.fallbacksByYear, year, major);
       var scoreRow = valuesForYear(input.scoresByYear, year).find(function (row) { return belongsToMajor(row, major); }) || null;
       var series = valuesForYear(input.segmentsByYear, year).find(function (row) { return belongsToMajor(row, major); }) || null;
       var schools = new Map();

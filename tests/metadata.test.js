@@ -52,6 +52,19 @@ test('rejects missing required source paths', () => {
   assert.match(validateMetadata(metadata).errors.join('\n'), /2026.*planSource/);
 });
 
+test('schema v3 requires every analytics and shard index source', () => {
+  const metadata = validMetadata();
+  metadata.schemaVersion = 3;
+  metadata.yearSources[2026].scoreSegmentSource = 'data/segments.json';
+  assert.match(validateMetadata(metadata).errors.join('\n'), /2026.*analyticsSource/);
+  metadata.yearSources[2026].analyticsSource = 'data/analytics.json';
+  metadata.yearSources[2026].scoreSegmentIndexSource = 'data/index.json';
+  metadata.yearSources[2026].scoreSegmentShardTemplate = 'data/shards/{majorCode}.json';
+  assert.deepEqual(validateMetadata(metadata), { valid: true, errors: [] });
+  metadata.yearSources[2026].scoreSegmentShardTemplate = 'data/shards/all.json';
+  assert.match(validateMetadata(metadata).errors.join('\n'), /majorCode/);
+});
+
 test('rejects a default year outside supported years', () => {
   const metadata = validMetadata();
   metadata.defaultYear = 2027;

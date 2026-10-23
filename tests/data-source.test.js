@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createDataRepository } from '../js/data-source.js';
 
+test('analytics and a chosen major shard are loaded only on demand', async () => {
+  const calls = [];
+  const repository = createDataRepository({ yearSources: { 2027: {
+    queryIndexSource: 'mapping.json', analyticsSource: 'analytics.json',
+    scoreSegmentIndexSource: 'index.json', scoreSegmentShardTemplate: 'shards/2027/{majorCode}.json'
+  } } }, async (url) => { calls.push(url); return { ok: true, json: async () => ({ url }) }; });
+  await repository.ensureQueryIndex(2027);
+  assert.deepEqual(calls, ['mapping.json']);
+  await repository.ensureAnalytics(2027);
+  await repository.ensureScoreSegment(2027, '51');
+  await repository.ensureScoreSegment(2027, '51');
+  assert.deepEqual(calls, ['mapping.json', 'analytics.json', 'shards/2027/51.json']);
+});
+
 function metadata() {
   return {
     defaultYear: 2027,

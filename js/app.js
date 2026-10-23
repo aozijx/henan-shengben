@@ -10,13 +10,15 @@ import * as theme from './theme.js';
 import * as data from './data.js';
 import * as query from './query.js';
 import * as explorer from './explorer.js';
-import { initCharts } from './stats.js';
+import { renderStatsPage } from './stats-page.js';
 import { bootstrapData } from './bootstrap.js';
 import { getLatestYear, getSortedYears } from './metadata.js';
-import { normalizeMajorOption, normalizePlanEntry, normalizeScoreSegmentSeries } from './model.js';
-import { buildMajorAggregates } from './aggregate.js';
+import { normalizeMajorOption, normalizeScoreSegmentSeries } from './model.js';
+import { buildMajorAggregates, resolveScoreContext } from './aggregate.js';
 import { buildResultModel } from './result-model.js';
-import { renderResultWorkspace } from './results-view.js';
+import { renderResultWorkspace, buildExpandedMajorHtml } from './results-view.js';
+import { lookupScoreSegmentCode } from './score-curves.js';
+import { queryRowsFromAnalytics } from './analytics-query.js';
 
 var $ = function (id) { return document.getElementById(id); };
 var $q = $('q'), $result = $('result'), $hint = $('hint');
@@ -25,34 +27,35 @@ var $suggest = $('suggest');
 var currentView = 'query';
 var VIEWS = ['query', 'stats', 'about'];
 var aggregateRequestId = 0;
+var queryRequestId = 0;
+var yearRequestId = 0;
+var statsContext = null;
 
 function createAggregateRenderer(loaded) {
   var supportedYears = getSortedYears(loaded.metadata);
-  var normalizedPlans = {};
-  supportedYears.forEach(function (year) {
-    normalizedPlans[year] = (loaded.store.plansByYear[year] || []).map(normalizePlanEntry);
-  });
   return function renderAggregates(majors, state, dispatch) {
-    if (!majors.length) return;
     var years = (state && state.selectedYears) || supportedYears;
     var requestId = ++aggregateRequestId;
+    if (!majors.length) {
+      renderResultWorkspace($result, { status: 'ready', hasQuery: Boolean(state && state.specName), aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
+      return;
+    }
     renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
-    Promise.all(years.map(function (year) { return loaded.repository.ensureScoreSegments(year); }))
-      .then(function (segmentFiles) {
+    Promise.resolve([])
+      .then(function () {
         if (requestId !== aggregateRequestId) return;
         var segmentsByYear = {};
-        years.forEach(function (year, index) {
-          segmentsByYear[year] = (segmentFiles[index].majors || []).map(normalizeScoreSegmentSeries);
-        });
+        years.forEach(function (year) { segmentsByYear[year] = []; });
+        var summaryStore = loaded.store.querySummaryStore || { plansByYear: {}, scoresByYear: {}, fallbacksByYear: {} };
         var aggregates = buildMajorAggregates({
           majors: majors.map(function (major) {
             return normalizeMajorOption(major, loaded.metadata.derivedFields && loaded.metadata.derivedFields.publicCourse);
           }),
           years: years,
-          plansByYear: normalizedPlans,
-          scoresByYear: loaded.store.scoresByYear,
+          plansByYear: data.normalizedPlansForYears(summaryStore, years),
+          scoresByYear: summaryStore.scoresByYear,
           segmentsByYear: segmentsByYear,
-          fallbacksByYear: loaded.store.fallbacksByYear
+          fallbacksByYear: summaryStore.fallbacksByYear
         });
         var resultModel = buildResultModel({
           aggregates: aggregates,
@@ -61,7 +64,32 @@ function createAggregateRenderer(loaded) {
           filters: state && state.filters,
           sort: state && state.sort
         });
-        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: resultModel.aggregates, selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
+        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: resultModel.aggregates, selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch,
+          function (aggregate, selected, holder, hiddenFields) {
+            holder.innerHTML = '<div class="loading">正在读取该专业的一分一段…</div>';
+            Promise.all([data.loadYears(loaded.store, selected), Promise.all(selected.map(function (year) {
+              return loaded.repository.ensureScoreSegmentIndex(year).then(function (index) {
+                var code = lookupScoreSegmentCode(index, aggregate.major.majorCode);
+                return code ? loaded.repository.ensureScoreSegment(year, code) : null;
+              });
+            }))]).then(function (values) {
+              if (!holder.isConnected) return;
+              var shards = values[1];
+              var detail = buildMajorAggregates({ majors: [aggregate.major], years: selected,
+                plansByYear: data.normalizedPlansForYears(loaded.store, selected),
+                scoresByYear: loaded.store.scoresByYear, segmentsByYear: {},
+                fallbacksByYear: loaded.store.fallbacksByYear })[0];
+              detail = buildResultModel({ aggregates: [detail], metadata: loaded.metadata,
+                selectedYears: selected, filters: state && state.filters }).aggregates[0] || detail;
+              selected.forEach(function (year, index) {
+                var yearValue = detail.years[year];
+                if (!yearValue) return;
+                yearValue.scoreSegments = shards[index] ? normalizeScoreSegmentSeries(shards[index]) : null;
+                yearValue.scoreContext = resolveScoreContext(yearValue.scoreSegments, null, yearValue.score);
+              });
+              holder.innerHTML = buildExpandedMajorHtml(detail, selected, hiddenFields);
+            }).catch(function (error) { if (holder.isConnected) holder.textContent = '数据加载失败：' + error.message; });
+          });
       })
       .catch(function (error) {
         if (requestId !== aggregateRequestId) return;
@@ -73,13 +101,11 @@ function createAggregateRenderer(loaded) {
 /* ---------- 头部统计数字 ---------- */
 function initStats() {
   data.uniqueMajors();
-  var metadata = data.getMetadata();
-  var activeYear = getLatestYear(metadata);
   $('stat-spec').textContent = String(data.MAPPING.length);
   $('stat-major').textContent = String(data.ALL_MAJORS.length);
-  $('stat-score').textContent = String((data.SCORE_BY_YEAR[activeYear] || []).length);
-  $('stat-school').textContent = String(data.getPlanStats()['院校数']);
-  $('stat-plan').textContent = String(data.getPlansByYear(activeYear).length);
+  $('stat-score').textContent = '–';
+  $('stat-school').textContent = '–';
+  $('stat-plan').textContent = '–';
 }
 
 function applyYearLabels(metadata) {
@@ -103,7 +129,8 @@ function switchView(v) {
     tab.classList.toggle('is-active', on);
     tab.setAttribute('aria-selected', String(on));
   });
-  if (v === 'stats' && data.isReady()) initCharts();
+  if (v === 'stats' && statsContext) renderStatsPage(statsContext.repository, statsContext.metadata,
+    statsContext.controller.getState(), data.getMappingByYear(statsContext.controller.getState().focusYear));
   if (location.hash !== '#' + v) location.hash = v;
 }
 window.addEventListener('hashchange', function () {
@@ -136,10 +163,16 @@ $('clearBtn').addEventListener('click', function () {
 document.querySelectorAll('.tab').forEach(function (tab) {
   tab.addEventListener('click', function () { switchView(tab.getAttribute('data-view')); });
 });
+$('stats-edit-filters').addEventListener('click', function () {
+  switchView('query');
+  var panel = $('explorer').querySelector('.filter-panel');
+  if (panel) panel.scrollIntoView({ block: 'start' });
+});
 
 /* ---------- 配色切换 ---------- */
 function refreshChartsIfVisible() {
-  if (currentView === 'stats' && data.isReady()) initCharts();
+  if (currentView === 'stats' && statsContext) renderStatsPage(statsContext.repository, statsContext.metadata,
+    statsContext.controller.getState(), data.getMappingByYear(statsContext.controller.getState().focusYear));
 }
 var themeBtn = $('themeToggle');
 if (themeBtn) {
@@ -166,12 +199,53 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   initStats();
   var renderAggregates = createAggregateRenderer(loaded);
   var explorerController = explorer.initExplorer($('explorer'), loaded.metadata, {
+    onYearChange: function (state) {
+      ++queryRequestId;
+      var requestId = ++yearRequestId;
+      loaded.repository.ensureQueryIndex(state.focusYear).then(function (mapping) {
+        if (requestId !== yearRequestId || explorerController.getState().focusYear !== state.focusYear) return;
+        loaded.store.mappingByYear[state.focusYear] = mapping;
+        if ($q.value.trim()) query.doQuery($q, $hint, $result);
+        else if (currentView === 'stats' && statsContext) renderStatsPage(loaded.repository, loaded.metadata,
+          explorerController.getState(), mapping);
+      }).catch(function (error) { if (requestId === yearRequestId) $hint.textContent = error.message; });
+    },
     onFilteredResult: function (majors, state) {
       renderAggregates(majors, state, explorerController && explorerController.dispatch);
+      if (currentView === 'stats' && statsContext) renderStatsPage(loaded.repository, loaded.metadata, state,
+        data.getMappingByYear(state.focusYear));
     }
   });
-  query.setResultListener(explorer.setSearchResult);
-  afterLoad();
+  statsContext = { repository: loaded.repository, metadata: loaded.metadata, controller: explorerController };
+  query.setResultListener(function (majors, specName) {
+    var requestId = ++queryRequestId;
+    ++aggregateRequestId;
+    if (!majors.length) return explorer.setSearchResult([], specName);
+    var state = explorerController.getState();
+    var selectedYears = state.selectedYears.slice();
+    var focusYear = state.focusYear;
+    $result.innerHTML = '<div class="loading">正在读取所选年份的统计摘要…</div>';
+    Promise.all(selectedYears.map(function (year) { return loaded.repository.ensureAnalytics(year); })).then(function (documents) {
+      var currentState = explorerController.getState();
+      if (requestId !== queryRequestId || currentState.focusYear !== focusYear ||
+          currentState.selectedYears.join(',') !== selectedYears.join(',')) return;
+      var analyticsByYear = Object.fromEntries(selectedYears.map(function (year, index) { return [year, documents[index]]; }));
+      loaded.store.querySummaryStore = queryRowsFromAnalytics(analyticsByYear, selectedYears);
+      data.buildIndexes(loaded.store.querySummaryStore, loaded.metadata);
+      explorer.setSearchResult(majors, specName);
+    }).catch(function (error) {
+      if (requestId !== queryRequestId) return;
+      explorer.setSearchResult([], specName);
+      $result.innerHTML = '<div class="msg-notfound">' + esc(error.message) + '</div>';
+    });
+  });
+  var initialFocusYear = explorerController.getState().focusYear;
+  var initialYearRequestId = ++yearRequestId;
+  loaded.repository.ensureQueryIndex(initialFocusYear).then(function (mapping) {
+    if (initialYearRequestId !== yearRequestId || explorerController.getState().focusYear !== initialFocusYear) return;
+    loaded.store.mappingByYear[initialFocusYear] = mapping;
+    afterLoad();
+  }).catch(function (error) { if (initialYearRequestId === yearRequestId) $hint.textContent = error.message; });
 }).catch(function (err) {
   $result.innerHTML = '<div class="msg-notfound"><b>数据加载失败：</b>' + esc(err.message) + '<br>' +
     '请确认 metadata 配置及其声明的数据文件完整后刷新页面重试。</div>';

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "W5",
+  "majorName": "生物科学",
+  "controlScore": 89,
+  "sourceId": "score-segments:2026:W5:a280e095ea87",
+  "segments": [
+    {
+      "score": 157,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 147,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 124,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 93,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 89,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    }
+  ]
+}

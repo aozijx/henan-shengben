@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "R6",
+  "majorName": "机械工程",
+  "controlScore": 96,
+  "sourceId": "score-segments:2025:R6:09cdf2bb0269",
+  "segments": [
+    {
+      "score": 138,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 132,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 96,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    }
+  ]
+}

@@ -4,8 +4,8 @@ import { createDataRepository } from './data-source.js';
 
 export async function bootstrapData(metadataUrl, fetchImpl) {
   var metadata = await loadMetadata(metadataUrl, fetchImpl);
-  var store = await loadAll(metadata, fetchImpl);
-  var index = buildIndexes(store, metadata);
   var repository = createDataRepository(metadata, fetchImpl);
+  var store = await loadAll(metadata, fetchImpl, repository);
+  var index = buildIndexes(store, metadata);
   return { metadata: metadata, store: store, index: index, repository: repository };
 }

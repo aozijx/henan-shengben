@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "C4",
+  "majorName": "临床医学",
+  "controlScore": 219,
+  "sourceId": "score-segments:2024:C4:56f600adfa23",
+  "segments": [
+    {
+      "score": 267,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 253,
+      "segmentCount": 2,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 252,
+      "segmentCount": 2,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 251,
+      "segmentCount": 2,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 250,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 248,
+      "segmentCount": 2,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 247,
+      "segmentCount": 2,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 246,
+      "segmentCount": 2,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 245,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 244,
+      "segmentCount": 7,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 243,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 242,
+      "segmentCount": 4,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 241,
+      "segmentCount": 2,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 240,
+      "segmentCount": 2,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 239,
+      "segmentCount": 6,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 238,
+      "segmentCount": 12,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 237,
+      "segmentCount": 9,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 236,
+      "segmentCount": 13,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 235,
+      "segmentCount": 6,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 234,
+      "segmentCount": 5,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 233,
+      "segmentCount": 9,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 232,
+      "segmentCount": 14,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 231,
+      "segmentCount": 12,
+      "cumulativeCount": 117
+    },
+    {
+      "score": 230,
+      "segmentCount": 12,
+      "cumulativeCount": 129
+    },
+    {
+      "score": 229,
+      "segmentCount": 14,
+      "cumulativeCount": 143
+    },
+    {
+      "score": 228,
+      "segmentCount": 18,
+      "cumulativeCount": 161
+    },
+    {
+      "score": 227,
+      "segmentCount": 11,
+      "cumulativeCount": 172
+    },
+    {
+      "score": 226,
+      "segmentCount": 10,
+      "cumulativeCount": 182
+    },
+    {
+      "score": 225,
+      "segmentCount": 14,
+      "cumulativeCount": 196
+    },
+    {
+      "score": 224,
+      "segmentCount": 19,
+      "cumulativeCount": 215
+    },
+    {
+      "score": 223,
+      "segmentCount": 21,
+      "cumulativeCount": 236
+    },
+    {
+      "score": 222,
+      "segmentCount": 19,
+      "cumulativeCount": 255
+    },
+    {
+      "score": 221,
+      "segmentCount": 20,
+      "cumulativeCount": 275
+    },
+    {
+      "score": 220,
+      "segmentCount": 18,
+      "cumulativeCount": 293
+    },
+    {
+      "score": 219,
+      "segmentCount": 17,
+      "cumulativeCount": 310
+    }
+  ]
+}

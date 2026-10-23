@@ -2,6 +2,8 @@
 import { normCode6, schoolName } from './utils.js';
 import { createDataRepository } from './data-source.js';
 import { getSortedYears } from './metadata.js';
+import { normalizePlanEntry } from './model.js';
+import { normalizeMajorName, selectMajorRows } from './major-match.js';
 
 export var YEARS = [];
 export var SCORE_BY_YEAR = {};
@@ -22,7 +24,7 @@ export function createLazyStore(metadata, fetchImpl) {
   return createDataRepository(metadata, fetchImpl);
 }
 
-function normName(value) { return String(value || '').replace(/\s+/g, ''); }
+function normName(value) { return normalizeMajorName(value); }
 
 async function readJson(path, fetcher, cache) {
   if (!cache[path]) {
@@ -38,7 +40,7 @@ async function readJson(path, fetcher, cache) {
   return cache[path];
 }
 
-export async function loadAll(metadata, fetchImpl) {
+export async function loadAll(metadata, fetchImpl, repository) {
   var fetcher = fetchImpl || fetch;
   var cache = {};
   var store = {
@@ -46,10 +48,30 @@ export async function loadAll(metadata, fetchImpl) {
     years: getSortedYears(metadata),
     mappingByYear: {}, scoresByYear: {}, plansByYear: {}, fallbacksByYear: {}, mapping: []
   };
-  await Promise.all(store.years.map(async function (year) {
-    var source = metadata.yearSources[year];
+  var defaultYear = metadata.defaultYear;
+  store.mappingByYear[defaultYear] = repository
+    ? await repository.ensureQueryIndex(defaultYear)
+    : await readJson(metadata.yearSources[defaultYear].queryIndexSource || metadata.yearSources[defaultYear].mappingSource, fetcher, cache);
+  store.mapping = store.mappingByYear[defaultYear] || [];
+  activeStore = store;
+  activeMetadata = metadata;
+  YEARS = store.years.slice();
+  SCORE_BY_YEAR = store.scoresByYear;
+  MAPPING = store.mapping;
+  PLANS = [];
+  ready = true;
+  return store;
+}
+
+export async function loadYears(store, years, fetchImpl) {
+  var fetcher = fetchImpl || fetch;
+  var cache = {};
+  await Promise.all(years.map(async function (year) {
+    if (store.plansByYear[year] && store.scoresByYear[year]) return;
+    var source = store.metadata.yearSources[year];
     var values = await Promise.all([
-      readJson(source.mappingSource, fetcher, cache),
+      store.mappingByYear[year] && (!source.queryIndexSource || source.queryIndexSource === source.mappingSource)
+        ? Promise.resolve(store.mappingByYear[year]) : readJson(source.mappingSource, fetcher, cache),
       readJson(source.scoreSource, fetcher, cache),
       readJson(source.planSource, fetcher, cache),
       source.collegeFallbackSource ? readJson(source.collegeFallbackSource, fetcher, cache) : Promise.resolve([])
@@ -59,15 +81,16 @@ export async function loadAll(metadata, fetchImpl) {
     store.plansByYear[year] = values[2];
     store.fallbacksByYear[year] = values[3];
   }));
-  store.mapping = store.mappingByYear[metadata.defaultYear] || [];
-  activeStore = store;
-  activeMetadata = metadata;
-  YEARS = store.years.slice();
-  SCORE_BY_YEAR = store.scoresByYear;
-  MAPPING = store.mapping;
-  PLANS = store.plansByYear[metadata.defaultYear] || [];
-  ready = true;
+  PLANS = store.plansByYear[store.metadata.defaultYear] || [];
   return store;
+}
+
+export function normalizedPlansForYears(store, years) {
+  var output = {};
+  (years || []).forEach(function (year) {
+    output[year] = (store.plansByYear[year] || []).map(normalizePlanEntry);
+  });
+  return output;
 }
 
 function createRowIndex(rows) {
@@ -78,7 +101,7 @@ function createRowIndex(rows) {
     if (name) (byName[name] = byName[name] || []).push(row);
     if (code) (byCode[code] = byCode[code] || []).push(row);
   });
-  return { byName: byName, byCode: byCode };
+  return { byName: byName, byCode: byCode, all: rows };
 }
 
 function createFallbackIndex(rows) {
@@ -151,11 +174,10 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
   var name = normName(major['专业名称']);
   var code = String(major['专业代号'] || '').trim();
   var code6 = normCode6(major['代码6位'] || '');
-  var list = name && planIndex.byName[name];
-  if (!list && code) {
-    var alias = code === '99' ? 'A1' : (code === 'A1' ? '99' : code);
-    list = planIndex.byCode[code] || planIndex.byCode[alias];
-  }
+  var list = selectMajorRows(planIndex.all || [], code, name,
+    function (row) { return row['专业代号'] || row['专业代码']; },
+    function (row) { return row['专业名称']; });
+  if (!list.length) list = null;
   if (!list) list = (code6 && fallbackIndex.byCode[code6]) || (name && fallbackIndex.byName[name]);
   if (!list) return [];
   return list.slice().sort(function (a, b) {

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "B7",
+  "majorName": "广播电视学",
+  "controlScore": 81,
+  "sourceId": "score-segments:2025:B7:11f21f210758",
+  "segments": [
+    {
+      "score": 146,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 140,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 137,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 132,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 128,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 124,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 110,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 81,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "X4",
+  "majorName": "烹饪与营养教育",
+  "controlScore": 100,
+  "sourceId": "score-segments:2026:X4:42e636339551",
+  "segments": [
+    {
+      "score": 166,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 154,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 153,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 150,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 140,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 138,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 135,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 133,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 131,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 130,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 127,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 125,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 120,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 117,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 113,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 105,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 103,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 100,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    }
+  ]
+}

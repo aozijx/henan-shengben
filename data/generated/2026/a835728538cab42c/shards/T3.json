@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "T3",
+  "majorName": "电气工程与智能控制",
+  "controlScore": 157,
+  "sourceId": "score-segments:2026:T3:726f06462ced",
+  "segments": [
+    {
+      "score": 220,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 214,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 212,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 205,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 204,
+      "segmentCount": 2,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 203,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 201,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 198,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 197,
+      "segmentCount": 2,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 193,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 192,
+      "segmentCount": 4,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 190,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 189,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 188,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 187,
+      "segmentCount": 2,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 185,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 182,
+      "segmentCount": 2,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 181,
+      "segmentCount": 2,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 180,
+      "segmentCount": 1,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 179,
+      "segmentCount": 1,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 178,
+      "segmentCount": 3,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 177,
+      "segmentCount": 4,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 176,
+      "segmentCount": 3,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 172,
+      "segmentCount": 1,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 170,
+      "segmentCount": 3,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 169,
+      "segmentCount": 3,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 168,
+      "segmentCount": 5,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 166,
+      "segmentCount": 3,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 165,
+      "segmentCount": 2,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 164,
+      "segmentCount": 1,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 163,
+      "segmentCount": 2,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 161,
+      "segmentCount": 4,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 159,
+      "segmentCount": 1,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 158,
+      "segmentCount": 2,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 157,
+      "segmentCount": 4,
+      "cumulativeCount": 72
+    }
+  ]
+}

@@ -47,7 +47,8 @@ function sanitizeFilters(saved, metadata) {
     if (field.type === 'enum') {
       filters[field.key] = enumOptions(field).indexOf(value) >= 0 ? value : filterDefaultValue(field);
     } else if (field.type === 'number') {
-      filters[field.key] = /^\d*$/.test(String(value == null ? '' : value)) ? String(value) : '';
+      var numericText = value == null ? '' : String(value);
+      filters[field.key] = /^\d*$/.test(numericText) ? numericText : '';
     } else {
       filters[field.key] = value == null ? filterDefaultValue(field) : String(value);
     }

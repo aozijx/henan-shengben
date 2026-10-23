@@ -1,5 +1,5 @@
 import { getCollegesByYear, getScore } from './data.js';
-import { enumOptions } from './metadata.js';
+import { enumOptions, getSortedYears } from './metadata.js';
 import { createInitialState, reduceExplorerState, sanitizeNumberInput, canExport } from './explorer-state.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { renderPreview } from './preview.js';
@@ -8,6 +8,7 @@ import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWi
 import { setQueryYear } from './query.js';
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
+import { buildYearDialogHtml } from './results-view.js';
 
 var activeExplorer = null;
 
@@ -36,12 +37,16 @@ function minControl(field, state, disabled) {
 
 export function buildExplorerControlsHtml(metadata, state) {
   var unavailable = state.status !== 'ready' || !state.majors.length;
+  var years = getSortedYears(metadata);
+  var selectedYears = state.selectedYears || years;
+  var yearLabel = selectedYears.length === years.length ? '年份：全部（' + years[0] + '–' + years[years.length - 1] + '）' : '年份：' + selectedYears.join('、');
   return '<div class="explorer-status" aria-live="polite">' +
       (state.status === 'loading' ? '<span class="loading">正在加载院校数据…</span>' : '') +
       (state.status === 'error' ? '<span class="msg-notfound">' + esc(state.error) + '</span>' : '') +
     '</div>' +
     '<section class="filter-panel" aria-label="筛选条件">' +
       '<div class="filter-group"><h3>筛选条件</h3><div class="filter-row">' +
+        '<div class="filter-field"><span>年份</span><button type="button" data-filter-action="years" aria-haspopup="dialog" aria-label="选择展示年份，' + esc(yearLabel) + '">' + esc(yearLabel) + '</button></div>' +
         enumControl(filterField(metadata, 'schoolType'), 'schoolType', state, unavailable) +
         enumControl(filterField(metadata, 'povertyStatus'), 'povertyStatus', state, unavailable) +
         enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
@@ -50,7 +55,7 @@ export function buildExplorerControlsHtml(metadata, state) {
       '<div class="filter-group filter-operations"><h3>筛选操作</h3><div class="filter-row">' +
       '<button type="button" data-action="reset"' + (unavailable ? ' disabled' : '') + '>重置筛选</button>' +
       '<button type="button" data-action="clear-storage"' + (state.status !== 'ready' ? ' disabled' : '') + '>清除本地存储</button>' +
-      '</div></div></section>' +
+      '</div></div>' + buildYearDialogHtml(metadata, selectedYears) + '</section>' +
     '<section class="preview-section"><div id="preview-table" class="preview-placeholder" aria-live="polite">' +
       (state.majors.length ? '预览表格准备中…' : '请先查询专科专业，再使用筛选与导出。') +
     '</div></section>' +
@@ -61,6 +66,32 @@ export function buildExplorerControlsHtml(metadata, state) {
 function renderExplorerControls(root, metadata, state, dispatch) {
   if (!root) return;
   root.innerHTML = buildExplorerControlsHtml(metadata, state);
+
+  var yearDialog = root.querySelector('.year-selection-dialog');
+  root.querySelector('[data-filter-action="years"]').addEventListener('click', function () {
+    if (typeof yearDialog.showModal === 'function') yearDialog.showModal();
+    else yearDialog.setAttribute('open', '');
+  });
+  yearDialog.querySelectorAll('[data-year-select]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var years = getSortedYears(metadata);
+      var selected = button.dataset.yearSelect === 'latest' ? [years[years.length - 1]] : years;
+      yearDialog.querySelectorAll('input[name="selected-year"]').forEach(function (input) {
+        input.checked = selected.indexOf(Number(input.value)) >= 0;
+      });
+    });
+  });
+  yearDialog.querySelector('[data-year-apply]').addEventListener('click', function () {
+    var selected = Array.from(yearDialog.querySelectorAll('input[name="selected-year"]:checked'))
+      .map(function (input) { return Number(input.value); });
+    if (!selected.length) {
+      yearDialog.querySelector('.year-selection-error').textContent = '请至少选择一个年份。';
+      return;
+    }
+    if (typeof yearDialog.close === 'function') yearDialog.close();
+    else yearDialog.removeAttribute('open');
+    dispatch({ type: 'SET_SELECTED_YEARS', years: selected });
+  });
 
   root.querySelectorAll('[data-filter]').forEach(function (control) {
     control.addEventListener('change', function () { dispatch({ type: 'SET_FILTER', key: control.dataset.filter, value: control.value }); });
@@ -163,7 +194,10 @@ export function initExplorer(root, metadata, options) {
   setQueryYear(state.focusYear);
   function dispatch(event) {
     state = reduceExplorerState(state, event, metadata);
-    if (event.type === 'SET_SELECTED_YEARS') setQueryYear(state.focusYear);
+    if (event.type === 'SET_SELECTED_YEARS') {
+      setQueryYear(state.focusYear);
+      if (typeof options.onYearChange === 'function') options.onYearChange(state);
+    }
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
     if (event.type === 'SET_FILTER' || event.type === 'SET_SORT' || event.type === 'RESET_FILTERS' ||
         event.type === 'SET_SELECTED_YEARS' || event.type === 'SET_RESULT_LAYOUT') {

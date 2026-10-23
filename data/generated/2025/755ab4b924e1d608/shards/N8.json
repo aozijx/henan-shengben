@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "N8",
+  "majorName": "金融工程",
+  "controlScore": 200,
+  "sourceId": "score-segments:2025:N8:42aaec762602",
+  "segments": [
+    {
+      "score": 201,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 200,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    }
+  ]
+}

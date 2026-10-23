@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "R1",
+  "majorName": "表演",
+  "controlScore": 156,
+  "sourceId": "score-segments:2024:R1:fad26a7396c9",
+  "segments": [
+    {
+      "score": 191,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 190,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 176,
+      "segmentCount": 2,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 172,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 166,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 163,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 161,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 160,
+      "segmentCount": 2,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 156,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    }
+  ]
+}

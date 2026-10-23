@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "17",
+  "majorName": "学前教育",
+  "controlScore": 164,
+  "sourceId": "score-segments:2025:17:f6e1bcd27862",
+  "segments": [
+    {
+      "score": 250,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 244,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 243,
+      "segmentCount": 4,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 242,
+      "segmentCount": 3,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 241,
+      "segmentCount": 2,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 240,
+      "segmentCount": 5,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 239,
+      "segmentCount": 4,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 238,
+      "segmentCount": 4,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 237,
+      "segmentCount": 11,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 236,
+      "segmentCount": 13,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 235,
+      "segmentCount": 13,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 234,
+      "segmentCount": 22,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 233,
+      "segmentCount": 21,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 232,
+      "segmentCount": 20,
+      "cumulativeCount": 124
+    },
+    {
+      "score": 231,
+      "segmentCount": 20,
+      "cumulativeCount": 144
+    },
+    {
+      "score": 230,
+      "segmentCount": 35,
+      "cumulativeCount": 179
+    },
+    {
+      "score": 229,
+      "segmentCount": 31,
+      "cumulativeCount": 210
+    },
+    {
+      "score": 228,
+      "segmentCount": 41,
+      "cumulativeCount": 251
+    },
+    {
+      "score": 227,
+      "segmentCount": 45,
+      "cumulativeCount": 296
+    },
+    {
+      "score": 226,
+      "segmentCount": 42,
+      "cumulativeCount": 338
+    },
+    {
+      "score": 225,
+      "segmentCount": 52,
+      "cumulativeCount": 390
+    },
+    {
+      "score": 224,
+      "segmentCount": 50,
+      "cumulativeCount": 440
+    },
+    {
+      "score": 223,
+      "segmentCount": 65,
+      "cumulativeCount": 505
+    },
+    {
+      "score": 222,
+      "segmentCount": 63,
+      "cumulativeCount": 568
+    },
+    {
+      "score": 221,
+      "segmentCount": 55,
+      "cumulativeCount": 623
+    },
+    {
+      "score": 220,
+      "segmentCount": 54,
+      "cumulativeCount": 677
+    },
+    {
+      "score": 219,
+      "segmentCount": 62,
+      "cumulativeCount": 739
+    },
+    {
+      "score": 218,
+      "segmentCount": 77,
+      "cumulativeCount": 816
+    },
+    {
+      "score": 217,
+      "segmentCount": 55,
+      "cumulativeCount": 871
+    },
+    {
+      "score": 216,
+      "segmentCount": 94,
+      "cumulativeCount": 965
+    },
+    {
+      "score": 215,
+      "segmentCount": 67,
+      "cumulativeCount": 1032
+    },
+    {
+      "score": 214,
+      "segmentCount": 73,
+      "cumulativeCount": 1105
+    },
+    {
+      "score": 213,
+      "segmentCount": 81,
+      "cumulativeCount": 1186
+    },
+    {
+      "score": 212,
+      "segmentCount": 86,
+      "cumulativeCount": 1272
+    },
+    {
+      "score": 211,
+      "segmentCount": 79,
+      "cumulativeCount": 1351
+    },
+    {
+      "score": 210,
+      "segmentCount": 70,
+      "cumulativeCount": 1421
+    },
+    {
+      "score": 209,
+      "segmentCount": 109,
+      "cumulativeCount": 1530
+    },
+    {
+      "score": 208,
+      "segmentCount": 109,
+      "cumulativeCount": 1639
+    },
+    {
+      "score": 207,
+      "segmentCount": 102,
+      "cumulativeCount": 1741
+    },
+    {
+      "score": 206,
+      "segmentCount": 100,
+      "cumulativeCount": 1841
+    },
+    {
+      "score": 205,
+      "segmentCount": 114,
+      "cumulativeCount": 1955
+    },
+    {
+      "score": 204,
+      "segmentCount": 85,
+      "cumulativeCount": 2040
+    },
+    {
+      "score": 203,
+      "segmentCount": 90,
+      "cumulativeCount": 2130
+    },
+    {
+      "score": 202,
+      "segmentCount": 106,
+      "cumulativeCount": 2236
+    },
+    {
+      "score": 201,
+      "segmentCount": 115,
+      "cumulativeCount": 2351
+    },
+    {
+      "score": 200,
+      "segmentCount": 92,
+      "cumulativeCount": 2443
+    },
+    {
+      "score": 199,
+      "segmentCount": 111,
+      "cumulativeCount": 2554
+    },
+    {
+      "score": 198,
+      "segmentCount": 103,
+      "cumulativeCount": 2657
+    },
+    {
+      "score": 197,
+      "segmentCount": 101,
+      "cumulativeCount": 2758
+    },
+    {
+      "score": 196,
+      "segmentCount": 116,
+      "cumulativeCount": 2874
+    },
+    {
+      "score": 195,
+      "segmentCount": 90,
+      "cumulativeCount": 2964
+    },
+    {
+      "score": 194,
+      "segmentCount": 106,
+      "cumulativeCount": 3070
+    },
+    {
+      "score": 193,
+      "segmentCount": 105,
+      "cumulativeCount": 3175
+    },
+    {
+      "score": 192,
+      "segmentCount": 100,
+      "cumulativeCount": 3275
+    },
+    {
+      "score": 164,
+      "segmentCount": 2652,
+      "cumulativeCount": 5927
+    }
+  ]
+}

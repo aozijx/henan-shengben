@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { doQuery, findMappingMatches, resolveMappingMatch, setQueryYear, setResultListener } from '../js/query.js';
-import { loadAll } from '../js/data.js';
+import { loadAll, loadYears } from '../js/data.js';
 
 test('searches only the mapping supplied for the selected year', () => {
   const mapping2026 = [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '旧专业' }] }];
@@ -58,7 +58,8 @@ test('switches completion and context to the focused query year', async () => {
     'mapping-2026.json': [{ 专科专业: '软件技术（2026）', 可报本科专业: [] }],
     'scores-2024.json': [], 'scores-2026.json': [], 'plans-2024.json': [], 'plans-2026.json': []
   };
-  await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
+  const store = await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
+  await loadYears(store, [2024], async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
   setQueryYear(2024);
   const input = { value: '软件技术' };
   const hint = { textContent: '' };

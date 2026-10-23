@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "J8",
+  "majorName": "电子科学与技术",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:J8:606f058e4ac0",
+  "segments": [
+    {
+      "score": 192,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 177,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 174,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 171,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 160,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 152,
+      "segmentCount": 2,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 150,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 148,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 142,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 137,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 136,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 135,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 134,
+      "segmentCount": 2,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 133,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 131,
+      "segmentCount": 2,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 125,
+      "segmentCount": 2,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 121,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 119,
+      "segmentCount": 3,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 117,
+      "segmentCount": 1,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 114,
+      "segmentCount": 1,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 112,
+      "segmentCount": 2,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 111,
+      "segmentCount": 2,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 105,
+      "segmentCount": 1,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 104,
+      "segmentCount": 2,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 103,
+      "segmentCount": 1,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 102,
+      "segmentCount": 2,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 101,
+      "segmentCount": 2,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 100,
+      "segmentCount": 1,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 96,
+      "segmentCount": 4,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 94,
+      "segmentCount": 3,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 93,
+      "segmentCount": 1,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 92,
+      "segmentCount": 2,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 91,
+      "segmentCount": 1,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 90,
+      "segmentCount": 2,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 88,
+      "segmentCount": 1,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 84,
+      "segmentCount": 2,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 82,
+      "segmentCount": 3,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 81,
+      "segmentCount": 1,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 80,
+      "segmentCount": 1,
+      "cumulativeCount": 62
+    }
+  ]
+}

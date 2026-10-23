@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "R6",
+  "majorName": "机械工程",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:R6:7299fa1f488c",
+  "segments": [
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 141,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 132,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 128,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 124,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 102,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 100,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 96,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 92,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 91,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 90,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 88,
+      "segmentCount": 2,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 86,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 85,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 80,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    }
+  ]
+}

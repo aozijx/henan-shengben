@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "V9",
+  "majorName": "传播学",
+  "controlScore": 135,
+  "sourceId": "score-segments:2026:V9:31d0d0226b2f",
+  "segments": [
+    {
+      "score": 174,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 172,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 164,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 159,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 151,
+      "segmentCount": 2,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 149,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 138,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 136,
+      "segmentCount": 2,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 135,
+      "segmentCount": 2,
+      "cumulativeCount": 14
+    }
+  ]
+}

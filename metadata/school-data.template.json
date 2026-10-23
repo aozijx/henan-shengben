@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 3,
+  "defaultYear": 2026,
+  "mappingReferences": { "2024": 2026, "2025": 2026 },
+  "uiDefaults": { "selectedYears": "allSupportedYears", "resultLayout": "cards" },
+  "resultVisibilityRules": [
+    { "when": { "filterKey": "povertyStatus", "equals": "否" }, "hide": ["povertyPlan"] }
+  ],
+  "sourceFields": {
+    "majorCode": "专业代号",
+    "majorName": "专业名称",
+    "disciplineCode6": "代码6位",
+    "professionalCourseCode": "考试科目代码",
+    "professionalCourseName": "考试科目"
+  },
+  "derivedFields": {
+    "publicCourse": {
+      "defaultLabel": "公共英语",
+      "professionalEnglishPattern": "专业英语",
+      "professionalEnglishLabel": "专业英语"
+    }
+  },
+  "fields": [
+    { "key": "majorName", "label": "本科专业", "exportLabel": "本科专业", "type": "string", "filterEnable": false, "sortEnable": false, "tableShow": true, "exportEnable": true },
+    { "key": "schoolType", "label": "办学性质", "exportLabel": "办学性质筛选", "type": "enum", "enumValues": ["公办", "民办"], "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
+    { "key": "povertyStatus", "label": "建档立卡", "exportLabel": "建档立卡筛选", "type": "enum", "enumValues": ["是", "否"], "filterDefault": "否", "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
+    { "key": "subject", "label": "专业基础课", "exportLabel": "专业基础课", "type": "enum", "enumValues": ["高等数学", "管理学", "大学语文", "大学语文、专业英语", "经济学", "法学基础", "教育学心理学", "中医基础", "生理学、病理解剖学", "动物、植物遗传学", "体育专业综合", "音乐专业综合", "美术专业综合", "舞蹈专业综合"], "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
+    { "key": "schoolCount", "label": "院校数({latestYear})", "exportLabel": "院校数({latestYear})", "type": "number", "min": 0, "filterEnable": true, "sortEnable": false, "tableShow": false, "exportEnable": false },
+    { "key": "originalOrder", "label": "原始顺序", "exportLabel": "原始顺序", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": false, "exportEnable": false }
+  ],
+  "yearFieldTemplates": [
+    { "key": "score{year}", "label": "{year}分数线", "exportLabel": "{year}分数线", "type": "number", "min": 0, "max": 750, "filterEnable": false, "sortEnable": true, "tableShow": true, "exportEnable": true },
+    { "key": "schoolSplit{year}", "label": "{year}院校数(公/民)", "exportLabel": "{year}院校数(公/民)", "type": "string", "sortKey": "schoolCount{year}", "filterEnable": false, "sortEnable": false, "tableShow": true, "exportEnable": true },
+    { "key": "planSplit{year}", "label": "{year}计划人数(公/民)", "exportLabel": "{year}计划人数(公/民)", "type": "string", "sortKey": "planCount{year}", "filterEnable": false, "sortEnable": false, "tableShow": true, "exportEnable": true },
+    { "key": "planCount{year}", "label": "{year}计划人数", "exportLabel": "{year}计划人数", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": false, "exportEnable": false },
+    { "key": "schoolCount{year}", "label": "{year}院校数", "exportLabel": "{year}院校数", "type": "number", "min": 0, "filterEnable": false, "sortEnable": true, "tableShow": false, "exportEnable": false }
+  ],
+  "defaultSort": { "key": "originalOrder", "direction": "original" },
+  "pageSize": 50,
+  "exportFormat": "csv"
+}

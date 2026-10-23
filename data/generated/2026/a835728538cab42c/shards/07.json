@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "07",
+  "majorName": "国际经济与贸易",
+  "controlScore": 125,
+  "sourceId": "score-segments:2026:07:849b9d116bce",
+  "segments": [
+    {
+      "score": 244,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 235,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 225,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 223,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 220,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 218,
+      "segmentCount": 2,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 216,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 214,
+      "segmentCount": 2,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 206,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 205,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 204,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 199,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 198,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 197,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 191,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 187,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 185,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 178,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 177,
+      "segmentCount": 1,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 172,
+      "segmentCount": 1,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 168,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 166,
+      "segmentCount": 1,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 159,
+      "segmentCount": 1,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 157,
+      "segmentCount": 2,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 156,
+      "segmentCount": 1,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 155,
+      "segmentCount": 1,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 151,
+      "segmentCount": 3,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 150,
+      "segmentCount": 1,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 146,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 141,
+      "segmentCount": 2,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 140,
+      "segmentCount": 1,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 139,
+      "segmentCount": 1,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 137,
+      "segmentCount": 3,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 135,
+      "segmentCount": 2,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 130,
+      "segmentCount": 1,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 127,
+      "segmentCount": 1,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 125,
+      "segmentCount": 1,
+      "cumulativeCount": 48
+    }
+  ]
+}

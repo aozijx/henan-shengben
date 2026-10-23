@@ -149,6 +149,15 @@ export function validateMetadata(value) {
     if (value.schemaVersion >= 2 && (!source || !isNonEmptyString(source.scoreSegmentSource))) {
       errors.push(year + ' 年缺少 scoreSegmentSource');
     }
+    if (value.schemaVersion >= 3) {
+      ['analyticsSource', 'scoreSegmentIndexSource', 'scoreSegmentShardTemplate'].forEach(function (key) {
+        if (!source || !isNonEmptyString(source[key])) errors.push(year + ' 年缺少 ' + key);
+      });
+      if (source && isNonEmptyString(source.scoreSegmentShardTemplate) &&
+          source.scoreSegmentShardTemplate.indexOf('{majorCode}') < 0) {
+        errors.push(year + ' 年 scoreSegmentShardTemplate 缺少 {majorCode}');
+      }
+    }
   });
 
   var fields = expandMetadata(value).fields;

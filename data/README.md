@@ -23,6 +23,6 @@
 
 ## 新增年度的发布清单
 
-先完成来源清单、原始 PDF、转换报告和规范 JSON 的核对，再把该年份加入 `metadata/school-data.json` 的 `supportedYears` 与 `yearSources`。每个可发布年份必须至少指向本目录中的专业对照、省控线、招生计划和一分一段规范 JSON；招生高校及专业总表仅在需要回退信息时配置。
+先完成来源清单、原始 PDF、转换报告和规范 JSON 的核对，再运行 `python -m convert.refresh_catalog`。工具扫描每年的专业对照、省控线、招生计划、一分一段和转换报告，核对年份、专业代号、控制线、计划和 PDF 来源哈希，然后在 `generated/<年份>/<输入摘要>/` 生成 analytics、专业分片和索引，在 `generated/catalog/` 生成含输入 SHA-256 的版本化索引表。analytics 保留每个专业的控制线，以及按办学性质汇总的院校、普通/专项计划和轻量的逐校汇总，以支持查询预览时准确去重；院校逐条招生计划仍在展开详情后读取。所有生成物校验通过后，最后原子替换 `metadata/school-data.json`。旧版本文件保持不变，所以中途失败不会改变旧页面的数据入口。旧年度借用其他年份对照须在 `metadata/school-data.template.json` 的 `mappingReferences` 中明确声明；新增年份必须有该年自己的专业对照。2024、2025 暂借用 2026 对照。
 
 页面的年份弹窗、聚合卡片、表格列、预览和 CSV 都从 metadata 的年份集合读取。不要通过复制页面字段或修改 JS 来“接入”新年度；数据文件和 metadata 才是年度边界。业务原始数据、转换产物和查询结果也不得写入浏览器 localStorage。

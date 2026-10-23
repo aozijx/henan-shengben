@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "T6",
+  "majorName": "建筑电气与智能化",
+  "controlScore": 98,
+  "sourceId": "score-segments:2025:T6:552a45ef0352",
+  "segments": [
+    {
+      "score": 276,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 253,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 242,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 238,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 220,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 217,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 208,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 206,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 204,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 195,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 190,
+      "segmentCount": 2,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 182,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 177,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 176,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 171,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 169,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 168,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 157,
+      "segmentCount": 1,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 155,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 154,
+      "segmentCount": 2,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 152,
+      "segmentCount": 1,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 148,
+      "segmentCount": 1,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 146,
+      "segmentCount": 1,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 145,
+      "segmentCount": 1,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 141,
+      "segmentCount": 2,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 140,
+      "segmentCount": 1,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 137,
+      "segmentCount": 1,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 135,
+      "segmentCount": 1,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 131,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 130,
+      "segmentCount": 1,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 125,
+      "segmentCount": 1,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 120,
+      "segmentCount": 1,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 119,
+      "segmentCount": 1,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 113,
+      "segmentCount": 1,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 110,
+      "segmentCount": 1,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 109,
+      "segmentCount": 1,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 101,
+      "segmentCount": 1,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 100,
+      "segmentCount": 1,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 98,
+      "segmentCount": 1,
+      "cumulativeCount": 46
+    }
+  ]
+}

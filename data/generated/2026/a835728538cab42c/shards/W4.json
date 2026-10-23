@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "W4",
+  "majorName": "人文地理与城乡规划",
+  "controlScore": 84,
+  "sourceId": "score-segments:2026:W4:ec7d50cf4f8e",
+  "segments": [
+    {
+      "score": 133,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 131,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 129,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 124,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 98,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 95,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 90,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 89,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 84,
+      "segmentCount": 2,
+      "cumulativeCount": 10
+    }
+  ]
+}

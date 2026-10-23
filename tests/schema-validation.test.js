@@ -35,6 +35,14 @@ test('school-data.json passes its JSON Schema', () => {
   assert.ok(ok, formatAjvErrors(validate.errors));
 });
 
+test('schema v3 rejects a yearly analytics source omission', () => {
+  const ajv = new Ajv({ allErrors: true, strict: false });
+  const validate = ajv.compile(loadSchema('school-data.schema.json'));
+  const metadata = loadJson('metadata/school-data.json');
+  delete metadata.yearSources[2026].analyticsSource;
+  assert.equal(validate(metadata), false);
+});
+
 test('school-data.json passes runtime validateMetadata', () => {
   const metadata = loadJson('metadata/school-data.json');
   const result = validateMetadata(metadata);
@@ -44,20 +52,44 @@ test('school-data.json passes runtime validateMetadata', () => {
 test('all metadata sources resolve inside typed data directories', () => {
   const metadata = loadJson('metadata/school-data.json');
   const failures = [];
+  const catalog = loadJson(metadata.catalogSource);
+  assert.deepEqual(catalog.supportedYears, metadata.supportedYears);
+  assert.deepEqual(catalog.yearSources, metadata.yearSources);
 
   Object.entries(metadata.yearSources).forEach(function ([year, sources]) {
     Object.entries(sources).forEach(function ([role, relativePath]) {
+      if (role === 'mappingReferenceYear') return;
       const normalized = relativePath.replace(/\\/g, '/');
       const parts = normalized.split('/');
       if (parts[0] !== 'data' || parts.length < 3) {
         failures.push(year + ' ' + role + ' 未位于 data 类型子目录：' + relativePath);
-      } else if (!existsSync(join(ROOT, relativePath))) {
+      } else if (!existsSync(join(ROOT, relativePath.replace('{majorCode}',
+        JSON.parse(readFileSync(join(ROOT, sources.scoreSegmentIndexSource), 'utf8')).majors[0]?.majorCode || ''))) ) {
         failures.push(year + ' ' + role + ' 文件不存在：' + relativePath);
       }
     });
   });
 
   assert.deepEqual(failures, [], failures.join('\n'));
+});
+
+test('every indexed score segment shard matches its year, code and cumulative counts', () => {
+  const metadata = loadJson('metadata/school-data.json');
+  Object.entries(metadata.yearSources).forEach(function ([year, sources]) {
+    const index = loadJson(sources.scoreSegmentIndexSource);
+    const canonical = loadJson(sources.scoreSegmentSource);
+    assert.equal(index.year, Number(year));
+    assert.equal(index.majors.length, canonical.majors.length);
+    index.majors.forEach(function (entry) {
+      const shard = loadJson(entry.path);
+      const original = canonical.majors.find(function (major) { return major.majorCode === entry.majorCode; });
+      assert.ok(original, year + '/' + entry.majorCode + ' missing from canonical source');
+      assert.equal(shard.year, Number(year));
+      assert.equal(shard.majorCode, entry.majorCode);
+      assert.deepEqual(shard.segments.map(function (segment) { return segment.cumulativeCount; }),
+        original.segments.map(function (segment) { return segment.cumulativeCount; }));
+    });
+  });
 });
 
 test('all data files pass their JSON Schemas', () => {

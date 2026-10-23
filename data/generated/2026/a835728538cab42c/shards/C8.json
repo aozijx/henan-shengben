@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "C8",
+  "majorName": "眼视光学",
+  "controlScore": 147,
+  "sourceId": "score-segments:2026:C8:962874ed1a23",
+  "segments": [
+    {
+      "score": 236,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 232,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 228,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 227,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 221,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 218,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 217,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 216,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 213,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 212,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 210,
+      "segmentCount": 2,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 209,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 207,
+      "segmentCount": 2,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 204,
+      "segmentCount": 3,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 202,
+      "segmentCount": 4,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 201,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 198,
+      "segmentCount": 3,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 197,
+      "segmentCount": 5,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 196,
+      "segmentCount": 2,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 195,
+      "segmentCount": 1,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 194,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 193,
+      "segmentCount": 5,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 192,
+      "segmentCount": 2,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 191,
+      "segmentCount": 2,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 190,
+      "segmentCount": 6,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 189,
+      "segmentCount": 3,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 188,
+      "segmentCount": 3,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 187,
+      "segmentCount": 4,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 186,
+      "segmentCount": 3,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 185,
+      "segmentCount": 3,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 184,
+      "segmentCount": 6,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 183,
+      "segmentCount": 8,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 181,
+      "segmentCount": 5,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 180,
+      "segmentCount": 5,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 179,
+      "segmentCount": 2,
+      "cumulativeCount": 92
+    },
+    {
+      "score": 178,
+      "segmentCount": 1,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 177,
+      "segmentCount": 4,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 176,
+      "segmentCount": 1,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 175,
+      "segmentCount": 5,
+      "cumulativeCount": 103
+    },
+    {
+      "score": 174,
+      "segmentCount": 2,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 173,
+      "segmentCount": 5,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 172,
+      "segmentCount": 5,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 171,
+      "segmentCount": 4,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 170,
+      "segmentCount": 5,
+      "cumulativeCount": 124
+    },
+    {
+      "score": 169,
+      "segmentCount": 4,
+      "cumulativeCount": 128
+    },
+    {
+      "score": 168,
+      "segmentCount": 4,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 167,
+      "segmentCount": 2,
+      "cumulativeCount": 134
+    },
+    {
+      "score": 166,
+      "segmentCount": 2,
+      "cumulativeCount": 136
+    },
+    {
+      "score": 165,
+      "segmentCount": 6,
+      "cumulativeCount": 142
+    },
+    {
+      "score": 164,
+      "segmentCount": 3,
+      "cumulativeCount": 145
+    },
+    {
+      "score": 163,
+      "segmentCount": 7,
+      "cumulativeCount": 152
+    },
+    {
+      "score": 162,
+      "segmentCount": 5,
+      "cumulativeCount": 157
+    },
+    {
+      "score": 161,
+      "segmentCount": 1,
+      "cumulativeCount": 158
+    },
+    {
+      "score": 160,
+      "segmentCount": 1,
+      "cumulativeCount": 159
+    }
+  ]
+}

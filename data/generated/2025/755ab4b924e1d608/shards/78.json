@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "78",
+  "majorName": "建筑学",
+  "controlScore": 83,
+  "sourceId": "score-segments:2025:78:5fe36270e9f7",
+  "segments": [
+    {
+      "score": 254,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 227,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 224,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 217,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 207,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 187,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 174,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 171,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 169,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 165,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 164,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 159,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 157,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 151,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 141,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 137,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 132,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 128,
+      "segmentCount": 3,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 121,
+      "segmentCount": 2,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 117,
+      "segmentCount": 1,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 116,
+      "segmentCount": 1,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 115,
+      "segmentCount": 1,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 114,
+      "segmentCount": 1,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 112,
+      "segmentCount": 1,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 105,
+      "segmentCount": 1,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 104,
+      "segmentCount": 1,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 102,
+      "segmentCount": 1,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 97,
+      "segmentCount": 1,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 96,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 93,
+      "segmentCount": 1,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 92,
+      "segmentCount": 1,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 89,
+      "segmentCount": 1,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 85,
+      "segmentCount": 1,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 83,
+      "segmentCount": 1,
+      "cumulativeCount": 40
+    }
+  ]
+}

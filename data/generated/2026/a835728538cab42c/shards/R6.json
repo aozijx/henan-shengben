@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "R6",
+  "majorName": "机械工程",
+  "controlScore": 87,
+  "sourceId": "score-segments:2026:R6:6a7a460f9c2e",
+  "segments": [
+    {
+      "score": 139,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 135,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 127,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 107,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 101,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 95,
+      "segmentCount": 2,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 93,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 87,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    }
+  ]
+}

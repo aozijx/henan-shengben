@@ -1,0 +1,395 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "57",
+  "majorName": "土木工程（含建筑工程）",
+  "controlScore": 162,
+  "sourceId": "score-segments:2025:57:36d870b3142a",
+  "segments": [
+    {
+      "score": 267,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 266,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 265,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 264,
+      "segmentCount": 2,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 263,
+      "segmentCount": 2,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 261,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 259,
+      "segmentCount": 2,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 258,
+      "segmentCount": 5,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 257,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 256,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 255,
+      "segmentCount": 6,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 254,
+      "segmentCount": 4,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 253,
+      "segmentCount": 5,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 252,
+      "segmentCount": 2,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 251,
+      "segmentCount": 3,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 250,
+      "segmentCount": 3,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 249,
+      "segmentCount": 3,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 248,
+      "segmentCount": 8,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 247,
+      "segmentCount": 6,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 246,
+      "segmentCount": 6,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 245,
+      "segmentCount": 11,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 244,
+      "segmentCount": 4,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 243,
+      "segmentCount": 10,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 242,
+      "segmentCount": 8,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 241,
+      "segmentCount": 8,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 240,
+      "segmentCount": 16,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 239,
+      "segmentCount": 6,
+      "cumulativeCount": 126
+    },
+    {
+      "score": 238,
+      "segmentCount": 4,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 237,
+      "segmentCount": 5,
+      "cumulativeCount": 135
+    },
+    {
+      "score": 236,
+      "segmentCount": 12,
+      "cumulativeCount": 147
+    },
+    {
+      "score": 235,
+      "segmentCount": 11,
+      "cumulativeCount": 158
+    },
+    {
+      "score": 234,
+      "segmentCount": 15,
+      "cumulativeCount": 173
+    },
+    {
+      "score": 233,
+      "segmentCount": 14,
+      "cumulativeCount": 187
+    },
+    {
+      "score": 232,
+      "segmentCount": 14,
+      "cumulativeCount": 201
+    },
+    {
+      "score": 231,
+      "segmentCount": 5,
+      "cumulativeCount": 206
+    },
+    {
+      "score": 230,
+      "segmentCount": 12,
+      "cumulativeCount": 218
+    },
+    {
+      "score": 229,
+      "segmentCount": 13,
+      "cumulativeCount": 231
+    },
+    {
+      "score": 228,
+      "segmentCount": 6,
+      "cumulativeCount": 237
+    },
+    {
+      "score": 227,
+      "segmentCount": 9,
+      "cumulativeCount": 246
+    },
+    {
+      "score": 226,
+      "segmentCount": 15,
+      "cumulativeCount": 261
+    },
+    {
+      "score": 225,
+      "segmentCount": 20,
+      "cumulativeCount": 281
+    },
+    {
+      "score": 224,
+      "segmentCount": 16,
+      "cumulativeCount": 297
+    },
+    {
+      "score": 223,
+      "segmentCount": 15,
+      "cumulativeCount": 312
+    },
+    {
+      "score": 222,
+      "segmentCount": 8,
+      "cumulativeCount": 320
+    },
+    {
+      "score": 221,
+      "segmentCount": 10,
+      "cumulativeCount": 330
+    },
+    {
+      "score": 220,
+      "segmentCount": 13,
+      "cumulativeCount": 343
+    },
+    {
+      "score": 219,
+      "segmentCount": 14,
+      "cumulativeCount": 357
+    },
+    {
+      "score": 218,
+      "segmentCount": 15,
+      "cumulativeCount": 372
+    },
+    {
+      "score": 217,
+      "segmentCount": 20,
+      "cumulativeCount": 392
+    },
+    {
+      "score": 216,
+      "segmentCount": 18,
+      "cumulativeCount": 410
+    },
+    {
+      "score": 215,
+      "segmentCount": 19,
+      "cumulativeCount": 429
+    },
+    {
+      "score": 214,
+      "segmentCount": 18,
+      "cumulativeCount": 447
+    },
+    {
+      "score": 213,
+      "segmentCount": 14,
+      "cumulativeCount": 461
+    },
+    {
+      "score": 212,
+      "segmentCount": 10,
+      "cumulativeCount": 471
+    },
+    {
+      "score": 184,
+      "segmentCount": 402,
+      "cumulativeCount": 873
+    },
+    {
+      "score": 183,
+      "segmentCount": 12,
+      "cumulativeCount": 885
+    },
+    {
+      "score": 182,
+      "segmentCount": 8,
+      "cumulativeCount": 893
+    },
+    {
+      "score": 181,
+      "segmentCount": 11,
+      "cumulativeCount": 904
+    },
+    {
+      "score": 180,
+      "segmentCount": 11,
+      "cumulativeCount": 915
+    },
+    {
+      "score": 179,
+      "segmentCount": 13,
+      "cumulativeCount": 928
+    },
+    {
+      "score": 178,
+      "segmentCount": 17,
+      "cumulativeCount": 945
+    },
+    {
+      "score": 177,
+      "segmentCount": 11,
+      "cumulativeCount": 956
+    },
+    {
+      "score": 176,
+      "segmentCount": 11,
+      "cumulativeCount": 967
+    },
+    {
+      "score": 175,
+      "segmentCount": 12,
+      "cumulativeCount": 979
+    },
+    {
+      "score": 174,
+      "segmentCount": 13,
+      "cumulativeCount": 992
+    },
+    {
+      "score": 173,
+      "segmentCount": 8,
+      "cumulativeCount": 1000
+    },
+    {
+      "score": 172,
+      "segmentCount": 11,
+      "cumulativeCount": 1011
+    },
+    {
+      "score": 171,
+      "segmentCount": 12,
+      "cumulativeCount": 1023
+    },
+    {
+      "score": 170,
+      "segmentCount": 9,
+      "cumulativeCount": 1032
+    },
+    {
+      "score": 169,
+      "segmentCount": 8,
+      "cumulativeCount": 1040
+    },
+    {
+      "score": 168,
+      "segmentCount": 15,
+      "cumulativeCount": 1055
+    },
+    {
+      "score": 167,
+      "segmentCount": 12,
+      "cumulativeCount": 1067
+    },
+    {
+      "score": 166,
+      "segmentCount": 11,
+      "cumulativeCount": 1078
+    },
+    {
+      "score": 165,
+      "segmentCount": 13,
+      "cumulativeCount": 1091
+    },
+    {
+      "score": 164,
+      "segmentCount": 6,
+      "cumulativeCount": 1097
+    },
+    {
+      "score": 163,
+      "segmentCount": 8,
+      "cumulativeCount": 1105
+    },
+    {
+      "score": 162,
+      "segmentCount": 17,
+      "cumulativeCount": 1122
+    }
+  ]
+}

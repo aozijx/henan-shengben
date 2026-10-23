@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "35",
+  "majorName": "材料成型及控制工程",
+  "controlScore": 89,
+  "sourceId": "score-segments:2024:35:875f86b487b9",
+  "segments": [
+    {
+      "score": 207,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 206,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 194,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 188,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 183,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 179,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 176,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 173,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 170,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 165,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 163,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 161,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 153,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 152,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 149,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 145,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 142,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 140,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 138,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 136,
+      "segmentCount": 2,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 132,
+      "segmentCount": 2,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 124,
+      "segmentCount": 2,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 122,
+      "segmentCount": 1,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 120,
+      "segmentCount": 1,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 119,
+      "segmentCount": 1,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 116,
+      "segmentCount": 1,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 108,
+      "segmentCount": 1,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 103,
+      "segmentCount": 2,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 100,
+      "segmentCount": 1,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 95,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 91,
+      "segmentCount": 1,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 90,
+      "segmentCount": 1,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 68,
+      "segmentCount": 1,
+      "cumulativeCount": 38
+    }
+  ]
+}

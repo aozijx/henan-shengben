@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "02",
+  "majorName": "经济统计学",
+  "controlScore": 101,
+  "sourceId": "score-segments:2026:02:2a9de0e075ac",
+  "segments": [
+    {
+      "score": 197,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 173,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 154,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 124,
+      "segmentCount": 2,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 119,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 101,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    }
+  ]
+}

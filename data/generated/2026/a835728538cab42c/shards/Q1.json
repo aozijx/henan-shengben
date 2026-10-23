@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "Q1",
+  "majorName": "水文与水资源工程",
+  "controlScore": 152,
+  "sourceId": "score-segments:2026:Q1:9a2df16da5d0",
+  "segments": [
+    {
+      "score": 217,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 215,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 214,
+      "segmentCount": 2,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 212,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 210,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 208,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 206,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 204,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 202,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 201,
+      "segmentCount": 2,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 198,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 197,
+      "segmentCount": 2,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 196,
+      "segmentCount": 2,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 195,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 191,
+      "segmentCount": 2,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 189,
+      "segmentCount": 3,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 188,
+      "segmentCount": 4,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 187,
+      "segmentCount": 2,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 184,
+      "segmentCount": 1,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 183,
+      "segmentCount": 3,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 182,
+      "segmentCount": 2,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 181,
+      "segmentCount": 2,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 180,
+      "segmentCount": 2,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 179,
+      "segmentCount": 3,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 177,
+      "segmentCount": 1,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 175,
+      "segmentCount": 1,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 173,
+      "segmentCount": 2,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 172,
+      "segmentCount": 5,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 171,
+      "segmentCount": 1,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 170,
+      "segmentCount": 2,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 169,
+      "segmentCount": 1,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 168,
+      "segmentCount": 2,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 166,
+      "segmentCount": 1,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 165,
+      "segmentCount": 2,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 164,
+      "segmentCount": 3,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 163,
+      "segmentCount": 4,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 161,
+      "segmentCount": 5,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 160,
+      "segmentCount": 3,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 159,
+      "segmentCount": 1,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 156,
+      "segmentCount": 1,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 155,
+      "segmentCount": 1,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 154,
+      "segmentCount": 2,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 153,
+      "segmentCount": 6,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 152,
+      "segmentCount": 3,
+      "cumulativeCount": 92
+    }
+  ]
+}

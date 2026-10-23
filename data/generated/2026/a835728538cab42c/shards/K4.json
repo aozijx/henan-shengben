@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "K4",
+  "majorName": "生物技术",
+  "controlScore": 115,
+  "sourceId": "score-segments:2026:K4:e75909dbf516",
+  "segments": [
+    {
+      "score": 248,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 223,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 220,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 218,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 195,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 194,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 169,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 131,
+      "segmentCount": 2,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 115,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "P1",
+  "majorName": "金融科技",
+  "controlScore": 128,
+  "sourceId": "score-segments:2024:P1:25ce7d6c365f",
+  "segments": [
+    {
+      "score": 225,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 187,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 174,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 137,
+      "segmentCount": 2,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 128,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    }
+  ]
+}

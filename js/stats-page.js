@@ -1,0 +1,193 @@
+import { projectAnalytics } from './analytics-projection.js';
+import { buildCurve, lookupScoreSegmentCode } from './score-curves.js';
+import { esc } from './utils.js';
+import { buildPaginationHtml, paginate } from './preview.js';
+
+var chartInstances = {};
+var selectedCodes = new Set();
+var page = 1;
+var pageGeneration = 0;
+var curveGeneration = 0;
+var context = null;
+function majorKey(major) { return major.majorCode + '|' + major.majorName; }
+
+function draw(id, option) {
+  var el = document.getElementById(id);
+  if (!el || !window.echarts) return false;
+  if (chartInstances[id]) chartInstances[id].dispose();
+  chartInstances[id] = window.echarts.init(el);
+  chartInstances[id].setOption(option);
+  return true;
+}
+
+function summary(projection) {
+  var focus = projection.focusYear;
+  var rows = projection.majors.map(function (major) { return { major: major, value: major.years[focus] }; })
+    .filter(function (item) { return item.value; });
+  var total = rows.reduce(function (sum, item) { return sum + item.value.planCount; }, 0);
+  var publicPlan = rows.reduce(function (sum, item) { var part = item.value.schoolTypes.public; return sum + (part ? part.ordinaryPlanCount + part.povertyPlanCount : 0); }, 0);
+  var privatePlan = rows.reduce(function (sum, item) { var part = item.value.schoolTypes.private; return sum + (part ? part.ordinaryPlanCount + part.povertyPlanCount : 0); }, 0);
+  var ordinaryPlan = rows.reduce(function (sum, item) { return sum + item.value.ordinaryPlanCount; }, 0);
+  var povertyPlan = rows.reduce(function (sum, item) { return sum + item.value.povertyPlanCount; }, 0);
+  document.getElementById('plan-overview').innerHTML =
+    '<div class="plan-card"><b>' + rows.length + '</b><span>匹配专业</span></div>' +
+    '<div class="plan-card"><b>' + total.toLocaleString() + '</b><span>计划人数（逐专业汇总）</span></div>' +
+    '<div class="plan-card"><b>' + publicPlan.toLocaleString() + '</b><span>公办计划</span></div>' +
+    '<div class="plan-card"><b>' + privatePlan.toLocaleString() + '</b><span>民办计划</span></div>' +
+    '<div class="plan-card"><b>' + ordinaryPlan.toLocaleString() + '</b><span>普通计划</span></div>' +
+    '<div class="plan-card"><b>' + povertyPlan.toLocaleString() + '</b><span>专项计划</span></div>';
+  var bins = [];
+  for (var start = 0; start < 300; start += 20) bins.push(start);
+  var years = projection.years;
+  var dist = years.map(function (year) {
+    return { name: String(year), type: 'bar', data: bins.map(function (start) {
+      return projection.majors.filter(function (major) {
+        var score = major.years[year] && major.years[year].score;
+        return score != null && score >= start && score < start + 20;
+      }).length;
+    }) };
+  });
+  if (!draw('chart-dist', { tooltip: { trigger: 'axis' }, legend: {},
+    xAxis: { type: 'category', data: bins.map(function (start) { return start + '–' + (start + 19); }) },
+    yAxis: { type: 'value', name: '专业数' }, series: dist })) {
+    document.getElementById('chart-dist').textContent = years.map(function (year, index) {
+      return year + ' 年：' + dist[index].data.join('、');
+    }).join('；');
+  }
+  var top = rows.filter(function (item) { return item.value.score != null; })
+    .sort(function (a, b) { return b.value.score - a.value.score || a.major.majorCode.localeCompare(b.major.majorCode); })
+    .slice(0, 15).reverse();
+  if (!draw('chart-top', { grid: { left: 135, right: 30 }, tooltip: { trigger: 'axis' },
+    xAxis: { type: 'value' }, yAxis: { type: 'category', data: top.map(function (item) { return item.major.majorName; }) },
+    series: [{ type: 'bar', data: top.map(function (item) { return item.value.score; }) }] })) {
+    document.getElementById('chart-top').innerHTML = top.slice().reverse().map(function (item) {
+      return '<p>' + esc(item.major.majorName) + ' · ' + item.value.score + '</p>';
+    }).join('');
+  }
+  var trend = selectedCodes.size ? projection.majors.filter(function (major) { return selectedCodes.has(majorKey(major)); }) : projection.majors.slice(0, 8);
+  if (!draw('chart-trend', { tooltip: { trigger: 'axis' }, legend: { type: 'scroll' },
+    xAxis: { type: 'category', data: years.map(String) }, yAxis: { type: 'value', name: '控制线' },
+    series: trend.map(function (major) { return { name: major.majorName, type: 'line', data: years.map(function (year) {
+      return major.years[year] && major.years[year].score;
+    }) }; }) })) {
+    document.getElementById('chart-trend').textContent = trend.map(function (major) {
+      return major.majorName + '：' + years.map(function (year) { return major.years[year]?.score ?? '—'; }).join(' / ');
+    }).join('；');
+  }
+}
+
+export function buildStatsTableHtml(projection, metadata, requestedPage) {
+  var current = paginate(projection.majors, requestedPage, metadata.pageSize || 50);
+  var rows = current.rows;
+  return '<div class="table-wrap"><table><thead><tr><th>本科专业</th>' + projection.years.map(function (year) {
+    return '<th>' + year + ' 年控制线 / 院校 / 计划</th>';
+  }).join('') + '</tr></thead><tbody>' + rows.map(function (major) {
+    return '<tr><td>' + esc(major.majorName) + ' (' + esc(major.majorCode) + ')</td>' + projection.years.map(function (year) {
+      var value = major.years[year];
+      if (!value) return '<td>—</td>';
+      var pub = value.schoolTypes.public || {};
+      var priv = value.schoolTypes.private || {};
+      return '<td><div class="stats-year-cell"><b>' + esc(value.score ?? '—') + ' 分</b>' +
+        '<span>院校 公 ' + (pub.schoolCount || 0) + ' / 民 ' + (priv.schoolCount || 0) + '</span>' +
+        '<span>普通 ' + (value.ordinaryPlanCount || 0) + ' / 专项 ' + (value.povertyPlanCount || 0) + ' 人</span></div></td>';
+    }).join('') + '</tr>';
+  }).join('') + '</tbody></table></div><p class="stats-table-total">共 ' + current.total + ' 个专业 · 当前 ' + current.start + '–' + current.end + '</p>' +
+    buildPaginationHtml(current.page, current.pageCount, '专业列表分页');
+}
+
+function renderTable(projection, metadata) {
+  var current = paginate(projection.majors, page, metadata.pageSize || 50);
+  page = current.page;
+  var root = document.getElementById('stats-table');
+  root.innerHTML = buildStatsTableHtml(projection, metadata, page);
+  root.querySelectorAll('.preview-pagination [data-page]').forEach(function (button) {
+    button.onclick = function () { page = Number(button.dataset.page); renderTable(projection, metadata); };
+  });
+}
+
+async function renderCurves() {
+  if (!context) return;
+  var token = ++curveGeneration;
+  var { projection, repository } = context;
+  var chosen = projection.majors.filter(function (row) { return selectedCodes.has(majorKey(row)); });
+  var fallback = document.getElementById('stats-curve-fallback');
+  if (!chosen.length) { fallback.textContent = '勾选专业后显示一分一段。';
+    if (chartInstances['chart-segments']) { chartInstances['chart-segments'].dispose(); delete chartInstances['chart-segments']; }
+    return; }
+  fallback.textContent = '正在读取所选专业的分数段…';
+  try {
+    var indexes = await Promise.all(projection.years.map(function (year) {
+      return repository.ensureScoreSegmentIndex(year).catch(function () { return null; });
+    }));
+    var shards = await Promise.all(chosen.flatMap(function (major) { return projection.years.map(function (year, index) {
+      var shardCode = lookupScoreSegmentCode(indexes[index], major.majorCode);
+      return (shardCode ? repository.ensureScoreSegment(year, shardCode) : Promise.resolve(null))
+        .then(function (value) { return { major, year, value }; })
+        .catch(function () { return { major, year, value: null }; });
+    }); }));
+    if (token !== curveGeneration) return;
+    var mode = document.getElementById('stats-curve-mode').value;
+    var series = shards.filter(function (item) { return item.value; }).map(function (item) {
+      return { name: item.year + ' ' + item.major.majorName, type: 'line', showSymbol: false,
+        data: buildCurve(item.value, mode) };
+    });
+    var missing = shards.length - series.length;
+    fallback.textContent = missing ? missing + ' 组数据未发布或加载失败，可重新勾选重试。' : '';
+    if (!draw('chart-segments', { tooltip: { trigger: 'axis' }, legend: { type: 'scroll' },
+      xAxis: { type: 'value', name: mode === 'rank' ? '位次' : '分数' },
+      yAxis: { type: 'value', name: mode === 'rank' ? '分数' : mode === 'percent' ? '累计百分比 %' : '人数' }, series: series })) {
+      fallback.textContent += series.map(function (item) { return item.name + '：' + item.data.length + ' 个分数段'; }).join('；');
+    }
+  } catch (error) { if (token === curveGeneration) fallback.textContent = error.message; }
+}
+
+function choices(projection) {
+  var root = document.getElementById('stats-major-choices');
+  var search = document.getElementById('stats-major-search');
+  var keyword = search.value.trim();
+  var visible = projection.majors.filter(function (major) {
+    return !keyword || major.majorName.includes(keyword) || major.majorCode.includes(keyword);
+  });
+  root.innerHTML = visible.map(function (major) { return '<label><input type="checkbox" value="' + esc(majorKey(major)) + '"' +
+    (selectedCodes.has(majorKey(major)) ? ' checked' : '') + '> ' + esc(major.majorName) + ' (' + esc(major.majorCode) + ')</label>'; }).join('') || '没有匹配的专业';
+  root.querySelectorAll('input').forEach(function (input) { input.onchange = function () {
+    if (input.checked) selectedCodes.add(input.value); else selectedCodes.delete(input.value);
+    document.getElementById('stats-selected-count').textContent = '已勾选 ' + selectedCodes.size + ' 个专业';
+    summary(projection); renderCurves();
+  }; });
+  document.getElementById('stats-selected-count').textContent = '已勾选 ' + selectedCodes.size + ' 个专业';
+  document.getElementById('stats-select-visible').onclick = function () {
+    visible.forEach(function (major) { selectedCodes.add(majorKey(major)); });
+    choices(projection); summary(projection); renderCurves();
+  };
+  document.getElementById('stats-clear-selected').onclick = function () {
+    selectedCodes.clear(); choices(projection); summary(projection); renderCurves();
+  };
+  search.oninput = function () { choices(projection); };
+  document.getElementById('stats-curve-mode').onchange = renderCurves;
+}
+
+export async function renderStatsPage(repository, metadata, state, mapping) {
+  var token = ++pageGeneration;
+  ++curveGeneration;
+  var status = document.getElementById('stats-status');
+  status.textContent = '正在读取年度统计…';
+  try {
+    var documents = await Promise.all(state.selectedYears.map(function (year) { return repository.ensureAnalytics(year); }));
+    if (token !== pageGeneration) return;
+    var analytics = Object.fromEntries(state.selectedYears.map(function (year, index) { return [year, documents[index]]; }));
+    var projection = projectAnalytics(analytics, mapping, state.selectedYears, state.filters,
+      state.specName ? state.majors : null);
+    document.querySelectorAll('[data-stats-focus-year]').forEach(function (node) {
+      node.textContent = String(projection.focusYear || '最新');
+    });
+    var allowed = new Set(projection.majors.map(majorKey));
+    var removed = 0;
+    selectedCodes.forEach(function (code) { if (!allowed.has(code)) { selectedCodes.delete(code); removed += 1; } });
+    context = { projection, repository };
+    document.getElementById('stats-context').textContent = '年份：' + projection.years.join('、') + ' · 办学性质：' + state.filters.schoolType +
+      ' · 建档立卡：' + state.filters.povertyStatus + ' · 专业基础课：' + state.filters.subject + ' · ' + projection.majors.length + ' 个专业';
+    status.textContent = removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' : '';
+    summary(projection); renderTable(projection, metadata); choices(projection); renderCurves();
+  } catch (error) { if (token === pageGeneration) status.textContent = '统计加载失败：' + error.message; }
+}

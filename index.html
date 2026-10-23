@@ -87,26 +87,42 @@
 
     <!-- ========== 视图：数据分析 ========== -->
     <section class="view" id="view-stats" role="tabpanel" hidden>
-      <h2 class="view-title">分数线怎么看</h2>
-      <p class="view-sub">以下图表由本工具配置的 <span data-year-range>历年</span> 录取控制分数线实时计算。</p>
+      <h2 class="view-title">数据分析</h2>
+      <p class="view-sub" id="stats-context">正在读取年份与筛选条件…</p>
+      <button type="button" id="stats-edit-filters">调整年份与筛选条件</button>
+      <p id="stats-status" role="status"></p>
       <div class="chart-card">
-        <h3><span data-latest-year>最新</span> 招生计划概览</h3>
-        <p class="chart-note">按 metadata 声明的最新年份招生计划统计：院校办学性质（公办 / 民办）、建档立卡专项与计划招生人数。</p>
+        <h3><span data-stats-focus-year>最新</span> 招生计划概览</h3>
+        <p class="chart-note">按当前筛选条件与所选年份中最新一年统计。</p>
         <div class="plan-grid" id="plan-overview"></div>
       </div>
       <div class="chart-card">
-        <h3>近三年控制线区间分布</h3>
+        <h3>所选年份控制线区间分布</h3>
         <p class="chart-note">横轴为分数线区间，柱高为该区间内的专业数量（含该年度所有单列控制线的专业）。</p>
         <div id="chart-dist" class="chart"></div>
       </div>
       <div class="chart-card">
-        <h3><span data-latest-year>最新</span> 年控制线 TOP 15</h3>
-        <p class="chart-note">按最新年份录取控制分数线从高到低排列，便于识别竞争激烈的专业。</p>
+        <h3>完整专业列表</h3>
+        <div id="stats-table"></div>
+      </div>
+      <div class="chart-card">
+        <h3>选择专业 · 一分一段</h3>
+        <p class="chart-note">勾选多个本科专业后，可按所选年份比较。成绩分布应在同省、同年、同考试类别下解释；不同专业人数规模的绝对位次不可直接当作竞争强弱，录取还取决于计划及院校投档线。</p>
+        <label>查找专业 <input id="stats-major-search" type="search" placeholder="专业名称或代号"></label>
+        <div class="stats-choice-actions"><button type="button" id="stats-select-visible">勾选当前搜索结果</button><button type="button" id="stats-clear-selected">清空勾选</button><span id="stats-selected-count" aria-live="polite"></span></div>
+        <div id="stats-major-choices" class="stats-major-choices"></div>
+        <label>曲线口径 <select id="stats-curve-mode"><option value="rank">位次—分数</option><option value="cumulative">分数—累计人数</option><option value="segment">分数—本段人数</option><option value="percent">累计百分比</option></select></label>
+        <div id="chart-segments" class="chart"></div>
+        <div id="stats-curve-fallback"></div>
+      </div>
+      <div class="chart-card">
+        <h3><span data-stats-focus-year>最新</span> 年控制线 TOP 15</h3>
+        <p class="chart-note">按所选年份中最新一年的录取控制分数线从高到低排列。</p>
         <div id="chart-top" class="chart"></div>
       </div>
       <div class="chart-card">
-        <h3>八个常见专业 · 三年控制线走势</h3>
-        <p class="chart-note">同一专业的代号口径在三年文件中保持一致；个别年份未单列则以「—」表示。</p>
+        <h3>所选专业 · 历年控制线走势</h3>
+        <p class="chart-note">勾选专业后展示其历年控制线；未勾选时展示前八个匹配专业。</p>
         <div id="chart-trend" class="chart"></div>
       </div>
       <noscript><p class="note-fallback">图表需要 JavaScript；当前环境下请直接使用「专业查询」。</p></noscript>

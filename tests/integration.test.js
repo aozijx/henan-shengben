@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { bootstrapData } from '../js/bootstrap.js';
+import { loadYears, buildIndexes } from '../js/data.js';
 import { buildMajorAggregates } from '../js/aggregate.js';
-import { canExport, createInitialState, reduceExplorerState } from '../js/explorer.js';
+import { buildExplorerControlsHtml, canExport, createInitialState, reduceExplorerState } from '../js/explorer.js';
 import { buildExportFilename, prepareExport, serializeCsv } from '../js/export.js';
 import { createPreviewModel } from '../js/preview.js';
 import { buildResultWorkspaceHtml } from '../js/results-view.js';
@@ -29,6 +30,8 @@ async function fixtureFetch(overrides = {}) {
 
 test('a metadata-only new year flows through selection, table, preview and export', async () => {
   const loaded = await bootstrapData('fixtures/metadata-2027.json', await fixtureFetch());
+  await loadYears(loaded.store, [2027], await fixtureFetch());
+  buildIndexes(loaded.store, loaded.metadata);
   const majors = loaded.store.mapping[0].可报本科专业.map((major) => normalizeMajorOption(major));
   const state = reduceExplorerState(createInitialState(loaded.metadata), { type: 'LOAD_SUCCESS' }, loaded.metadata);
   const aggregates = buildMajorAggregates({
@@ -53,7 +56,8 @@ test('a metadata-only new year flows through selection, table, preview and expor
   assert.equal(state.focusYear, loaded.metadata.defaultYear);
   assert.deepEqual(preview.allRows.map((row) => row.majorName), ['数据工程', '智能工程']);
   assert.deepEqual(preview.selectedYears, loaded.metadata.supportedYears);
-  assert.match(tableHtml, /year-selection-dialog/);
+  assert.match(buildExplorerControlsHtml(loaded.metadata, state), /year-selection-dialog/);
+  assert.doesNotMatch(tableHtml, /year-selection-dialog/);
   assert.match(tableHtml, /<th>历年概览<\/th>/);
   assert.match(tableHtml, /<h4>2027 年<\/h4>/);
   assert.doesNotMatch(tableHtml, /<th>2027 省控线<\/th>/);
@@ -61,12 +65,23 @@ test('a metadata-only new year flows through selection, table, preview and expor
   assert.equal(buildExportFilename(state.focusYear, new Date(2026, 9, 21)), '院校数据_2027_20261021.csv');
 });
 
+test('bootstrap requests metadata and the default query index once each', async () => {
+  const calls = [];
+  const fetchImpl = await fixtureFetch();
+  const loaded = await bootstrapData('fixtures/metadata-2027.json', async (url, options) => {
+    calls.push(url);
+    return fetchImpl(url, options);
+  });
+  await loaded.repository.ensureQueryIndex(2027);
+  assert.deepEqual(calls, ['fixtures/metadata-2027.json', 'fixtures/mapping-2027.json']);
+});
+
 test('a missing configured source names its path and leaves export disabled', async () => {
   const metadata = await fixture('metadata-2027.json');
   metadata.yearSources[2027].planSource = 'fixtures/missing-plans-2027.json';
   const fetchImpl = await fixtureFetch({ 'fixtures/metadata-2027.json': metadata });
   await assert.rejects(
-    bootstrapData('fixtures/metadata-2027.json', fetchImpl),
+    (async () => { const loaded = await bootstrapData('fixtures/metadata-2027.json', fetchImpl); await loadYears(loaded.store, [2027], fetchImpl); })(),
     /fixtures\/missing-plans-2027\.json.*404/
   );
 

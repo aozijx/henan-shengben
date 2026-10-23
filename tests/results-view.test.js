@@ -163,7 +163,7 @@ test('year controls make selected years and focus year visible', () => {
   }, metadata);
   const dialog = buildYearDialogHtml(metadata, [2024, 2026]);
 
-  assert.match(workspace, /年份：2024、2026/);
+  assert.doesNotMatch(workspace, /data-result-action="years"|year-selection-dialog/);
   assert.match(dialog, /已选 2\/3 年/);
   assert.match(dialog, /当前基准：2026 年/);
 });

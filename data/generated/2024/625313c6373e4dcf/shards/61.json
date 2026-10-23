@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "61",
+  "majorName": "道路桥梁与渡河工程",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:61:b0b46107aec6",
+  "segments": [
+    {
+      "score": 215,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 209,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 192,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 191,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 187,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 184,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 171,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 167,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 166,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 163,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 161,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 156,
+      "segmentCount": 2,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 155,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 152,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 151,
+      "segmentCount": 2,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 150,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 148,
+      "segmentCount": 1,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 147,
+      "segmentCount": 2,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 145,
+      "segmentCount": 1,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 144,
+      "segmentCount": 3,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 142,
+      "segmentCount": 1,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 141,
+      "segmentCount": 1,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 140,
+      "segmentCount": 1,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 139,
+      "segmentCount": 1,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 138,
+      "segmentCount": 3,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 136,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 134,
+      "segmentCount": 1,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 133,
+      "segmentCount": 4,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 132,
+      "segmentCount": 1,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 131,
+      "segmentCount": 1,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 127,
+      "segmentCount": 1,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 125,
+      "segmentCount": 2,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 124,
+      "segmentCount": 1,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 123,
+      "segmentCount": 3,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 122,
+      "segmentCount": 2,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 120,
+      "segmentCount": 1,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 119,
+      "segmentCount": 2,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 118,
+      "segmentCount": 1,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 117,
+      "segmentCount": 1,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 115,
+      "segmentCount": 2,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 114,
+      "segmentCount": 3,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 113,
+      "segmentCount": 1,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 111,
+      "segmentCount": 3,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 110,
+      "segmentCount": 1,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 109,
+      "segmentCount": 2,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 108,
+      "segmentCount": 1,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 107,
+      "segmentCount": 2,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 105,
+      "segmentCount": 1,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 104,
+      "segmentCount": 2,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 103,
+      "segmentCount": 2,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 100,
+      "segmentCount": 2,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 66,
+      "segmentCount": 1,
+      "cumulativeCount": 80
+    }
+  ]
+}

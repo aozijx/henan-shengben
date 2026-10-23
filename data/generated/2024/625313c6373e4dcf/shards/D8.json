@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "year": 2024,
+  "majorCode": "D8",
+  "majorName": "音乐学",
+  "controlScore": 181,
+  "sourceId": "score-segments:2024:D8:91dec1c94b01",
+  "segments": [
+    {
+      "score": 239,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 237,
+      "segmentCount": 3,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 235,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 233,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 231,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 225,
+      "segmentCount": 3,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 224,
+      "segmentCount": 3,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 223,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 220,
+      "segmentCount": 2,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 219,
+      "segmentCount": 2,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 218,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 217,
+      "segmentCount": 3,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 216,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 215,
+      "segmentCount": 2,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 214,
+      "segmentCount": 3,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 213,
+      "segmentCount": 6,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 212,
+      "segmentCount": 1,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 211,
+      "segmentCount": 2,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 210,
+      "segmentCount": 3,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 208,
+      "segmentCount": 1,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 207,
+      "segmentCount": 1,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 206,
+      "segmentCount": 2,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 205,
+      "segmentCount": 4,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 202,
+      "segmentCount": 4,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 201,
+      "segmentCount": 3,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 199,
+      "segmentCount": 1,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 198,
+      "segmentCount": 2,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 197,
+      "segmentCount": 3,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 195,
+      "segmentCount": 2,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 194,
+      "segmentCount": 1,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 192,
+      "segmentCount": 3,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 191,
+      "segmentCount": 1,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 190,
+      "segmentCount": 2,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 189,
+      "segmentCount": 2,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 188,
+      "segmentCount": 3,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 187,
+      "segmentCount": 3,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 185,
+      "segmentCount": 4,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 184,
+      "segmentCount": 1,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 183,
+      "segmentCount": 2,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 182,
+      "segmentCount": 4,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 181,
+      "segmentCount": 5,
+      "cumulativeCount": 94
+    }
+  ]
+}

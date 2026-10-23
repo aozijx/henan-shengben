@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "64",
+  "majorName": "纺织工程",
+  "controlScore": 82,
+  "sourceId": "score-segments:2026:64:46ab614e9c3d",
+  "segments": [
+    {
+      "score": 203,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 171,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 127,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 123,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 115,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 93,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 92,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 82,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    }
+  ]
+}

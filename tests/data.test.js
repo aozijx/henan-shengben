@@ -7,8 +7,42 @@ import {
   getMappingByYear,
   getScore,
   getScoreIndex,
-  loadAll
+  loadAll,
+  loadYears,
+  normalizedPlansForYears
 } from '../js/data.js';
+
+test('loadAll leaves yearly scores and plans unloaded at startup', async () => {
+  const calls = [];
+  const metadata = metadata2027();
+  const store = await loadAll(metadata, createFetch(fixturePayloads(), calls));
+  assert.deepEqual(calls, [metadata.yearSources[2027].mappingSource]);
+  assert.deepEqual(store.plansByYear, {});
+  assert.deepEqual(store.scoresByYear, {});
+});
+
+test('result plans are read after the selected years finish loading', async () => {
+  const payloads = fixturePayloads();
+  const store = await loadAll(metadata2027(), createFetch(payloads, []));
+  assert.deepEqual(normalizedPlansForYears(store, [2027])[2027], []);
+
+  await loadYears(store, [2027], createFetch(payloads, []));
+  assert.equal(normalizedPlansForYears(store, [2027])[2027][0].schoolName, '测试大学');
+  assert.equal(normalizedPlansForYears(store, [2027])[2027][0].planCount, 20);
+});
+
+test('yearly search reuses the already loaded query mapping when paths agree', async () => {
+  const calls = [];
+  const metadata = metadata2027({ queryIndexSource: 'fixtures/mapping-2027.json' });
+  const fetchImpl = createFetch(fixturePayloads(), calls);
+  const store = await loadAll(metadata, fetchImpl);
+  await loadYears(store, [2027], fetchImpl);
+  assert.deepEqual(calls, [
+    'fixtures/mapping-2027.json',
+    'fixtures/scores-2027.json',
+    'fixtures/plans-2027.json'
+  ]);
+});
 
 function metadata2027(overrides = {}) {
   return {
@@ -58,18 +92,29 @@ test('exposes the lazy repository through the data module', async () => {
   assert.deepEqual(calls, ['fixtures/mapping-2027.json']);
 });
 
-test('loads only source paths and years declared by metadata', async () => {
+test('college lookup does not attach a sibling major with the same code', async () => {
+  const metadata = metadata2027();
+  const payloads = fixturePayloads();
+  payloads['fixtures/plans-2027.json'] = [
+    { 年度: 2027, 专业代号: '51', 专业名称: '计算机科学与技术', 院校名称: '甲大学', 计划人数: 2070 },
+    { 年度: 2027, 专业代号: '51', 专业名称: '计算机应用工程', 院校名称: '乙大学', 计划人数: 150 }
+  ];
+  const store = await loadAll(metadata, createFetch(payloads, []));
+  await loadYears(store, [2027], createFetch(payloads, []));
+  const index = buildIndexes(store, metadata);
+  assert.deepEqual(getCollegesByYear(index, 2027, { 专业代号: '51', 专业名称: '计算机应用工程（本科层次职业教育专业）' })
+    .map(row => row.院校名称), ['乙大学']);
+  assert.deepEqual(getCollegesByYear(index, 2027, { 专业代号: '51', 专业名称: '不存在的专业' }), []);
+});
+
+test('loads only the startup query index declared by metadata', async () => {
   const calls = [];
   const store = await loadAll(metadata2027(), createFetch(fixturePayloads(), calls));
 
-  assert.deepEqual(calls.sort(), [
-    'fixtures/mapping-2027.json',
-    'fixtures/plans-2027.json',
-    'fixtures/scores-2027.json'
-  ]);
+  assert.deepEqual(calls, ['fixtures/mapping-2027.json']);
   assert.deepEqual(store.years, [2027]);
   assert.equal(store.mapping.length, 1);
-  assert.equal(store.plansByYear[2027][0].院校名称, '测试大学');
+  assert.equal(store.plansByYear[2027], undefined);
 });
 
 test('returns the mapping declared for the selected year', async () => {
@@ -85,7 +130,8 @@ test('returns the mapping declared for the selected year', async () => {
   payloads['fixtures/mapping-2026.json'] = [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '旧专业' }] }];
   payloads['fixtures/scores-2026.json'] = [];
   payloads['fixtures/plans-2026.json'] = [];
-  await loadAll(metadata, createFetch(payloads, []));
+  const store = await loadAll(metadata, createFetch(payloads, []));
+  await loadYears(store, [2027], createFetch(payloads, []));
 
   assert.equal(getMappingByYear(2026)[0].可报本科专业[0].专业名称, '旧专业');
   assert.equal(getMappingByYear(2027)[0].可报本科专业[0].专业名称, '软件工程');
@@ -97,13 +143,14 @@ test('a configured source failure names the exact path', async () => {
   delete payloads['fixtures/plans-2027.json'];
 
   await assert.rejects(
-    loadAll(metadata2027(), createFetch(payloads, calls)),
+    (async () => { const store = await loadAll(metadata2027(), createFetch(payloads, calls)); await loadYears(store, [2027], createFetch(payloads, calls)); })(),
     /fixtures\/plans-2027\.json.*404/
   );
 });
 
 test('builds a generic 2027 index without year-specific production code', async () => {
   const store = await loadAll(metadata2027(), createFetch(fixturePayloads(), []));
+  await loadYears(store, [2027], createFetch(fixturePayloads(), []));
   const index = buildIndexes(store, metadata2027());
   const major = store.mapping[0].可报本科专业[0];
 
@@ -121,6 +168,7 @@ test('preserves the 99 to A1 professional-code alias', async () => {
     年度: 2027, 专业代号: 'A1', 专业名称: '不同名称', 院校名称: '财经学院', 办学性质: '公办', 计划人数: 10
   };
   const store = await loadAll(metadata2027(), createFetch(payloads, []));
+  await loadYears(store, [2027], createFetch(payloads, []));
   const index = buildIndexes(store, metadata2027());
 
   assert.equal(getCollegesByYear(index, 2027, { 专业名称: '财务管理', 专业代号: '99' })[0].院校名称, '财经学院');

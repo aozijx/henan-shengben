@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "S8",
+  "majorName": "材料化学",
+  "controlScore": 122,
+  "sourceId": "score-segments:2025:S8:eab1b49b3efc",
+  "segments": [
+    {
+      "score": 234,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 224,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 214,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 198,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 196,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 195,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 183,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 175,
+      "segmentCount": 2,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 168,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 160,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 156,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 152,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 150,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 149,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 143,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 139,
+      "segmentCount": 1,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 130,
+      "segmentCount": 1,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 128,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 122,
+      "segmentCount": 1,
+      "cumulativeCount": 22
+    }
+  ]
+}

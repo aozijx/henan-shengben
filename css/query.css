@@ -32,4 +32,5 @@
 .filter-operations button:hover:not(:disabled){border-color:var(--blue);color:var(--blue-deep);}
 .filter-operations button:disabled{opacity:.5;cursor:not-allowed;}
 @media (min-width:721px){.result-toolbar{margin-top:22px;margin-bottom:26px;}}
+.filter-field [data-filter-action="years"]{min-height:40px;padding:8px 10px;border:1px solid var(--blue);border-radius:8px;background:var(--blue-soft);color:var(--blue-deep);font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
 @media (min-width:768px){.search-row input{height:52px;font-size:17px;}.clear,.go{height:52px;}}

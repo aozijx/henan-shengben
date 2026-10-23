@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "Q6",
+  "majorName": "财务会计教育",
+  "controlScore": 126,
+  "sourceId": "score-segments:2025:Q6:b902876c1e50",
+  "segments": [
+    {
+      "score": 206,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 200,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 193,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 188,
+      "segmentCount": 2,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 186,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 182,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 172,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 167,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 166,
+      "segmentCount": 1,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 165,
+      "segmentCount": 1,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 164,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 163,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 158,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 155,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 148,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 146,
+      "segmentCount": 2,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 145,
+      "segmentCount": 2,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 142,
+      "segmentCount": 3,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 139,
+      "segmentCount": 2,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 135,
+      "segmentCount": 1,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 27
+    }
+  ]
+}

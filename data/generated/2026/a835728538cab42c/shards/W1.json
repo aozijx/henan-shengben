@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "majorCode": "W1",
+  "majorName": "时尚传播",
+  "controlScore": 117,
+  "sourceId": "score-segments:2026:W1:70ca40d7869a",
+  "segments": [
+    {
+      "score": 205,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 169,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 163,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 162,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 151,
+      "segmentCount": 2,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 150,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 148,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 141,
+      "segmentCount": 1,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 138,
+      "segmentCount": 2,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 132,
+      "segmentCount": 1,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 131,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 130,
+      "segmentCount": 1,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 126,
+      "segmentCount": 1,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 125,
+      "segmentCount": 1,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 118,
+      "segmentCount": 1,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 117,
+      "segmentCount": 2,
+      "cumulativeCount": 19
+    }
+  ]
+}

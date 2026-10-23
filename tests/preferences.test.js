@@ -38,6 +38,12 @@ test('malformed storage falls back to safe metadata defaults', () => {
   assert.deepEqual(readColumnWidths(target, metadata), { majorName: 180, score: 120 });
 });
 
+test('missing numeric preference remains empty instead of the word undefined', () => {
+  const target = storage();
+  const configured = { ...metadata, fields: metadata.fields.concat({ key: 'schoolCount', type: 'number', filterEnable: true }) };
+  assert.equal(readExplorerState(target, configured).filters.schoolCount, '');
+});
+
 test('unknown, hidden and invalid widths are discarded', () => {
   const target = storage({
     [COLUMN_WIDTHS_KEY]: JSON.stringify({ majorName: 240, score: 20, hidden: 300, unknown: 400 })

@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "44",
+  "majorName": "电子信息工程（含电子信息工程技术）",
+  "controlScore": 147,
+  "sourceId": "score-segments:2025:44:e6d57773e034",
+  "segments": [
+    {
+      "score": 266,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 264,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 259,
+      "segmentCount": 2,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 258,
+      "segmentCount": 2,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 257,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 256,
+      "segmentCount": 3,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 255,
+      "segmentCount": 5,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 254,
+      "segmentCount": 4,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 253,
+      "segmentCount": 1,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 252,
+      "segmentCount": 2,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 249,
+      "segmentCount": 1,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 248,
+      "segmentCount": 6,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 247,
+      "segmentCount": 1,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 246,
+      "segmentCount": 8,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 245,
+      "segmentCount": 6,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 244,
+      "segmentCount": 7,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 243,
+      "segmentCount": 5,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 242,
+      "segmentCount": 1,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 241,
+      "segmentCount": 4,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 240,
+      "segmentCount": 6,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 239,
+      "segmentCount": 13,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 238,
+      "segmentCount": 7,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 237,
+      "segmentCount": 13,
+      "cumulativeCount": 100
+    },
+    {
+      "score": 236,
+      "segmentCount": 8,
+      "cumulativeCount": 108
+    },
+    {
+      "score": 235,
+      "segmentCount": 8,
+      "cumulativeCount": 116
+    },
+    {
+      "score": 234,
+      "segmentCount": 10,
+      "cumulativeCount": 126
+    },
+    {
+      "score": 233,
+      "segmentCount": 11,
+      "cumulativeCount": 137
+    },
+    {
+      "score": 232,
+      "segmentCount": 10,
+      "cumulativeCount": 147
+    },
+    {
+      "score": 231,
+      "segmentCount": 10,
+      "cumulativeCount": 157
+    },
+    {
+      "score": 230,
+      "segmentCount": 12,
+      "cumulativeCount": 169
+    },
+    {
+      "score": 229,
+      "segmentCount": 13,
+      "cumulativeCount": 182
+    },
+    {
+      "score": 228,
+      "segmentCount": 11,
+      "cumulativeCount": 193
+    },
+    {
+      "score": 227,
+      "segmentCount": 15,
+      "cumulativeCount": 208
+    },
+    {
+      "score": 226,
+      "segmentCount": 17,
+      "cumulativeCount": 225
+    },
+    {
+      "score": 225,
+      "segmentCount": 13,
+      "cumulativeCount": 238
+    },
+    {
+      "score": 224,
+      "segmentCount": 14,
+      "cumulativeCount": 252
+    },
+    {
+      "score": 223,
+      "segmentCount": 12,
+      "cumulativeCount": 264
+    },
+    {
+      "score": 222,
+      "segmentCount": 16,
+      "cumulativeCount": 280
+    },
+    {
+      "score": 221,
+      "segmentCount": 13,
+      "cumulativeCount": 293
+    },
+    {
+      "score": 220,
+      "segmentCount": 21,
+      "cumulativeCount": 314
+    },
+    {
+      "score": 219,
+      "segmentCount": 20,
+      "cumulativeCount": 334
+    },
+    {
+      "score": 218,
+      "segmentCount": 14,
+      "cumulativeCount": 348
+    },
+    {
+      "score": 217,
+      "segmentCount": 16,
+      "cumulativeCount": 364
+    },
+    {
+      "score": 216,
+      "segmentCount": 15,
+      "cumulativeCount": 379
+    },
+    {
+      "score": 215,
+      "segmentCount": 18,
+      "cumulativeCount": 397
+    },
+    {
+      "score": 214,
+      "segmentCount": 23,
+      "cumulativeCount": 420
+    },
+    {
+      "score": 213,
+      "segmentCount": 14,
+      "cumulativeCount": 434
+    },
+    {
+      "score": 212,
+      "segmentCount": 15,
+      "cumulativeCount": 449
+    },
+    {
+      "score": 211,
+      "segmentCount": 19,
+      "cumulativeCount": 468
+    },
+    {
+      "score": 210,
+      "segmentCount": 19,
+      "cumulativeCount": 487
+    },
+    {
+      "score": 209,
+      "segmentCount": 15,
+      "cumulativeCount": 502
+    },
+    {
+      "score": 208,
+      "segmentCount": 31,
+      "cumulativeCount": 533
+    },
+    {
+      "score": 207,
+      "segmentCount": 22,
+      "cumulativeCount": 555
+    },
+    {
+      "score": 206,
+      "segmentCount": 20,
+      "cumulativeCount": 575
+    },
+    {
+      "score": 178,
+      "segmentCount": 561,
+      "cumulativeCount": 1136
+    },
+    {
+      "score": 177,
+      "segmentCount": 23,
+      "cumulativeCount": 1159
+    },
+    {
+      "score": 176,
+      "segmentCount": 20,
+      "cumulativeCount": 1179
+    },
+    {
+      "score": 175,
+      "segmentCount": 16,
+      "cumulativeCount": 1195
+    },
+    {
+      "score": 174,
+      "segmentCount": 21,
+      "cumulativeCount": 1216
+    },
+    {
+      "score": 173,
+      "segmentCount": 22,
+      "cumulativeCount": 1238
+    },
+    {
+      "score": 172,
+      "segmentCount": 15,
+      "cumulativeCount": 1253
+    },
+    {
+      "score": 171,
+      "segmentCount": 25,
+      "cumulativeCount": 1278
+    },
+    {
+      "score": 170,
+      "segmentCount": 17,
+      "cumulativeCount": 1295
+    },
+    {
+      "score": 169,
+      "segmentCount": 13,
+      "cumulativeCount": 1308
+    },
+    {
+      "score": 168,
+      "segmentCount": 18,
+      "cumulativeCount": 1326
+    },
+    {
+      "score": 167,
+      "segmentCount": 20,
+      "cumulativeCount": 1346
+    },
+    {
+      "score": 166,
+      "segmentCount": 15,
+      "cumulativeCount": 1361
+    },
+    {
+      "score": 165,
+      "segmentCount": 19,
+      "cumulativeCount": 1380
+    },
+    {
+      "score": 164,
+      "segmentCount": 24,
+      "cumulativeCount": 1404
+    },
+    {
+      "score": 163,
+      "segmentCount": 23,
+      "cumulativeCount": 1427
+    },
+    {
+      "score": 162,
+      "segmentCount": 28,
+      "cumulativeCount": 1455
+    },
+    {
+      "score": 161,
+      "segmentCount": 24,
+      "cumulativeCount": 1479
+    },
+    {
+      "score": 160,
+      "segmentCount": 22,
+      "cumulativeCount": 1501
+    },
+    {
+      "score": 159,
+      "segmentCount": 15,
+      "cumulativeCount": 1516
+    },
+    {
+      "score": 158,
+      "segmentCount": 22,
+      "cumulativeCount": 1538
+    },
+    {
+      "score": 157,
+      "segmentCount": 26,
+      "cumulativeCount": 1564
+    },
+    {
+      "score": 156,
+      "segmentCount": 17,
+      "cumulativeCount": 1581
+    },
+    {
+      "score": 155,
+      "segmentCount": 19,
+      "cumulativeCount": 1600
+    },
+    {
+      "score": 154,
+      "segmentCount": 10,
+      "cumulativeCount": 1610
+    },
+    {
+      "score": 153,
+      "segmentCount": 16,
+      "cumulativeCount": 1626
+    },
+    {
+      "score": 152,
+      "segmentCount": 18,
+      "cumulativeCount": 1644
+    },
+    {
+      "score": 151,
+      "segmentCount": 22,
+      "cumulativeCount": 1666
+    },
+    {
+      "score": 150,
+      "segmentCount": 20,
+      "cumulativeCount": 1686
+    },
+    {
+      "score": 149,
+      "segmentCount": 16,
+      "cumulativeCount": 1702
+    },
+    {
+      "score": 148,
+      "segmentCount": 13,
+      "cumulativeCount": 1715
+    },
+    {
+      "score": 147,
+      "segmentCount": 12,
+      "cumulativeCount": 1727
+    }
+  ]
+}

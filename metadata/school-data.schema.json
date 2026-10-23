@@ -18,7 +18,8 @@
     "exportFormat"
   ],
   "properties": {
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "enum": [2, 3] },
+    "catalogSource": { "type": "string", "minLength": 1 },
     "defaultYear": { "type": "integer", "minimum": 2000 },
     "supportedYears": {
       "type": "array",
@@ -68,9 +69,13 @@
         "properties": {
           "mappingSource": { "type": "string", "minLength": 1 },
           "queryIndexSource": { "type": "string", "minLength": 1 },
+          "mappingReferenceYear": { "type": "integer", "minimum": 2000 },
           "scoreSource": { "type": "string", "minLength": 1 },
           "planSource": { "type": "string", "minLength": 1 },
           "scoreSegmentSource": { "type": "string", "minLength": 1 },
+          "analyticsSource": { "type": "string", "minLength": 1 },
+          "scoreSegmentIndexSource": { "type": "string", "minLength": 1 },
+          "scoreSegmentShardTemplate": { "type": "string", "minLength": 1 },
           "collegeFallbackSource": { "type": "string", "minLength": 1 }
         }
       }
@@ -160,5 +165,22 @@
     },
     "pageSize": { "type": "integer", "minimum": 1 },
     "exportFormat": { "const": "csv" }
-  }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "schemaVersion": { "minimum": 3 } }, "required": ["schemaVersion"] },
+      "then": {
+        "properties": {
+          "yearSources": {
+            "additionalProperties": {
+              "required": ["analyticsSource", "scoreSegmentIndexSource", "scoreSegmentShardTemplate"],
+              "properties": {
+                "scoreSegmentShardTemplate": { "pattern": "\\{majorCode\\}" }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

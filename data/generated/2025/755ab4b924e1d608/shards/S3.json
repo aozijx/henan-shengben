@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "S3",
+  "majorName": "金融数学",
+  "controlScore": 201,
+  "sourceId": "score-segments:2025:S3:a8c863882061",
+  "segments": [
+    {
+      "score": 246,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 219,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 203,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 201,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    }
+  ]
+}

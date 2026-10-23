@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "majorCode": "35",
+  "majorName": "材料成型及控制工程",
+  "controlScore": 89,
+  "sourceId": "score-segments:2025:35:d40b52ccefbe",
+  "segments": [
+    {
+      "score": 220,
+      "segmentCount": 1,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 174,
+      "segmentCount": 1,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 169,
+      "segmentCount": 1,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 154,
+      "segmentCount": 1,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 150,
+      "segmentCount": 1,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 139,
+      "segmentCount": 1,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 136,
+      "segmentCount": 1,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 118,
+      "segmentCount": 1,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 113,
+      "segmentCount": 2,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 91,
+      "segmentCount": 2,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 89,
+      "segmentCount": 1,
+      "cumulativeCount": 13
+    }
+  ]
+}
