@@ -81,7 +81,7 @@ def _search_candidates(seed: dict, session) -> dict[str, set[str]]:
         page_url = urljoin(url, link['href'])
         if not _official_page(page_url):
             continue
-        title = ' '.join(link.get_text(' ', strip=True).split())
+        title = ' '.join(link.parent.get_text(' ', strip=True).split())
         for role in _classify(title, seed['year']):
             candidates.setdefault(role, set()).add(page_url)
     return candidates
