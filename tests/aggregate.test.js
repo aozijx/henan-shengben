@@ -7,7 +7,7 @@ const major = {
   publicCourse: '公共英语', professionalCourse: { code: '02', name: '高等数学' }
 };
 
-test('merges ordinary and poverty codes by school while preserving separate plan totals', () => {
+test('keeps ordinary and poverty admission codes separate for the same school name', () => {
   const aggregates = buildMajorAggregates({
     majors: [major],
     years: [2026],
@@ -24,10 +24,10 @@ test('merges ordinary and poverty codes by school while preserving separate plan
   });
 
   const year = aggregates[0].years[2026];
-  assert.equal(year.schools.length, 3);
-  assert.equal(year.schools.find((school) => school.schoolName === '河南大学').ordinaryPlanCount, 20);
-  assert.equal(year.schools.find((school) => school.schoolName === '河南大学').povertyPlanCount, 3);
-  assert.deepEqual(year.publicSummary, { schoolCount: 2, ordinaryPlanCount: 20, povertyPlanCount: 3 });
+  assert.equal(year.schools.length, 4);
+  assert.equal(year.schools.find((school) => school.schoolCode === '6001').ordinaryPlanCount, 20);
+  assert.equal(year.schools.find((school) => school.schoolCode === '6401').povertyPlanCount, 3);
+  assert.deepEqual(year.publicSummary, { schoolCount: 3, ordinaryPlanCount: 20, povertyPlanCount: 3 });
   assert.deepEqual(year.privateSummary, { schoolCount: 1, ordinaryPlanCount: 10, povertyPlanCount: 0 });
   assert.equal(year.schools.find((school) => school.schoolName === '补录学校').ordinaryPlanCount, 0);
   assert.equal(year.scoreContext.controlCumulativeCount, 45);

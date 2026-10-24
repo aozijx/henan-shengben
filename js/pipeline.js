@@ -1,4 +1,4 @@
-import { schoolName } from './utils.js';
+import { admissionSchoolKey } from './utils.js';
 
 function normalizeText(value) {
   return String(value == null ? '' : value).replace(/\s+/g, '');
@@ -79,7 +79,7 @@ export function buildPreviewRows(input) {
         if (!rowMatchesPlan(planRow, filters)) return;
         hasPlans = true;
         hasPlansForYear = true;
-        var school = schoolName(planRow);
+        var school = admissionSchoolKey(planRow);
         var isPrivate = planRow['办学性质'] === '民办';
         var isPoverty = planRow['建档立卡'] === '是';
         var count = Number(planRow['计划人数']) || 0;

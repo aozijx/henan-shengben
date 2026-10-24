@@ -14,7 +14,7 @@ from .validate import validate_score_segment_major
 from .segment_store import iter_year
 
 CODE_RE = re.compile(r'^[A-Za-z0-9]+$')
-DERIVATION_VERSION = 2
+DERIVATION_VERSION = 3
 
 
 def _json(path: Path):
@@ -292,8 +292,11 @@ def _analytics(year, mapping, scores, plans):
             poverty = [r for r in rows if r not in ordinary]
             schools = {}
             for row in rows:
-                name = row['院校名称']
-                school = schools.setdefault(name, {'schoolName': name, 'ordinaryPlanCount': 0,
+                name = str(row.get('院校名称') or '').strip()
+                school_code = str(row.get('院校代号') or '').strip()
+                identity = (school_code, name) if school_code else ('', name)
+                school = schools.setdefault(identity, {'schoolName': name, 'schoolCode': school_code,
+                                                    'ordinaryPlanCount': 0,
                                                     'povertyPlanCount': 0, 'hasOrdinaryPlan': False,
                                                     'hasPovertyPlan': False})
                 special = row in poverty
@@ -301,10 +304,14 @@ def _analytics(year, mapping, scores, plans):
                 school['hasPovertyPlan' if special else 'hasOrdinaryPlan'] = True
             school_types[key] = {
                 'allSchoolCount': len(schools),
-                'ordinarySchoolCount': len({r.get('院校名称') for r in ordinary}),
+                'ordinarySchoolCount': len({
+                    (str(r.get('院校代号') or '').strip(), str(r.get('院校名称') or '').strip())
+                    if r.get('院校代号') else ('', str(r.get('院校名称') or '').strip())
+                    for r in ordinary
+                }),
                 'ordinaryPlanCount': sum(int(r.get('计划人数') or 0) for r in ordinary),
                 'povertyPlanCount': sum(int(r.get('计划人数') or 0) for r in poverty),
-                'schools': [schools[name] for name in sorted(schools)],
+                'schools': [schools[identity] for identity in sorted(schools)],
             }
         score = score_by_code.get(code)
         if score is None and code in ('99', 'A1'):

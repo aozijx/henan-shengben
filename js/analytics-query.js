@@ -12,7 +12,8 @@ export function queryRowsFromAnalytics(analyticsByYear, years) {
         var schoolType = type === 'public' ? '公办' : '民办';
         return (((major.schoolTypes || {})[type] || {}).schools || []).flatMap(function (school) {
           var base = { '年度': year, '专业代号': major.majorCode, '专业名称': major.majorName,
-            '院校名称': school.schoolName, '办学性质': schoolType, _summaryOnly: true };
+            '院校名称': school.schoolName, '院校代号': school.schoolCode || '',
+            '办学性质': schoolType, _summaryOnly: true };
           var rows = [];
           if (school.hasOrdinaryPlan) rows.push({ ...base, '招生类别': '普通专升本', '建档立卡': '否',
             '计划人数': school.ordinaryPlanCount });

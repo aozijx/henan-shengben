@@ -30,6 +30,24 @@ test('annual summaries drive preview totals and deduplicated school count', () =
   assert.equal(ordinary.effectiveSchoolCount, 1);
 });
 
+test('same-name admission codes count separately until a poverty-only code is filtered', () => {
+  const major = { '专业代号': '04', '专业名称': '金融学', '考试科目': '经济学' };
+  const annual = { 2027: { majors: [{ majorCode: '04', majorName: '金融学', controlScore: 180,
+    schoolTypes: { public: { schools: [
+      { schoolName: '甲大学', schoolCode: '6081', ordinaryPlanCount: 29, povertyPlanCount: 0,
+        hasOrdinaryPlan: true, hasPovertyPlan: false },
+      { schoolName: '甲大学', schoolCode: '6469', ordinaryPlanCount: 0, povertyPlanCount: 1,
+        hasOrdinaryPlan: false, hasPovertyPlan: true }
+    ] }, private: { schools: [] } } }] } };
+  const summary = queryRowsFromAnalytics(annual, [2027]);
+  const preview = (povertyStatus) => buildPreviewRows({ majors: [major], years: [2027],
+    filters: { povertyStatus }, getScore: () => 180, getPlans: () => summary.plansByYear[2027] });
+  assert.equal(preview('全部').rows[0].schoolCount2027, 2);
+  assert.equal(preview('全部').effectiveSchoolCount, 2);
+  assert.equal(preview('否').rows[0].schoolCount2027, 1);
+  assert.equal(preview('否').effectiveSchoolCount, 1);
+});
+
 test('published analytics reproduces the 2026 query preview without full plan downloads', () => {
   const metadata = read('metadata/school-data.json');
   const mapping = read(metadata.yearSources[2026].mappingSource);

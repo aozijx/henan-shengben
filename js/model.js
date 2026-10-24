@@ -1,3 +1,5 @@
+import { admissionSchoolKey } from './utils.js';
+
 function text(value) {
   var normalized = String(value == null ? '' : value).trim().replace(/（/g, '(').replace(/）/g, ')');
   return normalized || null;
@@ -25,12 +27,13 @@ export function normalizeMajorOption(row, publicCourseRules) {
 
 export function normalizePlanEntry(row) {
   var schoolName = text(row['院校名称']);
+  var schoolCode = text(row['院校代号']);
   return {
     year: numberOrNull(row['年度']),
     majorCode: text(row['专业代号']),
     majorName: text(row['专业名称']),
-    schoolId: schoolName,
-    schoolCode: text(row['院校代号']),
+    schoolId: admissionSchoolKey({ schoolCode: schoolCode, schoolName: schoolName }),
+    schoolCode: schoolCode,
     schoolName: schoolName,
     schoolType: text(row['办学性质']),
     admissionCategory: text(row['招生类别']),

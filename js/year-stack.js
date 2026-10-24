@@ -46,11 +46,12 @@ function planRecordHtml(entry) {
 export function buildSchoolDetailHtml(school, year, hiddenFields) {
   var entries = school.planEntries || [];
   var yearLabel = year == null ? '' : '<span class="school-year-badge">' + esc(String(year)) + ' 年</span>';
+  var schoolCode = school.schoolCode ? '<span class="school-type">代码 ' + esc(String(school.schoolCode)) + '</span>' : '';
   var records = entries.length
     ? entries.map(planRecordHtml).join('')
     : '<p class="school-detail-empty">该院校仅有招生高校总表回退信息，暂无计划明细。</p>';
   return '<article class="school-detail">' +
-    '<header><h5>' + esc(school.schoolName || '') + '</h5>' + yearLabel +
+    '<header><h5>' + esc(school.schoolName || '') + '</h5>' + schoolCode + yearLabel +
     '<span class="school-type">' + esc(school.schoolType || '—') + '</span></header>' +
     '<p class="school-plan-summary">普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人' +
     (resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人' : '') + '</p>' +

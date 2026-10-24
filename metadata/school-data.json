@@ -195,7 +195,7 @@
       "scoreSource": "data/省控线/省控线_2024.json",
       "planSource": "data/招生计划/招生计划_2024.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
-      "analyticsSource": "data/generated/2024/afa34dacf5f84824/analytics.json",
+      "analyticsSource": "data/generated/2024/4c57d415e6729bb0/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2024.json",
       "scoreSegmentShardTemplate": "data/一分一段/2024/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -206,7 +206,7 @@
       "scoreSource": "data/省控线/省控线_2025.json",
       "planSource": "data/招生计划/招生计划_2025.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
-      "analyticsSource": "data/generated/2025/8d7d0b8069e025ac/analytics.json",
+      "analyticsSource": "data/generated/2025/99e7689d5a123572/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2025.json",
       "scoreSegmentShardTemplate": "data/一分一段/2025/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -217,11 +217,11 @@
       "scoreSource": "data/省控线/省控线_2026.json",
       "planSource": "data/招生计划/招生计划_2026.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
-      "analyticsSource": "data/generated/2026/1283a7f9f1cf4cea/analytics.json",
+      "analyticsSource": "data/generated/2026/9d0f15c87a68ef27/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
       "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
       "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
     }
   },
-  "catalogSource": "data/generated/catalog/afdf5b5e7b3eaf18.json"
+  "catalogSource": "data/generated/catalog/a2a02f18b03c7d23.json"
 }

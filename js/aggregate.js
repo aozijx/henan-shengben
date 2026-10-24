@@ -1,4 +1,5 @@
 import { selectMajorRows } from './major-match.js';
+import { admissionSchoolKey } from './utils.js';
 
 function numberOrNull(value) {
   if (value == null || value === '') return null;
@@ -62,18 +63,15 @@ export function resolveScoreContext(series, score, controlScore) {
   };
 }
 
-function schoolIdentity(row) {
-  return String(row.schoolId || row.schoolName || row['院校名称'] || '').trim();
-}
-
 function schoolType(row) {
   return String(row.schoolType || row['办学性质'] || '公办').trim() || '公办';
 }
 
 function createSchool(row) {
   return {
-    schoolId: schoolIdentity(row),
-    schoolName: String(row.schoolName || row['院校名称'] || schoolIdentity(row)).trim(),
+    schoolId: admissionSchoolKey(row),
+    schoolName: String(row.schoolName || row['院校名称'] || admissionSchoolKey(row)).trim(),
+    schoolCode: String(row.schoolCode || row['院校代号'] || '').trim(),
     schoolType: schoolType(row),
     ordinaryPlanCount: 0,
     povertyPlanCount: 0,
@@ -83,7 +81,7 @@ function createSchool(row) {
 }
 
 function addSchool(schools, row, isFallback) {
-  var identity = schoolIdentity(row);
+  var identity = admissionSchoolKey(row);
   if (!identity) return;
   var school = schools.get(identity);
   if (!school) {

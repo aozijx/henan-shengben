@@ -18,3 +18,10 @@ export function normCode6(s) {
 export function schoolName(row) {
   return row['院校名称'] || row['学校名称'] || '';
 }
+
+/* 同名院校可能有普通与专项两套招生代码；筛选和计数按招生代码区分。 */
+export function admissionSchoolKey(row) {
+  var name = String(row.schoolName || schoolName(row)).trim();
+  var code = String(row.schoolCode || row['院校代号'] || '').trim();
+  return code ? code + '|' + name : String(row.schoolId || name).trim();
+}
