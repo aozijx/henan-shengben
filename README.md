@@ -68,6 +68,8 @@ python -m convert.ingest_year --seed data/year-links/YYYY.json
 
 首次运行建议加 `--check` 先预览；检查模式只在暂存目录处理并输出摘要，不发布数据。默认输出简短统计和异常；需要完整来源及逐专业明细时加 `--full-report`。`--seed` 必须指向尚未发布的新年度；现有年度不能用导入入口覆盖。参数和各阶段说明见 [convert/README.md](convert/README.md)。
 
+复核已发布年度时，不要使用 `ingest_year`。在隔离副本中运行异常复核、归一化和 catalog 校验的 PowerShell 流程，见 [已有年度复核说明](convert/README.md#已有年度复核)。
+
 运行自动化测试：
 
 ```bash
