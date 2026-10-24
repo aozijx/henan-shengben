@@ -40,7 +40,7 @@ export function buildExplorerControlsHtml(metadata, state) {
   var unavailable = state.status !== 'ready' || !state.majors.length;
   var years = getSortedYears(metadata);
   var selectedYears = state.selectedYears || years;
-  var yearLabel = selectedYears.length === years.length ? '全部（' + years[0] + '–' + years[years.length - 1] + '）' : selectedYears.join('、');
+  var yearLabel = selectedYears.length === years.length ? years[0] + '–' + years[years.length - 1] : selectedYears.join('、');
   return '<div class="explorer-status" aria-live="polite">' +
       (state.status === 'loading' ? '<span class="loading">正在加载院校数据…</span>' : '') +
       (state.status === 'error' ? '<span class="msg-notfound">' + esc(state.error) + '</span>' : '') +

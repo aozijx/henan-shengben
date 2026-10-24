@@ -7,16 +7,16 @@ function text(value) {
 
 function summaryPart(label, summary, hiddenFields) {
   var value = summary || {};
-  return '<span class="year-kind year-kind-' + (label === '公办' ? 'public' : 'private') + '">' + label + ' ' +
-    (value.schoolCount || 0) + ' 所 · 普通 ' + (value.ordinaryPlanCount || 0) + ' 人' +
-    (resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 专项 ' + (value.povertyPlanCount || 0) + ' 人' : '') + '</span>';
+  return '<span class="year-kind year-kind-' + (label === '公办' ? 'public' : 'private') + '"><strong>' + label +
+    '</strong><span>' + (value.schoolCount || 0) + ' 所 · 普通 ' + (value.ordinaryPlanCount || 0) + ' 人' +
+    (resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 专项 ' + (value.povertyPlanCount || 0) + ' 人' : '') + '</span></span>';
 }
 
 export function buildYearSummaryHtml(yearAggregate, hiddenFields) {
   if (!yearAggregate) return '<span class="year-unpublished">该年份数据尚未发布</span>';
   var score = yearAggregate.score == null ? '—' : yearAggregate.score;
   return '<div class="year-summary">' +
-    '<span class="year-score">省控线 ' + esc(String(score)) + '</span>' +
+    '<span class="year-score"><strong>省控线</strong><span>' + esc(String(score)) + '</span></span>' +
     summaryPart('公办', yearAggregate.publicSummary, hiddenFields) +
     summaryPart('民办', yearAggregate.privateSummary, hiddenFields) +
     '</div>';

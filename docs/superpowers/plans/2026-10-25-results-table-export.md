@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 将专业聚合表作为唯一主数据表，按专业展开院校详情，并在表格上方提供可勾选字段的 CSV 导出。
+**Goal:** 将专业聚合表作为唯一主数据表，使用结果下方的独立院校 section 展示学校详情，并在表格上方提供可勾选字段的 CSV 导出。
 
-**Architecture:** `index.html` 持有稳定的结果工具栏、结果状态/内容槽和导出字段对话框骨架。结果视图模块负责构造专业/年份/院校 HTML，结果控制器处理排序、视图切换和详情展开；独立导出对话框模块按 metadata 与所选年份生成复选框，并将所选字段交给现有 CSV 序列化模块。移除查询页底部重复预览，保留分析页继续使用的预览工具函数。
+**Architecture:** `index.html` 持有稳定的结果工具栏、状态/内容槽、导出字段对话框和跨全工作区的院校 section 骨架。结果视图模块负责构造专业/年份摘要，结果控制器处理排序、主视图切换、专业选择和院校布局；独立导出对话框模块按 metadata 与所选年份生成复选框，并将所选字段交给现有 CSV 序列化模块。移除查询页底部重复预览，保留分析页继续使用的预览工具函数。
 
 **Tech Stack:** 原生 HTML、CSS、ES Modules、metadata、浏览器原生 `dialog`、现有 CSV 下载实现；不增加运行时依赖。
 
@@ -14,16 +14,18 @@
 
 - 不改查询数据源、筛选默认值、专业匹配、汇总口径、CSV 编码、文件名规则或 metadata 字段定义。
 - 不把院校招生记录变成 CSV 的默认行粒度；导出继续按每个筛选后的本科专业一行，字段由用户选择。
-- 不因表格显示切换而重置筛选、排序、年份或已展开的院校详情。
+- 不因表格显示切换而重置筛选、排序、年份或当前选中的院校专业。
 - 所选年份限制主表年份概览、院校明细、导出字段及 CSV 内容。
-- 宽表只在结果表容器内横向滚动；手机上筛选面板和结果容器外宽一致。
+- 桌面表格最多保留专业、历年量化成绩/招生、院校选择三列；手机将每个专业展示为分组卡片，年份信息无需横向拖表即可阅读。
+- 院校信息在筛选面板和主结果所在网格行下方的独立 section 中按选中专业展示，横跨整个查询工作区，支持卡片/列表切换。
+- 手机上筛选面板和结果容器外宽一致；桌面未来年份过多导致超宽时，仅结果表容器横向滚动。
 - 结果容器使用 `var(--card)`、`1px solid var(--line)` 和 `var(--radius)`；空态居中，有结果时表格铺满内容宽度。
 - 不新增或运行自动化测试；按项目要求进行人工桌面/手机浏览器检查。
 
 ## Review Focus
 
 - 新查询、切换筛选和年份后，结果状态与内容更新，静态工具栏/对话框骨架保持稳定。
-- 切换卡片/表格不清除展开的学校明细或查询条件。
+- 切换卡片/表格不清除当前选中专业的学校明细或查询条件。
 - 专项筛选、学校类型与所选年份仍正确限制学校详情和专业摘要。
 - CSV 只含所选字段，且始终包含完整筛选结果，不受分页或详情展开影响。
 - 空结果、加载失败和无可导出字段时，状态提示居中且操作正确禁用。
@@ -34,7 +36,7 @@
 - `css/query.css`: `.result` 卡片容器、同网格宽度和响应式表格/工具栏布局。
 - `css/export.css`: 导出字段对话框、字段分组、手机滚动与底部操作样式。
 - `js/results-view.js`: 纯视图模型与结果 HTML 构建；不重建外层 `#result`。
-- `js/results-controller.js`: 绑定结果区事件，管理详情展开状态并将结果内容写入静态槽。
+- `js/results-controller.js`: 绑定结果区事件，管理所选专业与院校区布局并将结果内容写入静态槽。
 - `js/export-dialog.js`: 生成字段勾选项、打开/校验/取消/提交导出选择；不实现 CSV 编码。
 - `js/export.js`: 保持 CSV 字段过滤、序列化与下载；`prepareExport(..., selectedFieldKeys)` 接受可选字段键。
 - `js/explorer.js`: 删除预览表和底部导出的查询页渲染；把当前完整筛选行、年份与 metadata 提供给导出对话框。
@@ -73,10 +75,10 @@
 - Card and table views continue to consume `buildResultViewModel()` and expanded major details.
 
 - [x] Keep professional/year summary markup in `results-view.js` and make each selected year a visibly grouped score/admissions summary.
-- [x] Keep compact mobile table year groups side by side in its own horizontal scroll region; omit reference-rank placeholders when no rank data is loaded.
+- [x] Keep compact year groups side by side in the desktop table; omit reference-rank placeholders when no rank data is loaded.
 - [x] Move result state tracking and delegated click handling into `results-controller.js`.
-- [x] Render each expanded school list in a subrow immediately below its professional; keep the list lazy until expanded.
-- [x] Preserve per-major expansion state when sorting or switching card/table layout if the same result signature remains.
+- [x] Render one separate school section after the quantitative list/table; load the selected major's school data lazily.
+- [x] Preserve selected-major state when sorting or switching card/table layout if the same result signature remains.
 - [x] Update `app.js` loading, no-match and error paths to use the static result slots rather than replacing `#result.innerHTML`.
 
 ### Task 3: Add field-selectable CSV export
@@ -98,7 +100,7 @@
 
 **Files:** `css/query.css`, `css/export.css`, `README.md`, this plan
 
-- [x] Check desktop and 360 px views for aligned filter/result widths, non-stretched toolbar buttons, table-local horizontal scroll, and dialog usability.
+- [x] Check desktop and 360 px views for aligned filter/result widths, non-stretched toolbar buttons, readable year summaries without mobile table scrolling, and dialog usability.
 - [x] Check empty/no-match states, card/table switch, detail expand/collapse, year changes and export-field cancellation/selection in the local browser; inspect loading/error handling in the state controller.
 - [x] Confirm by code review that CSV uses the checked fields and the full filtered row set without invoking automated test commands.
 - [x] Update README module descriptions and mark completed plan tasks.
@@ -106,6 +108,14 @@
 ## Scope Review
 
 - Query export preview is removed because its row grain duplicates the professional summary data. Analysis page continues using `preview.js` pagination/formatting helpers.
-- School detail data remains a nested presentation of the same aggregate model and is excluded from CSV rows.
+- School detail data remains a separate presentation of the same aggregate model and is excluded from CSV rows.
+- The static school-section shell follows one selected major at a time and spans the full query grid below the filters and main result; its card/list control is independent of the main result layout.
 - Static skeletons reduce repeated DOM replacement; result content remains data-driven.
 - Automated tests and commands are intentionally excluded by the higher-priority instruction; acceptance is manual browser review.
+
+## Follow-up: Separate university details from quantitative comparison
+
+- [x] Put each year's score on its own metric row and align public/private school and admission totals side by side.
+- [x] Move school details below the filters and professional results into a dedicated full-workspace section with static shell and card/list modes.
+- [x] Review desktop and mobile result, card, and list layouts; check for horizontal overflow.
+- [ ] Run `git diff --check`; do not run automated tests.

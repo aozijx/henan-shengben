@@ -22,7 +22,7 @@ function resultStateFor(root, model) {
   var state = resultStates.get(root);
   var signature = resultSignature(model);
   if (!state || (model.status !== 'loading' && state.signature !== signature)) {
-    state = { signature: signature, expandedDetails: {} };
+    state = { signature: signature, expandedDetails: {}, selectedMajorKey: '', schoolLayout: 'cards' };
     resultStates.set(root, state);
   }
   if (model.status !== 'loading') state.signature = signature;
@@ -35,25 +35,58 @@ function within(root, target, selector) {
   return match && root.contains(match) ? match : null;
 }
 
-function toggleMajorDetail(root, context, button) {
-  var index = Number(button.getAttribute('data-expand-major'));
-  var aggregate = context.model.aggregates[index];
+function renderSelectedMajor(root, context) {
+  var state = context.state;
+  var section = root.querySelector('#selected-major-section');
+  var title = root.querySelector('#selected-major-name');
+  var content = root.querySelector('#selected-major-content');
+  if (!section || !content || !state) return;
+  section.dataset.schoolLayout = state.schoolLayout;
+  root.querySelectorAll('[data-select-major]').forEach(function (button) {
+    var aggregate = context.model.aggregates[Number(button.dataset.selectMajor)];
+    var selected = Boolean(aggregate && detailKey(aggregate) === state.selectedMajorKey);
+    button.setAttribute('aria-pressed', String(selected));
+    button.textContent = selected ? '当前院校' : '查看院校';
+  });
+  root.querySelectorAll('button[data-school-layout]').forEach(function (button) {
+    button.setAttribute('aria-pressed', String(button.dataset.schoolLayout === state.schoolLayout));
+  });
+  var activeIndex = context.model.aggregates.findIndex(function (aggregate) {
+    return detailKey(aggregate) === state.selectedMajorKey;
+  });
+  if (activeIndex < 0) {
+    state.selectedMajorKey = '';
+    if (title) title.textContent = '按专业查看各院校招生信息';
+    content.innerHTML = '<p class="selected-major-empty">选择上方的本科专业，查看对应院校和招生计划。</p>';
+    return;
+  }
+  var aggregate = context.model.aggregates[activeIndex];
+  if (title) title.textContent = aggregate.major && aggregate.major.majorName || '';
+  var holder = document.createElement('div');
+  holder.className = 'selected-major-detail';
+  holder.dataset.majorDetail = String(activeIndex);
+  holder.innerHTML = buildExpandedMajorHtml(aggregate, context.model.selectedYears, context.model.hiddenFields);
+  content.replaceChildren(holder);
+  if (context.onExpand) context.onExpand(aggregate, context.model.selectedYears, holder, context.model.hiddenFields);
+}
+
+function selectMajor(root, context, button) {
+  var aggregate = context.model.aggregates[Number(button.dataset.selectMajor)];
+  if (!aggregate) return;
   var key = detailKey(aggregate);
-  var holder = root.querySelector('[data-major-detail="' + index + '"]');
-  if (!holder || !context.expandedDetails) return false;
-  var opening = !context.expandedDetails[key];
-  if (opening) context.expandedDetails[key] = true;
-  else delete context.expandedDetails[key];
-  holder.hidden = !opening;
-  holder.innerHTML = opening
-    ? buildExpandedMajorHtml(aggregate, context.model.selectedYears, context.model.hiddenFields)
-    : '';
-  var detailRow = holder.closest('.aggregate-table-detail');
-  if (detailRow) detailRow.hidden = !opening;
-  button.textContent = opening ? '收起院校详情' : (button.dataset.expandLabel || '查看院校详情');
-  button.setAttribute('aria-expanded', String(opening));
-  if (opening && context.onExpand) context.onExpand(aggregate, context.model.selectedYears, holder, context.model.hiddenFields);
-  return opening;
+  context.state.selectedMajorKey = context.state.selectedMajorKey === key ? '' : key;
+  renderSelectedMajor(root, context);
+}
+
+function setSchoolLayout(root, context, button) {
+  var layout = button.dataset.schoolLayout;
+  if (layout !== 'cards' && layout !== 'list') return;
+  context.state.schoolLayout = layout;
+  var section = root.querySelector('#selected-major-section');
+  if (section) section.dataset.schoolLayout = layout;
+  root.querySelectorAll('button[data-school-layout]').forEach(function (item) {
+    item.setAttribute('aria-pressed', String(item.dataset.schoolLayout === layout));
+  });
 }
 
 function handleResultClick(root, event) {
@@ -70,8 +103,13 @@ function handleResultClick(root, event) {
     context.dispatch({ type: 'SET_RESULT_LAYOUT', resultLayout: layout.dataset.resultLayout });
     return;
   }
-  var detailButton = within(root, event.target, '[data-expand-major]');
-  if (detailButton) toggleMajorDetail(root, context, detailButton);
+  var schoolLayout = within(root, event.target, '[data-school-layout]');
+  if (schoolLayout) {
+    setSchoolLayout(root, context, schoolLayout);
+    return;
+  }
+  var majorButton = within(root, event.target, '[data-select-major]');
+  if (majorButton) selectMajor(root, context, majorButton);
 }
 
 function bindResultEvents(root) {
@@ -85,12 +123,14 @@ export function setResultState(root, message, kind) {
   var state = root.querySelector('#result-state');
   var content = root.querySelector('#result-content');
   var toolbar = root.querySelector('#result-toolbar');
+  var schoolSection = root.parentElement && root.parentElement.querySelector('#selected-major-section');
   root.querySelectorAll('[data-result-layout]').forEach(function (button) { button.disabled = true; });
   var exportButton = root.querySelector('#exportCsv');
   if (exportButton) exportButton.disabled = true;
   root.classList.remove('has-results');
   if (toolbar) toolbar.hidden = true;
   if (content) content.hidden = true;
+  if (schoolSection) schoolSection.hidden = true;
   if (state) {
     state.hidden = false;
     state.className = 'result-state ' + (kind === 'error' ? 'result-error' : 'empty');
@@ -107,6 +147,8 @@ export function renderResultWorkspace(root, model, metadata, dispatch, onExpand)
   var status = root.querySelector('#result-state');
   var content = root.querySelector('#result-content');
   var toolbar = root.querySelector('#result-toolbar');
+  var interactionRoot = root.closest('#view-query') || root;
+  var schoolSection = interactionRoot.querySelector('#selected-major-section');
   root.querySelectorAll('[data-result-layout]').forEach(function (button) {
     button.disabled = !hasResults;
     if (hasResults) button.setAttribute('aria-pressed', String(button.dataset.resultLayout === viewModel.resultLayout));
@@ -122,19 +164,19 @@ export function renderResultWorkspace(root, model, metadata, dispatch, onExpand)
     status.textContent = resultMessage(viewModel);
   }
   if (!hasResults) {
-    resultContexts.set(root, { model: viewModel, dispatch: dispatch, onExpand: onExpand, expandedDetails: state.expandedDetails });
-    bindResultEvents(root);
+    if (schoolSection) schoolSection.hidden = true;
+    resultContexts.set(interactionRoot, { model: viewModel, dispatch: dispatch, onExpand: onExpand, state: state });
+    bindResultEvents(interactionRoot);
     return;
   }
-  var context = { model: viewModel, dispatch: dispatch, onExpand: onExpand, expandedDetails: state.expandedDetails };
+  if (schoolSection) schoolSection.hidden = false;
+  viewModel.selectedMajorKey = state.selectedMajorKey;
+  viewModel.schoolLayout = state.schoolLayout;
+  var context = { model: viewModel, dispatch: dispatch, onExpand: onExpand, state: state };
   if (content) content.innerHTML = buildResultWorkspaceHtml(viewModel, metadata);
-  resultContexts.set(root, context);
-  bindResultEvents(root);
+  resultContexts.set(interactionRoot, context);
+  bindResultEvents(interactionRoot);
   if (content && onExpand) {
-    viewModel.aggregates.forEach(function (aggregate, index) {
-      if (!state.expandedDetails[detailKey(aggregate)]) return;
-      var holder = root.querySelector('[data-major-detail="' + index + '"]');
-      if (holder) onExpand(aggregate, viewModel.selectedYears, holder, viewModel.hiddenFields);
-    });
+    renderSelectedMajor(interactionRoot, context);
   }
 }

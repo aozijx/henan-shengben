@@ -40,14 +40,14 @@ test('initial aggregate summary includes courses, scores and split plan totals w
   assert.doesNotMatch(html, /0371-12345678|郑州市|完整分数段/);
 });
 
-test('card places its detail action beside the major title before yearly summaries', () => {
+test('card places its school selector beside the major title before yearly summaries', () => {
   const html = buildResultWorkspaceHtml({ aggregates: [aggregate], status: 'ready', hasQuery: true }, {
     supportedYears: [2026], latestYear: 2026
   });
 
   assert.match(html, /<header><div class="aggregate-card-heading"><div><h3>软件工程/);
-  assert.match(html, /data-expand-major="0"[^>]*>查看院校详情/);
-  assert.ok(html.indexOf('data-expand-major="0"') < html.indexOf('class="year-overview"'));
+  assert.match(html, /data-select-major="0" aria-pressed="false">查看院校/);
+  assert.ok(html.indexOf('data-select-major="0"') < html.indexOf('class="year-overview"'));
 });
 
 test('result workspace contains only result content and leaves layout controls to its static shell', () => {
@@ -138,7 +138,7 @@ test('cards render only selected years and keep lazy detail content out of the i
   assert.doesNotMatch(html, /<h4>2025 年<\/h4>|0371-12345678|完整分数段/);
 });
 
-test('table layout renders one major row from the same selected-year aggregate', () => {
+test('table layout groups course details and yearly admissions without embedding school details', () => {
   const html = buildResultWorkspaceHtml({
     aggregates: [aggregate], status: 'ready', hasQuery: true,
     selectedYears: [2026], resultLayout: 'table'
@@ -147,11 +147,11 @@ test('table layout renders one major row from the same selected-year aggregate',
   assert.match(html, /软件工程/);
   assert.match(html, /180/);
   assert.match(html, /公办 1 所/);
-  assert.match(html, /历年概览/);
+  assert.match(html, /历年成绩与招生/);
+  assert.match(html, /专业基础课 高等数学/);
   assert.doesNotMatch(html, /2026 省控线|2026 院校\(公\/民\)/);
-  assert.match(html, /class="aggregate-table-detail" hidden/);
-  assert.match(html, /查看院校详情/);
-  assert.doesNotMatch(html, /0371-12345678|完整分数段/);
+  assert.match(html, /data-select-major="0" aria-pressed="false">查看院校/);
+  assert.doesNotMatch(html, /selected-major-section|aggregate-table-detail|0371-12345678|完整分数段/);
 });
 
 test('year controls make selected years and focus year visible', () => {
@@ -179,14 +179,13 @@ test('result view model normalizes shared years and layout without mutating meta
   assert.equal(metadata.__selectedYears, undefined);
 });
 
-test('workspace renders expanded details from stable major identity state', () => {
+test('workspace marks the selected major while leaving school details to the static section', () => {
   const html = buildResultWorkspaceHtml(buildResultViewModel({
     aggregates: [aggregate], selectedYears: [2026], expandedDetails: { '080902': true }
   }, { supportedYears: [2026] }), { supportedYears: [2026] });
 
-  assert.match(html, /aria-expanded="true"/);
-  assert.match(html, /收起院校详情/);
-  assert.match(html, /0371-12345678/);
+  assert.match(html, /data-select-major="0" aria-pressed="true">当前院校/);
+  assert.doesNotMatch(html, /0371-12345678|selected-major-section/);
 });
 
 test('year dialog exposes metadata years and all required actions', () => {
@@ -198,11 +197,12 @@ test('year dialog exposes metadata years and all required actions', () => {
   assert.match(html, /取消|应用/);
 });
 
-test('table layout keeps a closed detail subrow adjacent to its major row', () => {
+test('table layout keeps school details out of per-major table rows', () => {
   const html = buildResultWorkspaceHtml({
     aggregates: [aggregate], status: 'ready', hasQuery: true,
     selectedYears: [2026], resultLayout: 'table'
   }, { supportedYears: [2026] });
-  assert.match(html, /class="aggregate-table-row"[\s\S]*class="aggregate-table-detail" hidden/);
-  assert.match(html, /data-major-detail="0"/);
+  assert.match(html, /class="aggregate-table-wrap"/);
+  assert.match(html, /data-select-major="0"/);
+  assert.doesNotMatch(html, /selected-major-section|aggregate-table-detail/);
 });

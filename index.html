@@ -107,6 +107,21 @@
           </form>
         </dialog>
       </div>
+      <section id="selected-major-section" class="selected-major-section" data-school-layout="cards" aria-labelledby="selected-major-title" hidden>
+        <header class="selected-major-section-header">
+          <div>
+            <h3 id="selected-major-title">院校与招生计划</h3>
+            <p id="selected-major-name">按专业查看各院校招生信息</p>
+          </div>
+          <div class="school-layout-switch" role="group" aria-label="院校展示方式">
+            <button type="button" data-school-layout="cards" aria-pressed="true">卡片</button>
+            <button type="button" data-school-layout="list" aria-pressed="false">列表</button>
+          </div>
+        </header>
+        <div id="selected-major-content" class="selected-major-content">
+          <p class="selected-major-empty">选择上方的本科专业，查看对应院校和招生计划。</p>
+        </div>
+      </section>
       <div id="explorer" class="explorer" aria-label="筛选排序与导出">
         <div class="loading">正在加载筛选配置与院校数据…</div>
       </div>

@@ -147,11 +147,82 @@
 @media(max-width:899px){
   #view-query #result.result{min-width:0;}
   #view-query #result-toolbar.result-toolbar{flex-wrap:wrap;margin:0 0 12px;padding:13px 12px 0;overflow:visible;white-space:normal;}
+  #view-query .selected-major-section{grid-column:1;grid-row:auto;order:7;}
 }
 
 /* Keep year summaries side by side inside the horizontally scrolling result table. */
 .year-overview-compact{display:flex;flex-wrap:nowrap;align-items:stretch;width:max-content;min-width:100%;gap:8px;}
 .year-overview-compact .year-overview-item{flex:0 0 176px;min-width:176px;}
 .year-overview-compact .year-summary{grid-template-columns:repeat(2,minmax(0,1fr));}
-#view-query .aggregate-table{min-width:var(--table-min-width,1160px);}
-#view-query .aggregate-table th:nth-child(4),#view-query .aggregate-table td:nth-child(4){width:var(--year-column-width,568px);}
+#view-query .aggregate-table{min-width:var(--table-min-width,850px);}
+#view-query .aggregate-table th:nth-child(1),#view-query .aggregate-table td:nth-child(1){width:210px;}
+#view-query .aggregate-table th:nth-child(2),#view-query .aggregate-table td:nth-child(2){width:var(--year-column-width,514px);}
+#view-query .aggregate-table th:nth-child(3),#view-query .aggregate-table td:nth-child(3){width:120px;}
+.aggregate-table td:nth-child(2){white-space:normal;}
+.aggregate-major-cell strong{display:block;font-size:14px;color:var(--ink);}
+.aggregate-major-meta{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.5;white-space:normal;}
+.aggregate-table-mobile-label{display:none;}
+.year-overview .year-rank{display:none;}
+
+/* Keep numeric comparison balanced: the score spans the row; public/private totals share it. */
+#view-query .year-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;margin:8px 0 0;}
+#view-query .year-score{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;}
+#view-query .year-score strong,.year-kind strong{color:var(--muted);font-size:11px;font-weight:600;}
+#view-query .year-score>span{font-size:15px;}
+#view-query .year-kind{display:grid;gap:3px;min-width:0;font-size:11px;line-height:1.45;overflow-wrap:anywhere;}
+
+#view-query .selected-major-section{grid-column:1/-1;grid-row:5;order:7;width:100%;min-width:0;margin-top:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;}
+#view-query .selected-major-section[hidden]{display:none!important;}
+.selected-major-section-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line);}
+.selected-major-section-header h3{margin:0;font-size:15px;}
+.selected-major-section-header p{margin:4px 0 0;color:var(--muted);font-size:12px;}
+.selected-major-content{width:100%;min-width:0;}
+.selected-major-empty{margin:0;padding:22px 16px;color:var(--muted);font-size:13px;}
+.school-layout-switch{display:inline-flex;flex:0 0 auto;gap:3px;padding:3px;border:1px solid var(--line);border-radius:var(--radius-xs);background:var(--surface-2);}
+.school-layout-switch button{min-height:30px;padding:5px 10px;border:1px solid transparent;border-radius:var(--radius-xs);background:transparent;color:var(--muted);font:inherit;font-size:12px;cursor:pointer;}
+.school-layout-switch button[aria-pressed="true"]{border-color:var(--blue);background:var(--switch-selected);color:var(--blue-deep);}
+.selected-major-section .school-comparison{width:100%;min-width:0;padding:15px 16px;}
+.selected-major-section .school-comparison>h4{margin-bottom:12px;}
+.selected-major-section .school-comparison-list{width:100%;}
+.selected-major-section[data-school-layout="list"] .school-comparison-list{grid-template-columns:minmax(0,1fr);gap:0;}
+.selected-major-section[data-school-layout="list"] .school-comparison-card{grid-template-columns:minmax(0,1fr);gap:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;overflow:visible;}
+.selected-major-section[data-school-layout="list"] .school-comparison-card:last-child{border-bottom:0;}
+.selected-major-section[data-school-layout="list"] .school-detail{display:grid;grid-template-columns:minmax(190px,.36fr) minmax(0,1fr);align-items:start;gap:0 18px;padding:13px 4px;background:transparent;}
+.selected-major-section[data-school-layout="list"] .school-detail>header,.selected-major-section[data-school-layout="list"] .school-plan-summary{grid-column:1;}
+.selected-major-section[data-school-layout="list"] .school-detail>header{align-self:end;}
+.selected-major-section[data-school-layout="list"] .school-plan-summary{margin:6px 0 0;}
+.selected-major-section[data-school-layout="list"] .school-plan-record,.selected-major-section[data-school-layout="list"] .school-detail-empty{grid-column:2;}
+.selected-major-section[data-school-layout="list"] .school-plan-record{grid-row:1/span 2;margin:0;padding:0;border:0;}
+
+@media(max-width:600px){
+  #view-query .aggregate-table-wrap{max-height:none;overflow:visible;border:0;border-radius:0;background:transparent;}
+  #view-query .aggregate-table{display:block;width:100%;min-width:0!important;border:0;border-collapse:initial;table-layout:auto;}
+  #view-query .aggregate-table thead{position:static;display:block;width:auto;height:auto;margin:0 0 9px;overflow:visible;clip:auto;white-space:normal;border:0;}
+  #view-query .aggregate-table thead tr{display:flex;gap:7px;}
+  #view-query .aggregate-table thead th{position:static;width:auto!important;min-height:34px;padding:0;border:1px solid var(--line);border-radius:var(--radius-xs);background:var(--surface-2);box-shadow:none;z-index:auto;}
+  #view-query .aggregate-table thead th:nth-child(3){display:none;}
+  #view-query .aggregate-table thead th.sortable button{width:auto;min-height:34px;padding:6px 9px;border:0;border-radius:inherit;white-space:nowrap;}
+  #view-query .aggregate-table tbody{display:grid;gap:10px;}
+  #view-query .aggregate-table tr.aggregate-table-row{display:grid;grid-template-columns:minmax(0,1fr);overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);}
+  #view-query .aggregate-table tr.aggregate-table-row td{display:block;width:auto!important;min-width:0;padding:11px 12px;border:0;white-space:normal;}
+  #view-query .aggregate-table-row .aggregate-major-cell{padding-bottom:8px!important;}
+  #view-query .aggregate-table-row td:nth-child(2){border-top:1px solid var(--line)!important;}
+  #view-query .aggregate-table-mobile-label{display:block;margin-bottom:7px;color:var(--muted);font-size:11px;font-weight:650;}
+  #view-query .aggregate-table .year-overview-compact{display:grid;width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+  #view-query .aggregate-table .year-overview-compact .year-overview-item{width:auto;min-width:0;flex:initial;padding:8px;border:1px solid var(--line);border-radius:var(--radius-xs);background:var(--surface);}
+  #view-query .aggregate-table .year-overview-compact .year-overview-item h4{margin-bottom:5px;}
+  #view-query .aggregate-table .year-overview-compact .year-summary{grid-template-columns:minmax(0,1fr);gap:4px;font-size:11px;}
+  #view-query .year-summary{grid-template-columns:minmax(0,1fr);gap:5px;}
+  #view-query .year-score{grid-column:1;}
+  #view-query .aggregate-table tr.aggregate-table-row td:nth-child(3){padding-top:7px;}
+  #view-query .aggregate-table tr.aggregate-table-row td:nth-child(3) button{width:100%;}
+  #view-query .aggregate-table tr.aggregate-table-detail{display:block;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface-3);}
+  #view-query .aggregate-table tr.aggregate-table-detail[hidden]{display:none!important;}
+  #view-query .aggregate-table tr.aggregate-table-detail td{display:block;width:100%;padding:0;border:0;white-space:normal;}
+  .selected-major-section-header{align-items:flex-start;flex-direction:column;padding:12px;}
+  .selected-major-section .school-comparison{padding:12px;}
+  .selected-major-section[data-school-layout="list"] .school-detail{grid-template-columns:minmax(0,1fr);gap:0;padding:12px 2px;}
+  .selected-major-section[data-school-layout="list"] .school-detail>header,.selected-major-section[data-school-layout="list"] .school-plan-summary,
+  .selected-major-section[data-school-layout="list"] .school-plan-record,.selected-major-section[data-school-layout="list"] .school-detail-empty{grid-column:1;grid-row:auto;}
+  .selected-major-section[data-school-layout="list"] .school-plan-record{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);}
+}
