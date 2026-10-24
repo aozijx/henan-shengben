@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from convert.ingest_year import _summary_report, ingest_year, publish_staged_files, source_role_for_attachment
 from convert.common import REPO_ROOT
-from convert.segment_store import write_year
+from convert.normalize import save_normalized_target
 
 
 YEAR = 2027
@@ -117,28 +117,30 @@ def write_synthetic_tables(plan, data_root, year, *, write, parser=None):
     return results
 
 
-def write_synthetic_extraction(target, data_root, *, needs_review=False):
+def write_synthetic_extraction(target, data_root, plan, *, needs_review=False, full_report=False):
     manifest = json.loads((data_root / target['manifestPath']).read_text(encoding='utf-8'))
     entry = manifest['entries'][0]
     result = {'schemaVersion': 1, 'dataset': 'score-segments', 'year': YEAR,
         'sourceManifest': target['manifestPath'], 'majors': [{
-            'majorCode': '51', 'majorName': '计算机科学与技术', 'status': 'ok',
+            'majorCode': '51', 'majorName': '计算机科学与技术',
+            'status': 'needs-review' if needs_review else 'ok',
             'sourcePdf': entry['localPath'], 'sourceSha256': entry['sha256'],
-            'segments': [{'score': 200, 'cumulativeCount': 4}, {'score': 199, 'cumulativeCount': 7}],
-            'issues': []}],
+            'segments': [] if needs_review else [
+                {'score': 200, 'cumulativeCount': 4}, {'score': 199, 'cumulativeCount': 7}],
+            'issues': [{'code': 'ocr-review'}] if needs_review else []}],
         'summary': {'total': 1, 'ok': 0 if needs_review else 1, 'needsReview': 1 if needs_review else 0}}
-    output = data_root / target['normalizedPath']
-    output.parent.mkdir(parents=True, exist_ok=True)
-    write_year(output, data_root, result)
-    return result
+    normalized, _ = save_normalized_target(target, plan, data_root, result,
+                                           full_report=full_report)
+    return normalized
 
 
 def mocked_tabular_parsers(*, needs_review=False):
     return (
         patch('convert.ingest_year.validate_attachment'),
         patch('convert.ingest_year.extract_year_sources', side_effect=write_synthetic_tables),
-        patch('convert.ingest_year.convert_target', side_effect=lambda target, root, workers=1:
-            write_synthetic_extraction(target, root, needs_review=needs_review)),
+        patch('convert.ingest_year.convert_target', side_effect=lambda target, root, **kwargs:
+            write_synthetic_extraction(target, root, kwargs['plan'], needs_review=needs_review,
+                                       full_report=kwargs.get('full_report', False))),
     )
 
 

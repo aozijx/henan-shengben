@@ -4,24 +4,14 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 from pathlib import Path
 from typing import Iterator
 
-from .common import DATA_ROOT, read_json
+from .common import DATA_ROOT, read_json, write_bytes_if_changed
 
 
 def _bytes(value: object) -> bytes:
     return (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
-
-
-def _write(path: Path, content: bytes) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if path.is_file() and path.read_bytes() == content:
-        return
-    temporary = path.with_name(path.name + '.new')
-    temporary.write_bytes(content)
-    os.replace(temporary, path)
 
 
 def _shard_path(index_path: Path, data_root: Path, year: int, code: str) -> Path:
@@ -53,10 +43,10 @@ def write_year(index_path: Path, data_root: Path, document: dict) -> dict:
                         'path': path.relative_to(data_root).as_posix(),
                         'sha256': hashlib.sha256(content).hexdigest()})
     for path, content in prepared:
-        _write(path, content)
+        write_bytes_if_changed(path, content)
     index = {key: value for key, value in document.items() if key not in ('schemaVersion', 'majors')}
     index.update({'schemaVersion': 2, 'majors': entries})
-    _write(index_path, _bytes(index))
+    write_bytes_if_changed(index_path, _bytes(index))
     return index
 
 
@@ -106,7 +96,7 @@ def main() -> int:
     index_path = Path(args.data_root) / targets[0]['normalizedPath']
     if args.output.resolve() == index_path.resolve() or args.output.exists():
         parser.error('--output must be a new path distinct from the index')
-    _write(args.output, _bytes(merge_year(index_path, args.data_root)))
+    write_bytes_if_changed(args.output, _bytes(merge_year(index_path, args.data_root)))
     print(args.output)
     return 0
 

@@ -1,22 +1,20 @@
 from __future__ import annotations
 
-import argparse
 from pathlib import Path
 from typing import Any
 
 from .authority import SourceValue, resolve_field
-from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
+from .common import read_json, write_json
 from .validate import validate_score_segment_year
-from .segment_store import iter_year, write_year
+from .segment_store import write_year
 
 
 def normalize_target(target: dict[str, Any], plan: dict[str, Any], data_root: Path,
-                     *, full_report: bool = False) -> tuple[dict[str, Any], dict[str, Any]]:
+                     source_document: dict[str, Any], *,
+                     full_report: bool = False) -> tuple[dict[str, Any], dict[str, Any]]:
     year = int(target["year"])
-    segment_path = data_root / target["normalizedPath"]
-    segment_index = read_json(segment_path)
-    if segment_index.get('year') != year or segment_index.get('dataset', 'score-segments') != 'score-segments':
-        raise ValueError(f'{year}: 一分一段索引年份或数据集不匹配')
+    if source_document.get('year') != year or source_document.get('dataset', 'score-segments') != 'score-segments':
+        raise ValueError(f'{year}: 一分一段年份或数据集不匹配')
     score_path = next(item["outputPath"] for item in plan["sources"] if item["parser"] == "scorelines" and int(item["year"]) == year)
     score_rows = read_json(data_root / score_path)
     scores = {item["专业代号"]: item for item in score_rows}
@@ -43,7 +41,7 @@ def normalize_target(target: dict[str, Any], plan: dict[str, Any], data_root: Pa
     excluded: list[dict[str, Any]] = []
     resolutions: list[dict[str, Any]] = []
     blockers: list[dict[str, Any]] = []
-    for source in iter_year(segment_path, data_root):
+    for source in source_document['majors']:
         code = source["majorCode"]
         correction = correction_by_code.get(code)
         if correction and correction.get("status") == "official-empty":
@@ -117,7 +115,7 @@ def normalize_target(target: dict[str, Any], plan: dict[str, Any], data_root: Pa
         "schemaVersion": 1,
         "year": year,
         "sourceManifest": target["manifestPath"],
-        "inputMajorCount": len(segment_index["majors"]),
+        "inputMajorCount": len(source_document["majors"]),
         "publishedMajorCount": len(published),
         "officialEmptyCount": len(excluded),
         "sourceUnavailableCount": len(source_unavailable),
@@ -134,35 +132,16 @@ def normalize_target(target: dict[str, Any], plan: dict[str, Any], data_root: Pa
     return document, report
 
 
-def normalize_all(data_root: Path = DATA_ROOT, years: set[int] | None = None,
-                  *, full_report: bool = False) -> list[dict[str, Any]]:
-    data_root = Path(data_root)
-    plan = load_data_plan(data_root, years)
-    reports = []
-    for target in plan["targets"]:
-        document, report = normalize_target(target, plan, data_root, full_report=full_report)
-        write_year(data_root / target["normalizedPath"], data_root, document)
-        write_json(data_root / target["conversionReportPath"], report)
-        reports.append(report)
-    return reports
-
-
-def main() -> int:
-    _ensure_stdout_utf8()
-    parser = argparse.ArgumentParser(description="归一化并验证一分一段年度数据")
-    parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
-    parser.add_argument("--years", nargs="*", type=int)
-    parser.add_argument("--full-report", action="store_true", help="在转换报告中附带成功专业的逐条解析")
-    args = parser.parse_args()
-    reports = normalize_all(args.data_root, set(args.years) if args.years else None,
-                            full_report=args.full_report)
-    for report in reports:
-        print(f"{report['year']}: {report['publishedMajorCount']} published, "
-              f"{report['officialEmptyCount']} official empty, "
-              f"{report.get('sourceUnavailableCount', 0)} without official score-segment PDF, "
-              f"{report['blockingCount']} blocking")
-    return 1 if any(report["blockingCount"] for report in reports) else 0
+def save_normalized_target(target: dict[str, Any], plan: dict[str, Any], data_root: Path,
+                           source_document: dict[str, Any], *,
+                           full_report: bool = False) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Normalize one in-memory OCR result, then write its final shard set once."""
+    document, report = normalize_target(target, plan, data_root, source_document,
+                                         full_report=full_report)
+    write_year(data_root / target["normalizedPath"], data_root, document)
+    write_json(data_root / target["conversionReportPath"], report)
+    return document, report
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit("convert.normalize 已并入 convert_all 和 issue_reports；已有数据请运行 convert.refresh_catalog 校验")

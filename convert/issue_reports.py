@@ -6,10 +6,10 @@ from typing import Any, Iterable
 
 from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
 from .manual_corrections import apply_manual_correction, ensure_manual_corrections
-from .normalize import normalize_target
+from .normalize import save_normalized_target
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
-from .segment_store import iter_year, write_year
+from .segment_store import iter_year
 
 
 def _analyze_rows(rows: list[RawPdfRow]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -99,6 +99,7 @@ def build_issue_report(
     year: int,
 ) -> dict[str, Any]:
     year = int(year)
+    source_entries = source_entries or {}
     issues: list[dict[str, Any]] = []
     issue_position = 0
     for major in majors:
@@ -214,12 +215,9 @@ def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None,
             document.update({"dataset": target["dataset"], "year": year,
                              "sourceManifest": target["manifestPath"],
                              "summary": summary, "majors": majors})
-            write_year(segment_path, data_root, document)
-            print(f"[{year}] 已应用 {len(applied_codes)} 条人工修正，覆盖对应规范分片", flush=True)
-            normalized, conversion_report = normalize_target(target, plan, data_root)
-            write_year(segment_path, data_root, normalized)
-            write_json(data_root / target["conversionReportPath"], conversion_report)
-            print(f"[{year}] 已在原分片完成归一化：{conversion_report['publishedMajorCount']} 个正式专业，"
+            _, conversion_report = save_normalized_target(target, plan, data_root, document)
+            print(f"[{year}] 已应用 {len(applied_codes)} 条人工修正并更新规范分片："
+                  f"{conversion_report['publishedMajorCount']} 个正式专业，"
                   f"{conversion_report['blockingCount']} 个待处理", flush=True)
 
         report = {"schemaVersion": 1, "year": year, "issueCount": len(issues), "issues": issues}

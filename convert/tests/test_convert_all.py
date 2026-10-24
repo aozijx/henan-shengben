@@ -1,4 +1,6 @@
 import json
+import hashlib
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -7,45 +9,112 @@ from io import StringIO
 from unittest.mock import patch
 
 from convert.convert_all import convert_target
+from convert.normalize import normalize_target
 from convert.segment_store import merge_year
 
 
 class ConvertAllTest(unittest.TestCase):
+    @staticmethod
+    def fixture(root, year, majors):
+        entries = []
+        scorelines = []
+        for code, name in majors:
+            relative = f'{code}.pdf'
+            source = root / relative
+            source.write_bytes(f'fixture {code}'.encode())
+            entries.append({'majorCode': code, 'majorName': name, 'localPath': relative,
+                            'sha256': hashlib.sha256(source.read_bytes()).hexdigest()})
+            scorelines.append({'专业代号': code, '专业名称': name, '分数线': 100})
+        (root / 'manifest.json').write_text(json.dumps({'entries': entries}), encoding='utf-8')
+        (root / 'scorelines.json').write_text(json.dumps(scorelines, ensure_ascii=False), encoding='utf-8')
+        (root / 'plans.json').write_text('[]', encoding='utf-8')
+        target = {'year': year, 'dataset': 'score-segments', 'manifestPath': 'manifest.json',
+                  'normalizedPath': f'一分一段/一分一段_{year}.json',
+                  'conversionReportPath': f'reports/转换报告_{year}.json'}
+        plan = {'sources': [
+            {'year': year, 'parser': 'scorelines', 'outputPath': 'scorelines.json'},
+            {'year': year, 'parser': 'plans', 'outputPath': 'plans.json'},
+        ], 'targets': [target]}
+        return target, plan, {entry['majorCode']: entry for entry in entries}
+
+    @staticmethod
+    def extracted(entry, *, status='ok', segments=None, issues=None):
+        return {'majorCode': entry['majorCode'], 'majorName': entry['majorName'],
+                'sourcePdf': entry['localPath'], 'sourceSha256': entry['sha256'],
+                'status': status, 'segments': segments if segments is not None else [
+                    {'score': 101, 'cumulativeCount': 1}, {'score': 100, 'cumulativeCount': 2}],
+                'issues': issues or []}
+
+    def test_reconversion_keeps_normalized_shard_and_hash_when_source_is_unchanged(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pdf = root / '01.pdf'
+            pdf.write_bytes(b'fixture pdf')
+            source_hash = hashlib.sha256(pdf.read_bytes()).hexdigest()
+            (root / 'manifest.json').write_text(json.dumps({'entries': [{
+                'majorCode': '01', 'majorName': '经济学', 'localPath': '01.pdf',
+                'sha256': source_hash,
+            }]}), encoding='utf-8')
+            (root / 'scorelines.json').write_text(json.dumps([{
+                '专业代号': '01', '专业名称': '经济学', '分数线': 100,
+            }]), encoding='utf-8')
+            (root / 'plans.json').write_text('[]', encoding='utf-8')
+            target = {'year': 2027, 'dataset': 'score-segments', 'manifestPath': 'manifest.json',
+                      'normalizedPath': '一分一段/一分一段_2027.json',
+                      'conversionReportPath': 'reports/转换报告_2027.json'}
+            plan = {'sources': [
+                {'year': 2027, 'parser': 'scorelines', 'outputPath': 'scorelines.json'},
+                {'year': 2027, 'parser': 'plans', 'outputPath': 'plans.json'},
+            ], 'targets': [target]}
+            extracted = {'majorCode': '01', 'majorName': '经济学', 'sourcePdf': '01.pdf',
+                         'sourceSha256': source_hash, 'status': 'ok', 'issues': [],
+                         'segments': [{'score': 101, 'cumulativeCount': 1},
+                                      {'score': 100, 'cumulativeCount': 2}]}
+            with patch('convert.convert_all._convert_entry', return_value=extracted), \
+                 patch('convert.normalize.normalize_target', wraps=normalize_target) as normalize:
+                first = convert_target(target, root, workers=1, plan=plan)
+                shard = root / '一分一段/2027/01.json'
+                index = root / target['normalizedPath']
+                report = root / target['conversionReportPath']
+                self.assertEqual(100, first['majors'][0]['controlScore'])
+                self.assertTrue(first['majors'][0]['sourceId'])
+                first_index_hash = json.loads(index.read_text(encoding='utf-8'))['majors'][0]['sha256']
+                unchanged_time = 1_700_000_000_000_000_000
+                os.utime(shard, ns=(unchanged_time, unchanged_time))
+                os.utime(index, ns=(unchanged_time, unchanged_time))
+                os.utime(report, ns=(unchanged_time, unchanged_time))
+                second = convert_target(target, root, workers=1, plan=plan)
+            self.assertEqual(2, normalize.call_count)
+            self.assertEqual(first, second)
+            self.assertEqual(first_index_hash, json.loads(index.read_text(encoding='utf-8'))['majors'][0]['sha256'])
+            self.assertEqual(unchanged_time, shard.stat().st_mtime_ns)
+            self.assertEqual(unchanged_time, index.stat().st_mtime_ns)
+            self.assertEqual(unchanged_time, report.stat().st_mtime_ns)
+
     def test_empty_manifest_writes_a_complete_conversion_document(self):
         with tempfile.TemporaryDirectory() as directory:
             data_root = Path(directory)
-            (data_root / "manifest.json").write_text('{"entries": []}', encoding="utf-8")
-            target = {
-                "year": 2026,
-                "dataset": "score-segments",
-                "manifestPath": "manifest.json",
-                "normalizedPath": "一分一段/一分一段_2026.json",
-            }
+            target, plan, _ = self.fixture(data_root, 2026, [])
+            result = convert_target(target, data_root, plan=plan)
 
-            result = convert_target(target, data_root)
-
-            self.assertEqual({"total": 0, "ok": 0, "needsReview": 0}, result["summary"])
+            self.assertEqual({"total": 0, "ok": 0, "needsReview": 0, "officialEmpty": 0}, result["summary"])
             persisted = merge_year(data_root / "一分一段/一分一段_2026.json", data_root)
             self.assertEqual(result, persisted)
 
     def test_retry_only_reviewed_major_and_show_name_and_issue(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'manifest.json').write_text(json.dumps({'entries': [
-                {'majorCode': '51', 'majorName': '计算机', 'localPath': '51.pdf'},
-                {'majorCode': '53', 'majorName': '网络工程', 'localPath': '53.pdf'}]}), encoding='utf-8')
-            target = {'year': 2027, 'dataset': 'score-segments', 'manifestPath': 'manifest.json',
-                      'normalizedPath': '一分一段/一分一段_2027.json'}
+            target, plan, entries = self.fixture(root, 2027, [('51', '计算机'), ('53', '网络工程')])
             results = iter([
-                {'majorCode': '51', 'majorName': '计算机', 'status': 'ok', 'segments': [1], 'issues': []},
-                {'majorCode': '53', 'majorName': '网络工程', 'status': 'needs-review', 'segments': [],
-                 'issues': [{'code': 'non-monotonic-count', 'message': '累计人数回退'}]},
-                {'majorCode': '53', 'majorName': '网络工程', 'status': 'ok', 'segments': [2], 'issues': []}])
+                self.extracted(entries['51']),
+                self.extracted(entries['53'], status='needs-review', segments=[],
+                               issues=[{'code': 'non-monotonic-count', 'message': '累计人数回退'}]),
+                self.extracted(entries['53'])])
             with patch('convert.convert_all._convert_entry', side_effect=lambda item: next(results)) as convert:
-                convert_target(target, root, workers=1)
+                convert_target(target, root, workers=1, plan=plan)
                 output = StringIO()
                 with redirect_stdout(output):
-                    result = convert_target(target, root, retry_review=True, workers=1)
+                    result = convert_target(target, root, retry_review=True, workers=1, plan=plan)
             self.assertEqual(3, convert.call_count)
             self.assertEqual(2, result['summary']['ok'])
             self.assertIn('53 网络工程', output.getvalue())
@@ -54,18 +123,14 @@ class ConvertAllTest(unittest.TestCase):
     def test_default_progress_hides_success_lines_and_verbose_shows_them(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'manifest.json').write_text(json.dumps({'entries': [
-                {'majorCode': '51', 'majorName': '计算机', 'localPath': '51.pdf'}]}), encoding='utf-8')
-            target = {'year': 2027, 'dataset': 'score-segments', 'manifestPath': 'manifest.json',
-                      'normalizedPath': '一分一段/一分一段_2027.json'}
-            with patch('convert.convert_all._convert_entry', return_value={
-                    'majorCode': '51', 'majorName': '计算机', 'status': 'ok', 'segments': [1], 'issues': []}):
+            target, plan, entries = self.fixture(root, 2027, [('51', '计算机')])
+            with patch('convert.convert_all._convert_entry', return_value=self.extracted(entries['51'])):
                 default_output = StringIO()
                 with redirect_stdout(default_output):
-                    convert_target(target, root, workers=1)
+                    convert_target(target, root, workers=1, plan=plan)
                 verbose_output = StringIO()
                 with redirect_stdout(verbose_output):
-                    convert_target(target, root, workers=1, verbose=True)
+                    convert_target(target, root, workers=1, verbose=True, plan=plan)
             self.assertNotIn('完成 1/1 51 计算机', default_output.getvalue())
             self.assertIn('1/1 ok', default_output.getvalue())
             self.assertIn('完成 1/1 51 计算机', verbose_output.getvalue())

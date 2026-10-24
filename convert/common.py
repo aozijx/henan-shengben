@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -29,9 +30,17 @@ def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def write_json(path: Path, value: object) -> None:
+def write_bytes_if_changed(path: Path, content: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False) + "\n", encoding="utf-8")
+    if path.is_file() and path.read_bytes() == content:
+        return
+    temporary = path.with_name(path.name + '.new')
+    temporary.write_bytes(content)
+    os.replace(temporary, path)
+
+
+def write_json(path: Path, value: object) -> None:
+    write_bytes_if_changed(path, (json.dumps(value, ensure_ascii=False) + "\n").encode("utf-8"))
 
 
 def load_data_plan(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> dict[str, Any]:

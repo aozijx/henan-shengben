@@ -8,9 +8,10 @@ from typing import Any
 
 from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json
 from .manual_corrections import apply_manual_correction
+from .normalize import save_normalized_target
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
-from .segment_store import iter_year, write_year
+from .segment_store import iter_year
 from pipeline_config import SCORE_SEGMENT_WORKERS
 
 
@@ -57,9 +58,11 @@ def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]
 
 
 def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None,
-                   workers: int | None = None, *, retry_review: bool = False,
-                   verbose: bool = False) -> dict[str, Any]:
+                   workers: int | None = None, *, plan: dict[str, Any] | None = None,
+                   retry_review: bool = False,
+                   verbose: bool = False, full_report: bool = False) -> dict[str, Any]:
     workers = max(1, SCORE_SEGMENT_WORKERS if workers is None else workers)
+    plan = plan if plan is not None else load_data_plan(data_root, {int(target['year'])})
     manifest = read_json(data_root / target["manifestPath"])
     output_path = data_root / target["normalizedPath"]
     existing = ({item['majorCode']: item for item in iter_year(output_path, data_root)}
@@ -117,12 +120,14 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
             "needsReview": sum(item["status"] != "ok" for item in majors),
         },
     }
-    write_year(output_path, data_root, result)
-    review = [f"{item['majorCode']} {item['majorName']}" for item in majors if item['status'] != 'ok']
-    print(f"{target['year']}: {result['summary']['ok']}/{result['summary']['total']} ok, "
-          f"{result['summary']['needsReview']} needs review"
+    normalized, _ = save_normalized_target(target, plan, data_root, result, full_report=full_report)
+    review = [f"{item['majorCode']} {item['majorName']}" for item in normalized['majors']
+              if item['status'] == 'needs-review']
+    summary = normalized['summary']
+    print(f"{target['year']}: {summary['ok']}/{summary['total']} ok, "
+          f"{summary['officialEmpty']} official empty, {summary['needsReview']} needs review"
           f"{' — ' + '、'.join(review) if review else ''}", flush=True)
-    return result
+    return normalized
 
 
 def main() -> int:
@@ -147,7 +152,7 @@ def main() -> int:
     if not targets:
         parser.error("year-links 中没有匹配的数据集/年份")
     for target in targets:
-        convert_target(target, data_root, set(args.major_codes or []), args.workers,
+        convert_target(target, data_root, set(args.major_codes or []), args.workers, plan=plan,
                        retry_review=args.retry_review, verbose=args.verbose)
     return 0
 

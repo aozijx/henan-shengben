@@ -12,9 +12,7 @@ from types import SimpleNamespace
 from convert.common import REPO_ROOT, read_json
 from convert.convert_all import convert_target
 from convert.extract_cli import extract_year_sources
-from convert.normalize import normalize_target
 from convert.refresh_catalog import refresh_catalog
-from convert.segment_store import write_year
 from pipeline_config import REQUEST_TIMEOUT
 from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
@@ -116,14 +114,11 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
     print(f'[{year}] 官方表格抽取完成：{len(results)} 张', flush=True)
     if len(results) != len(source_rows) or any(item['expectedCountMismatch'] for item in results):
         raise ValueError(f'{year}: tabular source extraction incomplete or unexpected row count')
-    print(f'[{year}] 抽取一分一段分数段 …', flush=True)
-    segment_result = convert_target(crawl_target, root)
+    print(f'[{year}] 抽取并归一化一分一段分数段 …', flush=True)
+    segment_result = convert_target(crawl_target, root, plan=plan, full_report=full_report)
     if segment_result['summary']['needsReview']:
         raise ValueError(f'{year}: OCR requires human review before publication')
-    print(f'[{year}] 归一化一分一段数据 …', flush=True)
-    normalized, normalization_report = normalize_target(crawl_target, plan, root, full_report=full_report)
-    write_year(root / crawl_target['normalizedPath'], root, normalized)
-    _write(root / crawl_target['conversionReportPath'], normalization_report)
+    normalization_report = read_json(root / crawl_target['conversionReportPath'])
     if normalization_report['blockingCount']:
         raise ValueError(f'{year}: normalization has unresolved blockers')
     return {'year': year, 'sources': len(source_rows), 'sourceProvenance': provenance,

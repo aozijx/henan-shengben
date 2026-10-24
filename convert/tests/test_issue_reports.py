@@ -1,15 +1,61 @@
 import json
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.issue_reports import build_issue_report
+from convert.issue_reports import build_issue_report, generate_reports
 from convert.manual_corrections import apply_manual_correction, ensure_manual_corrections
 from convert.pdf_tables import RawPdfRow
+from convert.segment_store import merge_year, write_year
 
 
 class IssueReportTest(unittest.TestCase):
+    def test_confirmed_correction_writes_only_final_normalized_shard(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pdf = root / '01.pdf'
+            pdf.write_bytes(b'fixture pdf')
+            source_hash = hashlib.sha256(pdf.read_bytes()).hexdigest()
+            manifest = {'entries': [{'majorCode': '01', 'majorName': '经济学',
+                                     'localPath': '01.pdf', 'sha256': source_hash}]}
+            (root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
+            (root / 'scorelines.json').write_text(json.dumps([{
+                '专业代号': '01', '专业名称': '经济学', '分数线': 100,
+            }]), encoding='utf-8')
+            (root / 'plans.json').write_text('[]', encoding='utf-8')
+            correction_path = root / '一分一段/人工修正.json'
+            correction_path.parent.mkdir(parents=True)
+            correction_path.write_text(json.dumps({'corrections': [{
+                'year': 2027, 'majorCode': '01', 'status': 'confirmed',
+                'replacementSegments': [{'score': 101, 'cumulativeCount': 1},
+                                        {'score': 100, 'cumulativeCount': 2}],
+            }]}), encoding='utf-8')
+            target = {'year': 2027, 'dataset': 'score-segments', 'manifestPath': 'manifest.json',
+                      'normalizedPath': '一分一段/一分一段_2027.json',
+                      'conversionReportPath': 'reports/转换报告_2027.json'}
+            plan = {'sources': [
+                {'year': 2027, 'parser': 'scorelines', 'outputPath': 'scorelines.json'},
+                {'year': 2027, 'parser': 'plans', 'outputPath': 'plans.json'},
+            ], 'targets': [target]}
+            index_path = root / target['normalizedPath']
+            write_year(index_path, root, {'year': 2027, 'dataset': 'score-segments',
+                'sourceManifest': 'manifest.json', 'majors': [{
+                    'majorCode': '01', 'majorName': '经济学', 'sourcePdf': '01.pdf',
+                    'sourceSha256': source_hash, 'status': 'needs-review', 'issues': [],
+                    'segments': [],
+                }]})
+            with patch('convert.issue_reports.load_data_plan', return_value=plan), \
+                 patch('convert.issue_reports.extract_rows', return_value=[]), \
+                 patch('convert.normalize.write_year', wraps=write_year) as write:
+                reports = generate_reports(root, {2027})
+            self.assertEqual(1, write.call_count)
+            self.assertEqual(0, reports[0]['issueCount'])
+            major = merge_year(index_path, root)['majors'][0]
+            self.assertEqual('ok', major['status'])
+            self.assertEqual(100, major['controlScore'])
+
     def extraction(self):
         return {
             "year": 2026,
