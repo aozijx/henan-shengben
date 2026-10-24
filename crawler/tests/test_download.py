@@ -121,20 +121,18 @@ class DownloadTest(unittest.TestCase):
             self.assertEqual(result['downloadStatus'], 'failed')
             self.assertEqual(target.read_bytes(), b'%PDF-old')
 
-    def test_download_targets_uses_only_the_requested_registry_year(self):
+    def test_download_targets_uses_only_the_requested_seed_year(self):
         with tempfile.TemporaryDirectory() as directory:
             data_root = Path(directory)
-            registry = data_root / 'source-registry.json'
-            targets = []
+            seed_paths = []
             for year in (2024, 2025):
-                targets.append({
-                    'dataset': 'score-segments', 'year': year,
-                    'sourcePageUrl': f'https://www.haeea.cn/{year}.shtml',
-                    'discoveryUrl': f'https://www.haeea.cn/{year}/discover.shtml',
-                    'manifestPath': f'来源清单/来源清单_{year}.json',
-                    'downloadDirectory': f'一分一段/原始PDF/{year}',
-                    'parser': 'score-segments',
-                })
+                seed = data_root / 'year-links' / f'{year}.json'
+                seed.parent.mkdir(parents=True, exist_ok=True)
+                seed.write_text(json.dumps({
+                    'year': year,
+                    'sources': {'scoreSegments': {'pageUrl': f'https://www.haeea.cn/{year}.shtml'}},
+                }), encoding='utf-8')
+                seed_paths.append(seed)
                 manifest = {
                     'entries': [{
                         'pdfUrl': f'https://www.haeea.cn/{year}.pdf',
@@ -142,14 +140,13 @@ class DownloadTest(unittest.TestCase):
                         'sha256': None,
                     }]
                 }
-                path = data_root / targets[-1]['manifestPath']
+                path = data_root / f'来源清单/来源清单_{year}.json'
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(json.dumps(manifest), encoding='utf-8')
             (data_root / '来源清单/来源清单_2099.json').write_text('{"entries": []}', encoding='utf-8')
-            registry.write_text(json.dumps({'crawlTargets': targets}), encoding='utf-8')
             session = RecordingSession()
 
-            counts = download_targets(registry, data_root, {2025}, session)
+            counts = download_targets(seed_paths, data_root, {2025}, session)
 
             self.assertEqual({2025: {'downloaded': 1, 'skipped': 0, 'failed': 0}}, counts)
             self.assertEqual(['https://www.haeea.cn/2025.pdf'], session.urls)

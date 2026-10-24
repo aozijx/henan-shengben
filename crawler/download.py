@@ -9,8 +9,8 @@ import requests
 if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from crawler.source_rules import load_crawl_targets
 from crawler.source_rules import is_official_pdf_url
+from crawler.year_sources import load_seed_targets
 
 
 def _sha256(content):
@@ -67,23 +67,26 @@ def download_manifest(manifest_path: Path, data_root: Path, session):
     return counts
 
 
-def download_targets(registry_path: Path, data_root: Path, years: set[int] | None, session) -> dict[int, dict[str, int]]:
+def download_targets(seed_paths, data_root: Path, years: set[int] | None, session) -> dict[int, dict[str, int]]:
     counts_by_year = {}
-    for target in load_crawl_targets(registry_path, years):
+    for target in load_seed_targets(seed_paths, years):
         counts_by_year[target.year] = download_manifest(data_root / target.manifest_path, data_root, session)
     return counts_by_year
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--registry', type=Path, default=Path('data/source-registry.json'))
+    parser.add_argument('--seed', action='append', type=Path,
+                        help='annual data/year-links/YYYY.json seed; defaults to every seed under --data-root')
     parser.add_argument('--years', nargs='*', type=int)
-    parser.add_argument('--data-root', type=Path, default=None)
+    parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
     session = requests.Session()
     session.headers['User-Agent'] = 'henan-shengben-data/1.0'
-    data_root = args.data_root or args.registry.resolve().parent
-    for year, counts in download_targets(args.registry, data_root, set(args.years) if args.years else None, session).items():
+    seed_paths = args.seed or sorted((args.data_root / 'year-links').glob('*.json'))
+    if not seed_paths:
+        parser.error('no year-links seeds found')
+    for year, counts in download_targets(seed_paths, args.data_root, set(args.years) if args.years else None, session).items():
         print(f'{year}: {counts}')
 
 

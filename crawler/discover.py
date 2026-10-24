@@ -64,12 +64,16 @@ def entry_document(entry):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--registry', default='data/source-registry.json')
+    parser.add_argument('--seed', action='append', type=Path,
+                        help='annual data/year-links/YYYY.json seed; defaults to every seed under --data-root')
     parser.add_argument('--years', nargs='*', type=int)
-    parser.add_argument('--data-root', default='data')
+    parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
-    from crawler.source_rules import load_crawl_targets
-    targets = load_crawl_targets(Path(args.registry), set(args.years) if args.years else None)
+    from crawler.year_sources import load_seed_targets
+    seed_paths = args.seed or sorted((args.data_root / 'year-links').glob('*.json'))
+    targets = load_seed_targets(seed_paths, set(args.years) if args.years else None)
+    if not targets:
+        parser.error('no matching year-links seeds')
     session = requests.Session()
     session.headers['User-Agent'] = 'henan-shengben-data/1.0'
     for target in targets:
@@ -80,7 +84,7 @@ def main():
                     'sourcePageUrl': target.source_page_url,
                     'discoveryUrl': target.discovery_url,
                     'entries': [entry_document(entry) for entry in entries]}
-        output = Path(args.data_root) / target.manifest_path
+        output = args.data_root / target.manifest_path
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         print(f'{target.year}: {len(entries)} 个官方 PDF -> {output}')

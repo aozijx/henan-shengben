@@ -6,6 +6,8 @@ from pathlib import Path
 from crawler.year_sources import (
     SOURCE_ROLES,
     SourceResolutionError,
+    crawl_target_for_seed,
+    load_seed_targets,
     load_year_links,
     registry_rows_for_year,
     resolve_year_sources,
@@ -53,6 +55,18 @@ class SearchSession(FakeSession):
 
 
 class YearSourcesTests(unittest.TestCase):
+    def test_seed_derives_every_year_specific_execution_path(self):
+        target = crawl_target_for_seed({
+            'year': 2027,
+            'searchPageUrl': 'https://www.haeea.cn/search',
+            'sources': {'scoreSegments': {'pageUrl': 'https://www.haeea.cn/segments'}},
+        })
+        self.assertEqual(target.manifest_path, '来源清单/来源清单_2027.json')
+        self.assertEqual(target.download_directory, '一分一段/原始PDF/2027')
+        self.assertEqual(target.extraction_path, '一分一段/提取结果/提取结果_2027.json')
+        self.assertEqual(target.normalized_path, '一分一段/一分一段_2027.json')
+        self.assertEqual(target.conversion_report_path, 'reports/转换报告_2027.json')
+
     def test_historical_year_links_are_the_authoritative_seed_inputs(self):
         data_root = Path(__file__).resolve().parents[2] / 'data' / 'year-links'
         seeds = {year: load_year_links(data_root / f'{year}.json') for year in (2024, 2025, 2026)}
@@ -99,6 +113,10 @@ class YearSourcesTests(unittest.TestCase):
             path.write_text(json.dumps(self.seed), encoding='utf-8')
             load_year_links(path)
             self.seed['sources']['master']['attachmentUrl'] = 'https://mirror.example/master.pdf'
+            path.write_text(json.dumps(self.seed), encoding='utf-8')
+            with self.assertRaisesRegex(SourceResolutionError, 'official HTTPS host'):
+                load_year_links(path)
+            self.seed['sources']['master']['attachmentUrl'] = 'http://xcoss.henan.gov.cn/typtfile/2027/master.pdf'
             path.write_text(json.dumps(self.seed), encoding='utf-8')
             with self.assertRaisesRegex(SourceResolutionError, 'official HTTPS host'):
                 load_year_links(path)

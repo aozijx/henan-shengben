@@ -38,17 +38,17 @@
 
 ### Task 1: Annual seed contract and source fixtures
 
-- [ ] Add tests proving the 2024–2026 seed files load, validate year/roles/official hosts, and expose known score-segment and control-line URLs; missing roles resolve only from unique official search candidates.
-- [ ] Run `python -m unittest crawler.tests.test_year_sources -v` and observe the new seed fixture assertions fail before adding files.
-- [ ] Add the three seed JSON files using verified official source page URLs and known exact attachments; where an older role cannot yet be verified, record a discovery search URL rather than inventing a page.
-- [ ] Run the focused tests and record which older-year roles are still undiscovered; do not download/overwrite historical data as part of this task.
+- [x] Add tests proving the 2024–2026 seed files load, validate year/roles/official hosts, and expose known score-segment and control-line URLs; missing roles resolve only from unique official search candidates.
+- [x] Run `python -m unittest crawler.tests.test_year_sources -v` and observe the new seed fixture assertions fail before adding files.
+- [x] Add the three seed JSON files using verified official source page URLs and known exact attachments; where an older role cannot yet be verified, record a discovery search URL rather than inventing a page.
+- [x] Run the focused tests and record which older-year roles are still undiscovered; do not download/overwrite historical data as part of this task.
 
 ### Task 2: Shared derived target and crawler migration
 
-- [ ] Add tests proving seed-to-target paths are deterministic and use year-specific manifest/download/extraction/normalized/report paths.
-- [ ] Change discover/download CLI tests to pass `--seed` (or `--seeds`) and derive targets from year-links; verify off-list links are rejected before network calls.
-- [ ] Remove `load_crawl_targets` use from crawler runtime and update crawler documentation.
-- [ ] Run `python -m unittest discover -s crawler/tests`.
+- [x] Add tests proving seed-to-target paths are deterministic and use year-specific manifest/download/extraction/normalized/report paths.
+- [x] Change discover/download CLI tests to pass `--seed` (or `--seeds`) and derive targets from year-links; verify off-list links are rejected before network calls.
+- [x] Remove `load_crawl_targets` use from crawler runtime and update crawler documentation.
+- [x] Run `python -m unittest discover -s crawler/tests`.
 
 ### Task 3: Convert/normalize/report migration
 

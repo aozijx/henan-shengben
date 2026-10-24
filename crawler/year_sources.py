@@ -9,7 +9,7 @@ import pdfplumber
 import requests
 from bs4 import BeautifulSoup
 
-from crawler.source_rules import is_official_pdf_url
+from crawler.source_rules import CrawlTarget, is_official_pdf_url
 
 
 class SourceResolutionError(ValueError):
@@ -59,6 +59,41 @@ def load_year_links(path: Path) -> dict:
             if url and not _official_page(url) and not is_official_pdf_url(url):
                 raise SourceResolutionError(f'{role}.{key} must use an official HTTPS host')
     return seed
+
+
+def crawl_target_for_seed(seed: dict) -> CrawlTarget:
+    """Derive the stable score-segment execution paths from one annual seed."""
+    year = int(seed['year'])
+    segment_page = seed.get('sources', {}).get('scoreSegments', {}).get('pageUrl')
+    discovery_url = segment_page or seed.get('searchPageUrl')
+    if not discovery_url or not _official_page(discovery_url):
+        raise SourceResolutionError(f'{year} scoreSegments: add an official pageUrl or searchPageUrl')
+    return CrawlTarget(
+        dataset='score-segments',
+        year=year,
+        source_page_url=segment_page or discovery_url,
+        discovery_url=discovery_url,
+        manifest_path=f'来源清单/来源清单_{year}.json',
+        download_directory=f'一分一段/原始PDF/{year}',
+        extraction_path=f'一分一段/提取结果/提取结果_{year}.json',
+        normalized_path=f'一分一段/一分一段_{year}.json',
+        conversion_report_path=f'reports/转换报告_{year}.json',
+        parser='score-segments',
+    )
+
+
+def load_seed_targets(seed_paths, years: set[int] | None = None) -> list[CrawlTarget]:
+    targets = []
+    seen = set()
+    for path in seed_paths:
+        seed = load_year_links(Path(path))
+        year = int(seed['year'])
+        if year in seen:
+            raise SourceResolutionError(f'duplicate year-links seed: {year}')
+        seen.add(year)
+        if years is None or year in years:
+            targets.append(crawl_target_for_seed(seed))
+    return sorted(targets, key=lambda target: (target.dataset, target.year))
 
 
 def _year_title(text: str, year: int) -> bool:
