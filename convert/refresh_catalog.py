@@ -9,7 +9,7 @@ import re
 import tempfile
 from pathlib import Path
 
-from .common import DATA_ROOT, REPO_ROOT, read_json
+from .common import DATA_ROOT, REPO_ROOT, load_data_plan, read_json
 from .validate import validate_score_segment_year
 
 
@@ -173,25 +173,17 @@ def validate_year_sources(year: int, files: dict, canonical: dict, report: dict,
 
 
 def _source_map(data_root: Path):
-    registry = _json(data_root / 'source-registry.json')
     by_year = {}
-    for item in registry.get('sources', []):
-        by_year.setdefault(int(item['year']), {})[item['parser']] = item['outputPath']
-    for item in registry.get('crawlTargets', []):
-        by_year.setdefault(int(item['year']), {})['score-segments'] = item['normalizedPath']
-        by_year[int(item['year'])]['report'] = item['conversionReportPath']
-    # Canonical files can arrive before source-registry is edited. Their content,
-    # not a filename alone, decides whether the year can be published.
-    for parser, directory, prefix in [('mapping', '专业对照', '专业对照'),
-                                      ('scorelines', '省控线', '省控线'),
-                                      ('plans', '招生计划', '招生计划'),
-                                      ('score-segments', '一分一段', '一分一段')]:
-        for path in (data_root / directory).glob(prefix + '_*.json'):
-            try:
-                year = int(path.stem.rsplit('_', 1)[1])
-            except ValueError:
-                continue
-            by_year.setdefault(year, {}).setdefault(parser, path.relative_to(data_root).as_posix())
+    plan = load_data_plan(data_root)
+    for item in plan['sources']:
+        if (data_root / item['outputPath']).is_file():
+            by_year.setdefault(int(item['year']), {})[item['parser']] = item['outputPath']
+    for item in plan['targets']:
+        year = int(item['year'])
+        if (data_root / item['normalizedPath']).is_file():
+            by_year.setdefault(year, {})['score-segments'] = item['normalizedPath']
+        if (data_root / item['conversionReportPath']).is_file():
+            by_year.setdefault(year, {})['report'] = item['conversionReportPath']
     return by_year
 
 

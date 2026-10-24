@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from .common import DATA_ROOT, REGISTRY_PATH, _ensure_stdout_utf8, load_registry, read_json, write_json
+from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
 from .pdf_tables import RawPdfRow, extract_rows
 
 
@@ -119,12 +119,12 @@ def apply_manual_correction(
     return [RawPdfRow(row.page_number, tuple(cells_by_row[index])) for index, row in enumerate(rows)], None
 
 
-def generate_reports(registry_path: Path) -> list[dict[str, Any]]:
-    data_root = registry_path.resolve().parent
-    registry = read_json(registry_path)
-    score_paths = {int(item["year"]): item["outputPath"] for item in registry["sources"] if item["parser"] == "scorelines"}
+def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> list[dict[str, Any]]:
+    data_root = Path(data_root)
+    plan = load_data_plan(data_root, years)
+    score_paths = {int(item["year"]): item["outputPath"] for item in plan["sources"] if item["parser"] == "scorelines"}
     reports = []
-    for target in registry["crawlTargets"]:
+    for target in plan["targets"]:
         extraction = read_json(data_root / target["extractionPath"])
         controls = {row["专业代号"]: row["分数线"] for row in read_json(data_root / score_paths[int(target["year"])])}
         manifest = read_json(data_root / target["manifestPath"])
@@ -138,9 +138,13 @@ def generate_reports(registry_path: Path) -> list[dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成一分一段 OCR 异常人工核对报告")
-    parser.add_argument("--registry", type=Path, default=REGISTRY_PATH)
+    parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
+    parser.add_argument("--years", nargs="*", type=int)
+    parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
-    reports = generate_reports(args.registry)
+    if args.registry:
+        parser.error('--registry is retired; use data/year-links seeds with --data-root')
+    reports = generate_reports(args.data_root, set(args.years) if args.years else None)
     for report in reports:
         print(f"{report['year']}: {report['issueCount']} issues")
     return 0

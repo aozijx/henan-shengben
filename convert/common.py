@@ -35,5 +35,7 @@ def write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def load_registry(path: Path | None = None) -> dict[str, Any]:
-    return read_json(Path(path) if path else REGISTRY_PATH)
+def load_data_plan(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> dict[str, Any]:
+    from crawler.year_sources import build_data_plan
+
+    return build_data_plan(Path(data_root), years)

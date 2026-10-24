@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from .common import DATA_ROOT, _ensure_stdout_utf8, load_registry, read_json, write_json
+from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
 from .issue_reports import apply_manual_correction
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
@@ -98,17 +98,20 @@ def main() -> int:
     parser.add_argument("--year", dest="years", action="append", type=int)
     parser.add_argument("--major", dest="major_codes", action="append")
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--registry", type=Path, default=None)
+    parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
+    parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
 
-    registry = load_registry(args.registry)
-    data_root = (Path(args.registry).resolve().parent if args.registry else DATA_ROOT)
+    if args.registry:
+        parser.error('--registry is retired; use data/year-links seeds with --data-root')
+    plan = load_data_plan(args.data_root, set(args.years) if args.years else None)
+    data_root = args.data_root
     targets = [
-        item for item in registry["crawlTargets"]
+        item for item in plan["targets"]
         if item["dataset"] == args.dataset and (not args.years or item["year"] in args.years)
     ]
     if not targets:
-        parser.error("注册表中没有匹配的数据集/年份")
+        parser.error("year-links 中没有匹配的数据集/年份")
     for target in targets:
         result = convert_target(target, data_root, set(args.major_codes or []), max(1, args.workers))
         print(f"{result['year']}: {result['summary']['ok']} ok, {result['summary']['needsReview']} needs review")

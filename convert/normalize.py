@@ -5,19 +5,19 @@ from pathlib import Path
 from typing import Any
 
 from .authority import SourceValue, resolve_field
-from .common import DATA_ROOT, REGISTRY_PATH, _ensure_stdout_utf8, load_registry, read_json, write_json
+from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
 from .validate import validate_score_segment_year
 
 
-def normalize_target(target: dict[str, Any], registry: dict[str, Any], data_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+def normalize_target(target: dict[str, Any], plan: dict[str, Any], data_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     year = int(target["year"])
     extraction = read_json(data_root / target["extractionPath"])
     manifest = read_json(data_root / target["manifestPath"])
     manifest_by_code = {item["majorCode"]: item for item in manifest["entries"]}
-    score_path = next(item["outputPath"] for item in registry["sources"] if item["parser"] == "scorelines" and int(item["year"]) == year)
+    score_path = next(item["outputPath"] for item in plan["sources"] if item["parser"] == "scorelines" and int(item["year"]) == year)
     score_rows = read_json(data_root / score_path)
     scores = {item["专业代号"]: item for item in score_rows}
-    plan_path = next(item["outputPath"] for item in registry["sources"] if item["parser"] == "plans" and int(item["year"]) == year)
+    plan_path = next(item["outputPath"] for item in plan["sources"] if item["parser"] == "plans" and int(item["year"]) == year)
     plan_rows = read_json(data_root / plan_path)
     plan_names: dict[str, list[str]] = {}
     for item in plan_rows:
@@ -94,14 +94,12 @@ def normalize_target(target: dict[str, Any], registry: dict[str, Any], data_root
     return document, report
 
 
-def normalize_all(registry_path: Path, years: set[int] | None = None) -> list[dict[str, Any]]:
-    registry = load_registry(registry_path)
-    data_root = registry_path.resolve().parent
+def normalize_all(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> list[dict[str, Any]]:
+    data_root = Path(data_root)
+    plan = load_data_plan(data_root, years)
     reports = []
-    for target in registry["crawlTargets"]:
-        if years and int(target["year"]) not in years:
-            continue
-        document, report = normalize_target(target, registry, data_root)
+    for target in plan["targets"]:
+        document, report = normalize_target(target, plan, data_root)
         write_json(data_root / target["normalizedPath"], document)
         write_json(data_root / target["conversionReportPath"], report)
         reports.append(report)
@@ -111,11 +109,13 @@ def normalize_all(registry_path: Path, years: set[int] | None = None) -> list[di
 def main() -> int:
     _ensure_stdout_utf8()
     parser = argparse.ArgumentParser(description="归一化并验证一分一段年度数据")
-    parser.add_argument("--registry", type=Path, default=None)
+    parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
+    parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--years", nargs="*", type=int)
     args = parser.parse_args()
-    registry_path = Path(args.registry) if args.registry else REGISTRY_PATH
-    reports = normalize_all(registry_path, set(args.years or []))
+    if args.registry:
+        parser.error('--registry is retired; use data/year-links seeds with --data-root')
+    reports = normalize_all(args.data_root, set(args.years) if args.years else None)
     for report in reports:
         print(f"{report['year']}: {report['publishedMajorCount']} published, {report['officialEmptyCount']} official empty, {report['blockingCount']} blocking")
     return 1 if any(report["blockingCount"] for report in reports) else 0

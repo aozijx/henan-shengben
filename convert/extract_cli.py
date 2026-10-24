@@ -5,8 +5,7 @@
   python -m convert.extract_cli --write    # 更新：写回 data/（仅写有差异的文件）
   python -m convert.extract_cli --year 2026 --parser mapping  # 只跑指定项
 
-数据源声明统一在 data/source-registry.json 的 sources[] 数组里。
-替代了旧的 tools/convert.py（该单体脚本已删除）。
+数据源由 data/year-links/YYYY.json 与约定的本地文件路径共同派生。
 """
 from __future__ import annotations
 
@@ -17,9 +16,8 @@ from typing import Any
 
 from .common import (
     DATA_ROOT,
-    REGISTRY_PATH,
     _ensure_stdout_utf8,
-    load_registry,
+    load_data_plan,
     read_json,
     write_json,
 )
@@ -31,10 +29,10 @@ def _diff_for(parser: str) -> Any:
     return diff_mapping if parser == "mapping" else diff_rows
 
 
-def extract_registered_year(registry: dict, data_root: Path, year: int, *, write: bool, parser: str | None = None) -> list[dict]:
+def extract_registered_year(plan: dict, data_root: Path, year: int, *, write: bool, parser: str | None = None) -> list[dict]:
     """Extract declared tabular sources for a year; new targets may lack JSON outputs."""
     results = []
-    for entry in registry["sources"]:
+    for entry in plan["sources"]:
         if int(entry["year"]) != year or (parser and entry["parser"] != parser):
             continue
         extracted = extract_entry(entry, data_root)
@@ -57,14 +55,18 @@ def main() -> int:
     parser.add_argument("--write", action="store_true", help="将重新抽取的结果写回 data/（仅写有差异的文件）")
     parser.add_argument("--year", type=int, help="只处理指定年份")
     parser.add_argument("--parser", help="只处理指定 parser (scorelines/mapping/plans/master)")
+    parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
+    parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
 
-    registry = load_registry(REGISTRY_PATH)
+    if args.registry:
+        parser.error('--registry is retired; use data/year-links seeds with --data-root')
+    plan = load_data_plan(args.data_root, {args.year} if args.year is not None else None)
 
     total_bad = 0
-    years = sorted({int(item["year"]) for item in registry["sources"]}) if args.year is None else [args.year]
+    years = sorted({int(item["year"]) for item in plan["sources"]}) if args.year is None else [args.year]
     for year in years:
-        for result in extract_registered_year(registry, DATA_ROOT, year, write=args.write, parser=args.parser):
+        for result in extract_registered_year(plan, args.data_root, year, write=args.write, parser=args.parser):
             label = "一致" if not result["diffs"] else f"{len(result['diffs'])} 处差异"
             count_note = "  [官方行数异常]" if result["expectedCountMismatch"] else ""
             print(f"{result['outputPath']}: 抽取 {result['rowCount']} 条 — {label}{count_note}")

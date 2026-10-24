@@ -1,6 +1,7 @@
 """Resolve one year's official source pages from a small human-maintained seed."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from io import BytesIO
@@ -40,8 +41,6 @@ def _official_page(url: str) -> bool:
 
 
 def load_year_links(path: Path) -> dict:
-    import json
-
     seed = json.loads(Path(path).read_text(encoding='utf-8'))
     year = seed.get('year')
     if not isinstance(year, int) or year < 2000 or year > 2200:
@@ -94,6 +93,72 @@ def load_seed_targets(seed_paths, years: set[int] | None = None) -> list[CrawlTa
         if years is None or year in years:
             targets.append(crawl_target_for_seed(seed))
     return sorted(targets, key=lambda target: (target.dataset, target.year))
+
+
+def crawl_target_record(seed: dict) -> dict:
+    target = crawl_target_for_seed(seed)
+    return {
+        'dataset': target.dataset,
+        'year': target.year,
+        'sourcePageUrl': target.source_page_url,
+        'discoveryUrl': target.discovery_url,
+        'manifestPath': target.manifest_path,
+        'downloadDirectory': target.download_directory,
+        'extractionPath': target.extraction_path,
+        'normalizedPath': target.normalized_path,
+        'conversionReportPath': target.conversion_report_path,
+        'parser': target.parser,
+    }
+
+
+def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
+    """Derive tabular parser inputs from a seed and conventional local files."""
+    year = int(seed['year'])
+    data_root = Path(data_root)
+    specs = (
+        ('mapping', ('mappingCodeTable', 'mappingOverview'), f'专业对照/专业对照_{year}.json',
+         (f'专业对照/原始PDF/专业代号对照_{year}.pdf', f'专业对照/原始PDF/专业对照一览_{year}.pdf')),
+        ('master', ('master',), f'招生高校及专业/招生高校及专业_{year}.json',
+         (f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf',)),
+        ('plans', ('plans',), f'招生计划/招生计划_{year}.json',
+         (f'招生计划/原始PDF/招生计划_{year}.pdf',)),
+        ('scorelines', ('scorelines',), f'省控线/省控线_{year}.json',
+         (f'省控线/原始PDF/省控线_{year}.pdf',)),
+    )
+    rows = []
+    declared = seed.get('sources', {})
+    for parser, roles, output_path, pdf_paths in specs:
+        available = any(role in declared for role in roles)
+        available = available or (data_root / output_path).is_file()
+        available = available or any((data_root / path).is_file() for path in pdf_paths)
+        if not available:
+            continue
+        row = {'outputPath': output_path, 'pdfPaths': list(pdf_paths), 'parser': parser, 'year': year}
+        output = data_root / output_path
+        if output.is_file():
+            value = json.loads(output.read_text(encoding='utf-8'))
+            if isinstance(value, list):
+                row['expectedCount'] = len(value)
+        rows.append(row)
+    return rows
+
+
+def build_data_plan(data_root: Path, years: set[int] | None = None) -> dict:
+    data_root = Path(data_root)
+    seeds = []
+    for path in sorted((data_root / 'year-links').glob('*.json')):
+        seed = load_year_links(path)
+        if path.stem != str(seed['year']):
+            raise SourceResolutionError(f'year-links filename/year mismatch: {path.name}')
+        if years is None or int(seed['year']) in years:
+            seeds.append(seed)
+    rows = [row for seed in seeds for row in source_rows_for_seed(seed, data_root)]
+    targets = [crawl_target_record(seed) for seed in seeds]
+    return {
+        'seeds': seeds,
+        'sources': sorted(rows, key=lambda row: (int(row['year']), row['parser'])),
+        'targets': sorted(targets, key=lambda target: (target['dataset'], int(target['year']))),
+    }
 
 
 def _year_title(text: str, year: int) -> bool:

@@ -86,11 +86,9 @@ def make_seed(root: Path) -> Path:
     return path
 
 
-def seed_data(root: Path, *, collision=False) -> tuple[Path, Path, bytes, bytes]:
+def seed_data(root: Path, *, collision=False) -> tuple[Path, Path, bytes]:
     data = root / 'data'
     data.mkdir()
-    registry_bytes = b'{"sources": [], "crawlTargets": []}\n'
-    (data / 'source-registry.json').write_bytes(registry_bytes)
     original_metadata = b'{"schemaVersion": 3, "defaultYear": 2026, "supportedYears": [2026]}\n'
     metadata = root / 'school-data.json'
     metadata.write_bytes(original_metadata)
@@ -101,7 +99,7 @@ def seed_data(root: Path, *, collision=False) -> tuple[Path, Path, bytes, bytes]
         path = data / '专业对照' / '专业对照_2027.json'
         path.parent.mkdir(parents=True)
         path.write_text('[{"preserve": true}]\n', encoding='utf-8')
-    return data, metadata, original_metadata, registry_bytes
+    return data, metadata, original_metadata
 
 
 def write_synthetic_tables(registry, data_root, year, *, write, parser=None):
@@ -160,7 +158,7 @@ class IngestYearTests(unittest.TestCase):
     def test_check_then_publish_generates_catalog_and_shard_without_touching_inputs_first(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
-            data, metadata, old_metadata, old_registry = seed_data(root)
+            data, metadata, old_metadata = seed_data(root)
             seed = make_seed(root)
             template = REPO_ROOT / 'metadata/school-data.template.json'
             corrections = data / '一分一段' / '人工修正.json'
@@ -173,7 +171,7 @@ class IngestYearTests(unittest.TestCase):
                 self.assertEqual(checked['metadataDiff']['addedYear'], YEAR)
                 self.assertEqual(checked['supportedYears'], [YEAR])
                 self.assertEqual(metadata.read_bytes(), old_metadata)
-                self.assertEqual((data / 'source-registry.json').read_bytes(), old_registry)
+                self.assertFalse((data / 'source-registry.json').exists())
                 self.assertFalse((data / '专业对照/专业对照_2027.json').exists())
 
                 published = ingest_year(seed, data, template, metadata, FakeSession())
@@ -188,21 +186,18 @@ class IngestYearTests(unittest.TestCase):
                 shard_path = yearly['scoreSegmentShardTemplate'].replace('{majorCode}', '51').removeprefix('data/')
                 self.assertTrue((data / shard_path).is_file())
                 self.assertEqual(corrections.read_bytes(), original_corrections)
-                registry = json.loads((data / 'source-registry.json').read_text(encoding='utf-8'))
-                self.assertTrue(any(item['year'] == YEAR and item['parser'] == 'master' for item in registry['sources']))
+                self.assertFalse((data / 'source-registry.json').exists())
 
                 published_metadata = metadata.read_bytes()
-                published_registry = (data / 'source-registry.json').read_bytes()
                 with self.assertRaisesRegex(ValueError, 'already exists'):
                     ingest_year(seed, data, template, metadata, FakeSession())
                 self.assertEqual(metadata.read_bytes(), published_metadata)
-                self.assertEqual((data / 'source-registry.json').read_bytes(), published_registry)
 
     def test_412_missing_pdf_and_ocr_review_leave_active_metadata_unchanged(self):
         for failure in ('412', 'missing-pdf', 'ocr-review'):
             with self.subTest(failure=failure), tempfile.TemporaryDirectory() as folder:
                 root = Path(folder)
-                data, metadata, old_metadata, old_registry = seed_data(root)
+                data, metadata, old_metadata = seed_data(root)
                 seed = make_seed(root)
                 template = REPO_ROOT / 'metadata/school-data.template.json'
                 session = FakeSession(
@@ -213,13 +208,13 @@ class IngestYearTests(unittest.TestCase):
                     with self.assertRaises((RuntimeError, ValueError)):
                         ingest_year(seed, data, template, metadata, session)
                 self.assertEqual(metadata.read_bytes(), old_metadata)
-                self.assertEqual((data / 'source-registry.json').read_bytes(), old_registry)
+                self.assertFalse((data / 'source-registry.json').exists())
                 self.assertFalse((data / '专业对照/专业对照_2027.json').exists())
 
     def test_existing_canonical_collision_is_preserved_and_not_published(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
-            data, metadata, old_metadata, _old_registry = seed_data(root, collision=True)
+            data, metadata, old_metadata = seed_data(root, collision=True)
             seed = make_seed(root)
             template = REPO_ROOT / 'metadata/school-data.template.json'
             canonical = data / '专业对照/专业对照_2027.json'

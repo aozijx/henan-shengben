@@ -52,10 +52,10 @@
 
 ### Task 3: Convert/normalize/report migration
 
-- [ ] Add tests proving extract, normalize, issue-report and catalog enumeration read supported annual seeds, not `crawlTargets`.
-- [ ] Migrate each consumer to the shared seed-derived target interface; retain parser-specific source rows as an internal derived view only where needed.
-- [ ] Add compatibility tests that fail clearly when an old registry-only invocation is attempted.
-- [ ] Run `python -m unittest discover -s convert/tests` and verify no canonical data changes.
+- [x] Add tests proving extract, normalize, issue-report and catalog enumeration read supported annual seeds, not `crawlTargets`.
+- [x] Migrate each consumer to the shared seed-derived target interface; retain parser-specific source rows as an internal derived view only where needed.
+- [x] Add compatibility tests that fail clearly when an old registry-only invocation is attempted.
+- [x] Run `python -m unittest discover -s convert/tests` and verify no canonical data changes.
 
 ### Task 4: Remove duplicate registry contract and update docs
 

@@ -8,6 +8,15 @@ from unittest.mock import patch
 from convert.refresh_catalog import _analytics, _major_name_matches, _source_map, refresh_catalog, validate_year_sources
 
 
+def write_year_seed(data: Path, year: int) -> None:
+    path = data / 'year-links' / f'{year}.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({
+        'year': year,
+        'sources': {'scoreSegments': {'pageUrl': f'https://www.haeea.cn/{year}.shtml'}},
+    }), encoding='utf-8')
+
+
 class RefreshCatalogTest(unittest.TestCase):
     def test_year_validator_is_public_for_ingestion_and_tools(self):
         self.assertTrue(callable(validate_year_sources))
@@ -34,6 +43,7 @@ class RefreshCatalogTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             data = root / 'data'
+            write_year_seed(data, 2024)
             for kind in ('专业对照', '省控线', '招生计划', '一分一段', 'reports', 'generated/catalog'):
                 (data / kind).mkdir(parents=True, exist_ok=True)
             files = {
@@ -119,17 +129,19 @@ class RefreshCatalogTest(unittest.TestCase):
                 refresh_catalog(data, template, metadata)
             self.assertEqual(metadata.read_bytes(), stable_metadata)
 
-    def test_discovers_new_year_canonical_files_without_registry_edits(self):
+    def test_discovers_seeded_new_year_canonical_files_and_ignores_unseeded_files(self):
         with tempfile.TemporaryDirectory() as folder:
             data = Path(folder)
-            (data / 'source-registry.json').write_text('{"sources":[]}', encoding='utf-8')
+            write_year_seed(data, 2028)
             for directory, prefix in [('专业对照', '专业对照'), ('省控线', '省控线'),
                                       ('招生计划', '招生计划'), ('一分一段', '一分一段')]:
-                (data / directory).mkdir()
+                (data / directory).mkdir(parents=True)
                 (data / directory / f'{prefix}_2028.json').write_text('{}', encoding='utf-8')
+                (data / directory / f'{prefix}_2099.json').write_text('{}', encoding='utf-8')
             sources = _source_map(data)
             self.assertEqual(set(sources[2028]), {'mapping', 'scorelines', 'plans', 'score-segments'})
             self.assertEqual(sources[2028]['mapping'], '专业对照/专业对照_2028.json')
+            self.assertNotIn(2099, sources)
 
     def test_shared_code_keeps_distinct_major_names_and_plan_totals(self):
         mapping = [{'专科专业': '会计', '可报本科专业': [
@@ -161,6 +173,7 @@ class RefreshCatalogTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             data = root / 'data'
+            write_year_seed(data, 2027)
             for kind in ('专业对照', '省控线', '招生计划', '一分一段'):
                 (data / kind).mkdir(parents=True)
             (data / 'source-registry.json').write_text(json.dumps({
@@ -271,6 +284,7 @@ class RefreshCatalogTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root / 'data').mkdir()
+            write_year_seed(root / 'data', 2027)
             (root / 'data/source-registry.json').write_text(json.dumps({'sources': [
                 {'year': 2027, 'parser': 'plans', 'outputPath': '招生计划/招生计划_2027.json'}]}), encoding='utf-8')
             template = root / 'template.json'

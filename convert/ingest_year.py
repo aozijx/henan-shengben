@@ -14,11 +14,18 @@ import requests
 from convert.common import REPO_ROOT, read_json
 from convert.convert_all import convert_target
 from convert.extract_cli import extract_registered_year
-from convert.normalize import normalize_all
+from convert.normalize import normalize_target
 from convert.refresh_catalog import refresh_catalog
 from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
-from crawler.year_sources import load_year_links, registry_rows_for_year, resolve_year_sources, validate_attachment
+from crawler.year_sources import (
+    crawl_target_record,
+    load_year_links,
+    registry_rows_for_year,
+    resolve_year_sources,
+    source_rows_for_seed,
+    validate_attachment,
+)
 
 
 def _write(path: Path, value: object) -> None:
@@ -39,15 +46,16 @@ def source_role_for_attachment(parser: str, index: int) -> str:
 
 def _run_in_staging(seed: dict, root: Path, session) -> dict:
     year = seed['year']
-    registry_path = root / 'source-registry.json'
-    registry = read_json(registry_path)
-    if any(int(item['year']) == year for item in registry.get('sources', [])) or any(
-            int(item['year']) == year for item in registry.get('crawlTargets', [])):
-        raise ValueError(f'{year} already exists in source registry; ingestion only adds new years')
+    prospective_rows = source_rows_for_seed(seed, root)
+    prospective_target = crawl_target_record(seed)
+    collision_paths = [row['outputPath'] for row in prospective_rows]
+    collision_paths.extend(prospective_target[key] for key in (
+        'manifestPath', 'extractionPath', 'normalizedPath', 'conversionReportPath'))
+    if any((root / relative).exists() for relative in collision_paths):
+        raise ValueError(f'{year} already exists; new-year publish would overwrite existing file')
     resolved = resolve_year_sources(seed, session)
     source_rows, crawl_target = registry_rows_for_year(resolved)
-    registry.setdefault('sources', []).extend(source_rows)
-    registry.setdefault('crawlTargets', []).append(crawl_target)
+    plan = {'seeds': [seed], 'sources': source_rows, 'targets': [crawl_target]}
 
     # Download source tables first; their final URLs and hashes are recorded in a provenance manifest.
     provenance = []
@@ -79,20 +87,21 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     segment_provenance = read_json(manifest_path)['entries']
     for item in segment_provenance:
         validate_attachment('scoreSegments', year, (root / item['localPath']).read_bytes())
-    _write(registry_path, registry)
-
-    results = extract_registered_year(registry, root, year, write=True)
+    results = extract_registered_year(plan, root, year, write=True)
     if len(results) != len(source_rows) or any(item['expectedCountMismatch'] for item in results):
         raise ValueError(f'{year}: tabular source extraction incomplete or unexpected row count')
     segment_result = convert_target(crawl_target, root, workers=1)
     if segment_result['summary']['needsReview']:
         raise ValueError(f'{year}: OCR requires human review before publication')
-    reports = normalize_all(registry_path, {year})
-    if len(reports) != 1 or reports[0]['blockingCount']:
+    normalized, normalization_report = normalize_target(crawl_target, plan, root)
+    _write(root / crawl_target['normalizedPath'], normalized)
+    _write(root / crawl_target['conversionReportPath'], normalization_report)
+    if normalization_report['blockingCount']:
         raise ValueError(f'{year}: normalization has unresolved blockers')
     return {'year': year, 'sources': len(source_rows), 'sourceProvenance': provenance,
             'scoreSegmentPdfs': len(entries), 'scoreSegmentProvenance': segment_provenance,
-            'publishedMajors': reports[0]['publishedMajorCount'], 'conversionReport': reports[0]}
+            'publishedMajors': normalization_report['publishedMajorCount'],
+            'conversionReport': normalization_report}
 
 
 def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_path: Path,
@@ -104,6 +113,11 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
     with tempfile.TemporaryDirectory(prefix='.ingest-year-', dir=data_root.parent) as temporary:
         staging_root = Path(temporary) / 'data'
         shutil.copytree(data_root, staging_root)
+        staged_seed = staging_root / 'year-links' / f"{seed['year']}.json"
+        staged_seed.parent.mkdir(parents=True, exist_ok=True)
+        if staged_seed.exists() and staged_seed.read_bytes() != Path(seed_path).read_bytes():
+            raise ValueError(f"{seed['year']} year-links seed differs from the active data root")
+        shutil.copy2(seed_path, staged_seed)
         shutil.copy2(metadata_path, Path(temporary) / 'metadata.json')
         report = _run_in_staging(seed, staging_root, session)
         staged_metadata = Path(temporary) / 'metadata.json'
@@ -121,11 +135,6 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
             relative = source.relative_to(staging_root)
             target = data_root / relative
             if target.exists():
-                if relative.as_posix() == 'source-registry.json':
-                    temporary_file = target.with_name(target.name + '.new')
-                    shutil.copy2(source, temporary_file)
-                    os.replace(temporary_file, target)
-                    continue
                 if target.read_bytes() != source.read_bytes():
                     raise ValueError(f'new-year publish would overwrite existing file: {relative}')
                 continue
