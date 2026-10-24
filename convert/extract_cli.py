@@ -29,7 +29,7 @@ def _diff_for(parser: str) -> Any:
     return diff_mapping if parser == "mapping" else diff_rows
 
 
-def extract_registered_year(plan: dict, data_root: Path, year: int, *, write: bool, parser: str | None = None) -> list[dict]:
+def extract_year_sources(plan: dict, data_root: Path, year: int, *, write: bool, parser: str | None = None) -> list[dict]:
     """Extract declared tabular sources for a year; new targets may lack JSON outputs."""
     results = []
     for entry in plan["sources"]:
@@ -58,17 +58,13 @@ def main() -> int:
     parser.add_argument("--year", type=int, help="只处理指定年份")
     parser.add_argument("--parser", help="只处理指定 parser (scorelines/mapping/plans/master)")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
-    parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
-
-    if args.registry:
-        parser.error('--registry is retired; use data/year-links seeds with --data-root')
     plan = load_data_plan(args.data_root, {args.year} if args.year is not None else None)
 
     total_bad = 0
     years = sorted({int(item["year"]) for item in plan["sources"]}) if args.year is None else [args.year]
     for year in years:
-        for result in extract_registered_year(plan, args.data_root, year, write=args.write, parser=args.parser):
+        for result in extract_year_sources(plan, args.data_root, year, write=args.write, parser=args.parser):
             label = "一致" if not result["diffs"] else f"{len(result['diffs'])} 处差异"
             count_note = "  [官方行数异常]" if result["expectedCountMismatch"] else ""
             print(f"{result['outputPath']}: 抽取 {result['rowCount']} 条 — {label}{count_note}")

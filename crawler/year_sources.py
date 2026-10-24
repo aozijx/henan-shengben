@@ -75,7 +75,6 @@ def crawl_target_for_seed(seed: dict) -> CrawlTarget:
         discovery_url=discovery_url,
         manifest_path=f'来源清单/来源清单_{year}.json',
         download_directory=f'一分一段/原始PDF/{year}',
-        extraction_path=f'一分一段/提取结果/提取结果_{year}.json',
         normalized_path=f'一分一段/一分一段_{year}.json',
         conversion_report_path=f'reports/转换报告_{year}.json',
         parser='score-segments',
@@ -105,7 +104,6 @@ def crawl_target_record(seed: dict) -> dict:
         'discoveryUrl': target.discovery_url,
         'manifestPath': target.manifest_path,
         'downloadDirectory': target.download_directory,
-        'extractionPath': target.extraction_path,
         'normalizedPath': target.normalized_path,
         'conversionReportPath': target.conversion_report_path,
         'parser': target.parser,
@@ -295,7 +293,6 @@ def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
         'discoveryUrl': resolved['pages']['scoreSegments'],
         'manifestPath': f'来源清单/来源清单_{year}.json',
         'downloadDirectory': f'一分一段/原始PDF/{year}',
-        'extractionPath': f'一分一段/提取结果/提取结果_{year}.json',
         'normalizedPath': f'一分一段/一分一段_{year}.json',
         'conversionReportPath': f'reports/转换报告_{year}.json', 'parser': 'score-segments',
     }

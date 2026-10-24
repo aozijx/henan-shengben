@@ -57,7 +57,12 @@ def parse_score_segments(rows: Iterable[RawPdfRow]) -> tuple[list[ScoreSegment],
         seen.add(item.score)
     for previous, current in zip(ordered, ordered[1:]):
         if current.cumulative_count < previous.cumulative_count:
-            fatal.append(ParseIssue("non-monotonic-count", None, f"累计人数在 {previous.score}→{current.score} 时减少"))
+            fatal.append(ParseIssue(
+                "non-monotonic-count",
+                None,
+                f"累计人数从 {previous.cumulative_count} 降至 {current.cumulative_count} "
+                f"（对应分数 {previous.score}→{current.score}）",
+            ))
     if fatal:
         return [], issues + fatal
     return ordered, issues

@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from crawler.download import download_entry, download_manifest, download_targets
+from crawler.download import compact_manifest_urls, download_entry, download_manifest, download_targets
 
 
 class Response:
@@ -72,6 +72,36 @@ class DownloadTest(unittest.TestCase):
             self.assertEqual(result['downloadStatus'], 'downloaded')
             self.assertEqual(result['finalUrl'], response.url)
             self.assertEqual(result['sha256'], hashlib.sha256(response.content).hexdigest())
+
+    def test_same_final_url_is_not_repeated_in_result(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / '01.pdf'
+            url = 'https://www.haeea.cn/01.pdf'
+            result = download_entry(url, target, Session(Response(b'%PDF-1.4 test', url=url)))
+            self.assertEqual('downloaded', result['downloadStatus'])
+            self.assertNotIn('finalUrl', result)
+
+    def test_encoded_chinese_url_is_not_treated_as_redirect(self):
+        with tempfile.TemporaryDirectory() as directory:
+            url = 'https://www.haeea.cn/attach/经济学.pdf'
+            encoded = 'https://www.haeea.cn/attach/%E7%BB%8F%E6%B5%8E%E5%AD%A6.pdf'
+            result = download_entry(url, Path(directory) / '01.pdf',
+                                    Session(Response(b'%PDF-1.4 test', url=encoded)))
+            self.assertNotIn('finalUrl', result)
+
+    def test_compaction_retains_real_redirects_and_other_provenance(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'manifest.json'
+            entries = [
+                {'pdfUrl': 'https://www.haeea.cn/经济学.pdf',
+                 'finalUrl': 'https://www.haeea.cn/%E7%BB%8F%E6%B5%8E%E5%AD%A6.pdf', 'sha256': 'a' * 64},
+                {'pdfUrl': 'https://www.haeea.cn/a.pdf',
+                 'finalUrl': 'https://news.haeea.cn/a.pdf', 'sha256': 'b' * 64}]
+            path.write_text(json.dumps({'entries': entries}), encoding='utf-8')
+            self.assertEqual(1, compact_manifest_urls(path))
+            actual = json.loads(path.read_text(encoding='utf-8'))['entries']
+            self.assertNotIn('finalUrl', actual[0])
+            self.assertEqual(entries[1], actual[1])
 
     def test_manifest_rejects_traversal_and_duplicate_destinations_before_download(self):
         with tempfile.TemporaryDirectory() as directory:

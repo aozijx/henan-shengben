@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.extract_cli import extract_registered_year
+from convert.extract_cli import extract_year_sources
 
 
 class ExtractRegisteredYearTests(unittest.TestCase):
@@ -13,16 +13,16 @@ class ExtractRegisteredYearTests(unittest.TestCase):
             root = Path(directory)
             entry = {'year': 2027, 'parser': 'plans', 'outputPath': '招生计划/招生计划_2027.json',
                      'pdfPaths': ['plan.pdf']}
-            registry = {'sources': [entry]}
+            plan = {'sources': [entry]}
             output = root / entry['outputPath']
             extracted = [{'专业代号': '51', '计划人数': 10}]
             with patch('convert.extract_cli.extract_entry', return_value=extracted):
-                dry_run = extract_registered_year(registry, root, 2027, write=False)
+                dry_run = extract_year_sources(plan, root, 2027, write=False)
                 self.assertEqual(dry_run[0]['rowCount'], 1)
                 self.assertTrue(dry_run[0]['diffs'])
                 self.assertFalse(output.exists())
 
-                written = extract_registered_year(registry, root, 2027, write=True)
+                written = extract_year_sources(plan, root, 2027, write=True)
                 self.assertEqual(written[0]['rowCount'], 1)
                 self.assertEqual(json.loads(output.read_text(encoding='utf-8')), extracted)
 
@@ -36,26 +36,26 @@ class ExtractRegisteredYearTests(unittest.TestCase):
             output.write_text(json.dumps(original, ensure_ascii=False), encoding='utf-8')
             extracted = [{'专业代号': '51', '专业名称': '新名称', '分数线': 180}]
             with patch('convert.extract_cli.extract_entry', return_value=extracted):
-                result = extract_registered_year({'sources': [entry]}, root, 2026, write=False)
+                result = extract_year_sources({'sources': [entry]}, root, 2026, write=False)
             self.assertTrue(result[0]['diffs'])
             self.assertEqual(json.loads(output.read_text(encoding='utf-8')), original)
 
     def test_year_filter_ignores_other_years_and_expected_count_is_optional(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            registry = {'sources': [
+            plan = {'sources': [
                 {'year': 2026, 'parser': 'plans', 'outputPath': '2026.json'},
                 {'year': 2027, 'parser': 'plans', 'outputPath': '2027.json', 'expectedCount': 2},
             ]}
             extracted = [{'row': 1}]
             with patch('convert.extract_cli.extract_entry', return_value=extracted) as extract:
-                results = extract_registered_year(registry, root, 2027, write=False)
+                results = extract_year_sources(plan, root, 2027, write=False)
             self.assertEqual(extract.call_count, 1)
             self.assertEqual(results[0]['outputPath'], '2027.json')
             self.assertTrue(results[0]['expectedCountMismatch'])
-            registry['sources'][1].pop('expectedCount')
+            plan['sources'][1].pop('expectedCount')
             with patch('convert.extract_cli.extract_entry', return_value=extracted):
-                optional = extract_registered_year(registry, root, 2027, write=False)
+                optional = extract_year_sources(plan, root, 2027, write=False)
             self.assertFalse(optional[0]['expectedCountMismatch'])
 
 

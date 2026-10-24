@@ -13,7 +13,6 @@ class CrawlTarget:
     discovery_url: str
     manifest_path: str
     download_directory: str
-    extraction_path: str
     normalized_path: str
     conversion_report_path: str
     parser: str

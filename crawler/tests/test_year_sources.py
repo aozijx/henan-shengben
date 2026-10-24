@@ -66,7 +66,6 @@ class YearSourcesTests(unittest.TestCase):
         })
         self.assertEqual(target.manifest_path, '来源清单/来源清单_2027.json')
         self.assertEqual(target.download_directory, '一分一段/原始PDF/2027')
-        self.assertEqual(target.extraction_path, '一分一段/提取结果/提取结果_2027.json')
         self.assertEqual(target.normalized_path, '一分一段/一分一段_2027.json')
         self.assertEqual(target.conversion_report_path, 'reports/转换报告_2027.json')
 

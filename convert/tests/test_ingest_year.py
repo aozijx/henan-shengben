@@ -4,8 +4,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.ingest_year import ingest_year, publish_staged_files, source_role_for_attachment
+from convert.ingest_year import _summary_report, ingest_year, publish_staged_files, source_role_for_attachment
 from convert.common import REPO_ROOT
+from convert.segment_store import write_year
 
 
 YEAR = 2027
@@ -71,7 +72,7 @@ class FakeSession:
             PAGES['master']: f'{YEAR} 招生高校及专业总表',
         }
         if url in page_text:
-            return FakeResponse(url, text=page_text[url])
+            return FakeResponse(url, content=page_text[url].encode('utf-8'))
         return FakeResponse(url, content=self.pdf_bytes)
 
 
@@ -102,9 +103,9 @@ def seed_data(root: Path, *, collision=False) -> tuple[Path, Path, bytes]:
     return data, metadata, original_metadata
 
 
-def write_synthetic_tables(registry, data_root, year, *, write, parser=None):
+def write_synthetic_tables(plan, data_root, year, *, write, parser=None):
     results = []
-    for row in registry['sources']:
+    for row in plan['sources']:
         if row['year'] != year or (parser and row['parser'] != parser):
             continue
         output = data_root / row['outputPath']
@@ -126,22 +127,38 @@ def write_synthetic_extraction(target, data_root, *, needs_review=False):
             'segments': [{'score': 200, 'cumulativeCount': 4}, {'score': 199, 'cumulativeCount': 7}],
             'issues': []}],
         'summary': {'total': 1, 'ok': 0 if needs_review else 1, 'needsReview': 1 if needs_review else 0}}
-    output = data_root / target['extractionPath']
+    output = data_root / target['normalizedPath']
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, ensure_ascii=False) + '\n', encoding='utf-8')
+    write_year(output, data_root, result)
     return result
 
 
 def mocked_tabular_parsers(*, needs_review=False):
     return (
         patch('convert.ingest_year.validate_attachment'),
-        patch('convert.ingest_year.extract_registered_year', side_effect=write_synthetic_tables),
+        patch('convert.ingest_year.extract_year_sources', side_effect=write_synthetic_tables),
         patch('convert.ingest_year.convert_target', side_effect=lambda target, root, workers=1:
             write_synthetic_extraction(target, root, needs_review=needs_review)),
     )
 
 
 class IngestYearTests(unittest.TestCase):
+    def test_default_cli_summary_omits_per_source_and_success_resolution_details(self):
+        report = {
+            'year': YEAR, 'sources': 6, 'scoreSegmentPdfs': 1, 'publishedMajors': 1,
+            'sourceProvenance': [{'localPath': 'large.pdf'}], 'scoreSegmentProvenance': [{'majorCode': '51'}],
+            'supportedYears': [YEAR], 'conversionReport': {
+                'inputMajorCount': 1, 'publishedMajorCount': 1, 'officialEmptyCount': 0,
+                'sourceUnavailableCount': 0, 'blockingCount': 0, 'officialEmpty': [],
+                'sourceUnavailable': [], 'blockers': [], 'validationErrors': [],
+                'resolutions': [{'majorCode': '51', 'reason': 'highest-priority'}]},
+            'metadataDiff': {'addedYear': YEAR},
+        }
+        compact = _summary_report(report, check=True)
+        self.assertNotIn('sourceProvenance', compact)
+        self.assertNotIn('resolutions', compact['conversionReport'])
+        self.assertEqual([YEAR], compact['supportedYears'])
+
     def test_publish_preflights_every_collision_before_copying_new_files(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
@@ -200,7 +217,6 @@ class IngestYearTests(unittest.TestCase):
                 self.assertEqual(checked['metadataDiff']['addedYear'], YEAR)
                 self.assertEqual(checked['supportedYears'], [YEAR])
                 self.assertEqual(metadata.read_bytes(), old_metadata)
-                self.assertFalse((data / 'source-registry.json').exists())
                 self.assertFalse((data / '专业对照/专业对照_2027.json').exists())
 
                 published = ingest_year(seed, data, template, metadata, FakeSession())
@@ -215,7 +231,6 @@ class IngestYearTests(unittest.TestCase):
                 shard_path = yearly['scoreSegmentShardTemplate'].replace('{majorCode}', '51').removeprefix('data/')
                 self.assertTrue((data / shard_path).is_file())
                 self.assertEqual(corrections.read_bytes(), original_corrections)
-                self.assertFalse((data / 'source-registry.json').exists())
 
                 published_metadata = metadata.read_bytes()
                 with self.assertRaisesRegex(ValueError, 'already exists'):
@@ -237,7 +252,6 @@ class IngestYearTests(unittest.TestCase):
                     with self.assertRaises((RuntimeError, ValueError)):
                         ingest_year(seed, data, template, metadata, session)
                 self.assertEqual(metadata.read_bytes(), old_metadata)
-                self.assertFalse((data / 'source-registry.json').exists())
                 self.assertFalse((data / '专业对照/专业对照_2027.json').exists())
 
     def test_existing_canonical_collision_is_preserved_and_not_published(self):

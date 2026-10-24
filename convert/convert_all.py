@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 import sys
 from typing import Any
 
-from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
-from .issue_reports import apply_manual_correction
+from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json
+from .manual_corrections import apply_manual_correction
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
+from .segment_store import iter_year, write_year
 from pipeline_config import SCORE_SEGMENT_WORKERS
 
 
@@ -55,34 +56,51 @@ def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]
     }
 
 
-def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None, workers: int | None = None) -> dict[str, Any]:
+def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None,
+                   workers: int | None = None, *, retry_review: bool = False,
+                   verbose: bool = False) -> dict[str, Any]:
     workers = max(1, SCORE_SEGMENT_WORKERS if workers is None else workers)
     manifest = read_json(data_root / target["manifestPath"])
-    entries = [entry for entry in manifest["entries"] if not major_codes or entry["majorCode"] in major_codes]
+    output_path = data_root / target["normalizedPath"]
+    existing = ({item['majorCode']: item for item in iter_year(output_path, data_root)}
+                if output_path.exists() else None)
+    if retry_review and existing is None:
+        raise ValueError('重试待审核专业需要已有的一分一段分片')
+    selected = set(major_codes or ())
+    if retry_review:
+        selected = {code for code, item in existing.items() if item.get('status', 'ok') != 'ok'}
+    if major_codes and not selected <= {item['majorCode'] for item in manifest['entries']}:
+        raise ValueError(f"未知专业代号：{', '.join(sorted(selected - {item['majorCode'] for item in manifest['entries']}))}")
+    entries = [entry for entry in manifest['entries'] if not (major_codes or retry_review) or entry['majorCode'] in selected]
     correction_path = data_root / "一分一段" / "人工修正.json"
     correction_values = read_json(correction_path).get("corrections", []) if correction_path.exists() else []
     corrections = {(int(item["year"]), item["majorCode"]): item for item in correction_values}
     arguments = [(entry, data_root, corrections.get((int(target["year"]), entry["majorCode"]))) for entry in entries]
-    print(f"[{target['year']}] 开始抽取一分一段：{target['manifestPath']}，共 {len(entries)} 个专业", flush=True)
+    print(f"[{target['year']}] 开始抽取并更新一分一段：{target['manifestPath']}，共 {len(entries)} 个专业", flush=True)
 
     def _converted():
         if workers > 1 and len(entries) > 1:
             with ProcessPoolExecutor(max_workers=workers) as executor:
-                yield from executor.map(_convert_entry, arguments)
+                futures = [executor.submit(_convert_entry, item) for item in arguments]
+                for future in as_completed(futures):
+                    yield future.result()
         else:
             yield from (_convert_entry(item) for item in arguments)
 
     majors = []
     for position, item in enumerate(_converted(), start=1):
-        print(f"[{target['year']}] {position}/{len(entries)} {item['majorCode']} {item['status']}", flush=True)
+        problem = '；'.join(f"{issue['code']}: {issue.get('message', '')}" for issue in item['issues'])
+        if verbose or retry_review or item['status'] != 'ok':
+            print(f"[{target['year']}] 完成 {position}/{len(entries)} {item['majorCode']} {item['majorName']} "
+                  f"{item['status']}{' — ' + problem if problem else ''}", flush=True)
         majors.append(item)
-    output_path = data_root / target["extractionPath"]
-    if major_codes and output_path.exists():
-        existing = read_json(output_path)
+    if (major_codes or retry_review) and existing:
         replacements = {item["majorCode"]: item for item in majors}
-        majors = [replacements.get(item["majorCode"], item) for item in existing.get("majors", [])]
+        majors = [replacements.get(code, item) for code, item in existing.items()]
         known = {item["majorCode"] for item in majors}
         majors.extend(item for code, item in replacements.items() if code not in known)
+    manifest_order = {entry['majorCode']: position for position, entry in enumerate(manifest['entries'])}
+    majors.sort(key=lambda item: manifest_order[item['majorCode']])
     result = {
         "schemaVersion": 1,
         "dataset": target["dataset"],
@@ -95,7 +113,11 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
             "needsReview": sum(item["status"] != "ok" for item in majors),
         },
     }
-    write_json(output_path, result)
+    write_year(output_path, data_root, result)
+    review = [f"{item['majorCode']} {item['majorName']}" for item in majors if item['status'] != 'ok']
+    print(f"{target['year']}: {result['summary']['ok']}/{result['summary']['total']} ok, "
+          f"{result['summary']['needsReview']} needs review"
+          f"{' — ' + '、'.join(review) if review else ''}", flush=True)
     return result
 
 
@@ -105,13 +127,13 @@ def main() -> int:
     parser.add_argument("--dataset", default="score-segments")
     parser.add_argument("--year", dest="years", action="append", type=int)
     parser.add_argument("--major", dest="major_codes", action="append")
+    parser.add_argument("--retry-review", action="store_true", help="仅重试已有分片中待审核的专业")
     parser.add_argument("--workers", type=int, default=None, help="并发进程数，默认取 pipeline_config.py 的 SCORE_SEGMENT_WORKERS")
+    parser.add_argument("--verbose", action="store_true", help="打印每个专业的转换完成状态")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
-    parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
-
-    if args.registry:
-        parser.error('--registry is retired; use data/year-links seeds with --data-root')
+    if args.retry_review and args.major_codes:
+        parser.error('--retry-review 和 --major 不能同时使用')
     plan = load_data_plan(args.data_root, set(args.years) if args.years else None)
     data_root = args.data_root
     targets = [
@@ -121,8 +143,8 @@ def main() -> int:
     if not targets:
         parser.error("year-links 中没有匹配的数据集/年份")
     for target in targets:
-        result = convert_target(target, data_root, set(args.major_codes or []), args.workers)
-        print(f"{result['year']}: {result['summary']['ok']} ok, {result['summary']['needsReview']} needs review")
+        convert_target(target, data_root, set(args.major_codes or []), args.workers,
+                       retry_review=args.retry_review, verbose=args.verbose)
     return 0
 
 

@@ -9,16 +9,16 @@ import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
-import requests
-
 from convert.common import REPO_ROOT, read_json
 from convert.convert_all import convert_target
-from convert.extract_cli import extract_registered_year
+from convert.extract_cli import extract_year_sources
 from convert.normalize import normalize_target
 from convert.refresh_catalog import refresh_catalog
-from pipeline_config import REQUEST_TIMEOUT, USER_AGENT
+from convert.segment_store import write_year
+from pipeline_config import REQUEST_TIMEOUT
 from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
+from crawler.waf import build_session
 from crawler.year_sources import (
     crawl_target_record,
     load_year_links,
@@ -64,13 +64,13 @@ def publish_staged_files(staging_root: Path, data_root: Path) -> None:
         os.replace(temporary_file, target)
 
 
-def _run_in_staging(seed: dict, root: Path, session) -> dict:
+def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = False) -> dict:
     year = seed['year']
     prospective_rows = source_rows_for_seed(seed, root)
     prospective_target = crawl_target_record(seed)
     collision_paths = [row['outputPath'] for row in prospective_rows]
     collision_paths.extend(prospective_target[key] for key in (
-        'manifestPath', 'extractionPath', 'normalizedPath', 'conversionReportPath'))
+        'manifestPath', 'normalizedPath', 'conversionReportPath'))
     if any((root / relative).exists() for relative in collision_paths):
         raise ValueError(f'{year} already exists; new-year publish would overwrite existing file')
     resolved = resolve_year_sources(seed, session)
@@ -90,8 +90,8 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
             validate_attachment(role, year, (root / relative).read_bytes())
             print(f'[{year}] 校验通过：{relative}', flush=True)
             provenance.append({'year': year, 'type': role, 'sourcePageUrl': row['pageUrls'][index],
-                'sourceUrl': url, 'finalUrl': result['finalUrl'], 'localPath': relative,
-                'sha256': result['sha256'], 'bytes': result['bytes']})
+                'sourceUrl': url, **({'finalUrl': result['finalUrl']} if result.get('finalUrl') else {}),
+                'localPath': relative, 'sha256': result['sha256'], 'bytes': result['bytes']})
     _write(root / f'来源清单/官方来源_{year}.json', {'schemaVersion': 1, 'year': year, 'sources': provenance})
 
     page = session.get(crawl_target['discoveryUrl'], timeout=REQUEST_TIMEOUT)
@@ -99,7 +99,7 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     print(f'[{year}] 发现一分一段官方 PDF …', flush=True)
     target = SimpleNamespace(year=year, source_page_url=crawl_target['sourcePageUrl'],
                              download_directory=crawl_target['downloadDirectory'])
-    entries = discover_year(target, page.text, base_url=crawl_target['sourcePageUrl'])
+    entries = discover_year(target, page.content, base_url=crawl_target['sourcePageUrl'])
     print(f'[{year}] 发现 {len(entries)} 个一分一段官方 PDF', flush=True)
     manifest = {'schemaVersion': 1, 'dataset': 'score-segments', 'year': year,
                 'sourcePageUrl': crawl_target['sourcePageUrl'], 'discoveryUrl': crawl_target['discoveryUrl'],
@@ -112,7 +112,7 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     segment_provenance = read_json(manifest_path)['entries']
     for item in segment_provenance:
         validate_attachment('scoreSegments', year, (root / item['localPath']).read_bytes())
-    results = extract_registered_year(plan, root, year, write=True)
+    results = extract_year_sources(plan, root, year, write=True)
     print(f'[{year}] 官方表格抽取完成：{len(results)} 张', flush=True)
     if len(results) != len(source_rows) or any(item['expectedCountMismatch'] for item in results):
         raise ValueError(f'{year}: tabular source extraction incomplete or unexpected row count')
@@ -121,8 +121,8 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     if segment_result['summary']['needsReview']:
         raise ValueError(f'{year}: OCR requires human review before publication')
     print(f'[{year}] 归一化一分一段数据 …', flush=True)
-    normalized, normalization_report = normalize_target(crawl_target, plan, root)
-    _write(root / crawl_target['normalizedPath'], normalized)
+    normalized, normalization_report = normalize_target(crawl_target, plan, root, full_report=full_report)
+    write_year(root / crawl_target['normalizedPath'], root, normalized)
     _write(root / crawl_target['conversionReportPath'], normalization_report)
     if normalization_report['blockingCount']:
         raise ValueError(f'{year}: normalization has unresolved blockers')
@@ -133,12 +133,11 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
 
 
 def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_path: Path,
-                session=None, *, check: bool = False) -> dict:
+                session=None, *, check: bool = False, full_report: bool = False) -> dict:
     seed = load_year_links(seed_path)
     if Path(seed_path).stem != str(seed['year']):
         raise ValueError(f"year-links filename/year mismatch: {Path(seed_path).name}")
-    session = session or requests.Session()
-    session.headers['User-Agent'] = USER_AGENT
+    session = session or build_session()
     data_root, metadata_path = Path(data_root).resolve(), Path(metadata_path).resolve()
     with tempfile.TemporaryDirectory(prefix='.ingest-year-', dir=data_root.parent) as temporary:
         print(f"[{seed['year']}] 准备暂存目录 …", flush=True)
@@ -150,7 +149,7 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
             raise ValueError(f"{seed['year']} year-links seed differs from the active data root")
         shutil.copy2(seed_path, staged_seed)
         shutil.copy2(metadata_path, Path(temporary) / 'metadata.json')
-        report = _run_in_staging(seed, staging_root, session)
+        report = _run_in_staging(seed, staging_root, session, full_report=full_report)
         staged_metadata = Path(temporary) / 'metadata.json'
         result = refresh_catalog(staging_root, template_path, staged_metadata)
         report['supportedYears'] = result['supportedYears']
@@ -168,6 +167,25 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
         return report
 
 
+def _summary_report(report: dict, *, check: bool) -> dict:
+    conversion = report['conversionReport']
+    compact_conversion = {key: conversion.get(key) for key in (
+        'inputMajorCount', 'publishedMajorCount', 'officialEmptyCount', 'sourceUnavailableCount',
+        'blockingCount', 'officialEmpty', 'sourceUnavailable', 'blockers', 'validationErrors')}
+    summary = {
+        'status': 'validated' if check else 'published',
+        'year': report['year'],
+        'sources': report['sources'],
+        'scoreSegmentPdfs': report['scoreSegmentPdfs'],
+        'publishedMajors': report['publishedMajors'],
+        'supportedYears': report['supportedYears'],
+        'conversionReport': compact_conversion,
+    }
+    if check and 'metadataDiff' in report:
+        summary['metadataDiff'] = report['metadataDiff']
+    return summary
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description='Ingest and validate one new official data year')
     parser.add_argument('--seed', required=True, type=Path)
@@ -175,13 +193,17 @@ def main() -> int:
     parser.add_argument('--template', type=Path, default=REPO_ROOT / 'metadata/school-data.template.json')
     parser.add_argument('--metadata', type=Path, default=REPO_ROOT / 'metadata/school-data.json')
     parser.add_argument('--check', action='store_true', help='validate in staging without publishing')
+    parser.add_argument('--full-report', action='store_true', help='输出来源溯源和完整逐专业转换报告')
     args = parser.parse_args()
     try:
-        report = ingest_year(args.seed, args.data_root, args.template, args.metadata, check=args.check)
+        report = ingest_year(args.seed, args.data_root, args.template, args.metadata,
+                             check=args.check, full_report=args.full_report)
     except Exception as error:
         print(json.dumps({'status': 'failed', 'error': str(error)}, ensure_ascii=False, indent=2))
         return 1
-    print(json.dumps({'status': 'validated' if args.check else 'published', **report}, ensure_ascii=False, indent=2))
+    output = ({'status': 'validated' if args.check else 'published', **report}
+              if args.full_report else _summary_report(report, check=args.check))
+    print(json.dumps(output, ensure_ascii=False, indent=2))
     return 0
 
 
