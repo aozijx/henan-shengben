@@ -32,7 +32,7 @@ function summary(projection, hiddenFields) {
   var povertyPlan = rows.reduce(function (sum, item) { return sum + item.value.povertyPlanCount; }, 0);
   document.getElementById('plan-overview').innerHTML =
     '<div class="plan-card"><b>' + rows.length + '</b><span>匹配专业</span></div>' +
-    '<div class="plan-card"><b>' + total.toLocaleString() + '</b><span>计划人数（逐专业汇总）</span></div>' +
+    (povertyPlan > 0 ? '<div class="plan-card"><b>' + total.toLocaleString() + '</b><span>计划人数（逐专业汇总）</span></div>' : '') +
     '<div class="plan-card"><b>' + publicPlan.toLocaleString() + '</b><span>公办计划</span></div>' +
     '<div class="plan-card"><b>' + privatePlan.toLocaleString() + '</b><span>民办计划</span></div>' +
     '<div class="plan-card"><b>' + ordinaryPlan.toLocaleString() + '</b><span>普通计划</span></div>' +
@@ -144,7 +144,7 @@ async function renderCurves() {
   } catch (error) { if (token === curveGeneration) fallback.textContent = error.message; }
 }
 
-function choices(projection) {
+function choices(projection, hiddenFields) {
   var root = document.getElementById('stats-major-choices');
   var search = document.getElementById('stats-major-search');
   var keyword = search.value.trim();
@@ -153,20 +153,20 @@ function choices(projection) {
   });
   function selectVisible() {
     visible.forEach(function (major) { selectedCodes.add(majorKey(major)); });
-    choices(projection); summary(projection); renderCurves();
+    choices(projection, hiddenFields); summary(projection, hiddenFields); renderCurves();
   }
   root.innerHTML = visible.map(function (major) { return '<label><input type="checkbox" value="' + esc(majorKey(major)) + '"' +
     (selectedCodes.has(majorKey(major)) ? ' checked' : '') + '> ' + esc(major.majorName) + ' (' + esc(major.majorCode) + ')</label>'; }).join('') || '没有匹配的专业';
   root.querySelectorAll('input').forEach(function (input) { input.onchange = function () {
     if (input.checked) selectedCodes.add(input.value); else selectedCodes.delete(input.value);
     document.getElementById('stats-selected-count').textContent = '已勾选 ' + selectedCodes.size + ' 个专业';
-    summary(projection); renderCurves();
+    summary(projection, hiddenFields); renderCurves();
   }; });
   document.getElementById('stats-selected-count').textContent = '已勾选 ' + selectedCodes.size + ' 个专业';
   document.getElementById('stats-clear-selected').onclick = function () {
-    selectedCodes.clear(); choices(projection); summary(projection); renderCurves();
+    selectedCodes.clear(); choices(projection, hiddenFields); summary(projection, hiddenFields); renderCurves();
   };
-  search.oninput = function () { choices(projection); };
+  search.oninput = function () { choices(projection, hiddenFields); };
   search.onkeydown = function (event) {
     if (event.key !== 'Enter') return;
     event.preventDefault();
@@ -197,6 +197,6 @@ export async function renderStatsPage(repository, metadata, state, mapping) {
     document.getElementById('stats-context').textContent = '年份：' + projection.years.join('、') + ' · 办学性质：' + state.filters.schoolType +
       ' · 建档立卡：' + state.filters.povertyStatus + ' · 专业基础课：' + state.filters.subject + ' · ' + projection.majors.length + ' 个专业';
     status.textContent = removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' : '';
-    summary(projection, hiddenFields); renderTable(projection, metadata, hiddenFields); choices(projection); renderCurves();
+    summary(projection, hiddenFields); renderTable(projection, metadata, hiddenFields); choices(projection, hiddenFields); renderCurves();
   } catch (error) { if (token === pageGeneration) status.textContent = '统计加载失败：' + error.message; }
 }
