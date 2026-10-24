@@ -72,8 +72,8 @@ def main():
     parser.add_argument('--years', nargs='*', type=int)
     parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
-    from crawler.year_sources import load_year_links, resolve_score_segment_target
-    seed_paths = args.seed or sorted((args.data_root / 'year-links').glob('*.json'))
+    from crawler.year_sources import load_year_links, resolve_score_segment_target, seed_paths_in
+    seed_paths = args.seed or seed_paths_in(args.data_root)
     seeds = [load_year_links(path) for path in seed_paths]
     seeds = [seed for seed in seeds if not args.years or seed['year'] in set(args.years)]
     if not seeds:

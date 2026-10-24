@@ -10,7 +10,7 @@ if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from crawler.source_rules import is_official_pdf_url
-from crawler.year_sources import load_seed_targets
+from crawler.year_sources import load_seed_targets, seed_paths_in
 
 
 def _sha256(content):
@@ -83,7 +83,7 @@ def main():
     args = parser.parse_args()
     session = requests.Session()
     session.headers['User-Agent'] = 'henan-shengben-data/1.0'
-    seed_paths = args.seed or sorted((args.data_root / 'year-links').glob('*.json'))
+    seed_paths = args.seed or seed_paths_in(args.data_root)
     if not seed_paths:
         parser.error('no year-links seeds found')
     for year, counts in download_targets(seed_paths, args.data_root, set(args.years) if args.years else None, session).items():

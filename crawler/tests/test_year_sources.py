@@ -6,11 +6,13 @@ from pathlib import Path
 from crawler.year_sources import (
     SOURCE_ROLES,
     SourceResolutionError,
+    build_data_plan,
     crawl_target_for_seed,
     load_seed_targets,
     load_year_links,
     execution_rows_for_year,
     resolve_year_sources,
+    seed_paths_in,
     validate_attachment,
 )
 
@@ -77,7 +79,7 @@ class YearSourcesTests(unittest.TestCase):
         self.assertEqual(seeds[2024]['sources']['scorelines']['attachmentUrl'],
                          'https://www.haeea.cn/attach/file/20240419/20240419145153_4343_bed9ca9e.pdf')
         self.assertEqual(seeds[2025]['searchPageUrl'],
-                         'https://www.haeea.cn/govsearch?page=1&words=%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8')
+                         'https://www.haeea.cn/GovSearch/News/Index?words=%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC&page=1')
         self.assertEqual(seeds[2025]['sources']['scorelines']['attachmentUrl'],
                          'https://www.haeea.cn/attach/file/20250402/20250402075042_5843_f6e5d888.pdf')
         self.assertEqual(seeds[2026]['sources']['scoreSegments']['pageUrl'],
@@ -97,6 +99,22 @@ class YearSourcesTests(unittest.TestCase):
                 'master': {'pageUrl': 'https://www.haeea.cn/master', 'attachmentUrl': 'https://xcoss.henan.gov.cn/typtfile/2027/master.pdf'},
             },
         }
+
+    def test_seed_discovery_skips_non_year_template_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            year_links = Path(directory) / 'year-links'
+            year_links.mkdir()
+            template = {
+                'year': 2027,
+                'searchPageUrl': 'https://www.haeea.cn/search',
+                'sources': {'scoreSegments': {'pageUrl': '一分一段统计表的官方公告页'}},
+            }
+            (year_links / 'template.json').write_text(json.dumps(template), encoding='utf-8')
+            seed = dict(template, sources={'scoreSegments': {'pageUrl': 'https://www.haeea.cn/segments'}})
+            (year_links / '2027.json').write_text(json.dumps(seed), encoding='utf-8')
+            self.assertEqual([path.name for path in seed_paths_in(directory)], ['2027.json'])
+            plan = build_data_plan(directory)
+            self.assertEqual([target['year'] for target in plan['targets']], [2027])
 
     def test_master_is_required_and_resolves_as_official_source(self):
         self.assertIn('master', SOURCE_ROLES)

@@ -1,0 +1,13 @@
+{
+    "year": 2027,
+    "searchPageUrl": "https://www.haeea.cn/GovSearch/News/Index?words=%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC&page=1",
+    "sources": {
+        "scoreSegments": {
+            "pageUrl": "一分一段统计表的官方公告页"
+        },
+        "scorelines": {
+            "pageUrl": "录取控制分数线的官方公告页",
+            "attachmentUrl": "官方 PDF 链接"
+        }
+    }
+}

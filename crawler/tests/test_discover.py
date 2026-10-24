@@ -10,6 +10,7 @@ from crawler.year_sources import (
     load_seed_targets,
     load_year_links,
     resolve_score_segment_target,
+    seed_paths_in,
 )
 
 
@@ -37,7 +38,7 @@ class DiscoverTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_loads_targets_from_year_seeds_and_filters_non_contiguous_years(self):
-        targets = load_seed_targets(Path('data/year-links').glob('*.json'), {2024, 2026})
+        targets = load_seed_targets(seed_paths_in(Path('data')), {2024, 2026})
         self.assertEqual([(target.dataset, target.year) for target in targets],
                          [('score-segments', 2024), ('score-segments', 2026)])
 

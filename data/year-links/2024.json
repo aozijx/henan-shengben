@@ -1,11 +1,12 @@
 {
   "year": 2024,
-  "searchPageUrl": "https://www.haeea.cn/govsearch?words=%E4%B8%93%E5%8D%87%E6%9C%AC&page=1",
+  "searchPageUrl": "https://www.haeea.cn/GovSearch/News/Index?words=%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC&page=1",
   "sources": {
     "scoreSegments": {
       "pageUrl": "https://www.haeea.cn/a/202404/43297_fd486546.shtml"
     },
     "scorelines": {
+      "pageUrl": "https://www.haeea.cn/a/202404/43296_87710d5e.shtml",
       "attachmentUrl": "https://www.haeea.cn/attach/file/20240419/20240419145153_4343_bed9ca9e.pdf"
     }
   }

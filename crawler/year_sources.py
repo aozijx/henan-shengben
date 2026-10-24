@@ -143,10 +143,16 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
     return rows
 
 
+def seed_paths_in(data_root: Path) -> list[Path]:
+    """List the numeric year seeds, skipping non-year files such as template.json."""
+    data_root = Path(data_root)
+    return [path for path in sorted((data_root / 'year-links').glob('*.json')) if path.stem.isdigit()]
+
+
 def build_data_plan(data_root: Path, years: set[int] | None = None) -> dict:
     data_root = Path(data_root)
     seeds = []
-    for path in sorted((data_root / 'year-links').glob('*.json')):
+    for path in seed_paths_in(data_root):
         seed = load_year_links(path)
         if path.stem != str(seed['year']):
             raise SourceResolutionError(f'year-links filename/year mismatch: {path.name}')
