@@ -2,6 +2,7 @@ import { esc } from './utils.js';
 import { getSortedYears, normalizeSelectedYears } from './metadata.js';
 import { buildSchoolComparisonHtml, buildScoreSegmentsHtml, buildYearSummaryHtml } from './year-stack.js';
 import { hiddenResultFields } from './result-visibility.js';
+import { nextSortDirection } from './preview.js';
 
 var resultViewStates = new WeakMap();
 
@@ -76,8 +77,16 @@ function toolbarHtml(model, metadata) {
     '</div>';
 }
 
-function tableHeaderHtml() {
-  return '<thead><tr><th>本科专业</th><th>公共课</th><th>专业基础课</th><th>历年概览</th><th>院校对比</th></tr></thead>';
+function sortButton(label, key, model, metadata) {
+  var field = (metadata.fields || []).find(function (item) { return item.key === key; });
+  if (!field || !field.sortEnable) return '<th>' + esc(label) + '</th>';
+  var direction = model.sort && model.sort.key === key ? model.sort.direction : null;
+  var indicator = direction === 'desc' ? '▼' : direction === 'asc' ? '▲' : '';
+  var ariaSort = direction === 'desc' ? ' aria-sort="descending"'
+    : direction === 'asc' ? ' aria-sort="ascending"' : '';
+  return '<th class="sortable"' + ariaSort + '>' +
+    '<button type="button" data-result-sort="' + esc(key) + '" aria-label="按' + esc(label) + '排序">' +
+    esc(label) + '<span class="sort-ind" aria-hidden="true">' + indicator + '</span></button></th>';
 }
 
 function tableRowsHtml(aggregates, years, expandedDetails, hiddenFields) {
@@ -94,7 +103,14 @@ function tableRowsHtml(aggregates, years, expandedDetails, hiddenFields) {
 }
 
 function tableHtml(model, metadata) {
-  return '<div class="aggregate-table-wrap"><table class="aggregate-table">' + tableHeaderHtml() +
+  var focusYear = model.selectedYears.length ? model.selectedYears[model.selectedYears.length - 1] : null;
+  var headers = '<thead><tr>' + sortButton('本科专业', 'majorName', model, metadata) +
+    '<th>公共课</th><th>专业基础课</th>' +
+    (focusYear == null ? '<th>历年概览</th><th>院校对比</th>' :
+      sortButton('历年概览', 'score' + focusYear, model, metadata) +
+      sortButton('院校对比', 'schoolCount' + focusYear, model, metadata)) +
+    '</tr></thead>';
+  return '<div class="aggregate-table-wrap"><table class="aggregate-table">' + headers +
     '<tbody>' + tableRowsHtml(model.aggregates, model.selectedYears || getSortedYears(metadata), model.expandedDetails, model.hiddenFields) + '</tbody></table></div>';
 }
 
@@ -175,6 +191,12 @@ function within(root, target, selector) {
 }
 
 function handleResultClick(root, model, metadata, dispatch, event, expandedDetails, onExpand) {
+  var sort = within(root, event.target, '[data-result-sort]');
+  if (sort && dispatch) {
+    var key = sort.dataset.resultSort;
+    dispatch({ type: 'SET_SORT', sort: { key: key, direction: nextSortDirection(model.sort, key) } });
+    return;
+  }
   var layout = within(root, event.target, '[data-result-layout]');
   if (layout) {
     if (dispatch) dispatch({ type: 'SET_RESULT_LAYOUT', resultLayout: layout.dataset.resultLayout });

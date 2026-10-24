@@ -2,6 +2,7 @@ import { projectAnalytics } from './analytics-projection.js';
 import { buildCurve, lookupScoreSegmentCode } from './score-curves.js';
 import { esc } from './utils.js';
 import { buildPaginationHtml, paginate } from './preview.js';
+import { hiddenResultFields, resultFieldVisible } from './result-visibility.js';
 
 var chartInstances = {};
 var selectedCodes = new Set();
@@ -20,7 +21,7 @@ function draw(id, option) {
   return true;
 }
 
-function summary(projection) {
+function summary(projection, hiddenFields) {
   var focus = projection.focusYear;
   var rows = projection.majors.map(function (major) { return { major: major, value: major.years[focus] }; })
     .filter(function (item) { return item.value; });
@@ -35,7 +36,7 @@ function summary(projection) {
     '<div class="plan-card"><b>' + publicPlan.toLocaleString() + '</b><span>公办计划</span></div>' +
     '<div class="plan-card"><b>' + privatePlan.toLocaleString() + '</b><span>民办计划</span></div>' +
     '<div class="plan-card"><b>' + ordinaryPlan.toLocaleString() + '</b><span>普通计划</span></div>' +
-    '<div class="plan-card"><b>' + povertyPlan.toLocaleString() + '</b><span>专项计划</span></div>';
+    (resultFieldVisible(hiddenFields, 'povertyPlan') ? '<div class="plan-card"><b>' + povertyPlan.toLocaleString() + '</b><span>专项计划</span></div>' : '');
   var bins = [];
   for (var start = 0; start < 300; start += 20) bins.push(start);
   var years = projection.years;
@@ -76,7 +77,7 @@ function summary(projection) {
   }
 }
 
-export function buildStatsTableHtml(projection, metadata, requestedPage) {
+export function buildStatsTableHtml(projection, metadata, requestedPage, hiddenFields) {
   var current = paginate(projection.majors, requestedPage, metadata.pageSize || 50);
   var rows = current.rows;
   return '<div class="table-wrap"><table><thead><tr><th>本科专业</th>' + projection.years.map(function (year) {
@@ -89,19 +90,21 @@ export function buildStatsTableHtml(projection, metadata, requestedPage) {
       var priv = value.schoolTypes.private || {};
       return '<td><div class="stats-year-cell"><b>' + esc(value.score ?? '—') + ' 分</b>' +
         '<span>院校 公 ' + (pub.schoolCount || 0) + ' / 民 ' + (priv.schoolCount || 0) + '</span>' +
-        '<span>普通 ' + (value.ordinaryPlanCount || 0) + ' / 专项 ' + (value.povertyPlanCount || 0) + ' 人</span></div></td>';
+        (resultFieldVisible(hiddenFields, 'povertyPlan') ? '<span>普通 ' + (value.ordinaryPlanCount || 0) +
+          ' / 专项 ' + (value.povertyPlanCount || 0) + ' 人</span>' : '<span>普通 ' + (value.ordinaryPlanCount || 0) + ' 人</span>') +
+        '</div></td>';
     }).join('') + '</tr>';
   }).join('') + '</tbody></table></div><p class="stats-table-total">共 ' + current.total + ' 个专业 · 当前 ' + current.start + '–' + current.end + '</p>' +
     buildPaginationHtml(current.page, current.pageCount, '专业列表分页');
 }
 
-function renderTable(projection, metadata) {
+function renderTable(projection, metadata, hiddenFields) {
   var current = paginate(projection.majors, page, metadata.pageSize || 50);
   page = current.page;
   var root = document.getElementById('stats-table');
-  root.innerHTML = buildStatsTableHtml(projection, metadata, page);
+  root.innerHTML = buildStatsTableHtml(projection, metadata, page, hiddenFields);
   root.querySelectorAll('.preview-pagination [data-page]').forEach(function (button) {
-    button.onclick = function () { page = Number(button.dataset.page); renderTable(projection, metadata); };
+    button.onclick = function () { page = Number(button.dataset.page); renderTable(projection, metadata, hiddenFields); };
   });
 }
 
@@ -185,9 +188,10 @@ export async function renderStatsPage(repository, metadata, state, mapping) {
     var removed = 0;
     selectedCodes.forEach(function (code) { if (!allowed.has(code)) { selectedCodes.delete(code); removed += 1; } });
     context = { projection, repository };
+    var hiddenFields = hiddenResultFields(metadata, state.filters);
     document.getElementById('stats-context').textContent = '年份：' + projection.years.join('、') + ' · 办学性质：' + state.filters.schoolType +
       ' · 建档立卡：' + state.filters.povertyStatus + ' · 专业基础课：' + state.filters.subject + ' · ' + projection.majors.length + ' 个专业';
     status.textContent = removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' : '';
-    summary(projection); renderTable(projection, metadata); choices(projection); renderCurves();
+    summary(projection, hiddenFields); renderTable(projection, metadata, hiddenFields); choices(projection); renderCurves();
   } catch (error) { if (token === pageGeneration) status.textContent = '统计加载失败：' + error.message; }
 }

@@ -34,3 +34,7 @@
 @media (min-width:721px){.result-toolbar{margin-top:22px;margin-bottom:26px;}}
 .filter-field [data-filter-action="years"]{min-height:40px;padding:8px 10px;border:1px solid var(--blue);border-radius:8px;background:var(--blue-soft);color:var(--blue-deep);font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
 @media (min-width:768px){.search-row input{height:52px;font-size:17px;}.clear,.go{height:52px;}}
+.aggregate-table th.sortable { padding: 0; }
+.aggregate-table th.sortable button { width: 100%; min-height: 38px; padding: 10px 12px; border: 0; border-radius: 0; background: transparent; color: inherit; text-align: left; font: inherit; }
+.aggregate-table th.sortable button:hover { background: var(--surface-3); color: var(--blue-deep); }
+.aggregate-table .sort-ind { margin-left: 5px; color: var(--blue); }

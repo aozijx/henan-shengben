@@ -33,14 +33,24 @@ var statsContext = null;
 
 function createAggregateRenderer(loaded) {
   var supportedYears = getSortedYears(loaded.metadata);
+  function renderWorkspace(view, years, state, dispatch, onExpand) {
+    renderResultWorkspace($result, {
+      ...view,
+      selectedYears: years,
+      resultLayout: state && state.resultLayout,
+      filters: state && state.filters,
+      sort: state && state.sort
+    }, loaded.metadata, dispatch, onExpand);
+  }
+
   return function renderAggregates(majors, state, dispatch) {
     var years = (state && state.selectedYears) || supportedYears;
     var requestId = ++aggregateRequestId;
     if (!majors.length) {
-      renderResultWorkspace($result, { status: 'ready', hasQuery: Boolean(state && state.specName), aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
+      renderWorkspace({ status: 'ready', hasQuery: Boolean(state && state.specName), aggregates: [] }, years, state, dispatch);
       return;
     }
-    renderResultWorkspace($result, { status: 'loading', hasQuery: true, aggregates: [], selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
+    renderWorkspace({ status: 'loading', hasQuery: true, aggregates: [] }, years, state, dispatch);
     Promise.resolve([])
       .then(function () {
         if (requestId !== aggregateRequestId) return;
@@ -64,7 +74,7 @@ function createAggregateRenderer(loaded) {
           filters: state && state.filters,
           sort: state && state.sort
         });
-        renderResultWorkspace($result, { status: 'ready', hasQuery: true, aggregates: resultModel.aggregates, selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch,
+        renderWorkspace({ status: 'ready', hasQuery: true, aggregates: resultModel.aggregates }, years, state, dispatch,
           function (aggregate, selected, holder, hiddenFields) {
             holder.innerHTML = '<div class="loading">正在读取该专业的一分一段…</div>';
             Promise.all([data.loadYears(loaded.store, selected), Promise.all(selected.map(function (year) {
@@ -93,19 +103,42 @@ function createAggregateRenderer(loaded) {
       })
       .catch(function (error) {
         if (requestId !== aggregateRequestId) return;
-        renderResultWorkspace($result, { status: 'error', hasQuery: true, aggregates: [], error: error.message, selectedYears: years, resultLayout: state && state.resultLayout, filters: state && state.filters }, loaded.metadata, dispatch);
+        renderWorkspace({ status: 'error', hasQuery: true, aggregates: [], error: error.message }, years, state, dispatch);
       });
   };
 }
 
 /* ---------- 头部统计数字 ---------- */
-function initStats() {
+function initStats(repository, metadata) {
   data.uniqueMajors();
   $('stat-spec').textContent = String(data.MAPPING.length);
   $('stat-major').textContent = String(data.ALL_MAJORS.length);
   $('stat-score').textContent = '–';
   $('stat-school').textContent = '–';
   $('stat-plan').textContent = '–';
+  var latestYear = getLatestYear(metadata);
+  repository.ensureAnalytics(latestYear).then(function (analytics) {
+    var schools = new Set();
+    var plans = 0;
+    var scores = 0;
+    (analytics.majors || []).forEach(function (major) {
+      if (major.controlScore != null) scores += 1;
+      Object.values(major.schoolTypes || {}).forEach(function (type) {
+        (type.schools || []).forEach(function (school) {
+          if (school.schoolName) schools.add(school.schoolName);
+          if (school.hasOrdinaryPlan) plans += 1;
+          if (school.hasPovertyPlan) plans += 1;
+        });
+      });
+    });
+    $('stat-score').textContent = scores.toLocaleString();
+    $('stat-school').textContent = schools.size.toLocaleString();
+    $('stat-plan').textContent = plans.toLocaleString();
+  }).catch(function () {
+    $('stat-score').textContent = '暂不可用';
+    $('stat-school').textContent = '暂不可用';
+    $('stat-plan').textContent = '暂不可用';
+  });
 }
 
 function applyYearLabels(metadata) {
@@ -196,7 +229,7 @@ theme.applyTheme(theme.readThemeMode(), false);
 bootstrapData('metadata/school-data.json').then(function (loaded) {
   window.__henanReady = true;
   applyYearLabels(loaded.metadata);
-  initStats();
+  initStats(loaded.repository, loaded.metadata);
   var renderAggregates = createAggregateRenderer(loaded);
   var explorerController = explorer.initExplorer($('explorer'), loaded.metadata, {
     onYearChange: function (state) {

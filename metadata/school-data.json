@@ -37,7 +37,7 @@
       "exportLabel": "本科专业",
       "type": "string",
       "filterEnable": false,
-      "sortEnable": false,
+      "sortEnable": true,
       "tableShow": true,
       "exportEnable": true
     },
