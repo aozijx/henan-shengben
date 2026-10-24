@@ -9,6 +9,10 @@ coverage/
 *.log
 __pycache__/
 *.pyc
+# 原子替换和年度导入失败时可能遗留的临时产物
+*.json.new
+/.ingest-year-*/
+/data/.publish-*/
 # 官方站 WAF 会话 Cookie（本地借用，不入库）
 .waf-cookie
 # Superpowers 执行台账与临时评审包；正式设计和计划保留在 docs/superpowers/。

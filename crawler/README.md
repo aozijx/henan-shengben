@@ -1,30 +1,29 @@
 # 官方一分一段采集
 
-爬虫从 `data/year-links/YYYY.json` 读取年度和官方来源链接，并按年份确定性派生来源清单、下载、提取、归一化与报告路径。PDF 下载只允许 HTTPS 的 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和已验证的政府附件域名 `xcoss.henan.gov.cn`。
+采集器读取 `data/year-links/YYYY.json` 中的年份和官方来源链接。`discover.py` 从官方公告页生成一分一段 PDF 清单；`download.py` 读取这份清单并下载 PDF。清单和 PDF 路径由年份自动派生，下一步直接使用上一步的输出，无需手填每个专业的文件名。依赖见 `crawler/requirements.txt`。
 
-```powershell
-pip install -r crawler/requirements.txt
-python crawler/discover.py --years 2024 2025 2026
-python crawler/download.py
-python crawler/download.py --years 2026
-python crawler/download.py --seed data/year-links/2026.json --data-root data
-```
+## 参数
 
-未传 `--seed` 时，发现器和下载器读取 `--data-root/year-links/*.json`；`--years` 只保留所选年份。命令可以重复运行。SHA-256 一致的文件会跳过；失败响应、HTTP 跳转出白名单和非 PDF 内容都不会覆盖已有文件。
+| 入口 | 参数 | 作用 |
+| --- | --- | --- |
+| `discover.py`、`download.py` | `--seed PATH` | 指定一个年度链接文件，可重复传入；省略时读取 `--data-root/year-links/` 下所有年度文件。 |
+| `discover.py`、`download.py` | `--years YYYY …` | 只处理指定年份；省略时处理所选链接文件中的全部年份。 |
+| `discover.py`、`download.py` | `--data-root DIR` | 数据根目录，默认 `data`。 |
+| `download.py` | `--compact-url-fields` | 只清理清单中与原 PDF 地址等价的 `finalUrl`，不联网或重新下载。 |
+| `download.py` | `--major CODE` | 只下载或重试所选专业的 PDF；可重复传入，与 `--years` 配合缩小范围。 |
 
-## 官方站 WAF（瑞数动态安全）
+发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。允许的 HTTPS 域名包括 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和已验证的政府附件域名 `xcoss.henan.gov.cn`。
 
-公告页（`.shtml` 与 GovSearch）可能返回 403/412 挑战页，PDF 附件域（`/attach/file/`）不受影响，因此 `download.py` 通常无需处理。公告页有两种通过方式：
+`pdfUrl` 是公告页给出的地址。只有服务器真正跳转到另一地址时才记录 `finalUrl`；单纯的中文 URL 百分号编码差异不算跳转。清理旧清单的重复字段时，`--compact-url-fields` 只删除这种等价地址，保留真实跳转、哈希和其他来源信息。
 
-**自动引导（默认开启）**：首次遇到 403/412 时，会话自动调用 DrissionPage 拉起一个真实 Chromium（本机需装 Chrome 或 Edge）访问目标页，挑战通过后把 Cookie 与 UA 写回仓库根 `.waf-cookie` 并原地重试。需要 `pip install -r crawler/requirements.txt`；弹出的浏览器窗口在挑战期间不要关闭。`pipeline_config.py` 的 `WAF_AUTO_BOOTSTRAP = False` 可关闭。
+## 公告页访问受限
 
-**手动借用**：在浏览器打开任一公告页（确认非 412），开发者工具复制该请求 `Cookie` 请求头的完整值，保存到仓库根 `.waf-cookie`（已 gitignore，不会提交）。瑞数校验 Cookie 与 UA 的绑定关系，因此推荐存 JSON 格式 `{"userAgent": "浏览器UA", "cookie": "Cookie值"}`——会话会自动跟随文件内的 UA；存纯 Cookie 字符串则会话保持默认 UA，可能被 WAF 拒绝。
+官方公告页可能返回 403/412。默认开启自动引导：会话遇到挑战时会使用 DrissionPage 启动本机 Chrome 或 Edge，通过后把 Cookie 和浏览器标识写入仓库根目录的 `.waf-cookie`，然后重试原请求。安装 `crawler/requirements.txt` 中的依赖；挑战期间保持弹出的浏览器窗口打开。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
 
-Cookie 失效（再次 412）后重复对应步骤即可。
-# New-year source intake
+需要手动提供会话时，先在浏览器确认官方公告页可正常打开，再从该请求复制完整的 Cookie 请求头到 `.waf-cookie`。建议保存 JSON 对象，包含 `userAgent` 和 `cookie` 两个字段，以保持 Cookie 与浏览器标识一致。该文件已被 Git 忽略。会话失效后重新获取即可。
 
-Use `data/year-links/YYYY.json` as the human-maintained entry point. Each source role may provide an official `pageUrl` and, when page discovery is ambiguous, an exact official `attachmentUrl`. `searchPageUrl` is only used to discover a unique candidate. The ingest command rejects missing or ambiguous sources and validates page year/type before using attachments.
+## 新年度来源
 
-The official site may return an anti-bot response such as 403/412. In that case the command stops; add a precise official page or attachment URL to the seed and retry. Do not substitute a mirror URL. Download manifests retain source page, source URL, final URL, byte count and SHA-256. Failed responses never replace an existing file.
+`data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。`searchPageUrl` 只用于发现唯一的候选公告页。来源缺失、候选不唯一、网页不可访问，或网页年份及类型不匹配时，采集会停止；应修正官方链接配置后重试，不使用转载镜像。
 
-Run `python -m convert.ingest_year --seed data/year-links/YYYY.json --check` to validate and preview a year without publishing metadata. A successful `--check` can be published by rerunning without `--check` after reviewing the report. GitHub Actions performs the same check and uploads its report; it does not commit or merge generated data.
+新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。检查结果确认后去掉 `--check` 才发布。GitHub Actions 只执行检查并上传报告，不提交或合并生成数据。详细参数与审核规则见 [转换说明](../convert/README.md)。

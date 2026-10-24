@@ -1,8 +1,8 @@
 # 数据目录
 
-本目录按数据类型组织，类型目录内的规范 JSON 和官方 PDF 均以年份命名。除一分一段每年包含多份专业 PDF 外，不再以年份作为目录层级。
+本目录按数据类型组织。表格型规范 JSON 按年份命名；一分一段只有一套按专业代号分片的数据和一个年度索引。
 
-`year-links/YYYY.json` 是年度与官方来源 URL 的唯一人工配置。Python 工具从 seed、稳定命名约定和本地文件清单共同派生解析器、输入 PDF、规范输出、来源清单、提取结果和报告路径；来源 manifest、哈希与报告是审计产物，不是第二份配置。
+`year-links/YYYY.json` 是年度与官方来源 URL 的唯一人工配置。Python 工具从 seed、稳定命名约定和本地文件清单共同派生解析器、输入 PDF、规范输出、来源清单和报告路径；来源 manifest、哈希与报告是审计产物，不是第二份配置。
 
 | 目录 | 权威字段 | 规范数据 | 官方原始文件 |
 | --- | --- | --- | --- |
@@ -10,10 +10,16 @@
 | `省控线/` | 专业年度录取控制分数线 | `省控线_<年份>.json` | `原始PDF/省控线_<年份>.pdf` |
 | `招生计划/` | 院校、招生专业、计划人数、学费等 | `招生计划_<年份>.json` | `原始PDF/招生计划_<年份>.pdf` |
 | `招生高校及专业/` | 招生计划缺失字段的回退信息 | `招生高校及专业_<年份>.json` | `原始PDF/招生高校及专业_<年份>.pdf` |
-| `一分一段/` | 分数、累计人数 | `一分一段_<年份>.json` | `原始PDF/<年份>/*.pdf` |
+| `一分一段/` | 分数、累计人数、处理状态 | `一分一段_<年份>.json` 索引和 `<年份>/<专业代号>.json` 唯一分片；OCR、规范化、修正和重试都写入这套文件 | `原始PDF/<年份>/*.pdf` |
 | `来源清单/` | 来源页面、下载 URL、哈希和转换状态 | `来源清单_<年份>.json` | 不适用 |
 | `reports/` | 转换异常与字段冲突 | `转换报告_<年份>.json` | 不适用 |
 | `schemas/` | 数据契约 | `*.schema.json` | 不适用 |
+
+## 一分一段存储说明
+
+一分一段年度索引只引用 `一分一段/<年份>/<专业代号>.json`。OCR 识别结果先写临时文件，校验后原子覆盖专业分片；`needs-review` 状态及错误原因也保存在该专业分片中，单专业重试从官方 PDF 重做并更新同一文件。
+
+浏览器直接读取规范索引和规范专业分片，不再复制一套分数数据。图表所需的本段人数由相邻累计人数相减得出，不落盘为重复字段。`generated/<年份>/<版本>/analytics.json` 只保存院校与计划的年度汇总；`convert.segment_store` 仅在明确指定新输出路径时导出合并副本。转换报告供 catalog 校验，异常报告供人工复核。
 
 ## 来源和冲突规则
 
@@ -23,11 +29,11 @@
 
 ## 新增年度的发布清单
 
-先完成来源清单、原始 PDF、转换报告和规范 JSON 的核对，再运行 `python -m convert.refresh_catalog`。工具扫描每年的专业对照、省控线、招生计划、一分一段和转换报告，核对年份、专业代号、控制线、计划和 PDF 来源哈希，然后在 `generated/<年份>/<输入摘要>/` 生成 analytics、专业分片和索引，在 `generated/catalog/` 生成含输入 SHA-256 的版本化索引表。analytics 保留每个专业的控制线，以及按办学性质汇总的院校、普通/专项计划和轻量的逐校汇总，以支持查询预览时准确去重；院校逐条招生计划仍在展开详情后读取。所有生成物校验通过后，最后原子替换 `metadata/school-data.json`。旧版本文件保持不变，所以中途失败不会改变旧页面的数据入口。旧年度借用其他年份对照须在 `metadata/school-data.template.json` 的 `mappingReferences` 中明确声明；新增年份必须有该年自己的专业对照。2024、2025 暂借用 2026 对照。
+先完成来源清单、原始 PDF、转换报告和规范分片的核对，再运行 `convert.refresh_catalog`。它从年度配置和上一阶段输出自动定位输入，逐个校验专业路径、分片 SHA-256、专业身份、源 PDF 哈希、分数顺序和累计人数；再核对省控线、计划与 OCR 审核状态。任何输入变化都重新执行完整发布前校验。校验通过后，只在 `generated/<年份>/<输入摘要>/` 生成供浏览器按需加载的 analytics，并在 `generated/catalog/` 生成版本化元数据索引，最后原子替换 `metadata/school-data.json`。页面的一分一段索引和专业分片直接使用规范文件，不再复制生成。2024、2025 暂借用 2026 专业对照，来源声明在 `metadata/school-data.template.json` 的 `mappingReferences`。
 
 页面的年份弹窗、聚合卡片、表格列、预览和 CSV 都从 metadata 的年份集合读取。不要通过复制页面字段或修改 JS 来“接入”新年度；数据文件和 metadata 才是年度边界。业务原始数据、转换产物和查询结果也不得写入浏览器 localStorage。
-# Adding a year
+## 新增年度
 
-Create `data/year-links/YYYY.json` with the official search page and any known exact announcement or attachment URLs. A source entry uses one of these six roles: `scoreSegments`, `scorelines`, `plans`, `mappingCodeTable`, `mappingOverview`, or `master`; each role accepts `pageUrl` and `attachmentUrl`. The resolver may fill a missing page from a unique official search result. It stops when the source is absent, ambiguous, inaccessible or does not match the requested year and type. The `master` role is the separate admissions college/major master list, not the detailed school plan table. Its PDF may be hosted on the verified `xcoss.henan.gov.cn` government attachment host.
+在 `data/year-links/YYYY.json` 填写官方检索页，以及已确认的公告页或附件地址。六种来源角色为 `scoreSegments`、`scorelines`、`plans`、`mappingCodeTable`、`mappingOverview` 和 `master`；每项可用 `pageUrl` 指定公告页、用 `attachmentUrl` 指定附件。缺少公告页时，解析器只接受官方检索结果中唯一且符合年份、类型的候选。`master` 是招生高校及专业总表，与详细招生计划不同，其 PDF 可以位于已验证的政府附件域名 `xcoss.henan.gov.cn`。
 
-Run the command in `convert/README.md` with `--check` first. Inspect the provenance and coverage report, correct the seed or OCR data as needed, then run without `--check` to publish. Existing yearly files are retained and metadata is replaced last. A duplicate year, inaccessible official page (including HTTP 412), missing attachment, unresolved OCR review, or conflicting existing canonical output stops publication; metadata remains the current pointer. Do not substitute an unofficial mirror or directly edit published generated indexes. Keep each year's own mapping; do not add a new year to `mappingReferences` as a fallback. See `convert/README.md` for review, retry, correction and rollback steps.
+`convert.ingest_year` 的 `--seed` 指向年度链接文件；先加 `--check` 在暂存目录核验来源和覆盖情况，确认后去掉该参数发布。重复年份、无法访问的公告页（包括 HTTP 412）、附件缺失、OCR 待审核或现有规范数据冲突都会阻止发布，metadata 保持原指向。应修正官方链接配置或有证据的 OCR 修正，不能替换为非官方转载地址，也不要直接修改已发布的索引。每年应使用本年专业对照，不把新增年度加入 `mappingReferences` 作为回退。参数、重试和回滚规则见 [转换说明](../convert/README.md)。

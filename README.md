@@ -39,9 +39,9 @@ henan-shengben/
 │   ├── 招生计划/           # 招生计划_<年份>.json + 原始PDF/
 │   ├── 招生高校及专业/     # 招生高校及专业_<年份>.json + 原始PDF/
 │   └── README.md           # 命名、权威来源和冲突处理规则
-├── tools/
-│   └── convert.py          # PDF → JSON 重新抽取与校验脚本（python tools/convert.py 校验，--write 写回）
-├── convert/refresh_catalog.py # 扫描规范数据、生成年度索引和分析分片
+├── convert/                # PDF 抽取、OCR、归一化、年度导入与报告
+├── convert/segment_store.py   # 一分一段专业分片读写及显式合并
+├── convert/refresh_catalog.py # 校验规范分片、生成浏览器索引和分析分片
 ├── tests/                  # Node 内置测试：元数据、流水线、预览、导出与年度升级
 ├── 转换说明.md             # PDF → JSON 的转换方式与核验结果
 └── README.md
@@ -57,6 +57,16 @@ python -m http.server 8000
 ```
 
 数据通过相对路径从 `data/` 目录读取，请保持目录结构完整。
+
+## 数据更新（一条命令）
+
+新增年度时，先在 `data/year-links/YYYY.json` 登记官方来源。下面这一条命令会自动解析公告页、下载 PDF、抽取表格、识别一分一段、生成分片和审计报告、校验数据并更新 catalog 与 metadata：
+
+```powershell
+python -m convert.ingest_year --seed data/year-links/YYYY.json
+```
+
+首次运行建议加 `--check` 先预览；检查模式只在暂存目录处理并输出摘要，不发布数据。默认输出简短统计和异常；需要完整来源及逐专业明细时加 `--full-report`。`--seed` 必须指向尚未发布的新年度；现有年度不能用导入入口覆盖。参数和各阶段说明见 [convert/README.md](convert/README.md)。
 
 运行自动化测试：
 
@@ -101,12 +111,12 @@ npm test
 
 ## 元数据与年度维护
 
-`metadata/school-data.template.json` 保存手写的页面字段、默认 UI 配置和旧年度对照借用声明；`metadata/school-data.json` 是自动生成、供页面读取的发布入口。`python -m convert.refresh_catalog` 从规范数据与转换报告生成年度来源字段和 v3 metadata。新增年度须先获得该年的专业对照。2024、2025 暂时使用 2026 对照，`mappingReferenceYear` 明示这个替代来源。启动仅读取 metadata 与默认查询索引；查询预览和数据分析按所选年份读取轻量 analytics，展开院校详情时才读取完整招生计划，勾选专业后才读取该专业的一分一段分片。数据分析页可同时勾选多个本科专业，完整列表分页展示，TOP 图仍固定前 15。
+`metadata/school-data.template.json` 保存手写的页面字段、默认 UI 配置和旧年度对照借用声明；`metadata/school-data.json` 是自动生成、供页面读取的发布入口。`python -m convert.refresh_catalog` 从规范分片索引与转换报告生成年度来源字段和 v3 metadata。新增年度须先获得该年的专业对照。2024、2025 暂时使用 2026 对照，`mappingReferenceYear` 明示这个替代来源。启动仅读取 metadata 与默认查询索引；查询预览和数据分析按所选年份读取轻量 analytics，展开院校详情时才读取完整招生计划，勾选专业后直接读取规范的一分一段分片。图表所需的本段人数由相邻累计人数计算，不再保存重复专业文件。数据分析页可同时勾选多个本科专业，完整列表分页展示，TOP 图仍固定前 15。
 
 原有说明中的年度字段配置如下：
 
 - `supportedYears`、`defaultYear`：可用年份与默认年份；`uiDefaults` 指定默认全选策略和结果布局；
-- `yearSources`：每年生成 `mappingSource`、`queryIndexSource`、`scoreSource`、`planSource`、`scoreSegmentSource`、`analyticsSource`、`scoreSegmentIndexSource` 和 `scoreSegmentShardTemplate`；`collegeFallbackSource` 可选；
+- `yearSources`：每年含 `mappingSource`、`queryIndexSource`、`scoreSource`、`planSource` 和指向规范一分一段索引/分片的 `scoreSegmentSource`、`scoreSegmentIndexSource`、`scoreSegmentShardTemplate`；`analyticsSource` 指向生成的轻量院校汇总；`collegeFallbackSource` 可选；
 - `fields`：每个字段包含 `key`、页面 `label`、`exportLabel`、`type`，并通过 `filterEnable`、`sortEnable`、`tableShow`、`exportEnable` 控制用途；枚举字段声明 `enumValues`，数值字段可声明 `min` / `max`；
 - `yearFieldTemplates`：按 `supportedYears` 展开省控线、院校数和计划人数列，避免为新年份手写字段；
 - `resultVisibilityRules`：根据当前筛选条件隐藏结果区字段。例如建档立卡筛选为“否”时隐藏专项计划标签；院校详情同时只保留普通计划条目；

@@ -2,24 +2,35 @@
 
 转换层只读取 `data/year-links/YYYY.json` 的年度身份与官方来源链接。清单、PDF、提取、规范数据和报告路径由共享构造器按年份派生，不在多个 CLI 或 JSON 文件中重复维护。
 
-一分一段 PDF 没有文本层，是整页扫描图。流水线先由 `pdfplumber` 读取页码和内嵌图片，再由 RapidOCR 识别表格数字，最后通过纯解析器检查分数唯一性及累计人数单调性。快速识别违反约束时会自动逐单元格重试；仍无法确认的数字写入 `issues`，不会被静默补造。全量模式默认使用 4 个工作进程，并限制每个 OCR 引擎的线程数，避免 CPU 过度争用；并发参数统一在根目录 `pipeline_config.py` 配置，CLI `--workers` 可临时覆盖。
+一分一段 PDF 没有文本层，是整页扫描图。流水线先由 `pdfplumber` 读取页码和内嵌图片，再由 RapidOCR 识别表格数字，最后通过纯解析器检查分数唯一性及累计人数单调性。快速识别违反约束时会自动逐单元格重试；仍无法确认的数字写入 `issues`，不会被静默补造。OCR 并发默认读取根目录 `pipeline_config.py`，CLI `--workers` 可临时覆盖。多进程按完成顺序显示进度，但年度索引仍按来源清单顺序保存。流式消费有利于及时显示结果和减少待处理对象，OCR 耗时仍主要由图像识别决定。
 
-```powershell
-python -m pip install -r convert/requirements.txt
-python -m convert.convert_all --dataset score-segments --year 2026
-python -m convert.convert_all --dataset score-segments --year 2026 --major 01
-python -m convert.issue_reports
-python -m convert.normalize --years 2024 2025 2026
-python -m unittest discover -s convert/tests -v
-```
+依赖见 `convert/requirements.txt`。所有命令从仓库根目录用 `python -m convert.<模块>` 调用；`--help` 可查看当前参数。各入口的主要参数如下：
 
-年度中间结果写入约定的 `一分一段/提取结果/提取结果_<年份>.json`。`status: needs-review` 的专业不能直接进入前端；下一阶段会结合官方专业对照、省控线和跨表约束完成权威归一化与冲突报告。
+| 模块 | 参数 | 用途 |
+| --- | --- | --- |
+| `convert_all` | `--year YYYY`（可重复） | 限定转换年度；省略时处理所有 seed 年度。 |
+| `convert_all` | `--major CODE`（可重复） | 只转换指定专业，保留同年其他分片。代号必须在来源清单中。 |
+| `convert_all` | `--retry-review` | 只重试现有索引中 `needs-review` 的专业；不可与 `--major` 同用。 |
+| `convert_all` | `--verbose` | 默认只打印待审专业和年度汇总；加此项显示每个专业的完成状态。 |
+| `convert_all` | `--workers N` | 覆盖 `pipeline_config.py` 的 OCR 进程数。 |
+| `convert_all` | `--dataset NAME`、`--data-root PATH` | 指定数据集（当前为 `score-segments`）和数据根目录。 |
+| `issue_reports` | `--years YYYY …`、`--full-report` | 限定年份；默认只保留可疑 OCR 行及上下文，完整 OCR 行仅在完整报告中写入。 |
+| `normalize` | `--years YYYY …`、`--full-report` | 限定年份；默认转换报告省略成功专业的逐条权威解析。 |
+| `segment_store` | `--year YYYY --output NEW_PATH` | 核对规范索引和分片哈希后导出合并副本；拒绝覆盖已有路径。 |
+| `ingest_year` | `--seed YEAR_LINKS --check` | 在暂存目录核验新年度，不发布。去掉 `--check` 才发布。 |
+| `ingest_year` | `--full-report` | 默认输出导入摘要和异常；加此项显示来源溯源与逐专业明细。 |
+| `crawler.download` | `--major CODE`（可重复） | 只下载或重试指定专业的官方 PDF，可与年份筛选一起使用。 |
+| 各入口 | `--data-root PATH` | 改用指定数据根目录，适合隔离演练。 |
 
-批量转换、归一化和异常报告均枚举 `data/year-links/*.json`，再使用同一个年度派生视图；`--years` 只筛选 seed，不扫描未声明年份。转换空清单也会生成完整的零计数结果，便于自动化流程稳定处理。旧 `--registry` 参数会明确报迁移错误，不会静默读取陈旧链接。
+一分一段只有一套持久化分片：年度索引 `一分一段/一分一段_<年份>.json` 和专业文件 `一分一段/<年份>/<专业代号>.json`。OCR 直接写这套分片；`normalize` 在同一文件补齐规范字段，确认修正也直接覆盖对应专业文件。每次写入先写临时文件再原子替换，索引保存分片 SHA-256。`needs-review` 保留在同一分片和索引中，但不会进入浏览器展示。单专业 `--major` 只重算该专业，`--retry-review` 只重算索引里待审的专业；两者不能同时使用。日志含完成数、专业代号和名称、错误码及原因。
 
-异常报告写入 `data/reports/异常数据_<年份>.json`，人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖；转换器仅应用其中 `status: confirmed` 的修正。
+合并命令仅用于临时导出，不参与处理链；日常转换、复核、重试和 catalog 都使用同一套规范分片。
 
-归一化结果写入 `一分一段/一分一段_<年份>.json`，转换报告写入 `reports/转换报告_<年份>.json`。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业；官方空表通过人工文件的 `official-empty` 状态显式记录，但不伪造分数段。
+批量转换、归一化和异常报告均枚举 `data/year-links/*.json`，再使用同一个年度派生视图；年份参数只筛选 seed，不扫描未声明年份。转换空清单也会生成完整的零计数结果，便于自动化流程稳定处理。
+
+异常报告写入 `data/reports/异常数据_<年份>.json`，默认保留错误、可疑 OCR 行及上下文；只有 `issue_reports --full-report` 才附带每个待审专业的完整 OCR 行。人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖。确认修正后重新运行 `python -m convert.issue_reports`：它只复核待审专业，将 `status: confirmed` 的修正直接应用并覆盖对应规范分片；`official-empty` 不作为待审异常，也不会生成分数段。这样无需重跑全量 OCR 或再次运行 `normalize`。
+
+转换报告写入 `reports/转换报告_<年份>.json`。默认只保留 catalog 校验所需的计数、阻塞项、异常解析、官方空表和来源未列出记录；只有 `normalize --full-report` 才附带成功专业的逐条解析。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业。官方分数段清单未列出的代号会写入 `sourceUnavailable` 并附官方清单地址，不生成虚假分数段；catalog 只接受此类代号与省控线未覆盖清单完全一致。官方 PDF 明确为空表的情况仍通过人工文件的 `official-empty` 状态记录。
 
 ## 新年度链接导入
 
@@ -40,15 +51,6 @@ python -m unittest discover -s convert/tests -v
 }
 ```
 
-先执行 `python -m convert.ingest_year --seed data/year-links/YYYY.json --check`，检查 JSON 报告中的来源 URL/最终 URL/哈希、转换行数、覆盖情况和 metadata diff。检查模式只在临时目录生成结果，不写入 `data/` 或 metadata。人工确认后，去掉 `--check` 发布；已有年份会被拒绝，不能用此命令重跑覆盖。若发现官方网页返回 403/412、来源不唯一或缺附件，导入会失败且保留当前 metadata；不要用学校转载链接绕过官方来源校验。可先补齐或修正官方链接种子，再重试。当前命令要求官方公告页可读取；直接本地 PDF 离线导入尚未支持。
+`ingest_year` 的 `--seed` 指向新年度链接配置；首次运行附加 `--check`，默认摘要包含来源数量、转换计数、阻塞项和 metadata diff。加 `--full-report` 可输出所有来源 URL、实际跳转 URL（如有）、哈希和逐专业解析。检查模式只在临时目录生成结果，不写入 `data/` 或 metadata。人工确认后，去掉 `--check` 发布；已有年份会被拒绝，不能用此入口重跑覆盖。若发现官方网页返回 403/412、来源不唯一或缺附件，导入会失败且保留当前 metadata；先补齐或修正官方链接配置，再重试。当前入口要求官方公告页可读取；直接本地 PDF 离线导入尚未支持。
 
 PDF/OCR 产生 `needs-review` 或字段冲突时，不发布。按 `data/reports/README.md` 审阅异常，并仅在 `data/一分一段/人工修正.json` 中添加有官方依据的确认修正，然后重新执行 `--check`。成功发布后，生成物按版本不可变；若需回滚，使用版本控制回退该年度发布提交（包括 metadata 和新增数据），不要手工覆盖旧 catalog 或 shard。
-# Automated yearly ingestion
-
-After adding an official source seed at `data/year-links/YYYY.json`, run:
-
-```powershell
-python -m convert.ingest_year --seed data/year-links/YYYY.json --check
-```
-
-Review source provenance, row counts, score-segment coverage and the metadata diff. If all sources and OCR rows are confirmed, rerun without `--check` to publish the yearly canonical JSON, versioned analytics/index/shards and metadata. Existing years cannot be re-ingested by this command. Resolve OCR issues through the normal conversion review/correction process before publishing.
