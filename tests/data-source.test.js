@@ -22,7 +22,7 @@ function metadata() {
     supportedYears: [2027],
     yearSources: { 2027: {
       queryIndexSource: 'index.json', mappingSource: 'mapping.json', scoreSource: 'scores.json',
-      planSource: 'plans.json', scoreSegmentSource: 'segments.json'
+      planSource: 'plans.json', scoreSegmentShardTemplate: 'shards/{majorCode}.json'
     } }
   };
 }
@@ -53,7 +53,7 @@ test('retry evicts a failed URL and requests it again', async () => {
     attempt += 1;
     return attempt === 1 ? { ok: false, status: 503 } : { ok: true, json: async () => [] };
   });
-  await assert.rejects(repository.ensureScoreSegments(2027), /segments\.json.*503/);
-  await repository.retry('segments.json');
+  await assert.rejects(repository.ensureScoreSegment(2027, '51'), /shards\/51\.json.*503/);
+  await repository.retry('shards/51.json');
   assert.equal(attempt, 2);
 });

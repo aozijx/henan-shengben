@@ -32,7 +32,6 @@ export function createDataRepository(metadata, fetchImpl) {
     ensureMapping: function (year) { return load(sourceFor(metadata, year, 'mappingSource')); },
     ensureScores: function (year) { return load(sourceFor(metadata, year, 'scoreSource')); },
     ensurePlans: function (year) { return load(sourceFor(metadata, year, 'planSource')); },
-    ensureScoreSegments: function (year) { return load(sourceFor(metadata, year, 'scoreSegmentSource')); },
     ensureAnalytics: function (year) { return load(sourceFor(metadata, year, 'analyticsSource')); },
     ensureScoreSegmentIndex: function (year) { return load(sourceFor(metadata, year, 'scoreSegmentIndexSource')); },
     ensureScoreSegment: function (year, majorCode) {
