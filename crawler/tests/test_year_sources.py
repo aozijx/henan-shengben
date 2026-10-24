@@ -53,6 +53,24 @@ class SearchSession(FakeSession):
 
 
 class YearSourcesTests(unittest.TestCase):
+    def test_historical_year_links_are_the_authoritative_seed_inputs(self):
+        data_root = Path(__file__).resolve().parents[2] / 'data' / 'year-links'
+        seeds = {year: load_year_links(data_root / f'{year}.json') for year in (2024, 2025, 2026)}
+        self.assertEqual({year: seed['year'] for year, seed in seeds.items()},
+                         {2024: 2024, 2025: 2025, 2026: 2026})
+        self.assertEqual(seeds[2024]['sources']['scoreSegments']['pageUrl'],
+                         'https://www.haeea.cn/a/202404/43297_fd486546.shtml')
+        self.assertEqual(seeds[2024]['sources']['scorelines']['attachmentUrl'],
+                         'https://www.haeea.cn/attach/file/20240419/20240419145153_4343_bed9ca9e.pdf')
+        self.assertEqual(seeds[2025]['searchPageUrl'],
+                         'https://www.haeea.cn/govsearch?page=1&words=%E5%88%86%E6%95%B0%E6%AE%B5%E7%BB%9F%E8%AE%A1%E8%A1%A8')
+        self.assertEqual(seeds[2025]['sources']['scorelines']['attachmentUrl'],
+                         'https://www.haeea.cn/attach/file/20250402/20250402075042_5843_f6e5d888.pdf')
+        self.assertEqual(seeds[2026]['sources']['scoreSegments']['pageUrl'],
+                         'https://www.haeea.cn/a/202604/43664_744774c0.shtml')
+        self.assertEqual(seeds[2026]['sources']['scorelines']['attachmentUrl'],
+                         'https://www.haeea.cn/attach/file/20260409/20260409072504_5957_16c52a46.pdf')
+
     def setUp(self):
         self.seed = {
             'year': 2027,
