@@ -11,7 +11,7 @@
 | `convert_all` | `--year YYYY`（可重复） | 限定转换年度；省略时处理所有 seed 年度。 |
 | `convert_all` | `--major CODE`（可重复） | 只转换指定专业，保留同年其他分片。代号必须在来源清单中。 |
 | `convert_all` | `--retry-review` | 只重试现有索引中 `needs-review` 的专业；不可与 `--major` 同用。 |
-| `convert_all` | `--verbose` | 默认只打印待审专业和年度汇总；加此项显示每个专业的完成状态。 |
+| `convert_all` | `--verbose` | 默认每完成约 5% 打印一次进度，并立即列出待审专业；加此项显示每个专业的完成状态。 |
 | `convert_all` | `--workers N` | 覆盖 `pipeline_config.py` 的 OCR 进程数。 |
 | `convert_all` | `--dataset NAME`、`--data-root PATH` | 指定数据集（当前为 `score-segments`）和数据根目录。 |
 | `issue_reports` | `--years YYYY …`、`--full-report` | 限定年份；默认只保留可疑 OCR 行及上下文，完整 OCR 行仅在完整报告中写入。 |

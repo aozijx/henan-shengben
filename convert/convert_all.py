@@ -88,11 +88,15 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
             yield from (_convert_entry(item) for item in arguments)
 
     majors = []
+    progress_interval = max(1, (len(entries) + 19) // 20)
     for position, item in enumerate(_converted(), start=1):
         problem = '；'.join(f"{issue['code']}: {issue.get('message', '')}" for issue in item['issues'])
         if verbose or retry_review or item['status'] != 'ok':
             print(f"[{target['year']}] 完成 {position}/{len(entries)} {item['majorCode']} {item['majorName']} "
                   f"{item['status']}{' — ' + problem if problem else ''}", flush=True)
+        elif position % progress_interval == 0 or position == len(entries):
+            percent = position * 100 // len(entries)
+            print(f"[{target['year']}] OCR 进度 {position}/{len(entries)}（{percent}%）", flush=True)
         majors.append(item)
     if (major_codes or retry_review) and existing:
         replacements = {item["majorCode"]: item for item in majors}
