@@ -72,7 +72,10 @@ export function chartPalette() {
     ink: g('--ink') || '#17222e',
     muted: g('--muted') || '#5b6b7a',
     faint: g('--faint') || '#8b99a6',
+    surface: g('--card') || '#ffffff',
+    line: g('--line') || '#d9e0e7',
     grid: g('--chart-grid') || '#edf0f3',
+    fontFamily: g('--sans') || 'sans-serif',
     trends: [1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
       return g('--trend-' + i) || FALLBACK_TRENDS[i - 1];
     })

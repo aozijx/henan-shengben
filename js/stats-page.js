@@ -3,6 +3,7 @@ import { buildCurve, lookupScoreSegmentCode } from './score-curves.js';
 import { esc } from './utils.js';
 import { buildPaginationHtml, paginate } from './preview.js';
 import { hiddenResultFields, resultFieldVisible } from './result-visibility.js';
+import { chartPalette } from './theme.js';
 
 var chartInstances = {};
 var selectedCodes = new Set();
@@ -12,12 +13,45 @@ var curveGeneration = 0;
 var context = null;
 function majorKey(major) { return major.majorCode + '|' + major.majorName; }
 
+function themedAxis(axis, palette) {
+  if (!axis) return axis;
+  var result = { ...axis };
+  result.axisLabel = { color: palette.muted, ...(axis.axisLabel || {}) };
+  result.nameTextStyle = { color: palette.faint, ...(axis.nameTextStyle || {}) };
+  result.axisLine = { ...(axis.axisLine || {}), lineStyle: { color: palette.line, ...((axis.axisLine || {}).lineStyle || {}) } };
+  result.axisTick = { ...(axis.axisTick || {}), lineStyle: { color: palette.line, ...((axis.axisTick || {}).lineStyle || {}) } };
+  result.splitLine = { ...(axis.splitLine || {}), lineStyle: { color: palette.grid, ...((axis.splitLine || {}).lineStyle || {}) } };
+  return result;
+}
+
+function themedOption(option) {
+  var palette = chartPalette();
+  var result = { ...option, textStyle: { color: palette.ink, fontFamily: palette.fontFamily, ...(option.textStyle || {}) } };
+  if (option.tooltip) {
+    var axisPointer = option.tooltip.axisPointer || {};
+    result.tooltip = { ...option.tooltip, backgroundColor: palette.surface, borderColor: palette.line,
+      textStyle: { color: palette.ink, fontFamily: palette.fontFamily, ...((option.tooltip || {}).textStyle || {}) },
+      axisPointer: { ...axisPointer,
+        label: { color: palette.ink, backgroundColor: palette.surface, borderColor: palette.line, ...(axisPointer.label || {}) } } };
+  }
+  if (option.legend) {
+    result.legend = Array.isArray(option.legend) ? option.legend.map(function (legend) {
+      return { ...legend, textStyle: { color: palette.muted, ...(legend.textStyle || {}) } };
+    }) : { ...option.legend, textStyle: { color: palette.muted, ...(option.legend.textStyle || {}) } };
+  }
+  if (option.xAxis) result.xAxis = Array.isArray(option.xAxis)
+    ? option.xAxis.map(function (axis) { return themedAxis(axis, palette); }) : themedAxis(option.xAxis, palette);
+  if (option.yAxis) result.yAxis = Array.isArray(option.yAxis)
+    ? option.yAxis.map(function (axis) { return themedAxis(axis, palette); }) : themedAxis(option.yAxis, palette);
+  return result;
+}
+
 function draw(id, option) {
   var el = document.getElementById(id);
   if (!el || !window.echarts) return false;
   if (chartInstances[id]) chartInstances[id].dispose();
   chartInstances[id] = window.echarts.init(el);
-  chartInstances[id].setOption(option);
+  chartInstances[id].setOption(themedOption(option));
   return true;
 }
 
