@@ -26,4 +26,4 @@
 
 `data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。`searchPageUrl` 只用于发现唯一的候选公告页。来源缺失、候选不唯一、网页不可访问，或网页年份及类型不匹配时，采集会停止；应修正官方链接配置后重试，不使用转载镜像。
 
-新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。检查结果确认后去掉 `--check` 才发布。GitHub Actions 只执行检查并上传报告，不提交或合并生成数据。详细参数与审核规则见 [转换说明](../convert/README.md)。
+新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。检查结果确认后去掉 `--check` 才发布。GitHub Actions 只执行检查并上传报告，不提交或合并生成数据。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。
