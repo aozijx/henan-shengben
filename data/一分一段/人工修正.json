@@ -102,6 +102,36 @@
       "evidenceNote": "省控线98；右列相邻分数100，OCR将98误识别为985。"
     },
     {
+      "issueId": "2026-53",
+      "year": 2026,
+      "majorCode": "53",
+      "majorName": "网络工程",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 2, "rowIndex": 42, "columnIndex": 2, "value": "80"}],
+      "replacementSegments": [],
+      "evidenceNote": "省控线80；右列相邻分数81，OCR将80误识别为805。"
+    },
+    {
+      "issueId": "2026-60",
+      "year": 2026,
+      "majorCode": "60",
+      "majorName": "城乡规划",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 2, "rowIndex": 42, "columnIndex": 2, "value": "99"}],
+      "replacementSegments": [],
+      "evidenceNote": "省控线99；右列相邻分数100，OCR将99误识别为995。"
+    },
+    {
+      "issueId": "2026-A4",
+      "year": 2026,
+      "majorCode": "A4",
+      "majorName": "人力资源管理",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 2, "rowIndex": 42, "columnIndex": 2, "value": "119"}],
+      "replacementSegments": [],
+      "evidenceNote": "省控线119；右列相邻分数120，OCR将119误识别为1195。"
+    },
+    {
       "issueId": "2026-N8",
       "year": 2026,
       "majorCode": "N8",
@@ -110,6 +140,26 @@
       "cellOverrides": [],
       "replacementSegments": [],
       "evidenceNote": "官方PDF仅含水印、无分数表，且2026省控线表无N8记录；作为官方空表保留，不生成分数段。"
+    },
+    {
+      "issueId": "2026-P8",
+      "year": 2026,
+      "majorCode": "P8",
+      "majorName": "工业设计",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 1, "rowIndex": 15, "columnIndex": 2, "value": "81"}],
+      "replacementSegments": [],
+      "evidenceNote": "省控线81；右列相邻分数82，OCR漏识别最低分81。"
+    },
+    {
+      "issueId": "2026-T4",
+      "year": 2026,
+      "majorCode": "T4",
+      "majorName": "智能工程与创意设计",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 1, "rowIndex": 15, "columnIndex": 2, "value": "80"}],
+      "replacementSegments": [],
+      "evidenceNote": "省控线80；右列相邻分数81，OCR将80误识别为805。"
     }
   ]
 }
