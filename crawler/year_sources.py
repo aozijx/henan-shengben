@@ -189,6 +189,22 @@ def _search_candidates(seed: dict, session) -> dict[str, set[str]]:
     return candidates
 
 
+def resolve_score_segment_target(seed: dict, session) -> CrawlTarget:
+    """Resolve the one score-segment announcement needed by the crawler."""
+    explicit = seed.get('sources', {}).get('scoreSegments', {}).get('pageUrl')
+    if explicit:
+        return crawl_target_for_seed(seed)
+    candidates = _search_candidates(seed, session).get('scoreSegments', set())
+    candidates = {url for url in candidates if _official_page(url)}
+    if len(candidates) != 1:
+        raise SourceResolutionError(
+            f"{seed['year']} scoreSegments: expected one official page, found {len(candidates)}; add an exact pageUrl")
+    resolved = dict(seed)
+    resolved['sources'] = dict(seed.get('sources', {}))
+    resolved['sources']['scoreSegments'] = {'pageUrl': next(iter(candidates))}
+    return crawl_target_for_seed(resolved)
+
+
 def _page_attachments(page_url: str, session, year: int) -> list[tuple[str, str]]:
     response = session.get(page_url, timeout=60)
     response.raise_for_status()

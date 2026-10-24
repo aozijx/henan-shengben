@@ -66,7 +66,7 @@
 
 ### Task 5: Action and end-to-end acceptance
 
-- [ ] Test PR and workflow-dispatch paths both pass the selected seed(s) into the same `convert.ingest_year --check` code path.
-- [ ] Verify 2024–2026 seed-only offline target derivation and the synthetic 2027 full ingest/publication flow, including fail-closed 412 and metadata byte identity.
-- [ ] Run crawler and convert suites, `npm test`, workflow YAML parsing and `git diff --check`.
-- [ ] Compare hashes of existing canonical files, raw PDFs, manual corrections, source manifests and metadata before/after; commit the seed migration in reviewable batches.
+- [x] Test PR and workflow-dispatch paths both pass the selected seed(s) into the same `convert.ingest_year --check` code path.
+- [x] Verify 2024–2026 seed-only offline target derivation and the synthetic 2027 full ingest/publication flow, including fail-closed 412 and metadata byte identity.
+- [x] Run crawler and convert suites, `npm test`, workflow YAML parsing and `git diff --check`.
+- [x] Compare hashes of existing canonical files, raw PDFs, manual corrections, source manifests and metadata before/after; commit the seed migration in reviewable batches.

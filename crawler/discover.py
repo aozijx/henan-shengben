@@ -34,6 +34,9 @@ MAJOR_PATTERN = re.compile(r'[（(]([0-9A-Z]{2})([^（）()]+)[）)]', re.IGNORE
 
 def discover_year(target, html, base_url=None):
     soup = BeautifulSoup(html or '', 'html.parser')
+    page_text = soup.get_text(' ', strip=True)
+    if str(target.year) not in page_text or not any(marker in page_text for marker in ('分数段', '一分一段')):
+        raise DiscoveryBlockedError(f'{target.year} 页面年份或类型不匹配，停止发现 PDF')
     found = {}
     for link in soup.find_all('a', href=True):
         url = urljoin(base_url or target.source_page_url, link['href'])
@@ -69,14 +72,16 @@ def main():
     parser.add_argument('--years', nargs='*', type=int)
     parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
-    from crawler.year_sources import load_seed_targets
+    from crawler.year_sources import load_year_links, resolve_score_segment_target
     seed_paths = args.seed or sorted((args.data_root / 'year-links').glob('*.json'))
-    targets = load_seed_targets(seed_paths, set(args.years) if args.years else None)
-    if not targets:
+    seeds = [load_year_links(path) for path in seed_paths]
+    seeds = [seed for seed in seeds if not args.years or seed['year'] in set(args.years)]
+    if not seeds:
         parser.error('no matching year-links seeds')
     session = requests.Session()
     session.headers['User-Agent'] = 'henan-shengben-data/1.0'
-    for target in targets:
+    for seed in seeds:
+        target = resolve_score_segment_target(seed, session)
         response = session.get(target.discovery_url, timeout=60)
         response.raise_for_status()
         entries = discover_year(target, response.text)
