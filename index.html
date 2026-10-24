@@ -129,9 +129,11 @@
 
     <!-- ========== 视图：数据分析 ========== -->
     <section class="view" id="view-stats" role="tabpanel" hidden>
-      <h2 class="view-title">数据分析</h2>
+      <div class="stats-heading-row">
+        <h2 class="view-title">数据分析</h2>
+        <button type="button" id="stats-edit-filters" aria-label="调整年份与筛选条件">年份与筛选</button>
+      </div>
       <p class="view-sub" id="stats-context">正在读取年份与筛选条件…</p>
-      <button type="button" id="stats-edit-filters">调整年份与筛选条件</button>
       <p id="stats-status" role="status"></p>
       <div class="chart-card">
         <h3><span data-stats-focus-year>最新</span> 招生计划概览</h3>

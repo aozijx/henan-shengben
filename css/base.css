@@ -162,6 +162,10 @@ body{
   line-height:1.6;
   transition:background-color .25s ease, color .25s ease;
 }
+/* Shared shell for page-level surfaces; component sheets keep only their own spacing and layout. */
+:where(.filter-panel,.explorer-actions,.preview-section,.export-actions,.result,.chart-card){
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+}
 .page{max-width:1280px;margin:0 auto;padding:0 20px 56px;}
 .sr-only{
   position:absolute;width:1px;height:1px;overflow:hidden;
