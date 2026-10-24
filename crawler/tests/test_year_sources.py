@@ -9,7 +9,7 @@ from crawler.year_sources import (
     crawl_target_for_seed,
     load_seed_targets,
     load_year_links,
-    registry_rows_for_year,
+    execution_rows_for_year,
     resolve_year_sources,
     validate_attachment,
 )
@@ -121,9 +121,9 @@ class YearSourcesTests(unittest.TestCase):
             with self.assertRaisesRegex(SourceResolutionError, 'official HTTPS host'):
                 load_year_links(path)
 
-    def test_registry_includes_master_parser_row(self):
+    def test_execution_rows_include_master_parser(self):
         resolved = resolve_year_sources(self.seed, FakeSession())
-        sources, _crawl = registry_rows_for_year(resolved)
+        sources, _crawl = execution_rows_for_year(resolved)
         row = next(row for row in sources if row['parser'] == 'master')
         self.assertEqual(row['outputPath'], '招生高校及专业/招生高校及专业_2027.json')
         self.assertEqual(row['pdfPaths'], ['招生高校及专业/原始PDF/招生高校及专业_2027.pdf'])
@@ -155,7 +155,7 @@ class YearSourcesTests(unittest.TestCase):
             pages={candidate: '2027 录取控制分数线'},
         )
         resolved = resolve_year_sources(seed, session)
-        rows, _target = registry_rows_for_year(resolved)
+        rows, _target = execution_rows_for_year(resolved)
         self.assertEqual(resolved['pages']['scorelines'], candidate)
         self.assertTrue(all(row['year'] == 2027 for row in rows))
         self.assertTrue(all('_2027.' in row['outputPath'] for row in rows))

@@ -257,7 +257,7 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
     return {'year': year, 'pages': pages, 'attachments': attachments}
 
 
-def registry_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
+def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
     year = resolved['year']
     attachments = resolved['attachments']
     sources = [

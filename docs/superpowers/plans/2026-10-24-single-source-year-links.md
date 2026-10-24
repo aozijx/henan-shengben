@@ -59,10 +59,10 @@
 
 ### Task 4: Remove duplicate registry contract and update docs
 
-- [ ] Add a test that repository runtime code no longer reads `crawlTargets` or hand-maintained source URLs from `source-registry.json`.
-- [ ] Remove the duplicate `crawlTargets` data and obsolete registry APIs/docs; keep a generated compatibility file only if Task 3 proves a consumer needs it, and validate it against seeds.
-- [ ] Update root, data, crawler, convert documentation and metadata/source-ingestion spec to name year-links as the sole manual input.
-- [ ] Run `rg` audit for `crawlTargets`, `source-registry.json`, and old CLI defaults; remaining references must be generated compatibility/tests/history only and explained.
+- [x] Add a test that repository runtime code no longer reads `crawlTargets` or hand-maintained source URLs from `source-registry.json`.
+- [x] Remove the duplicate `crawlTargets` data and obsolete registry APIs/docs; keep a generated compatibility file only if Task 3 proves a consumer needs it, and validate it against seeds.
+- [x] Update root, data, crawler, convert documentation and metadata/source-ingestion spec to name year-links as the sole manual input.
+- [x] Run `rg` audit for `crawlTargets`, `source-registry.json`, and old CLI defaults; remaining references must be generated compatibility/tests/history only and explained.
 
 ### Task 5: Action and end-to-end acceptance
 

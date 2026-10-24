@@ -114,9 +114,9 @@ npm test
 
 新增 2027 或后续年份时，只需：
 
-1. 将该年度自己的专业对照、省控线、招生计划、一分一段规范 JSON 和通过校验的转换报告放入相应数据类型目录；2024、2025 暂时借用 2026 对照，不是后续年份的默认策略。
-2. 运行 `python -m convert.refresh_catalog`。工具校验完整年度和一分一段原始 PDF 哈希，生成 `data/generated/<年份>/<输入摘要>/` 下不可变的 analytics、分片和索引，以及带输入 SHA-256 的版本化 catalog；最后一次性替换 `metadata/school-data.json` 发布入口。若原默认年是最新年，新年度会自动成为默认年。失败时旧 metadata 仍指向旧文件；未被引用的生成文件可在核对后清理。
-3. 不需要修改 JS、页面字段、`supportedYears` 或 `yearSources`；`yearFieldTemplates` 会展开新年度列，年份弹窗也会自动显示它。官方文件的抓取入口仍须在 `data/source-registry.json` 声明来源 URL。
+1. 创建 `data/year-links/YYYY.json`，只登记年度、官方检索页以及已确认的公告页/附件 URL；后续年份必须有自己的专业对照，2024、2025 暂借 2026 对照不是默认策略。
+2. 先运行 `python -m convert.ingest_year --seed data/year-links/YYYY.json --check` 审查来源、哈希、行数、覆盖率和 metadata diff；确认后去掉 `--check` 发布。工具在临时目录完成下载、转换、归一化和 catalog 刷新，最后一次性替换 `metadata/school-data.json`。
+3. 不需要修改 JS、页面字段、`supportedYears` 或 `yearSources`；`yearFieldTemplates` 会展开新年度列，年份弹窗也会自动显示它。未在 year-links 中声明的年份不会被工具扫描或发布。
 4. 运行 `npm test`，确认元数据校验、加载、筛选、排序、预览和 CSV 流程通过。
 
 无需修改 `js/` 业务逻辑。JSON 结构须保持一致：

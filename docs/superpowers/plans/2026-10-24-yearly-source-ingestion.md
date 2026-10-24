@@ -52,7 +52,7 @@
 **Interfaces:**
 - Produces: `load_year_links(path: Path) -> dict` with `year`, optional `searchPageUrl`, and a `sources` map keyed by `scoreSegments`, `scorelines`, `plans`, `mappingCodeTable`, `mappingOverview`, `master`; each source contains an optional `pageUrl` and optional `attachmentUrl`. Missing links may be discovered, but all six roles must resolve before download.
 - Produces: `resolve_year_sources(seed: dict, session) -> dict` (one official page per required type, discovered official attachments and provenance; raises `DiscoveryBlockedError` on missing/ambiguous source).
-- Produces: `registry_rows_for_year(resolved: dict) -> tuple[list[dict], dict]` (existing `sources` rows including `招生高校及专业`, plus one score-segments `crawlTargets` row, with conventional year paths and no `expectedCount` guess).
+- Produces: `execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]` (derived parser rows including `招生高校及专业`, plus one score-segments execution target with conventional year paths and no `expectedCount` guess).
 
 - [x] **Step 1: Add acceptance tests** for the user-supplied 2026 official page/PDF URLs, exact year/type match, unique and duplicate search candidates, missing roles, `xcoss.henan.gov.cn`, and HTTP 412. Assert registry rows use year-specific mappings and conventional paths.
 - [x] **Step 2: Run `python -m unittest crawler.tests.test_year_sources -v`**; resolver interfaces pre-existed, so tests verified their acceptance behavior.

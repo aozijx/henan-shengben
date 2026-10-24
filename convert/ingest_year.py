@@ -21,7 +21,7 @@ from crawler.download import download_entry, download_manifest
 from crawler.year_sources import (
     crawl_target_record,
     load_year_links,
-    registry_rows_for_year,
+    execution_rows_for_year,
     resolve_year_sources,
     source_rows_for_seed,
     validate_attachment,
@@ -54,7 +54,7 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     if any((root / relative).exists() for relative in collision_paths):
         raise ValueError(f'{year} already exists; new-year publish would overwrite existing file')
     resolved = resolve_year_sources(seed, session)
-    source_rows, crawl_target = registry_rows_for_year(resolved)
+    source_rows, crawl_target = execution_rows_for_year(resolved)
     plan = {'seeds': [seed], 'sources': source_rows, 'targets': [crawl_target]}
 
     # Download source tables first; their final URLs and hashes are recorded in a provenance manifest.

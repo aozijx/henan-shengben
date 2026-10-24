@@ -13,7 +13,6 @@ from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_ROOT = REPO_ROOT / "data"
-REGISTRY_PATH = DATA_ROOT / "source-registry.json"
 
 
 def _ensure_stdout_utf8() -> None:

@@ -91,16 +91,6 @@ class RefreshCatalogTest(unittest.TestCase):
             pdf = data / '一分一段/原始PDF/2024/51.pdf'
             pdf.parent.mkdir(parents=True)
             pdf.write_bytes(b'fixture-pdf')
-            (data / 'source-registry.json').write_text(json.dumps({
-                'sources': [
-                    {'year': 2024, 'parser': 'mapping', 'outputPath': files['mapping']},
-                    {'year': 2024, 'parser': 'scorelines', 'outputPath': files['scorelines']},
-                    {'year': 2024, 'parser': 'plans', 'outputPath': files['plans']},
-                ],
-                'crawlTargets': [{'year': 2024, 'normalizedPath': files['score-segments'],
-                    'conversionReportPath': files['report']}],
-            }), encoding='utf-8')
-
             published_inputs = {key: hashlib.sha256((data / relative).read_bytes()).hexdigest()
                                 for key, relative in files.items()}
             legacy_catalog_path = 'generated/catalog/legacy.json'
@@ -176,14 +166,6 @@ class RefreshCatalogTest(unittest.TestCase):
             write_year_seed(data, 2027)
             for kind in ('专业对照', '省控线', '招生计划', '一分一段'):
                 (data / kind).mkdir(parents=True)
-            (data / 'source-registry.json').write_text(json.dumps({
-                'sources': [
-                    {'year': 2027, 'parser': 'mapping', 'outputPath': '专业对照/专业对照_2027.json'},
-                    {'year': 2027, 'parser': 'scorelines', 'outputPath': '省控线/省控线_2027.json'},
-                    {'year': 2027, 'parser': 'plans', 'outputPath': '招生计划/招生计划_2027.json'}],
-                'crawlTargets': [{'year': 2027, 'normalizedPath': '一分一段/一分一段_2027.json',
-                    'conversionReportPath': 'reports/转换报告_2027.json'}]
-            }), encoding='utf-8')
             (data / '专业对照/专业对照_2027.json').write_text(json.dumps([
                 {'专科专业': '软件技术', '可报本科专业': [{'专业代号': '51', '专业名称': '计算机科学与技术'}]}]), encoding='utf-8')
             (data / '省控线/省控线_2027.json').write_text(json.dumps([
@@ -285,8 +267,6 @@ class RefreshCatalogTest(unittest.TestCase):
             root = Path(folder)
             (root / 'data').mkdir()
             write_year_seed(root / 'data', 2027)
-            (root / 'data/source-registry.json').write_text(json.dumps({'sources': [
-                {'year': 2027, 'parser': 'plans', 'outputPath': '招生计划/招生计划_2027.json'}]}), encoding='utf-8')
             template = root / 'template.json'
             template.write_text('{}', encoding='utf-8')
             metadata = root / 'metadata.json'

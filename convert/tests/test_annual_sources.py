@@ -9,6 +9,16 @@ from convert.common import DATA_ROOT, load_data_plan
 
 
 class AnnualSourcePlanTests(unittest.TestCase):
+    def test_runtime_has_no_registry_or_crawl_target_configuration_reads(self):
+        repo = Path(__file__).resolve().parents[2]
+        runtime = list((repo / 'crawler').glob('*.py')) + list((repo / 'convert').glob('*.py'))
+        for path in runtime:
+            with self.subTest(path=path.relative_to(repo)):
+                text = path.read_text(encoding='utf-8')
+                self.assertNotIn('crawlTargets', text)
+                self.assertNotIn('source-registry.json', text)
+        self.assertFalse((repo / 'data/source-registry.json').exists())
+
     def test_repository_plan_is_derived_from_year_seeds_and_local_files(self):
         plan = load_data_plan(DATA_ROOT)
         self.assertEqual([target['year'] for target in plan['targets']], [2024, 2025, 2026])
