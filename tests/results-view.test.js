@@ -33,10 +33,10 @@ test('initial aggregate summary includes courses, scores and split plan totals w
   assert.match(html, /专业代码[^<]*80/);
   assert.match(html, /公共英语/);
   assert.match(html, /高等数学/);
-  assert.match(html, /省控线[^<]*180/);
+  assert.match(html, /<strong>省控线<\/strong><span>180<\/span>/);
   assert.doesNotMatch(html, /参考位次/);
-  assert.match(html, /公办[^<]*1 所[^<]*普通 20 人[^<]*专项 3 人/);
-  assert.match(html, /民办[^<]*1 所[^<]*普通 10 人/);
+  assert.match(html, /<strong>公办<\/strong><span>1 所 · 普通 20 人 · 专项 3 人<\/span>/);
+  assert.match(html, /<strong>民办<\/strong><span>1 所 · 普通 10 人 · 专项 0 人<\/span>/);
   assert.doesNotMatch(html, /0371-12345678|郑州市|完整分数段/);
 });
 
@@ -69,7 +69,7 @@ test('expanded major content creates school comparison and score segment tables 
 });
 
 test('year and school renderers preserve ordinary and poverty semantics', () => {
-  assert.match(buildYearSummaryHtml(aggregate.years[2026]), /公办 1 所 · 普通 20 人 · 专项 3 人/);
+  assert.match(buildYearSummaryHtml(aggregate.years[2026]), /<strong>公办<\/strong><span>1 所 · 普通 20 人 · 专项 3 人<\/span>/);
   const schoolHtml = buildSchoolDetailHtml(aggregate.years[2026].schools[0]);
   assert.match(schoolHtml, /学费/);
   assert.match(schoolHtml, /4400/);
@@ -146,7 +146,7 @@ test('table layout groups course details and yearly admissions without embedding
   assert.match(html, /class="aggregate-table-wrap"/);
   assert.match(html, /软件工程/);
   assert.match(html, /180/);
-  assert.match(html, /公办 1 所/);
+  assert.match(html, /<strong>公办<\/strong><span>1 所 · 普通 20 人 · 专项 3 人<\/span>/);
   assert.match(html, /历年成绩与招生/);
   assert.match(html, /专业基础课 高等数学/);
   assert.doesNotMatch(html, /2026 省控线|2026 院校\(公\/民\)/);

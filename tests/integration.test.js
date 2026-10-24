@@ -58,7 +58,7 @@ test('a metadata-only new year flows through selection, table, preview and expor
   assert.deepEqual(preview.selectedYears, loaded.metadata.supportedYears);
   assert.match(buildExplorerControlsHtml(loaded.metadata, state), /year-selection-dialog/);
   assert.doesNotMatch(tableHtml, /year-selection-dialog/);
-  assert.match(tableHtml, /<th>历年概览<\/th>/);
+  assert.match(tableHtml, /历年成绩与招生/);
   assert.match(tableHtml, /<h4>2027 年<\/h4>/);
   assert.doesNotMatch(tableHtml, /<th>2027 省控线<\/th>/);
   assert.match(csv, /^\uFEFF本科专业,2027分数线,2027院校数\(公\/民\),2027计划人数\(公\/民\)\r\n数据工程,220,0\/1,0\/0\r\n智能工程,180,1\/0,20\/0/);
