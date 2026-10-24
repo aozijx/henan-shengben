@@ -9,6 +9,7 @@
   /* ---- 基础色 ---- */
   --paper:#f5f6f8;
   --card:#ffffff;
+  --surface:#ffffff;
   --ink:#17222e;
   --muted:#5b6b7a;
   --faint:#8b99a6;
@@ -72,6 +73,7 @@
 
   --paper:#0f1317;
   --card:#171d24;
+  --surface:#171d24;
   --ink:#dfe6ee;
   --muted:#94a2b0;
   --faint:#6b7885;
@@ -137,6 +139,9 @@ body{
   clip:rect(0 0 0 0);white-space:nowrap;
 }
 code{background:var(--code-bg);padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:var(--mono);}
+
+/* 原生下拉菜单需要显式继承主题颜色，避免深色模式下选项仍使用浅色系统默认值。 */
+select option{background-color:var(--surface);color:var(--ink);}
 
 /* ---------- 无障碍 ---------- */
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;}

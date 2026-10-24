@@ -108,8 +108,11 @@
       <div class="chart-card">
         <h3>选择专业 · 一分一段</h3>
         <p class="chart-note">勾选多个本科专业后，可按所选年份比较。成绩分布应在同省、同年、同考试类别下解释；不同专业人数规模的绝对位次不可直接当作竞争强弱，录取还取决于计划及院校投档线。</p>
-        <label class="stats-control">查找专业 <input id="stats-major-search" type="search" placeholder="专业名称或代号"></label>
-        <div class="stats-choice-actions"><button type="button" id="stats-select-visible">勾选当前搜索结果</button><button type="button" id="stats-clear-selected">清空勾选</button><span id="stats-selected-count" aria-live="polite"></span></div>
+        <div class="stats-selection-controls">
+          <label class="stats-control" for="stats-major-search">查找专业 <input id="stats-major-search" type="search" placeholder="专业名称或代号"></label>
+          <button type="button" id="stats-clear-selected">清空勾选</button>
+          <span id="stats-selected-count" aria-live="polite"></span>
+        </div>
         <div id="stats-major-choices" class="stats-major-choices"></div>
         <label class="stats-control">曲线口径 <select id="stats-curve-mode"><option value="rank">位次—分数</option><option value="cumulative">分数—累计人数</option><option value="segment">分数—本段人数</option><option value="percent">累计百分比</option></select></label>
         <div id="chart-segments" class="chart"></div>
@@ -154,7 +157,7 @@
         <h3>读取规则</h3>
         <ul>
           <li>分数线优先按「填报代号」精确匹配；未命中再按「专业名称」精确匹配；仍未命中按名称包含匹配（处理年度表中「含 xxx」合并命名）。</li>
-          <li>招生院校按年份分别取自对应年度《招生计划》（专业名称 → 填报代号，含财务管理 99 ↔ A1 差异处理）；无计划数据时回退到 metadata 声明的招生总表（6 位专业代码、忽略 T / K 后缀差异）。同一院校同一专业的普通计划与建档立卡专项为两条独立条目。</li>
+          <li>招生院校按年份分别取自对应年度《招生计划》（专业名称 → 填报代号，含财务管理 99 ↔ A1 差异处理）；无计划数据时回退到 metadata 声明的招生总表。同一院校同一专业的普通计划与建档立卡专项为两条独立条目。</li>
           <li>年份折叠中「公办 X 所 / 民办 Y 所」按院校名称去重统计；「计划 Z 人」为该年公办 / 民办各院校计划人数合计（含建档立卡专项）。</li>
           <li>「—」表示当年控制线表中未单列该专业或未招生，<b>不代表 0 分，也不代表不能报考</b>；最终以当年官方招生计划与文件为准。</li>
         </ul>

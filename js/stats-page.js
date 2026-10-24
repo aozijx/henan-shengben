@@ -151,6 +151,10 @@ function choices(projection) {
   var visible = projection.majors.filter(function (major) {
     return !keyword || major.majorName.includes(keyword) || major.majorCode.includes(keyword);
   });
+  function selectVisible() {
+    visible.forEach(function (major) { selectedCodes.add(majorKey(major)); });
+    choices(projection); summary(projection); renderCurves();
+  }
   root.innerHTML = visible.map(function (major) { return '<label><input type="checkbox" value="' + esc(majorKey(major)) + '"' +
     (selectedCodes.has(majorKey(major)) ? ' checked' : '') + '> ' + esc(major.majorName) + ' (' + esc(major.majorCode) + ')</label>'; }).join('') || '没有匹配的专业';
   root.querySelectorAll('input').forEach(function (input) { input.onchange = function () {
@@ -159,14 +163,15 @@ function choices(projection) {
     summary(projection); renderCurves();
   }; });
   document.getElementById('stats-selected-count').textContent = '已勾选 ' + selectedCodes.size + ' 个专业';
-  document.getElementById('stats-select-visible').onclick = function () {
-    visible.forEach(function (major) { selectedCodes.add(majorKey(major)); });
-    choices(projection); summary(projection); renderCurves();
-  };
   document.getElementById('stats-clear-selected').onclick = function () {
     selectedCodes.clear(); choices(projection); summary(projection); renderCurves();
   };
   search.oninput = function () { choices(projection); };
+  search.onkeydown = function (event) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    selectVisible();
+  };
   document.getElementById('stats-curve-mode').onchange = renderCurves;
 }
 
