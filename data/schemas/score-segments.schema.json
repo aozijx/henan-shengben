@@ -3,37 +3,25 @@
   "$id": "score-segments.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "year", "sourceManifest", "majors"],
+  "required": ["schemaVersion", "year", "dataset", "sourceManifest", "majors"],
   "properties": {
-    "schemaVersion": {"const": 1},
+    "schemaVersion": {"const": 2},
     "year": {"type": "integer", "minimum": 2020},
+    "dataset": {"const": "score-segments"},
     "sourceManifest": {"type": "string", "minLength": 1},
+    "summary": {"type": "object"},
     "majors": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["majorCode", "majorName", "controlScore", "sourceId", "sourcePdf", "sourceSha256", "segments"],
+        "required": ["majorCode", "majorName", "status", "path", "sha256"],
         "properties": {
-          "majorCode": {"type": "string", "minLength": 1},
+          "majorCode": {"type": "string", "pattern": "^[A-Za-z0-9]+$"},
           "majorName": {"type": "string", "minLength": 1},
-          "controlScore": {"type": ["integer", "null"], "minimum": 0},
-          "sourceId": {"type": "string", "minLength": 1},
-          "sourcePdf": {"type": "string", "minLength": 1},
-          "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-          "segments": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["score", "cumulativeCount"],
-              "properties": {
-                "score": {"type": "integer", "minimum": 0},
-                "cumulativeCount": {"type": "integer", "minimum": 0}
-              }
-            }
-          }
+          "status": {"enum": ["ok", "needs-review", "official-empty"]},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
         }
       }
     }

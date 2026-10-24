@@ -81,10 +81,10 @@ test('every indexed score segment shard matches its year, code and cumulative co
     assert.equal(index.year, Number(year));
     assert.equal(index.majors.length, canonical.majors.length);
     index.majors.forEach(function (entry) {
-      const shard = loadJson(entry.path);
-      const original = canonical.majors.find(function (major) { return major.majorCode === entry.majorCode; });
-      assert.ok(original, year + '/' + entry.majorCode + ' missing from canonical source');
-      assert.equal(shard.year, Number(year));
+      const shard = loadJson('data/' + entry.path);
+      const originalEntry = canonical.majors.find(function (major) { return major.majorCode === entry.majorCode; });
+      assert.ok(originalEntry, year + '/' + entry.majorCode + ' missing from canonical source');
+      const original = loadJson('data/' + originalEntry.path);
       assert.equal(shard.majorCode, entry.majorCode);
       assert.deepEqual(shard.segments.map(function (segment) { return segment.cumulativeCount; }),
         original.segments.map(function (segment) { return segment.cumulativeCount; }));
@@ -150,6 +150,7 @@ test('score professional codes are non-empty for every year', () => {
 test('normalized score segment files and source manifests pass their schemas', () => {
   const ajv = new Ajv({ allErrors: true, strict: false });
   const scoreValidate = ajv.compile(loadDataSchema('score-segments.schema.json'));
+  const shardValidate = ajv.compile(loadDataSchema('score-segment-shard.schema.json'));
   const manifestValidate = ajv.compile(loadDataSchema('source-manifest.schema.json'));
   const failures = [];
   ['2024', '2025', '2026'].forEach(function (year) {
@@ -157,6 +158,13 @@ test('normalized score segment files and source manifests pass their schemas', (
     if (!scoreValidate(loadJson(scorePath))) {
       failures.push(scorePath + ': ' + formatAjvErrors(scoreValidate.errors));
     }
+    const index = loadJson(scorePath);
+    index.majors.forEach(function (entry) {
+      const shardPath = 'data/' + entry.path;
+      if (!shardValidate(loadJson(shardPath))) {
+        failures.push(shardPath + ': ' + formatAjvErrors(shardValidate.errors));
+      }
+    });
     const manifestPath = 'data/来源清单/来源清单_' + year + '.json';
     if (!manifestValidate(loadJson(manifestPath))) {
       failures.push(manifestPath + ': ' + formatAjvErrors(manifestValidate.errors));
