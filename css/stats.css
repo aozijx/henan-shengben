@@ -60,3 +60,46 @@
 .stats-table-total { margin: .75rem 0 0; text-align: center; color: var(--muted); font-size: .8rem; }
 #stats-status { min-height: 1.4rem; }
 #stats-edit-filters { margin: 0 0 .75rem; min-height: 36px; padding: 6px 12px; border: 1px solid var(--blue); border-radius: 8px; background: var(--blue-soft); color: var(--blue-deep); font: inherit; font-size: .84rem; cursor: pointer; }
+
+/* Consistent analytics surfaces and responsive controls. */
+.chart-card{padding:18px;border-radius:var(--radius);margin-bottom:14px;}
+.chart-card h3{font-size:16px;line-height:1.45;}
+.chart-note{max-width:76em;font-size:12px;line-height:1.65;}
+.chart{min-width:0;height:340px;}
+.chart.short{height:430px;}
+.plan-grid{gap:9px;}
+.plan-card{min-width:0;padding:14px;border-radius:var(--radius-sm);}
+.plan-card b{font-size:22px;}
+.stats-major-choices{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));min-width:0;border-color:var(--line);background:var(--surface);}
+.stats-major-choices label{min-width:0;line-height:1.45;}
+.stats-selection-controls button,#stats-edit-filters{min-height:44px;border-radius:var(--radius-xs);}
+.stats-selection-controls{min-width:0;}
+.stats-control{min-width:0;line-height:1.5;}
+#stats-major-search,#stats-curve-mode{min-width:0;max-width:100%;min-height:44px;border-radius:var(--radius-xs);}
+#stats-table .table-wrap{max-width:100%;overscroll-behavior-x:contain;border-radius:var(--radius-sm);}
+#stats-table table{min-width:680px;background:var(--card);}
+#stats-table th,#stats-table td{padding:.65rem .7rem;}
+
+@media (max-width:600px){
+  .chart-card{padding:13px;margin-bottom:12px;}
+  .chart-card h3{font-size:15px;}
+  .chart-note{font-size:11.5px;}
+  .chart{height:280px;}
+  .chart.short{height:360px;}
+  .plan-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .plan-card{padding:11px;}
+  .plan-card b{font-size:19px;}
+  .plan-card span{font-size:11px;line-height:1.45;}
+  .stats-selection-controls{align-items:stretch;}
+  .stats-selection-controls label{flex:1 1 100%;}
+  .stats-selection-controls button{flex:1 1 auto;}
+  .stats-control{display:flex;width:100%;margin-top:10px;}
+  #stats-major-search{flex:1 1 100%;width:100%;}
+  #stats-curve-mode{flex:1 1 100%;width:100%;}
+  .stats-major-choices{grid-template-columns:1fr;max-height:16rem;padding:10px;}
+  #stats-table th,#stats-table td{padding:.55rem .6rem;}
+}
+
+.chart-card,.note-fallback,.plan-card,.stats-major-choices,.stats-selection-controls button,
+#stats-major-search,#stats-curve-mode,#stats-edit-filters{border-width:1px;}
+#stats-table th,#stats-table td{border-bottom-width:.5px;}

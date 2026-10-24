@@ -1,14 +1,15 @@
 import { getCollegesByYear, getScore } from './data.js';
 import { enumOptions, getSortedYears } from './metadata.js';
-import { createInitialState, reduceExplorerState, sanitizeNumberInput, canExport } from './explorer-state.js';
+import { createInitialState, reduceExplorerState, sanitizeNumberInput } from './explorer-state.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
-import { renderPreview } from './preview.js';
-import { downloadCsv, prepareExport } from './export.js';
 import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
 import { setQueryYear } from './query.js';
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 import { buildYearDialogHtml } from './results-view.js';
+import { setResultState } from './results-controller.js';
+import { bindExportDialog } from './export-dialog.js';
+import { downloadCsv, prepareExport } from './export.js';
 
 var activeExplorer = null;
 
@@ -39,7 +40,7 @@ export function buildExplorerControlsHtml(metadata, state) {
   var unavailable = state.status !== 'ready' || !state.majors.length;
   var years = getSortedYears(metadata);
   var selectedYears = state.selectedYears || years;
-  var yearLabel = selectedYears.length === years.length ? '年份：全部（' + years[0] + '–' + years[years.length - 1] + '）' : '年份：' + selectedYears.join('、');
+  var yearLabel = selectedYears.length === years.length ? '全部（' + years[0] + '–' + years[years.length - 1] + '）' : selectedYears.join('、');
   return '<div class="explorer-status" aria-live="polite">' +
       (state.status === 'loading' ? '<span class="loading">正在加载院校数据…</span>' : '') +
       (state.status === 'error' ? '<span class="msg-notfound">' + esc(state.error) + '</span>' : '') +
@@ -55,12 +56,7 @@ export function buildExplorerControlsHtml(metadata, state) {
       '<div class="filter-group filter-operations"><h3>筛选操作</h3><div class="filter-row">' +
       '<button type="button" data-action="reset"' + (unavailable ? ' disabled' : '') + '>重置筛选</button>' +
       '<button type="button" data-action="clear-storage"' + (state.status !== 'ready' ? ' disabled' : '') + '>清除本地存储</button>' +
-      '</div></div>' + buildYearDialogHtml(metadata, selectedYears) + '</section>' +
-    '<section class="preview-section"><div id="preview-table" class="preview-placeholder" aria-live="polite">' +
-      (state.majors.length ? '预览表格准备中…' : '请先查询专科专业，再使用筛选与导出。') +
-    '</div></section>' +
-    '<section class="export-actions"><button type="button" id="exportCsv"' +
-      (!canExport(state) ? ' disabled' : '') + '>导出 CSV</button></section>';
+      '</div></div>' + buildYearDialogHtml(metadata, selectedYears) + '</section>';
 }
 
 function renderExplorerControls(root, metadata, state, dispatch) {
@@ -114,33 +110,13 @@ function renderExplorerControls(root, metadata, state, dispatch) {
     var result = document.getElementById('result');
     if (search) search.value = '';
     if (hint) hint.textContent = '';
-    if (result) result.innerHTML = '<div class="empty">输入专业名称，回车或点「查询」开始检索</div>';
+    if (result) setResultState(result, '输入专业名称，回车或点「查询」开始检索', 'empty');
     dispatch({ type: 'CLEAR_ALL', columnWidths: readColumnWidths(localStorage, metadata) });
   });
-  var exportButton = root.querySelector('#exportCsv');
-  if (exportButton) exportButton.addEventListener('click', function () {
-    downloadCsv({ ...prepareExport({
-      status: state.status,
-      allRows: state.rows,
-      selectedYears: state.selectedYears
-    }, metadata, state.focusYear), date: new Date() });
-  });
-  renderPreview(root.querySelector('#preview-table'), {
-    allRows: state.rows,
-    page: state.page,
-    sort: state.sort,
-    effectiveSchoolCount: state.effectiveSchoolCount,
-    effectiveSchoolYear: state.focusYear,
-    hasSearch: state.majors.length > 0,
-    status: state.status,
-    error: state.error,
-    columnWidths: state.columnWidths,
-    selectedYears: state.selectedYears
-  }, metadata, dispatch);
 }
 
 /* ---------- 筛选联动结果区 ----------
-   把筛选后的专业（保持原顺序）通知给上层，用于重渲染查询结果表；
+   把筛选后的专业（保持原顺序）通知给上层，用于重渲染专业摘要；
    同时返回「筛选后 X / Y 个专业」的计数说明（未启用筛选时为 null）。 */
 function activeFilterNote(state) {
   var f = state.filters || {};
@@ -212,6 +188,17 @@ export function initExplorer(root, metadata, options) {
     dispatch: dispatch,
     getState: function () { return state; }
   };
+  bindExportDialog(
+    options.exportDialog || document.getElementById('export-fields-dialog'),
+    options.exportButton || document.getElementById('exportCsv'),
+    metadata,
+    function () { return state; },
+    function (selectedFieldKeys) {
+      var exportModel = prepareExport({ status: state.status, allRows: state.rows, selectedYears: state.selectedYears },
+        metadata, state.focusYear, selectedFieldKeys);
+      downloadCsv({ ...exportModel, date: new Date() });
+    }
+  );
   renderExplorerControls(root, metadata, state, dispatch);
   notifyFilteredResult(state, options);
   return activeExplorer;

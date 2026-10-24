@@ -32,8 +32,8 @@ test('builds the required year and local date filename', () => {
   assert.equal(buildExportFilename(2027, new Date(2026, 9, 21, 15, 30)), '院校数据_2027_20261021.csv');
 });
 
-test('download rejects empty preview results', () => {
-  assert.throws(() => downloadCsv({ rows: [], fields, year: 2026, date: new Date() }, {}, {}), /没有可导出的预览数据/);
+test('download rejects empty filtered results', () => {
+  assert.throws(() => downloadCsv({ rows: [], fields, year: 2026, date: new Date() }, {}, {}), /没有可导出的筛选结果/);
 });
 
 test('download creates and revokes one CSV object URL', () => {
@@ -64,13 +64,13 @@ test('download creates and revokes one CSV object URL', () => {
   ]);
 });
 
-test('prepareExport uses the complete preview result instead of the current page', () => {
-  const previewModel = {
+test('prepareExport uses the complete filtered result instead of the current page', () => {
+  const resultModel = {
     status: 'ready',
     allRows: [{ majorName: '一', score: 1 }, { majorName: '二', score: 2 }, { majorName: '三', score: 3 }],
     pageRows: [{ majorName: '三', score: 3 }]
   };
-  const prepared = prepareExport(previewModel, { fields }, 2027);
+  const prepared = prepareExport(resultModel, { fields }, 2027);
   assert.equal(prepared.rows.length, 3);
   assert.deepEqual(prepared.fields.map((field) => field.key), ['majorName', 'score']);
   assert.equal(prepared.year, 2027);

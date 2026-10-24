@@ -3,6 +3,20 @@ import assert from 'node:assert/strict';
 import { doQuery, findMappingMatches, resolveMappingMatch, setQueryYear, setResultListener } from '../js/query.js';
 import { loadAll, loadYears } from '../js/data.js';
 
+function createResultRoot() {
+  const slots = {
+    '#result-state': { hidden: true, className: '', textContent: '' },
+    '#result-content': { hidden: true },
+    '#result-toolbar': { hidden: true }
+  };
+  return {
+    innerHTML: '',
+    classList: { remove() {} },
+    querySelector(selector) { return slots[selector] || null; },
+    querySelectorAll() { return []; }
+  };
+}
+
 test('searches only the mapping supplied for the selected year', () => {
   const mapping2026 = [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '旧专业' }] }];
   const mapping2027 = [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '新专业' }] }];
@@ -36,7 +50,7 @@ test('completes a successful partial query to the selected specialty name', asyn
   await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
   const input = { value: '物联网' };
   const hint = { textContent: '' };
-  const result = { innerHTML: '' };
+  const result = createResultRoot();
 
   doQuery(input, hint, result);
 
@@ -63,7 +77,7 @@ test('switches completion and context to the focused query year', async () => {
   setQueryYear(2024);
   const input = { value: '软件技术' };
   const hint = { textContent: '' };
-  doQuery(input, hint, { innerHTML: '' });
+  doQuery(input, hint, createResultRoot());
   assert.equal(input.value, '软件技术（2024）');
   assert.match(hint.textContent, /2024 对照一览表/);
 });
@@ -81,7 +95,7 @@ test('hands successful matches to the aggregate workspace without legacy table m
   await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
   const input = { value: '软件' };
   const hint = { textContent: '' };
-  const result = { innerHTML: '' };
+  const result = createResultRoot();
   let received = null;
   setResultListener((majors, name) => { received = { majors, name }; });
 

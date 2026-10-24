@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/query.css">
 <link rel="stylesheet" href="css/preview.css">
+<link rel="stylesheet" href="css/export.css">
 <link rel="stylesheet" href="css/stats.css">
 <link rel="stylesheet" href="css/about.css">
 </head>
@@ -78,7 +79,33 @@
       <p class="hint" id="hint"></p>
 
       <div id="result" class="result" aria-live="polite">
-        <div class="empty">输入专业名称，回车或点「查询」开始检索</div>
+        <div class="result-toolbar" id="result-toolbar" hidden>
+          <div class="result-layout-switch" role="group" aria-label="结果布局">
+            <button type="button" data-result-layout="cards" aria-label="切换为聚合卡片" title="聚合卡片" aria-pressed="true" disabled>
+              <svg class="layout-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="9" width="5.5" height="5.5" rx="1"></rect></svg>
+            </button>
+            <button type="button" data-result-layout="table" aria-label="切换为表格" title="表格" aria-pressed="false" disabled>
+              <svg class="layout-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 3.25h12M2 8h12M2 12.75h12"></path><circle cx="3" cy="3.25" r=".5"></circle><circle cx="3" cy="8" r=".5"></circle><circle cx="3" cy="12.75" r=".5"></circle></svg>
+            </button>
+          </div>
+          <button type="button" id="exportCsv" class="export-trigger" disabled>导出 CSV</button>
+        </div>
+        <div id="result-state" class="result-state empty">输入专业名称，回车或点「查询」开始检索</div>
+        <div id="result-content" class="result-content" hidden></div>
+        <dialog class="export-fields-dialog" id="export-fields-dialog" aria-labelledby="export-fields-title">
+          <form method="dialog">
+            <h2 id="export-fields-title">选择导出字段</h2>
+            <p class="export-fields-description">选择 CSV 中要包含的列；数据按当前筛选的本科专业完整导出。</p>
+            <div class="export-field-list" id="export-field-list"></div>
+            <p class="export-fields-error" id="export-fields-error" role="status" aria-live="polite"></p>
+            <div class="export-field-actions">
+              <button type="button" data-export-select-all>全选</button>
+              <button type="button" data-export-clear-all>清空选择</button>
+              <button type="submit" value="cancel">取消</button>
+              <button type="button" data-export-confirm>导出</button>
+            </div>
+          </form>
+        </dialog>
       </div>
       <div id="explorer" class="explorer" aria-label="筛选排序与导出">
         <div class="loading">正在加载筛选配置与院校数据…</div>

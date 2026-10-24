@@ -14,12 +14,9 @@ function summaryPart(label, summary, hiddenFields) {
 
 export function buildYearSummaryHtml(yearAggregate, hiddenFields) {
   if (!yearAggregate) return '<span class="year-unpublished">该年份数据尚未发布</span>';
-  var context = yearAggregate.scoreContext || {};
   var score = yearAggregate.score == null ? '—' : yearAggregate.score;
-  var rank = context.controlCumulativeCount == null ? '—' : context.controlCumulativeCount;
   return '<div class="year-summary">' +
     '<span class="year-score">省控线 ' + esc(String(score)) + '</span>' +
-    '<span class="year-rank">参考位次 ' + esc(String(rank)) + '</span>' +
     summaryPart('公办', yearAggregate.publicSummary, hiddenFields) +
     summaryPart('民办', yearAggregate.privateSummary, hiddenFields) +
     '</div>';

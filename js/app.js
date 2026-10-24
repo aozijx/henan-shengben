@@ -2,7 +2,7 @@
    河南专升本 · 查询工具  —  入口模块
    持有 DOM 引用、页签路由、主题按钮、数据加载编排与事件绑定。
    功能按模块拆分：utils / theme / metadata / data / render / query /
-   explorer / pipeline / preview / export / preferences / stats / bootstrap。
+   explorer / pipeline / result workspace / export / preferences / stats / bootstrap。
    ============================================================ */
 
 import { esc } from './utils.js';
@@ -16,7 +16,8 @@ import { getLatestYear, getSortedYears } from './metadata.js';
 import { normalizeMajorOption, normalizeScoreSegmentSeries } from './model.js';
 import { buildMajorAggregates, resolveScoreContext } from './aggregate.js';
 import { buildResultModel } from './result-model.js';
-import { renderResultWorkspace, buildExpandedMajorHtml } from './results-view.js';
+import { buildExpandedMajorHtml } from './results-view.js';
+import { renderResultWorkspace, setResultState } from './results-controller.js';
 import { lookupScoreSegmentCode } from './score-curves.js';
 import { queryRowsFromAnalytics } from './analytics-query.js';
 
@@ -83,7 +84,7 @@ function createAggregateRenderer(loaded) {
                 return code ? loaded.repository.ensureScoreSegment(year, code) : null;
               });
             }))]).then(function (values) {
-              if (!holder.isConnected) return;
+              if (!holder.isConnected || holder.hidden) return;
               var shards = values[1];
               var detail = buildMajorAggregates({ majors: [aggregate.major], years: selected,
                 plansByYear: data.normalizedPlansForYears(loaded.store, selected),
@@ -97,8 +98,9 @@ function createAggregateRenderer(loaded) {
                 yearValue.scoreSegments = shards[index] ? normalizeScoreSegmentSeries(shards[index]) : null;
                 yearValue.scoreContext = resolveScoreContext(yearValue.scoreSegments, null, yearValue.score);
               });
+              if (!holder.isConnected || holder.hidden) return;
               holder.innerHTML = buildExpandedMajorHtml(detail, selected, hiddenFields);
-            }).catch(function (error) { if (holder.isConnected) holder.textContent = '数据加载失败：' + error.message; });
+            }).catch(function (error) { if (holder.isConnected && !holder.hidden) holder.textContent = '数据加载失败：' + error.message; });
           });
       })
       .catch(function (error) {
@@ -232,6 +234,8 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   initStats(loaded.repository, loaded.metadata);
   var renderAggregates = createAggregateRenderer(loaded);
   var explorerController = explorer.initExplorer($('explorer'), loaded.metadata, {
+    exportDialog: $('export-fields-dialog'),
+    exportButton: $('exportCsv'),
     onYearChange: function (state) {
       ++queryRequestId;
       var requestId = ++yearRequestId;
@@ -257,7 +261,7 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
     var state = explorerController.getState();
     var selectedYears = state.selectedYears.slice();
     var focusYear = state.focusYear;
-    $result.innerHTML = '<div class="loading">正在读取所选年份的统计摘要…</div>';
+    setResultState($result, '正在读取所选年份的统计摘要…', 'loading');
     Promise.all(selectedYears.map(function (year) { return loaded.repository.ensureAnalytics(year); })).then(function (documents) {
       var currentState = explorerController.getState();
       if (requestId !== queryRequestId || currentState.focusYear !== focusYear ||
@@ -269,7 +273,7 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
     }).catch(function (error) {
       if (requestId !== queryRequestId) return;
       explorer.setSearchResult([], specName);
-      $result.innerHTML = '<div class="msg-notfound">' + esc(error.message) + '</div>';
+      setResultState($result, error.message, 'error');
     });
   });
   var initialFocusYear = explorerController.getState().focusYear;
@@ -280,8 +284,7 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
     afterLoad();
   }).catch(function (error) { if (initialYearRequestId === yearRequestId) $hint.textContent = error.message; });
 }).catch(function (err) {
-  $result.innerHTML = '<div class="msg-notfound"><b>数据加载失败：</b>' + esc(err.message) + '<br>' +
-    '请确认 metadata 配置及其声明的数据文件完整后刷新页面重试。</div>';
+  setResultState($result, '数据加载失败：' + err.message + '。请确认 metadata 配置及其声明的数据文件完整后刷新页面重试。', 'error');
   var explorerRoot = $('explorer');
   if (explorerRoot) explorerRoot.innerHTML = '<div class="msg-notfound"><b>筛选与导出不可用：</b>' + esc(err.message) + '</div>';
   $hint.textContent = '';

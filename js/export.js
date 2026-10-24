@@ -33,18 +33,24 @@ export function buildExportFilename(year, date) {
   return '院校数据_' + year + '_' + stamp + '.csv';
 }
 
-export function prepareExport(previewModel, metadata, focusYear) {
-  if (!previewModel || previewModel.status !== 'ready') throw new Error('预览尚未就绪，不可导出');
-  if (!Array.isArray(previewModel.allRows) || !previewModel.allRows.length) throw new Error('没有可导出的预览数据');
+export function prepareExport(resultModel, metadata, focusYear, selectedFieldKeys) {
+  if (!resultModel || resultModel.status !== 'ready') throw new Error('查询结果尚未就绪，不可导出');
+  if (!Array.isArray(resultModel.allRows) || !resultModel.allRows.length) throw new Error('当前没有可导出的筛选结果');
+  var fields = getExportFields(metadata, resultModel.selectedYears);
+  if (Array.isArray(selectedFieldKeys)) {
+    var selected = new Set(selectedFieldKeys);
+    fields = fields.filter(function (field) { return selected.has(field.key); });
+    if (!fields.length) throw new Error('请至少选择一个导出字段');
+  }
   return {
-    rows: previewModel.allRows,
-    fields: getExportFields(metadata, previewModel.selectedYears),
+    rows: resultModel.allRows,
+    fields: fields,
     year: focusYear
   };
 }
 
 export function downloadCsv(model, documentLike, urlApi) {
-  if (!model.rows || !model.rows.length) throw new Error('没有可导出的预览数据');
+  if (!model.rows || !model.rows.length) throw new Error('当前没有可导出的筛选结果');
   var doc = documentLike || document;
   var urls = urlApi || URL;
   var filename = buildExportFilename(model.year, model.date);

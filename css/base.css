@@ -7,64 +7,81 @@
   color-scheme: light;
 
   /* ---- 基础色 ---- */
-  --paper:#f5f6f8;
+  --paper:#ffffff;
   --card:#ffffff;
   --surface:#ffffff;
-  --ink:#17222e;
+  --ink:#111111;
   --muted:#5b6b7a;
-  --faint:#8b99a6;
-  --line:#e0e5ea;
-  --line-strong:#c9d2da;
-  --blue:#1f4e79;          /* 档案蓝：链接与强调文字 */
-  --blue-deep:#16385a;     /* 更深的蓝：数字、激活态文字 */
-  --blue-soft:#e8eef4;
-  --vermill:#c2410c;       /* 朱砂：分数线、强调数字 */
-  --vermill-soft:#fbeadd;
-  --olive:#4d7c0f;         /* 下降趋势 */
-  --na:#c2cad2;
+  --faint:#7d8b98;
+  --line:#d9e0e7;
+  --line-strong:#b9c6d1;
+  --blue:#2f6f9e;          /* 蓝：链接与强调文字 */
+  --blue-deep:#174f78;     /* 深蓝：数字、激活态文字 */
+  --blue-soft:#e8f0f7;
+  --vermill:#b85f3d;       /* 陶土：分数线、强调数字 */
+  --vermill-soft:#ffffff;
+  --olive:#287b72;         /* 青绿：趋势 */
+  --na:#b8d0e1;
 
   /* ---- 主操作按钮（背景 + 反白文字） ---- */
-  --btn-bg:#1f4e79;
-  --btn-bg-hover:#16385a;
-  --btn-fg:#ffffff;
-  --focus-ring:rgba(31,78,121,.14);
+  --btn-bg:#ffffff;
+  --btn-bg-hover:#ffffff;
+  --btn-fg:#174f78;
+  --focus-ring:rgba(47,111,158,.22);
+  --switch-surface:#f0f4f8;
+  --switch-hover:#e5edf5;
+  --switch-selected:#d8e7f4;
+
+  /* Small-area emphasis colors; keep large surfaces black/white/blue. */
+  --accent-teal:#287b72;
+  --accent-teal-soft:#ffffff;
+  --accent-amber:#9a701e;
+  --accent-amber-soft:#ffffff;
+  --accent-violet:#7056a0;
+  --accent-violet-soft:#ffffff;
+  --accent-rust:#b85f3d;
+  --accent-rust-soft:#ffffff;
 
   /* ---- 分层表面 ---- */
   --surface-2:#f0f3f6;     /* 表头、chip 底 */
   --surface-3:#f7fafc;     /* 行悬停 */
-  --row-alt:#f3f6fa;       /* 表格隔行加深 */
+  --row-alt:#f3f6fa;       /* 表格隔行 */
   --code-bg:#eef1f4;
   --other-bg:#eef1f4;
   --other-fg:#44525f;
-  --mgmt-bg:#fef3e2;
-  --mgmt-fg:#8a5a00;
+  --mgmt-bg:var(--accent-amber-soft);
+  --mgmt-fg:var(--accent-amber);
   --warn-bg:#fdf5ef;
-  --warn-border:#f2c9b4;
+  --warn-border:#e2b59e;
 
   /* ---- 院校标注标签（招生计划） ---- */
   --pub-bg:#e8eef4;
-  --pub-fg:#1f4e79;
-  --min-bg:#fbeadd;
-  --min-fg:#c2410c;
-  --card-bg:#efeaf6;
-  --card-fg:#6b4d8f;
+  --pub-fg:#174f78;
+  --min-bg:var(--accent-rust-soft);
+  --min-fg:var(--accent-rust);
+  --card-bg:var(--accent-violet-soft);
+  --card-fg:var(--accent-violet);
 
   /* ---- 图表配色 ---- */
-  --chart-grid:#edf0f3;
-  --trend-1:#1f4e79;
-  --trend-2:#c2410c;
-  --trend-3:#4d7c0f;
-  --trend-4:#8a5a00;
-  --trend-5:#6b4d8f;
-  --trend-6:#2e7d74;
-  --trend-7:#b0435f;
-  --trend-8:#5b6b7a;
+  --chart-grid:#e5ebf0;
+  --trend-1:#2f6f9e;
+  --trend-2:#a65f43;
+  --trend-3:#287b72;
+  --trend-4:#8a6c25;
+  --trend-5:#7056a0;
+  --trend-6:#3f8a80;
+  --trend-7:#a45162;
+  --trend-8:#416987;
 
   --mono:"SF Mono","JetBrains Mono",ui-monospace,Consolas,Menlo,monospace;
   --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",system-ui,-apple-system,sans-serif;
   --serif:"Songti SC","SimSun","Noto Serif CJK SC",serif;
-  --radius:10px;
-  --shadow:0 1px 2px rgba(23,34,46,.06),0 6px 20px rgba(23,34,46,.05);
+  --radius-xs:7px;
+  --radius-sm:11px;
+  --radius:15px;
+  --radius-lg:21px;
+  --radius-pill:999px;
+  --shadow:0 1px 2px rgba(23,26,29,.045),0 8px 24px rgba(23,26,29,.07);
 }
 
 /* ---------- 深色模式变量表 ---------- */
@@ -74,43 +91,55 @@
   --paper:#0f1317;
   --card:#171d24;
   --surface:#171d24;
-  --ink:#dfe6ee;
-  --muted:#94a2b0;
-  --faint:#6b7885;
-  --line:#252e38;
-  --line-strong:#37424e;
+  --ink:#e2e8ed;
+  --muted:#aeb8c7;
+  --faint:#8795a6;
+  --line:#3b4654;
+  --line-strong:#4a5868;
   --blue:#6aa9e0;
   --blue-deep:#a6d0f0;
   --blue-soft:#1b2b3c;
   --vermill:#f08a5c;
-  --vermill-soft:#3a2114;
-  --olive:#93c74f;
-  --na:#4b5560;
+  --vermill-soft:#171d24;
+  --olive:#7eaaa4;
+  --na:#345a76;
 
-  --btn-bg:#2a6ea6;
-  --btn-bg-hover:#3480bd;
-  --btn-fg:#ffffff;
-  --focus-ring:rgba(106,169,224,.28);
+  --btn-bg:#171d24;
+  --btn-bg-hover:#1b242d;
+  --btn-fg:#a6d0f0;
+  --focus-ring:rgba(131,169,197,.28);
+  --switch-surface:#171d24;
+  --switch-hover:#202e3e;
+  --switch-selected:#263b53;
 
-  --surface-2:#1e252d;
+  --accent-teal:#5fc7ba;
+  --accent-teal-soft:#171d24;
+  --accent-amber:#e0b95a;
+  --accent-amber-soft:#171d24;
+  --accent-violet:#b393e0;
+  --accent-violet-soft:#171d24;
+  --accent-rust:#f08a5c;
+  --accent-rust-soft:#171d24;
+
+  --surface-2:#171d24;
   --surface-3:#1c242c;
-  --row-alt:#202832;
-  --code-bg:#222b34;
-  --other-bg:#232b34;
-  --other-fg:#b7c3cf;
-  --mgmt-bg:#33260f;
-  --mgmt-fg:#e5b86a;
-  --warn-bg:#2a1c14;
-  --warn-border:#5a3a26;
+  --row-alt:#1a222b;
+  --code-bg:#202a34;
+  --other-bg:#202a34;
+  --other-fg:#c0cad5;
+  --mgmt-bg:var(--accent-amber-soft);
+  --mgmt-fg:var(--accent-amber);
+  --warn-bg:#171d24;
+  --warn-border:#754632;
 
   --pub-bg:#1b2b3c;
   --pub-fg:#a6d0f0;
-  --min-bg:#3a2114;
-  --min-fg:#f08a5c;
-  --card-bg:#2c2138;
-  --card-fg:#b393e0;
+  --min-bg:var(--accent-rust-soft);
+  --min-fg:var(--accent-rust);
+  --card-bg:var(--accent-violet-soft);
+  --card-fg:var(--accent-violet);
 
-  --chart-grid:#242d37;
+  --chart-grid:#2c3743;
   --trend-1:#6aa9e0;
   --trend-2:#f08a5c;
   --trend-3:#9ed45a;
@@ -133,7 +162,7 @@ body{
   line-height:1.6;
   transition:background-color .25s ease, color .25s ease;
 }
-.page{max-width:1120px;margin:0 auto;padding:0 16px 48px;}
+.page{max-width:1280px;margin:0 auto;padding:0 20px 56px;}
 .sr-only{
   position:absolute;width:1px;height:1px;overflow:hidden;
   clip:rect(0 0 0 0);white-space:nowrap;
@@ -145,6 +174,14 @@ select option{background-color:var(--surface);color:var(--ink);}
 
 /* ---------- 无障碍 ---------- */
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+
+/* Superellipse corners enhance supported browsers; border-radius remains the fallback. */
+@supports (corner-shape:superellipse(1.2)){
+  :where(.theme-toggle,.stats>div,.tab,.search-row input,.search-row button,.filter-panel,.filter-field select,.filter-field input,.filter-field button,.filter-operations button,.result-toolbar button,.aggregate-card,.aggregate-detail-action button,.school-comparison-card,.score-segment-year,.aggregate-table-wrap,.year-selection-dialog,.year-selection-actions button,.preview-section,.preview-pagination button,.chart-card,.plan-card,.stats-major-choices,.stats-selection-controls button,#stats-edit-filters,.about-block,.export-actions button){
+    corner-shape:superellipse(1.2);
+  }
+}
+
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important;}
 }

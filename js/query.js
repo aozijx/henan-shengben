@@ -5,7 +5,7 @@
    ============================================================ */
 
 import { getMappingByYear, getMetadata, isReady } from './data.js';
-import { esc } from './utils.js';
+import { setResultState } from './results-controller.js';
 
 var activeQueryYear = null;
 
@@ -60,7 +60,7 @@ export function doQuery($q, $hint, $result) {
   if (!kw) {
     $hint.textContent = '';
     if (resultListener) resultListener([], '');
-    $result.innerHTML = '<div class="empty">输入专业名称，回车或点「查询」开始检索</div>';
+    setResultState($result, '输入专科专业，回车或点击查询开始检索', 'empty');
     return;
   }
 
@@ -70,9 +70,8 @@ export function doQuery($q, $hint, $result) {
     $hint.textContent = '';
     if (resultListener) resultListener([], '');
     var metadata = getMetadata();
-    $result.innerHTML = '<div class="msg-notfound">未找到专科专业「' + esc(kw) + '」。<br>' +
-      '可尝试：关键词的一部分（如「物联网」）；' +
-      '本工具收录 ' + (currentQueryYear(metadata) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。</div>';
+    setResultState($result, '未找到专科专业「' + kw + '」。可尝试输入关键词的一部分（如「物联网」）；本工具收录 ' +
+      (currentQueryYear(metadata) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。', 'empty');
     return;
   }
   var spec = resolveMappingMatch(mapping, kw);
@@ -87,7 +86,7 @@ function showSpec($q, $hint, $result, spec) {
   var metadata = getMetadata();
   $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + (currentQueryYear(metadata) || '') + ' 对照一览表）';
   if (!majors.length) {
-    $result.innerHTML = '<div class="empty">「' + esc(spec['专科专业']) + '」暂无可报本科专业数据</div>';
+    setResultState($result, '「' + spec['专科专业'] + '」暂无可报本科专业数据', 'empty');
     return;
   }
 }

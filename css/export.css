@@ -1,0 +1,26 @@
+/* Field selection lives beside the CSV serializer but keeps its own visual rules. */
+.export-fields-dialog{width:min(520px,calc(100vw - 32px));max-height:min(82vh,760px);padding:0;border:1px solid var(--line-strong);border-radius:var(--radius);background:var(--card);color:var(--ink);box-shadow:var(--shadow);}
+.export-fields-dialog::backdrop{background:rgb(6 10 14 / .64);backdrop-filter:blur(2px);}
+.export-fields-dialog form{display:flex;flex-direction:column;gap:12px;max-height:inherit;padding:20px;}
+.export-fields-dialog h2{margin:0;font-size:18px;}
+.export-fields-description{margin:0;color:var(--muted);font-size:13px;}
+.export-field-list{display:grid;gap:12px;min-height:0;max-height:52vh;overflow:auto;padding:2px;overscroll-behavior:contain;}
+.export-field-group{display:grid;gap:7px;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);}
+.export-field-group legend{padding:0 5px;color:var(--muted);font-size:12px;font-weight:700;}
+.export-field-option{display:flex;align-items:center;gap:9px;min-height:36px;color:var(--ink);font-size:13px;cursor:pointer;}
+.export-field-option input{width:17px;height:17px;flex:none;accent-color:var(--blue);}
+.export-fields-error{min-height:18px;margin:0;color:var(--vermill);font-size:12px;}
+.export-field-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding-top:4px;border-top:1px solid var(--line);}
+.export-field-actions button{min-height:40px;padding:7px 12px;border:1px solid var(--line-strong);border-radius:var(--radius-xs);background:var(--surface-2);color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+.export-field-actions button:hover{border-color:var(--blue);color:var(--blue-deep);}
+.export-field-actions [data-export-confirm]{border-color:var(--blue);color:var(--blue-deep);}
+.export-field-actions button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+
+@media(max-width:520px){
+  .export-fields-dialog{width:calc(100vw - 24px);max-height:88vh;border-radius:var(--radius-sm);}
+  .export-fields-dialog form{gap:10px;padding:16px;}
+  .export-field-list{max-height:58vh;}
+  .export-field-option{min-height:42px;}
+  .export-field-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .export-field-actions button{min-height:44px;padding-inline:8px;}
+}

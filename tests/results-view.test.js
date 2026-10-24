@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildResultWorkspaceHtml, buildExpandedMajorHtml, buildYearDialogHtml, buildResultViewModel, toggleMajorDetail } from '../js/results-view.js';
+import { buildResultWorkspaceHtml, buildExpandedMajorHtml, buildYearDialogHtml, buildResultViewModel, resultMessage } from '../js/results-view.js';
 import { buildSchoolDetailHtml, buildYearSummaryHtml } from '../js/year-stack.js';
 
 const aggregate = {
@@ -24,7 +24,7 @@ const aggregate = {
   }
 };
 
-test('initial aggregate summary includes courses scores ranks and split plan totals without private details', () => {
+test('initial aggregate summary includes courses, scores and split plan totals without unavailable ranks or private details', () => {
   const html = buildResultWorkspaceHtml({ aggregates: [aggregate], status: 'ready' }, {
     supportedYears: [2026], latestYear: 2026
   });
@@ -34,7 +34,7 @@ test('initial aggregate summary includes courses scores ranks and split plan tot
   assert.match(html, /公共英语/);
   assert.match(html, /高等数学/);
   assert.match(html, /省控线[^<]*180/);
-  assert.match(html, /参考位次[^<]*45/);
+  assert.doesNotMatch(html, /参考位次/);
   assert.match(html, /公办[^<]*1 所[^<]*普通 20 人[^<]*专项 3 人/);
   assert.match(html, /民办[^<]*1 所[^<]*普通 10 人/);
   assert.doesNotMatch(html, /0371-12345678|郑州市|完整分数段/);
@@ -50,15 +50,13 @@ test('card places its detail action beside the major title before yearly summari
   assert.ok(html.indexOf('data-expand-major="0"') < html.indexOf('class="year-overview"'));
 });
 
-test('layout switch uses compact labelled icon buttons', () => {
+test('result workspace contains only result content and leaves layout controls to its static shell', () => {
   const html = buildResultWorkspaceHtml({ aggregates: [aggregate], status: 'ready', hasQuery: true }, {
     supportedYears: [2026], latestYear: 2026
   });
 
-  assert.match(html, /data-result-layout="cards"[^>]*aria-label="切换为聚合卡片"/);
-  assert.match(html, /data-result-layout="table"[^>]*aria-label="切换为表格"/);
-  assert.match(html, /class="layout-icon"/);
-  assert.doesNotMatch(html, />聚合卡片<|>表格</);
+  assert.match(html, /class="aggregate-list"/);
+  assert.doesNotMatch(html, /data-result-layout|result-toolbar|layout-icon/);
 });
 
 test('expanded major content creates school comparison and score segment tables lazily', () => {
@@ -113,12 +111,13 @@ test('school details expose the complete plan record instead of only contact fie
   assert.match(html, /https:\/\/example.edu\/charter/);
 });
 
-test('workspace distinguishes empty query filtered empty unpublished year and load failure', () => {
+test('result status helper distinguishes empty query filtered empty unpublished year and load failure', () => {
   const metadata = { supportedYears: [2026], latestYear: 2026 };
-  assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'idle' }, metadata), /输入专科专业/);
-  assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'ready', hasQuery: true }, metadata), /筛选条件下没有/);
-  assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'unpublished' }, metadata), /尚未发布/);
-  assert.match(buildResultWorkspaceHtml({ aggregates: [], status: 'error', error: '计划加载失败' }, metadata), /计划加载失败/);
+  assert.match(resultMessage({ status: 'idle' }, metadata), /输入专科专业/);
+  assert.match(resultMessage({ status: 'ready', hasQuery: true }, metadata), /筛选条件下没有/);
+  assert.match(resultMessage({ status: 'unpublished' }, metadata), /尚未发布/);
+  assert.match(resultMessage({ status: 'error', error: '计划加载失败' }, metadata), /计划加载失败/);
+  assert.equal(buildResultWorkspaceHtml({ aggregates: [], status: 'ready', hasQuery: true }, metadata), '');
 });
 
 test('cards render only selected years and keep lazy detail content out of the initial DOM', () => {
@@ -163,7 +162,8 @@ test('year controls make selected years and focus year visible', () => {
   }, metadata);
   const dialog = buildYearDialogHtml(metadata, [2024, 2026]);
 
-  assert.doesNotMatch(workspace, /data-result-action="years"|year-selection-dialog/);
+  assert.doesNotMatch(workspace, /data-result-action="years"|year-selection-dialog|result-toolbar/);
+  assert.match(dialog, /专业摘要、院校明细和导出字段/);
   assert.match(dialog, /已选 2\/3 年/);
   assert.match(dialog, /当前基准：2026 年/);
 });
@@ -179,9 +179,9 @@ test('result view model normalizes shared years and layout without mutating meta
   assert.equal(metadata.__selectedYears, undefined);
 });
 
-test('workspace renders expanded details from explicit view state', () => {
+test('workspace renders expanded details from stable major identity state', () => {
   const html = buildResultWorkspaceHtml(buildResultViewModel({
-    aggregates: [aggregate], selectedYears: [2026], expandedDetails: { 0: true }
+    aggregates: [aggregate], selectedYears: [2026], expandedDetails: { '080902': true }
   }, { supportedYears: [2026] }), { supportedYears: [2026] });
 
   assert.match(html, /aria-expanded="true"/);
@@ -198,32 +198,11 @@ test('year dialog exposes metadata years and all required actions', () => {
   assert.match(html, /取消|应用/);
 });
 
-test('detail toggle keeps table detail mounted without dispatching a global render', () => {
-  const detailRow = { hidden: true, classList: { contains: (name) => name === 'aggregate-table-detail' } };
-  const holder = {
-    innerHTML: '',
-    hasChildNodes() { return this.innerHTML.length > 0; },
-    closest() { return detailRow; }
-  };
-  const root = { querySelector: () => holder };
-  const button = {
-    dataset: { expandLabel: '查看院校详情' },
-    getAttribute: () => '0',
-    setAttribute() {},
-    textContent: '查看院校详情'
-  };
-  const model = { aggregates: [aggregate] };
-  const viewState = {};
-
-  assert.equal(toggleMajorDetail(root, model.aggregates, button, viewState, [2026]), true);
-  assert.match(holder.innerHTML, /河南大学/);
-  assert.equal(viewState['0'], true);
-  assert.equal(detailRow.hidden, false);
-  assert.equal(button.textContent, '收起院校详情');
-
-  assert.equal(toggleMajorDetail(root, model.aggregates, button, viewState, [2026]), false);
-  assert.equal(holder.innerHTML, '');
-  assert.equal(viewState['0'], undefined);
-  assert.equal(detailRow.hidden, true);
-  assert.equal(button.textContent, '查看院校详情');
+test('table layout keeps a closed detail subrow adjacent to its major row', () => {
+  const html = buildResultWorkspaceHtml({
+    aggregates: [aggregate], status: 'ready', hasQuery: true,
+    selectedYears: [2026], resultLayout: 'table'
+  }, { supportedYears: [2026] });
+  assert.match(html, /class="aggregate-table-row"[\s\S]*class="aggregate-table-detail" hidden/);
+  assert.match(html, /data-major-detail="0"/);
 });
