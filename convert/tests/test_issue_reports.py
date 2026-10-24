@@ -4,7 +4,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.issue_reports import apply_manual_correction, build_issue_report, ensure_manual_corrections
+from convert.issue_reports import build_issue_report
+from convert.manual_corrections import apply_manual_correction, ensure_manual_corrections
 from convert.pdf_tables import RawPdfRow
 
 
@@ -24,21 +25,30 @@ class IssueReportTest(unittest.TestCase):
         }
 
     @patch("convert.issue_reports.extract_rows")
-    def test_report_contains_traceability_raw_rows_and_suspicious_context(self, extract):
+    def test_default_report_is_compact_but_keeps_traceability_and_suspicious_context(self, extract):
         extract.return_value = [
             RawPdfRow(1, ("240", "10", "200", "50")),
             RawPdfRow(1, ("239", "11", "805", "12")),
         ]
-        report = build_issue_report(self.extraction(), Path("data"), {"53": 100})
+        report = build_issue_report(self.extraction()["majors"], Path("data"), {"53": 100}, year=2026)
         issue = report["issues"][0]
         self.assertEqual("2026-53", issue["issueId"])
         self.assertEqual(100, issue["officialControlScore"])
         self.assertEqual("一分一段/原始PDF/2026/53_网络工程.pdf", issue["sourcePdf"])
         self.assertEqual("a" * 64, issue["sourceSha256"])
-        self.assertEqual(2, len(issue["rawRows"]))
+        self.assertNotIn("rawRows", issue)
         self.assertTrue(issue["suspiciousRows"])
         self.assertIn("score-out-of-range", issue["suspiciousRows"][0]["reasons"])
         self.assertEqual(2, len(issue["suspiciousRows"][0]["contextRows"]))
+
+    @patch('convert.issue_reports.extract_rows')
+    def test_full_report_includes_full_ocr_rows(self, extract):
+        extract.return_value = [RawPdfRow(1, ('239', '11', '805', '12'))]
+        report = build_issue_report(self.extraction()["majors"], Path('data'), {'53': 100},
+                                    full_report=True, year=2026)
+        issue = report['issues'][0]
+        self.assertEqual(1, len(issue['rawRows']))
+        self.assertEqual(['239', '11', '805', '12'], issue['suspiciousRows'][0]['cells'])
 
     def test_manual_correction_file_is_created_once_and_never_overwritten(self):
         with tempfile.TemporaryDirectory() as directory:
