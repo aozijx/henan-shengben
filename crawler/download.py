@@ -10,8 +10,9 @@ import requests
 if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT, USER_AGENT
+from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT
 from crawler.source_rules import is_official_pdf_url
+from crawler.waf import build_session
 from crawler.year_sources import load_seed_targets, seed_paths_in
 
 
@@ -104,8 +105,7 @@ def main():
     parser.add_argument('--years', nargs='*', type=int)
     parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
-    session = requests.Session()
-    session.headers['User-Agent'] = USER_AGENT
+    session = build_session()
     seed_paths = args.seed or seed_paths_in(args.data_root)
     if not seed_paths:
         parser.error('no year-links seeds found')

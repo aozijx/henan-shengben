@@ -12,8 +12,9 @@ from bs4 import BeautifulSoup
 if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from pipeline_config import REQUEST_TIMEOUT, USER_AGENT
+from pipeline_config import REQUEST_TIMEOUT
 from crawler.source_rules import is_official_pdf_url
+from crawler.waf import build_session
 
 
 class DiscoveryBlockedError(RuntimeError):
@@ -79,8 +80,7 @@ def main():
     seeds = [seed for seed in seeds if not args.years or seed['year'] in set(args.years)]
     if not seeds:
         parser.error('no matching year-links seeds')
-    session = requests.Session()
-    session.headers['User-Agent'] = USER_AGENT
+    session = build_session()
     for seed in seeds:
         year = seed['year']
         print(f'[{year}] 解析官方分数段来源页 …', flush=True)
@@ -88,7 +88,7 @@ def main():
         print(f'[{year}] 来源页：{target.discovery_url}', flush=True)
         response = session.get(target.discovery_url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
-        entries = discover_year(target, response.text)
+        entries = discover_year(target, response.content)
         print(f'[{year}] 发现 {len(entries)} 个官方 PDF', flush=True)
         document = {'schemaVersion': 1, 'dataset': target.dataset, 'year': target.year,
                     'sourcePageUrl': target.source_page_url,

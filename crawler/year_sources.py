@@ -184,7 +184,7 @@ def _search_candidates(seed: dict, session) -> dict[str, set[str]]:
         return {}
     response = session.get(url, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.content, 'html.parser')
     candidates: dict[str, set[str]] = {}
     for link in soup.find_all('a', href=True):
         page_url = urljoin(url, link['href'])
@@ -215,7 +215,7 @@ def resolve_score_segment_target(seed: dict, session) -> CrawlTarget:
 def _page_attachments(page_url: str, session, year: int) -> list[tuple[str, str]]:
     response = session.get(page_url, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.content, 'html.parser')
     found = []
     for link in soup.find_all('a', href=True):
         url = urljoin(page_url, link['href'])
@@ -254,7 +254,7 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
         pages[role] = next(iter(urls))
         response = session.get(pages[role], timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
-        page_text = BeautifulSoup(response.text, 'html.parser').get_text(' ', strip=True)
+        page_text = BeautifulSoup(response.content, 'html.parser').get_text(' ', strip=True)
         if str(year) not in page_text or not any(word in page_text for word in SOURCE_ROLES[role]):
             raise SourceResolutionError(f'{year} {role}: official page title/content does not confirm the year and source type')
 

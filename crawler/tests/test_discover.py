@@ -17,6 +17,7 @@ from crawler.year_sources import (
 class Response:
     def __init__(self, text):
         self.text = text
+        self.content = text.encode('utf-8')
 
     def raise_for_status(self):
         return None
@@ -78,6 +79,14 @@ class DiscoverTest(unittest.TestCase):
         entries = discover_year(target, html)
         self.assertEqual([entry.major_code for entry in entries], ['01', 'U6'])
         self.assertTrue(all('haeea.cn' in entry.pdf_url for entry in entries))
+
+    def test_decodes_charset_less_utf8_bytes_from_official_site(self):
+        target = crawl_target_for_seed(load_year_links(Path('data/year-links/2025.json')))
+        html = ('<meta charset="utf-8"><h1>2025年专升本分数段统计表</h1>'
+                '<a href="/attach/file/x/表(01经济学).pdf">下载</a>').encode('utf-8')
+        entries = discover_year(target, html)
+        self.assertEqual([entry.major_code for entry in entries], ['01'])
+        self.assertEqual(entries[0].major_name, '经济学')
 
     def test_rejects_antibot_or_empty_pages(self):
         target = crawl_target_for_seed(load_year_links(Path('data/year-links/2025.json')))

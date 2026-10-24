@@ -20,6 +20,7 @@ from crawler.year_sources import (
 class FakeResponse:
     def __init__(self, text=''):
         self.text = text
+        self.content = text.encode('utf-8')
 
     def raise_for_status(self):
         return None
