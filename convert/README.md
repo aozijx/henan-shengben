@@ -6,10 +6,10 @@
 
 ```powershell
 python -m pip install -r convert/requirements.txt
-python convert/convert_all.py --dataset score-segments --year 2026
-python convert/convert_all.py --dataset score-segments --year 2026 --major 01
-python convert/issue_reports.py
-python convert/normalize.py --years 2024 2025 2026
+python -m convert.convert_all --dataset score-segments --year 2026
+python -m convert.convert_all --dataset score-segments --year 2026 --major 01
+python -m convert.issue_reports
+python -m convert.normalize --years 2024 2025 2026
 python -m unittest discover -s convert/tests -v
 ```
 

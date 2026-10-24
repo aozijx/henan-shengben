@@ -34,7 +34,7 @@ def _write(path: Path, value: object) -> None:
 
 
 def source_role_for_attachment(parser: str, index: int) -> str:
-    """Map a registry parser row and PDF position to its source provenance role."""
+    """Map a derived parser row and PDF position to its source provenance role."""
     if parser == 'mapping':
         if index not in (0, 1):
             raise ValueError(f'unsupported mapping attachment index: {index}')
@@ -42,6 +42,25 @@ def source_role_for_attachment(parser: str, index: int) -> str:
     if parser in {'scorelines', 'plans', 'master'} and index == 0:
         return parser
     raise ValueError(f'unsupported parser attachment: {parser}[{index}]')
+
+
+def publish_staged_files(staging_root: Path, data_root: Path) -> None:
+    """Preflight every destination before publishing any newly staged file."""
+    staged_files = [path for path in Path(staging_root).rglob('*') if path.is_file()]
+    for source in staged_files:
+        relative = source.relative_to(staging_root)
+        target = Path(data_root) / relative
+        if target.exists() and target.read_bytes() != source.read_bytes():
+            raise ValueError(f'new-year publish would overwrite existing file: {relative}')
+    for source in staged_files:
+        relative = source.relative_to(staging_root)
+        target = Path(data_root) / relative
+        if target.exists():
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        temporary_file = target.with_name(target.name + '.new')
+        shutil.copy2(source, temporary_file)
+        os.replace(temporary_file, target)
 
 
 def _run_in_staging(seed: dict, root: Path, session) -> dict:
@@ -107,6 +126,8 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
 def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_path: Path,
                 session=None, *, check: bool = False) -> dict:
     seed = load_year_links(seed_path)
+    if Path(seed_path).stem != str(seed['year']):
+        raise ValueError(f"year-links filename/year mismatch: {Path(seed_path).name}")
     session = session or requests.Session()
     session.headers['User-Agent'] = 'henan-shengben-data/1.0'
     data_root, metadata_path = Path(data_root).resolve(), Path(metadata_path).resolve()
@@ -128,20 +149,8 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
                                       'yearSources': result['yearSources'][str(seed['year'])],
                                       'defaultYear': result['defaultYear']}
             return report
-        # Publish only new paths. Refuse collisions, then replace metadata last.
-        for source in staging_root.rglob('*'):
-            if not source.is_file():
-                continue
-            relative = source.relative_to(staging_root)
-            target = data_root / relative
-            if target.exists():
-                if target.read_bytes() != source.read_bytes():
-                    raise ValueError(f'new-year publish would overwrite existing file: {relative}')
-                continue
-            target.parent.mkdir(parents=True, exist_ok=True)
-            temporary_file = target.with_name(target.name + '.new')
-            shutil.copy2(source, temporary_file)
-            os.replace(temporary_file, target)
+        # Publish only new paths. Refuse every collision before copying, then replace metadata last.
+        publish_staged_files(staging_root, data_root)
         staged_file = Path(temporary) / 'metadata.json'
         metadata_tmp = metadata_path.with_name(metadata_path.name + '.new')
         shutil.copy2(staged_file, metadata_tmp)

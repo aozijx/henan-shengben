@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.ingest_year import ingest_year, source_role_for_attachment
+from convert.ingest_year import ingest_year, publish_staged_files, source_role_for_attachment
 from convert.common import REPO_ROOT
 
 
@@ -142,6 +142,35 @@ def mocked_tabular_parsers(*, needs_review=False):
 
 
 class IngestYearTests(unittest.TestCase):
+    def test_publish_preflights_every_collision_before_copying_new_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            staging = root / 'staging'
+            active = root / 'active'
+            staging.mkdir()
+            active.mkdir()
+            (staging / 'a-new.json').write_text('new', encoding='utf-8')
+            (staging / 'z-existing.json').write_text('replacement', encoding='utf-8')
+            (active / 'z-existing.json').write_text('preserve', encoding='utf-8')
+
+            with self.assertRaisesRegex(ValueError, 'overwrite existing file'):
+                publish_staged_files(staging, active)
+
+            self.assertFalse((active / 'a-new.json').exists())
+            self.assertEqual((active / 'z-existing.json').read_text(encoding='utf-8'), 'preserve')
+
+    def test_seed_filename_must_match_declared_year(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            data, metadata, old_metadata = seed_data(root)
+            seed = make_seed(root)
+            wrong_name = seed.with_name('2026.json')
+            seed.replace(wrong_name)
+            with self.assertRaisesRegex(ValueError, 'filename/year mismatch'):
+                ingest_year(wrong_name, data, REPO_ROOT / 'metadata/school-data.template.json',
+                            metadata, FakeSession(), check=True)
+            self.assertEqual(metadata.read_bytes(), old_metadata)
+
     def test_source_parser_attachment_role_mapping(self):
         self.assertEqual(source_role_for_attachment('master', 0), 'master')
         self.assertEqual(source_role_for_attachment('scorelines', 0), 'scorelines')
