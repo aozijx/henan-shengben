@@ -1,0 +1,64 @@
+{
+  "majorCode": "P7",
+  "majorName": "心理学",
+  "controlScore": 135,
+  "sourceId": "score-segments:2025:P7:1c4c10681ac3",
+  "sourcePdf": "一分一段/原始PDF/2025/P7_心理学.pdf",
+  "sourceSha256": "1c4c10681ac347810c34505c70eef9e8b594b0d842fd61fbdac92be1eb22cbce",
+  "segments": [
+    {
+      "score": 185,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 13
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,180 @@
+{
+  "majorCode": "86",
+  "majorName": "茶学",
+  "controlScore": 169,
+  "sourceId": "score-segments:2024:86:be7114dbfa31",
+  "sourcePdf": "一分一段/原始PDF/2024/86_茶学.pdf",
+  "sourceSha256": "be7114dbfa3117715152a97655206b9afc2f285f80febfd90eb6610082979b50",
+  "segments": [
+    {
+      "score": 240,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 84
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

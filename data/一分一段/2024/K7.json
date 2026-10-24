@@ -1,0 +1,88 @@
+{
+  "majorCode": "K7",
+  "majorName": "舞蹈学",
+  "controlScore": 177,
+  "sourceId": "score-segments:2024:K7:0eb0f1297fba",
+  "sourcePdf": "一分一段/原始PDF/2024/K7_舞蹈学.pdf",
+  "sourceSha256": "0eb0f1297fbaeaa9ec303074b2aab091e822331a2cef23fec979829ebc1ac19d",
+  "segments": [
+    {
+      "score": 213,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 23
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

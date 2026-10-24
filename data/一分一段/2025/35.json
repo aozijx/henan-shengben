@@ -1,0 +1,56 @@
+{
+  "majorCode": "35",
+  "majorName": "材料成型及控制工程",
+  "controlScore": 89,
+  "sourceId": "score-segments:2025:35:d40b52ccefbe",
+  "sourcePdf": "一分一段/原始PDF/2025/35_材料成型及控制工程.pdf",
+  "sourceSha256": "d40b52ccefbeaa33f5080f9175a0230d966f7c4b55f9ba3b73958256bbc4f8f7",
+  "segments": [
+    {
+      "score": 220,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 13
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,132 @@
+{
+  "majorCode": "B5",
+  "majorName": "日语",
+  "controlScore": 146,
+  "sourceId": "score-segments:2025:B5:27994863cc27",
+  "sourcePdf": "一分一段/原始PDF/2025/B5_日语.pdf",
+  "sourceSha256": "27994863cc277ed26c8e5f3c937e56444c0d1ee1aed236814eda39df0d68fbc8",
+  "segments": [
+    {
+      "score": 243,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 39
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

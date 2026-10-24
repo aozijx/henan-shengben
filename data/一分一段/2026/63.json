@@ -1,0 +1,68 @@
+{
+  "majorCode": "63",
+  "majorName": "测绘工程",
+  "controlScore": 81,
+  "sourceId": "score-segments:2026:63:5423a6a38ee9",
+  "sourcePdf": "一分一段/原始PDF/2026/63_测绘工程.pdf",
+  "sourceSha256": "5423a6a38ee9446df84c240da7ef748415586f7a371e6d417d81ef7f0a014df8",
+  "segments": [
+    {
+      "score": 160,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 16
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

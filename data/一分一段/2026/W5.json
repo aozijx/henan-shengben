@@ -1,0 +1,32 @@
+{
+  "majorCode": "W5",
+  "majorName": "生物科学",
+  "controlScore": 89,
+  "sourceId": "score-segments:2026:W5:a280e095ea87",
+  "sourcePdf": "一分一段/原始PDF/2026/W5_生物科学.pdf",
+  "sourceSha256": "a280e095ea872bae04420ed5c75c5b9ac72f3be2732bcc1e84861d84476d6231",
+  "segments": [
+    {
+      "score": 157,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 5
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

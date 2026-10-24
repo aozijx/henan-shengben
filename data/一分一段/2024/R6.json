@@ -1,0 +1,84 @@
+{
+  "majorCode": "R6",
+  "majorName": "机械工程",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:R6:7299fa1f488c",
+  "sourcePdf": "一分一段/原始PDF/2024/R6_机械工程.pdf",
+  "sourceSha256": "7299fa1f488c2b0290f05b505a29dde0756808a4cf645f7812dcf630e01a1782",
+  "segments": [
+    {
+      "score": 167,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 19
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,44 @@
+{
+  "majorCode": "B7",
+  "majorName": "广播电视学",
+  "controlScore": 81,
+  "sourceId": "score-segments:2025:B7:11f21f210758",
+  "sourcePdf": "一分一段/原始PDF/2025/B7_广播电视学.pdf",
+  "sourceSha256": "11f21f210758508fe62ec7fc06fcd6f3827568ee62c2a11989f88186903f270e",
+  "segments": [
+    {
+      "score": 146,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 8
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

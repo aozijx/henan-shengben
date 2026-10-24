@@ -1,0 +1,120 @@
+{
+  "majorCode": "D3",
+  "majorName": "中医学",
+  "controlScore": 238,
+  "sourceId": "score-segments:2026:D3:71ba37123c5b",
+  "sourcePdf": "一分一段/原始PDF/2026/D3_中医学.pdf",
+  "sourceSha256": "71ba37123c5b6dc28a2cdbfb3b7b7c0b14cad196626fc079e30340b978cb1bc8",
+  "segments": [
+    {
+      "score": 265,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 264,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 263,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 262,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 260,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 259,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 258,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 256,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 255,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 112
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 131
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 139
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,44 @@
+{
+  "majorCode": "N8",
+  "majorName": "金融工程",
+  "controlScore": 136,
+  "sourceId": "score-segments:2024:N8:133f624944a7",
+  "sourcePdf": "一分一段/原始PDF/2024/N8_金融工程.pdf",
+  "sourceSha256": "133f624944a7446c016b58db7007facbd56ddc7fd6e6a2b7718d9bdbbb396d03",
+  "segments": [
+    {
+      "score": 200,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 8
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

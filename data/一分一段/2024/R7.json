@@ -1,0 +1,204 @@
+{
+  "majorCode": "R7",
+  "majorName": "包装工程",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:R7:ac64292262ee",
+  "sourcePdf": "一分一段/原始PDF/2024/R7_包装工程.pdf",
+  "sourceSha256": "ac64292262eed1fec2d12cd07b64ad0e85f09a42dc98f9a48d1056d273853285",
+  "segments": [
+    {
+      "score": 187,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 59
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

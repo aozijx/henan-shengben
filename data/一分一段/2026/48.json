@@ -1,0 +1,324 @@
+{
+  "majorCode": "48",
+  "majorName": "自动化",
+  "controlScore": 126,
+  "sourceId": "score-segments:2026:48:1bf13909b76f",
+  "sourcePdf": "一分一段/原始PDF/2026/48_自动化.pdf",
+  "sourceSha256": "1bf13909b76fa3700a105322d43b121528e295bdcf22b289701d4b0d097f5df4",
+  "segments": [
+    {
+      "score": 247,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 112
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 128
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 136
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 143
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 149
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 160
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 166
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 173
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 177
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 183
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 187
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 191
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 192
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 195
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 319
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 325
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 327
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 331
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 337
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 342
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 344
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 351
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 356
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 360
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 367
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 373
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 376
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 378
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 381
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 388
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 392
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 393
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 396
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 398
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 400
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 401
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 404
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 411
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

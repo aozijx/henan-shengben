@@ -1,0 +1,68 @@
+{
+  "majorCode": "K5",
+  "majorName": "翻译",
+  "controlScore": 133,
+  "sourceId": "score-segments:2024:K5:4b5456569aff",
+  "sourcePdf": "一分一段/原始PDF/2024/K5_翻译.pdf",
+  "sourceSha256": "4b5456569aff466e2f918f275270daf1dbc667694e6cdd07eb34fd18b2a70b4d",
+  "segments": [
+    {
+      "score": 214,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 14
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

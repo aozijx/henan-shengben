@@ -1,0 +1,128 @@
+{
+  "majorCode": "K7",
+  "majorName": "舞蹈学",
+  "controlScore": 200,
+  "sourceId": "score-segments:2025:K7:5bec7f4b531e",
+  "sourcePdf": "一分一段/原始PDF/2025/K7_舞蹈学.pdf",
+  "sourceSha256": "5bec7f4b531eaae09265c9da14a409e0c9b9521d5878ed7a931fc3c60aa3b009",
+  "segments": [
+    {
+      "score": 249,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 44
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

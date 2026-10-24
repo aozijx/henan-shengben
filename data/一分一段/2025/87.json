@@ -1,0 +1,228 @@
+{
+  "majorCode": "87",
+  "majorName": "林学",
+  "controlScore": 156,
+  "sourceId": "score-segments:2025:87:028c9f0e0180",
+  "sourcePdf": "一分一段/原始PDF/2025/87_林学.pdf",
+  "sourceSha256": "028c9f0e0180f547e56993d16e1eb92f61c92c58fffb25d018c3b075eb796f14",
+  "segments": [
+    {
+      "score": 242,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 120
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,228 @@
+{
+  "majorCode": "Q4",
+  "majorName": "智能医学工程",
+  "controlScore": 152,
+  "sourceId": "score-segments:2026:Q4:6ad6c3f47548",
+  "sourcePdf": "一分一段/原始PDF/2026/Q4_智能医学工程.pdf",
+  "sourceSha256": "6ad6c3f47548b6453e3b24716420882f043ce1a6f5175906626369bcfcab7787",
+  "segments": [
+    {
+      "score": 221,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 99
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 103
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 108
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 120
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,236 @@
+{
+  "majorCode": "Q5",
+  "majorName": "审计学",
+  "controlScore": 154,
+  "sourceId": "score-segments:2026:Q5:a26d5f6dc802",
+  "sourcePdf": "一分一段/原始PDF/2026/Q5_审计学.pdf",
+  "sourceSha256": "a26d5f6dc8026fecff89f128637eaacb5c61ad4e43207160f69fa623150da801",
+  "segments": [
+    {
+      "score": 241,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 92
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 99
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 142
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 162
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 173
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 186
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 198
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 205
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 219
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 225
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 233
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 239
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 251
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 257
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 268
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 278
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 284
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 291
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 301
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 312
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 323
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 329
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 339
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 346
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 354
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 364
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 374
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 384
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 395
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 401
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 409
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 581
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 594
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

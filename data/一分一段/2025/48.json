@@ -1,0 +1,244 @@
+{
+  "majorCode": "48",
+  "majorName": "自动化",
+  "controlScore": 171,
+  "sourceId": "score-segments:2025:48:59af1aabe4b7",
+  "sourcePdf": "一分一段/原始PDF/2025/48_自动化.pdf",
+  "sourceSha256": "59af1aabe4b7d723678b3f920ed1b602a8907d6487529ba406adfdcf45d1db13",
+  "segments": [
+    {
+      "score": 267,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 263,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 261,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 92
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 99
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 123
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 125
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 136
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 144
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 151
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 156
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 162
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 167
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 174
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 182
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 189
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 196
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 202
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 209
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 214
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 223
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 373
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 376
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 384
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 389
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

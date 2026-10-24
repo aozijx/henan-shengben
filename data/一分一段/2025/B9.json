@@ -1,0 +1,228 @@
+{
+  "majorCode": "B9",
+  "majorName": "广播电视编导",
+  "controlScore": 167,
+  "sourceId": "score-segments:2025:B9:f5001ec4d17d",
+  "sourcePdf": "一分一段/原始PDF/2025/B9_广播电视编导.pdf",
+  "sourceSha256": "f5001ec4d17d53885b0c02d323fc2d95eeddc04373d782baa4c10288704b5b0b",
+  "segments": [
+    {
+      "score": 257,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 103
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 108
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 116
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 121
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 126
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 128
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 140
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 144
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 146
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 153
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 159
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 161
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 165
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 166
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 170
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

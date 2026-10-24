@@ -1,0 +1,128 @@
+{
+  "majorCode": "X1",
+  "majorName": "智能测控工程",
+  "controlScore": 163,
+  "sourceId": "score-segments:2026:X1:d8755d2ead04",
+  "sourcePdf": "一分一段/原始PDF/2026/X1_智能测控工程.pdf",
+  "sourceSha256": "d8755d2ead04a982eed35c7c7e4e588de476ea15326847993ecf1c5b9bfb2fef",
+  "segments": [
+    {
+      "score": 237,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 60
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

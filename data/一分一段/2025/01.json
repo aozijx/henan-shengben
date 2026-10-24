@@ -1,0 +1,224 @@
+{
+  "majorCode": "01",
+  "majorName": "经济学",
+  "controlScore": 140,
+  "sourceId": "score-segments:2025:01:750a95ba0eae",
+  "sourcePdf": "一分一段/原始PDF/2025/01_经济学.pdf",
+  "sourceSha256": "750a95ba0eaef0654451b26d4d9b8993e69c8c5e6520e4391b2bcb02587e6270",
+  "segments": [
+    {
+      "score": 256,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 68
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,228 @@
+{
+  "majorCode": "J2",
+  "majorName": "数据科学与大数据技术",
+  "controlScore": 81,
+  "sourceId": "score-segments:2026:J2:08daaf3eb970",
+  "sourcePdf": "一分一段/原始PDF/2026/J2_数据科学与大数据技术.pdf",
+  "sourceSha256": "08daaf3eb970a8a70f642f39aa6acb4300c0fbfa102c5cf72021651961956ea9",
+  "segments": [
+    {
+      "score": 238,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 97,
+      "cumulativeCount": 73
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

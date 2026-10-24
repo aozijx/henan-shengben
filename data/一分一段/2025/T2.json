@@ -1,0 +1,160 @@
+{
+  "majorCode": "T2",
+  "majorName": "新能源科学与工程",
+  "controlScore": 109,
+  "sourceId": "score-segments:2025:T2:6575671215a3",
+  "sourcePdf": "一分一段/原始PDF/2025/T2_新能源科学与工程.pdf",
+  "sourceSha256": "6575671215a355fcee362c1acd2300f4734e53c3c5ba9d856c815ccbaa33cb39",
+  "segments": [
+    {
+      "score": 251,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 43
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

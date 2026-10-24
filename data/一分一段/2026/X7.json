@@ -1,0 +1,192 @@
+{
+  "majorCode": "X7",
+  "majorName": "影视摄影与制作",
+  "controlScore": 139,
+  "sourceId": "score-segments:2026:X7:4ff941899d7a",
+  "sourcePdf": "一分一段/原始PDF/2026/X7_影视摄影与制作.pdf",
+  "sourceSha256": "4ff941899d7ab7fa36c6e518e33015278b5ebda11e6763c980190bc97b49de7f",
+  "segments": [
+    {
+      "score": 203,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 92
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 98
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

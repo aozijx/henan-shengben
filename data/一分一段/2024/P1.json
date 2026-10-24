@@ -1,0 +1,32 @@
+{
+  "majorCode": "P1",
+  "majorName": "金融科技",
+  "controlScore": 128,
+  "sourceId": "score-segments:2024:P1:25ce7d6c365f",
+  "sourcePdf": "一分一段/原始PDF/2024/P1_金融科技.pdf",
+  "sourceSha256": "25ce7d6c365fe39938cac64f759180d8530efae55d486ab0c2ff7fcdbfca768c",
+  "segments": [
+    {
+      "score": 225,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 6
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,108 @@
+{
+  "majorCode": "B5",
+  "majorName": "日语",
+  "controlScore": 102,
+  "sourceId": "score-segments:2026:B5:82119673d7c9",
+  "sourcePdf": "一分一段/原始PDF/2026/B5_日语.pdf",
+  "sourceSha256": "82119673d7c9ed915403c663fdf05c57e2f717d4a1e97d32d87d5e0da27cfdb4",
+  "segments": [
+    {
+      "score": 213,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 30
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

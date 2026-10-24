@@ -1,0 +1,244 @@
+{
+  "majorCode": "J2",
+  "majorName": "数据科学与大数据技术",
+  "controlScore": 171,
+  "sourceId": "score-segments:2025:J2:199417e20f94",
+  "sourcePdf": "一分一段/原始PDF/2025/J2_数据科学与大数据技术.pdf",
+  "sourceSha256": "199417e20f948fa1670c6739a10d3997a9b753726929dfbbfcf62153ad4c1870",
+  "segments": [
+    {
+      "score": 270,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 267,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 265,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 263,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 262,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 260,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 256,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 255,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 102
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 121
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 125
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 127
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 131
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 135
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 210
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 214
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 216
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 219
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

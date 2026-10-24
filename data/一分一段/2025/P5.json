@@ -1,0 +1,24 @@
+{
+  "majorCode": "P5",
+  "majorName": "汉语国际教育",
+  "controlScore": 157,
+  "sourceId": "score-segments:2025:P5:1a93e4be5d31",
+  "sourcePdf": "一分一段/原始PDF/2025/P5_汉语国际教育.pdf",
+  "sourceSha256": "1a93e4be5d311fb0b316461ffc629a1628602d49c332994757bbd353bd187a55",
+  "segments": [
+    {
+      "score": 185,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 3
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

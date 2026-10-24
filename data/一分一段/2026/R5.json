@@ -1,0 +1,36 @@
+{
+  "majorCode": "R5",
+  "majorName": "宝石及材料工艺学",
+  "controlScore": 90,
+  "sourceId": "score-segments:2026:R5:0614a519b955",
+  "sourcePdf": "一分一段/原始PDF/2026/R5_宝石及材料工艺学.pdf",
+  "sourceSha256": "0614a519b95569b70f05f8df989d4135f1b7dc6bc63e749e6d06c65fd7e0c89c",
+  "segments": [
+    {
+      "score": 126,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 6
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

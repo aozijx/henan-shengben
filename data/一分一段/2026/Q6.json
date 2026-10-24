@@ -1,0 +1,104 @@
+{
+  "majorCode": "Q6",
+  "majorName": "财务会计教育",
+  "controlScore": 91,
+  "sourceId": "score-segments:2026:Q6:95a1a014718e",
+  "sourcePdf": "一分一段/原始PDF/2026/Q6_财务会计教育.pdf",
+  "sourceSha256": "95a1a014718e8878e6a447d42b1cc7b270628e1cfc88b243af51e92306bf51ab",
+  "segments": [
+    {
+      "score": 186,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 25
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

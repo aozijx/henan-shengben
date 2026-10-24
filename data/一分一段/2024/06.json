@@ -1,0 +1,188 @@
+{
+  "majorCode": "06",
+  "majorName": "投资学",
+  "controlScore": 174,
+  "sourceId": "score-segments:2024:06:b801f27fcc72",
+  "sourcePdf": "一分一段/原始PDF/2024/06_投资学.pdf",
+  "sourceSha256": "b801f27fcc72fdeac823bd59bebb6ff19ffd8b1caea8f10eb5f52584fb66fa81",
+  "segments": [
+    {
+      "score": 243,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 73
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

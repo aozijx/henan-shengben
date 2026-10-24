@@ -1,0 +1,72 @@
+{
+  "majorCode": "R4",
+  "majorName": "互联网金融",
+  "controlScore": 82,
+  "sourceId": "score-segments:2024:R4:568e3654ffde",
+  "sourcePdf": "一分一段/原始PDF/2024/R4_互联网金融.pdf",
+  "sourceSha256": "568e3654ffde38da88a2b620a45b6c068f214ad2119cff92e27083bac19db5d6",
+  "segments": [
+    {
+      "score": 207,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 82,
+      "cumulativeCount": 16
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

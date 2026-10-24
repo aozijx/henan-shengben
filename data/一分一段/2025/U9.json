@@ -1,0 +1,132 @@
+{
+  "majorCode": "U9",
+  "majorName": "土地资源管理",
+  "controlScore": 142,
+  "sourceId": "score-segments:2025:U9:38fbfe51d48b",
+  "sourcePdf": "一分一段/原始PDF/2025/U9_土地资源管理.pdf",
+  "sourceSha256": "38fbfe51d48bb54e4fd770a743e9bad6b3964c3e577a6d47640657954f6da25a",
+  "segments": [
+    {
+      "score": 223,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 36
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

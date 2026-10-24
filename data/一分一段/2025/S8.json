@@ -1,0 +1,96 @@
+{
+  "majorCode": "S8",
+  "majorName": "材料化学",
+  "controlScore": 122,
+  "sourceId": "score-segments:2025:S8:eab1b49b3efc",
+  "sourcePdf": "一分一段/原始PDF/2025/S8_材料化学.pdf",
+  "sourceSha256": "eab1b49b3efc11fe9bf0209e412415bc61e44ac7e25a094d78b0c7c43b44b970",
+  "segments": [
+    {
+      "score": 234,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 22
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

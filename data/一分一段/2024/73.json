@@ -1,0 +1,20 @@
+{
+  "majorCode": "73",
+  "majorName": "高分子材料与工程",
+  "controlScore": 86,
+  "sourceId": "score-segments:2024:73:82fc7653539a",
+  "sourcePdf": "一分一段/原始PDF/2024/73_高分子材料与工程.pdf",
+  "sourceSha256": "82fc7653539a4cd0c31b68a54b84161abe052199afd8ec7d2287c95b4fd971e6",
+  "segments": [
+    {
+      "score": 160,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 2
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

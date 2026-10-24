@@ -1,0 +1,172 @@
+{
+  "majorCode": "A8",
+  "majorName": "档案学",
+  "controlScore": 185,
+  "sourceId": "score-segments:2026:A8:dac8173f9027",
+  "sourcePdf": "一分一段/原始PDF/2026/A8_档案学.pdf",
+  "sourceSha256": "dac8173f9027b8b052de4486de46e2a58f1ce86612c2774cb589f46a45d0be0b",
+  "segments": [
+    {
+      "score": 232,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 80
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

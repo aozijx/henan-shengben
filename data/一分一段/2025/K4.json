@@ -1,0 +1,24 @@
+{
+  "majorCode": "K4",
+  "majorName": "生物技术",
+  "controlScore": 137,
+  "sourceId": "score-segments:2025:K4:2b9d800a7930",
+  "sourcePdf": "一分一段/原始PDF/2025/K4_生物技术.pdf",
+  "sourceSha256": "2b9d800a793011ba6c1b8674c3a73cab081d5b86a3372882cf278b530a096b5b",
+  "segments": [
+    {
+      "score": 178,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 3
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

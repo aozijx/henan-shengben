@@ -1,0 +1,232 @@
+{
+  "majorCode": "D2",
+  "majorName": "护理学（含护理）",
+  "controlScore": 196,
+  "sourceId": "score-segments:2025:D2:c703c35f17e0",
+  "sourcePdf": "一分一段/原始PDF/2025/D2_护理学.pdf",
+  "sourceSha256": "c703c35f17e0d3624660a415c02ccca82aecc642ff1d17222c7ccd93b7f05118",
+  "segments": [
+    {
+      "score": 277,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 276,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 275,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 274,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 273,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 272,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 271,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 270,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 269,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 268,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 267,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 266,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 265,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 264,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 263,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 262,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 261,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 260,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 259,
+      "cumulativeCount": 125
+    },
+    {
+      "score": 258,
+      "cumulativeCount": 139
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 167
+    },
+    {
+      "score": 256,
+      "cumulativeCount": 192
+    },
+    {
+      "score": 255,
+      "cumulativeCount": 216
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 241
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 276
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 309
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 341
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 368
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 398
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 444
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 480
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 513
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 558
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 597
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 653
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 702
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 753
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 792
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 850
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 903
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 952
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 1013
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 1067
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 1119
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 1164
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 1221
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 1272
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 1332
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 1387
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 1447
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 1488
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 1537
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 1599
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 1660
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 3198
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

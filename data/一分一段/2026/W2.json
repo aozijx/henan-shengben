@@ -1,0 +1,96 @@
+{
+  "majorCode": "W2",
+  "majorName": "信息与计算科学",
+  "controlScore": 80,
+  "sourceId": "score-segments:2026:W2:2061d2d1f11a",
+  "sourcePdf": "一分一段/原始PDF/2026/W2_信息与计算科学.pdf",
+  "sourceSha256": "2061d2d1f11a0791d01e3178429ddead3d71b14e6328619272dadb733e114b6d",
+  "segments": [
+    {
+      "score": 132,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 24
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

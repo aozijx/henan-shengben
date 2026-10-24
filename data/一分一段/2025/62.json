@@ -1,0 +1,124 @@
+{
+  "majorCode": "62",
+  "majorName": "水利水电工程",
+  "controlScore": 241,
+  "sourceId": "score-segments:2025:62:c7652512a2c8",
+  "sourcePdf": "一分一段/原始PDF/2025/62_水利水电工程.pdf",
+  "sourceSha256": "c7652512a2c80138454152843d2a08248fc480f511f47b71186ac61a0dd00808",
+  "segments": [
+    {
+      "score": 279,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 272,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 271,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 270,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 266,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 265,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 264,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 263,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 260,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 259,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 258,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 256,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 255,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 102
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

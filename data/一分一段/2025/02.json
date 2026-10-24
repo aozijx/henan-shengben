@@ -1,0 +1,56 @@
+{
+  "majorCode": "02",
+  "majorName": "经济统计学",
+  "controlScore": 102,
+  "sourceId": "score-segments:2025:02:6e8a14b80174",
+  "sourcePdf": "一分一段/原始PDF/2025/02_经济统计学.pdf",
+  "sourceSha256": "6e8a14b8017423436e54802eb811b8767d9cdb4ae27a0a8e2d301921377e74af",
+  "segments": [
+    {
+      "score": 183,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 11
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

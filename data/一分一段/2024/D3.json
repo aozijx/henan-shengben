@@ -1,0 +1,144 @@
+{
+  "majorCode": "D3",
+  "majorName": "中医学",
+  "controlScore": 206,
+  "sourceId": "score-segments:2024:D3:3a6939041bb3",
+  "sourcePdf": "一分一段/原始PDF/2024/D3_中医学.pdf",
+  "sourceSha256": "3a6939041bb3022acadff34347cc187fd2d4b3b6f9c9623fdae565016de564e0",
+  "segments": [
+    {
+      "score": 241,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 125
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 138
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 148
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 159
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 177
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 189
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

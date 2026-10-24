@@ -1,0 +1,92 @@
+{
+  "majorCode": "X5",
+  "majorName": "食品安全与检测",
+  "controlScore": 88,
+  "sourceId": "score-segments:2026:X5:786d082c2ae0",
+  "sourcePdf": "一分一段/原始PDF/2026/X5_食品安全与检测.pdf",
+  "sourceSha256": "786d082c2ae0d29133369451505bfc55af2d583879662f4e4143fec9f1cea9de",
+  "segments": [
+    {
+      "score": 192,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 23
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

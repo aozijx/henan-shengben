@@ -1,0 +1,208 @@
+{
+  "majorCode": "J8",
+  "majorName": "电子科学与技术",
+  "controlScore": 80,
+  "sourceId": "score-segments:2025:J8:7e480bf3b13f",
+  "sourcePdf": "一分一段/原始PDF/2025/J8_电子科学与技术.pdf",
+  "sourceSha256": "7e480bf3b13f01c042ea8d8143d0f4b0c8dbf278c21b980cf4666a7a9bbba51c",
+  "segments": [
+    {
+      "score": 172,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 97,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 82,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 83
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,148 @@
+{
+  "majorCode": "U7",
+  "majorName": "工程审计",
+  "controlScore": 146,
+  "sourceId": "score-segments:2026:U7:3c382c0476f3",
+  "sourcePdf": "一分一段/原始PDF/2026/U7_工程审计.pdf",
+  "sourceSha256": "3c382c0476f3dd0f0fbc021a8ec99d7b498768d002556c55276fea6ce055b5ad",
+  "segments": [
+    {
+      "score": 233,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 46
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,28 @@
+{
+  "majorCode": "S3",
+  "majorName": "金融数学",
+  "controlScore": 201,
+  "sourceId": "score-segments:2025:S3:a8c863882061",
+  "sourcePdf": "一分一段/原始PDF/2025/S3_金融数学.pdf",
+  "sourceSha256": "a8c863882061e6c1d741001dacd7f28112b015dd449ce1bea9476117ebd69897",
+  "segments": [
+    {
+      "score": 246,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 4
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,24 @@
+{
+  "majorCode": "R6",
+  "majorName": "机械工程",
+  "controlScore": 96,
+  "sourceId": "score-segments:2025:R6:09cdf2bb0269",
+  "sourcePdf": "一分一段/原始PDF/2025/R6_机械工程.pdf",
+  "sourceSha256": "09cdf2bb0269f3dbde5141eb66b338678099a33c2cc696fc5e39c87a50cb2ec2",
+  "segments": [
+    {
+      "score": 138,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 3
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

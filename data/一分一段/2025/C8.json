@@ -1,0 +1,252 @@
+{
+  "majorCode": "C8",
+  "majorName": "眼视光学",
+  "controlScore": 141,
+  "sourceId": "score-segments:2025:C8:95190682fd0d",
+  "sourcePdf": "一分一段/原始PDF/2025/C8_眼视光学.pdf",
+  "sourceSha256": "95190682fd0d5cb86b5d98c3f4d5b05400471a3e91b80593745eed99f22a3823",
+  "segments": [
+    {
+      "score": 245,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 103
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 116
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 212
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 216
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 218
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 223
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 225
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 228
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

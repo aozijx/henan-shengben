@@ -1,0 +1,96 @@
+{
+  "majorCode": "C5",
+  "majorName": "口腔医学",
+  "controlScore": 221,
+  "sourceId": "score-segments:2026:C5:e4e13c280904",
+  "sourcePdf": "一分一段/原始PDF/2026/C5_口腔医学.pdf",
+  "sourceSha256": "e4e13c2809049ce081bb03b41ecd5fbf1f54263f01d0ff51bb85cc63166fcf58",
+  "segments": [
+    {
+      "score": 264,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 35
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

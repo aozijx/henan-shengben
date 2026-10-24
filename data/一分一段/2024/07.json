@@ -1,0 +1,228 @@
+{
+  "majorCode": "07",
+  "majorName": "国际经济与贸易",
+  "controlScore": 196,
+  "sourceId": "score-segments:2024:07:31308915708b",
+  "sourcePdf": "一分一段/原始PDF/2024/07_国际经济与贸易.pdf",
+  "sourceSha256": "31308915708bd881d7a3c9978d2ae96642514bc4cae4d11c4a5de8edb216f551",
+  "segments": [
+    {
+      "score": 260,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 102
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 123
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 131
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 134
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 140
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 144
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 148
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 156
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 158
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 165
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 168
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 171
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 174
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 176
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 181
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 182
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 187
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

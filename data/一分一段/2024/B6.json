@@ -1,0 +1,92 @@
+{
+  "majorCode": "B6",
+  "majorName": "新闻学",
+  "controlScore": 173,
+  "sourceId": "score-segments:2024:B6:57dade3fd45a",
+  "sourcePdf": "一分一段/原始PDF/2024/B6_新闻学.pdf",
+  "sourceSha256": "57dade3fd45a9127304b99b9fd294a87ab6d4cac811b0d5c6c11155bf5182f1a",
+  "segments": [
+    {
+      "score": 224,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 21
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

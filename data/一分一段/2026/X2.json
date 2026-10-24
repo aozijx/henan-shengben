@@ -1,0 +1,104 @@
+{
+  "majorCode": "X2",
+  "majorName": "飞行器制造工程",
+  "controlScore": 85,
+  "sourceId": "score-segments:2026:X2:f6f01a6b5f76",
+  "sourcePdf": "一分一段/原始PDF/2026/X2_飞行器制造工程.pdf",
+  "sourceSha256": "f6f01a6b5f76f6f5457be1627e00d01c317106a2531b832673cc400da84b167e",
+  "segments": [
+    {
+      "score": 135,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 97,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 25
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

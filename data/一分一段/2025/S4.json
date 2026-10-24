@@ -1,0 +1,176 @@
+{
+  "majorCode": "S4",
+  "majorName": "教育技术学",
+  "controlScore": 124,
+  "sourceId": "score-segments:2025:S4:d0216c7c8734",
+  "sourcePdf": "一分一段/原始PDF/2025/S4_教育技术学.pdf",
+  "sourceSha256": "d0216c7c8734ab59e0bdf788ab04a19bb369f7c7aac947463f2f3a8d294c60ae",
+  "segments": [
+    {
+      "score": 203,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 64
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

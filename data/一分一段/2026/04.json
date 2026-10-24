@@ -1,0 +1,228 @@
+{
+  "majorCode": "04",
+  "majorName": "金融学",
+  "controlScore": 148,
+  "sourceId": "score-segments:2026:04:67f95874a57c",
+  "sourcePdf": "一分一段/原始PDF/2026/04_金融学.pdf",
+  "sourceSha256": "67f95874a57c699fc7d33b6f4e4b2fbfdfea1bf539ee9cf9cb0f043c6d42c946",
+  "segments": [
+    {
+      "score": 255,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 92
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

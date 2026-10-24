@@ -1,0 +1,136 @@
+{
+  "majorCode": "D4",
+  "majorName": "针灸推拿学",
+  "controlScore": 229,
+  "sourceId": "score-segments:2026:D4:1f3f58f817f6",
+  "sourcePdf": "一分一段/原始PDF/2026/D4_针灸推拿学.pdf",
+  "sourceSha256": "1f3f58f817f6f49a917650a5e8ba86064e487f4088293a7ef326407bfa8d595a",
+  "segments": [
+    {
+      "score": 267,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 265,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 260,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 258,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 256,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 123
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 134
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

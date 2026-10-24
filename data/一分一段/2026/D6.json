@@ -1,0 +1,228 @@
+{
+  "majorCode": "D6",
+  "majorName": "社会体育指导与管理",
+  "controlScore": 156,
+  "sourceId": "score-segments:2026:D6:81a67d5a653c",
+  "sourcePdf": "一分一段/原始PDF/2026/D6_社会体育指导与管理.pdf",
+  "sourceSha256": "81a67d5a653ca4dae2b5de0b4f2d6b4bba7903f9e5bbf7c78152d1d86199af86",
+  "segments": [
+    {
+      "score": 243,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 106
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 124
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 129
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 136
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 137
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 139
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 140
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 145
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 147
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 152
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 156
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 163
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 165
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 172
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 174
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 177
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

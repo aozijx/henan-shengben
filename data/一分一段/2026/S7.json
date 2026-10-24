@@ -1,0 +1,204 @@
+{
+  "majorCode": "S7",
+  "majorName": "新能源汽车工程",
+  "controlScore": 81,
+  "sourceId": "score-segments:2026:S7:d26fada842a8",
+  "sourcePdf": "一分一段/原始PDF/2026/S7_新能源汽车工程.pdf",
+  "sourceSha256": "d26fada842a8dd9832ec2b930f7310e92afeebef0c9b0902b5a24e35e52001bc",
+  "segments": [
+    {
+      "score": 191,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 89
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

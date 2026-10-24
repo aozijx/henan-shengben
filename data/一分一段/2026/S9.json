@@ -1,0 +1,220 @@
+{
+  "majorCode": "S9",
+  "majorName": "广告学",
+  "controlScore": 133,
+  "sourceId": "score-segments:2026:S9:21e1f5657cb0",
+  "sourcePdf": "一分一段/原始PDF/2026/S9_广告学.pdf",
+  "sourceSha256": "21e1f5657cb0e785b1cf4c38694d7c0aa0eda9143b06404c43a853ccb900cf38",
+  "segments": [
+    {
+      "score": 232,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 102
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,228 @@
+{
+  "majorCode": "P2",
+  "majorName": "知识产权",
+  "controlScore": 141,
+  "sourceId": "score-segments:2025:P2:efc74b50e035",
+  "sourcePdf": "一分一段/原始PDF/2025/P2_知识产权.pdf",
+  "sourceSha256": "efc74b50e035125037b83ef68785c7405cb8869e1b6310af5256f014cec7bef7",
+  "segments": [
+    {
+      "score": 235,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 84
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

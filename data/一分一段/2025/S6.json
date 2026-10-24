@@ -1,0 +1,52 @@
+{
+  "majorCode": "S6",
+  "majorName": "应用化学",
+  "controlScore": 85,
+  "sourceId": "score-segments:2025:S6:4458185e6b13",
+  "sourcePdf": "一分一段/原始PDF/2025/S6_应用化学.pdf",
+  "sourceSha256": "4458185e6b13cb5e9a39113c67845073ec65fa8987b337849ff78f3191eac06b",
+  "segments": [
+    {
+      "score": 170,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 10
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

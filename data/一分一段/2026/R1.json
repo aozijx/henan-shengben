@@ -1,0 +1,40 @@
+{
+  "majorCode": "R1",
+  "majorName": "表演",
+  "controlScore": 142,
+  "sourceId": "score-segments:2026:R1:60ce766cb754",
+  "sourcePdf": "一分一段/原始PDF/2026/R1_表演.pdf",
+  "sourceSha256": "60ce766cb754d5a23eb9f282d56e5b34e5117c0804caba90c38c22bb745b0620",
+  "segments": [
+    {
+      "score": 203,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 7
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

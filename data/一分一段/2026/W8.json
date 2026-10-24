@@ -1,0 +1,224 @@
+{
+  "majorCode": "W8",
+  "majorName": "集成电路设计与集成系统",
+  "controlScore": 80,
+  "sourceId": "score-segments:2026:W8:c72154f2570b",
+  "sourcePdf": "一分一段/原始PDF/2026/W8_集成电路设计与集成系统.pdf",
+  "sourceSha256": "c72154f2570bf0980e48b85d7bfdcfd467bb5fd35a7f27b314aca25a411dc64d",
+  "segments": [
+    {
+      "score": 158,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 97,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 82,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 101
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

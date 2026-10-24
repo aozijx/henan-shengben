@@ -1,0 +1,228 @@
+{
+  "majorCode": "61",
+  "majorName": "道路桥梁与渡河工程",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:61:b0b46107aec6",
+  "sourcePdf": "一分一段/原始PDF/2024/61_道路桥梁与渡河工程.pdf",
+  "sourceSha256": "b0b46107aec64232afa8774a40a53f042fe2eb3ebdce8ea14b7e49491b2770be",
+  "segments": [
+    {
+      "score": 215,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 66,
+      "cumulativeCount": 80
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

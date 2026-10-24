@@ -1,0 +1,228 @@
+{
+  "majorCode": "R3",
+  "majorName": "数字媒体艺术",
+  "controlScore": 179,
+  "sourceId": "score-segments:2025:R3:b406458fccc3",
+  "sourcePdf": "一分一段/原始PDF/2025/R3_数字媒体艺术.pdf",
+  "sourceSha256": "b406458fccc375a79de485e2bd1bbe2cb4ce061e4e89912d021136a0c7dba106",
+  "segments": [
+    {
+      "score": 252,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 102
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 128
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 143
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 169
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 179
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 190
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 205
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 224
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 239
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 251
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 263
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 285
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 302
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 316
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 335
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 360
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 382
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 405
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 423
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 436
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 451
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 467
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 490
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 518
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 545
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 559
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 587
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 604
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 635
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 654
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

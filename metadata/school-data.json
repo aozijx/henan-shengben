@@ -195,9 +195,9 @@
       "scoreSource": "data/省控线/省控线_2024.json",
       "planSource": "data/招生计划/招生计划_2024.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
-      "analyticsSource": "data/generated/2024/625313c6373e4dcf/analytics.json",
-      "scoreSegmentIndexSource": "data/generated/2024/625313c6373e4dcf/index.json",
-      "scoreSegmentShardTemplate": "data/generated/2024/625313c6373e4dcf/shards/{majorCode}.json",
+      "analyticsSource": "data/generated/2024/afa34dacf5f84824/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2024.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2024/{majorCode}.json",
       "mappingReferenceYear": 2026
     },
     "2025": {
@@ -206,9 +206,9 @@
       "scoreSource": "data/省控线/省控线_2025.json",
       "planSource": "data/招生计划/招生计划_2025.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
-      "analyticsSource": "data/generated/2025/755ab4b924e1d608/analytics.json",
-      "scoreSegmentIndexSource": "data/generated/2025/755ab4b924e1d608/index.json",
-      "scoreSegmentShardTemplate": "data/generated/2025/755ab4b924e1d608/shards/{majorCode}.json",
+      "analyticsSource": "data/generated/2025/8d7d0b8069e025ac/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2025.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2025/{majorCode}.json",
       "mappingReferenceYear": 2026
     },
     "2026": {
@@ -217,11 +217,11 @@
       "scoreSource": "data/省控线/省控线_2026.json",
       "planSource": "data/招生计划/招生计划_2026.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
-      "analyticsSource": "data/generated/2026/a835728538cab42c/analytics.json",
-      "scoreSegmentIndexSource": "data/generated/2026/a835728538cab42c/index.json",
-      "scoreSegmentShardTemplate": "data/generated/2026/a835728538cab42c/shards/{majorCode}.json",
+      "analyticsSource": "data/generated/2026/1283a7f9f1cf4cea/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
       "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
     }
   },
-  "catalogSource": "data/generated/catalog/bb0c8f7f7bcd86fa.json"
+  "catalogSource": "data/generated/catalog/afdf5b5e7b3eaf18.json"
 }

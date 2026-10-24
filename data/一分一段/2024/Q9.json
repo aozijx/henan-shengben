@@ -1,0 +1,144 @@
+{
+  "majorCode": "Q9",
+  "majorName": "舞蹈表演",
+  "controlScore": 159,
+  "sourceId": "score-segments:2024:Q9:00c535f7fa0b",
+  "sourcePdf": "一分一段/原始PDF/2024/Q9_舞蹈表演.pdf",
+  "sourceSha256": "00c535f7fa0bdaef64b4906398d437048168d5552f0dc2b91a6008c167aae461",
+  "segments": [
+    {
+      "score": 219,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 60
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

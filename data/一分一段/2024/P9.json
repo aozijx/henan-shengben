@@ -1,0 +1,72 @@
+{
+  "majorCode": "P9",
+  "majorName": "城市地下空间工程",
+  "controlScore": 91,
+  "sourceId": "score-segments:2024:P9:1d32b61e9893",
+  "sourcePdf": "一分一段/原始PDF/2024/P9_城市地下空间工程.pdf",
+  "sourceSha256": "1d32b61e9893c11c8afd24c4051cdd241aef1c6148615318f600c845d2ebd94f",
+  "segments": [
+    {
+      "score": 170,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 18
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,368 @@
+{
+  "majorCode": "49",
+  "majorName": "通信工程",
+  "controlScore": 91,
+  "sourceId": "score-segments:2026:49:44d8e6d04bc5",
+  "sourcePdf": "一分一段/原始PDF/2026/49_通信工程.pdf",
+  "sourceSha256": "44d8e6d04bc58155c6a8f2b78bef706c48bc20bc87988615465ae7690b7c5f79",
+  "segments": [
+    {
+      "score": 227,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 92
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 102
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 108
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 116
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 124
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 126
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 129
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 135
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 136
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 137
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 141
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 147
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 160
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 167
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 170
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 385
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 391
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 399
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 403
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 408
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 415
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 419
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 424
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 433
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 442
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 448
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 449
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 456
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 462
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 474
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 479
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 486
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 487
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 494
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 506
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 512
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 518
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 523
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 532
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 539
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 546
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 552
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 556
+    },
+    {
+      "score": 97,
+      "cumulativeCount": 568
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 574
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 579
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 584
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 592
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 597
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 601
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

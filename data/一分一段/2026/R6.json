@@ -1,0 +1,44 @@
+{
+  "majorCode": "R6",
+  "majorName": "机械工程",
+  "controlScore": 87,
+  "sourceId": "score-segments:2026:R6:6a7a460f9c2e",
+  "sourcePdf": "一分一段/原始PDF/2026/R6_机械工程.pdf",
+  "sourceSha256": "6a7a460f9c2ec2c76b1f02a204450a3e19eead0c4fb914161905371716062653",
+  "segments": [
+    {
+      "score": 139,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 10
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

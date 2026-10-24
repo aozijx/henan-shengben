@@ -1,0 +1,364 @@
+{
+  "majorCode": "98",
+  "majorName": "物流管理（含现代物流管理）",
+  "controlScore": 133,
+  "sourceId": "score-segments:2024:98:572e80c4bfe0",
+  "sourcePdf": "一分一段/原始PDF/2024/98_物流管理.pdf",
+  "sourceSha256": "572e80c4bfe0717bffb520ad4718a65bed724636cc1e1b7d844846aeb273a17b",
+  "segments": [
+    {
+      "score": 253,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 117
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 152
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 170
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 184
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 197
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 215
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 230
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 251
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 272
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 293
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 314
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 341
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 367
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 389
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 406
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 435
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 460
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 475
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 501
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 528
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 553
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 572
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 596
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 618
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 652
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 682
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 716
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 745
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 770
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 798
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 834
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 1705
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 1735
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 1758
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 1780
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 1814
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 1837
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 1861
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 1890
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 1919
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 1941
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 1961
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 1981
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 2016
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 2041
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 2065
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 2086
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 2111
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 2137
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 2166
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 2179
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 2197
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 2217
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 2241
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 2263
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 2283
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 2302
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 2319
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 2337
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 2355
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 2380
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 2399
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 2418
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 2437
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 2457
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

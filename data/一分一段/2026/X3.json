@@ -1,0 +1,228 @@
+{
+  "majorCode": "X3",
+  "majorName": "飞行器质量与可靠性",
+  "controlScore": 82,
+  "sourceId": "score-segments:2026:X3:d8952999c92b",
+  "sourcePdf": "一分一段/原始PDF/2026/X3_飞行器质量与可靠性.pdf",
+  "sourceSha256": "d8952999c92b4e8e7d5387ded26635b0f71af2743789e1e2bd9f1723ecffaa53",
+  "segments": [
+    {
+      "score": 210,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 66,
+      "cumulativeCount": 74
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

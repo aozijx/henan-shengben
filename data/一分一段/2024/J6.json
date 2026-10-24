@@ -1,0 +1,216 @@
+{
+  "majorCode": "J6",
+  "majorName": "特殊教育",
+  "controlScore": 178,
+  "sourceId": "score-segments:2024:J6:89c751012860",
+  "sourcePdf": "一分一段/原始PDF/2024/J6_特殊教育.pdf",
+  "sourceSha256": "89c75101286032461b52802f5adfe24dfc4eee3879007f004caeb3fe3afac5eb",
+  "segments": [
+    {
+      "score": 240,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 112
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 127
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 135
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 137
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 144
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 157
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 159
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 169
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

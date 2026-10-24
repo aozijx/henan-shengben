@@ -1,0 +1,120 @@
+{
+  "majorCode": "W6",
+  "majorName": "测控技术与仪器",
+  "controlScore": 80,
+  "sourceId": "score-segments:2026:W6:c6ee9e18b684",
+  "sourcePdf": "一分一段/原始PDF/2026/W6_测控技术与仪器.pdf",
+  "sourceSha256": "c6ee9e18b6849c9919fbc57c5c428fa465bc50681fb47f7887f5f2bb9092473d",
+  "segments": [
+    {
+      "score": 149,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 82,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 32
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

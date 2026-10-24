@@ -1,0 +1,84 @@
+{
+  "majorCode": "U1",
+  "majorName": "假肢矫形工程",
+  "controlScore": 105,
+  "sourceId": "score-segments:2025:U1:08ea0386d309",
+  "sourcePdf": "一分一段/原始PDF/2025/U1_假肢矫形工程.pdf",
+  "sourceSha256": "08ea0386d309548ca5d0fd6fe6820f099251d6b80644a87b5d73a48e106597be",
+  "segments": [
+    {
+      "score": 160,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 20
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,44 @@
+{
+  "majorCode": "P8",
+  "majorName": "工业设计",
+  "controlScore": 80,
+  "sourceId": "score-segments:2024:P8:a1e785d27db4",
+  "sourcePdf": "一分一段/原始PDF/2024/P8_工业设计.pdf",
+  "sourceSha256": "a1e785d27db419b148149f0281967355bc80f322b3597ab47f7fa387701fed63",
+  "segments": [
+    {
+      "score": 154,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 9
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

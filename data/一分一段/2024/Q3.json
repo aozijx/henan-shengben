@@ -1,0 +1,100 @@
+{
+  "majorCode": "Q3",
+  "majorName": "生物工程",
+  "controlScore": 84,
+  "sourceId": "score-segments:2024:Q3:f16dbfcbeff9",
+  "sourcePdf": "一分一段/原始PDF/2024/Q3_生物工程.pdf",
+  "sourceSha256": "f16dbfcbeff9d1d1108ccc01054993032646a128ac33f27c61811947ba03363b",
+  "segments": [
+    {
+      "score": 230,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 24
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

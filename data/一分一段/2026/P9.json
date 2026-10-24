@@ -1,0 +1,240 @@
+{
+  "majorCode": "P9",
+  "majorName": "城市地下空间工程",
+  "controlScore": 128,
+  "sourceId": "score-segments:2026:P9:84ab2396e17c",
+  "sourcePdf": "一分一段/原始PDF/2026/P9_城市地下空间工程.pdf",
+  "sourceSha256": "84ab2396e17c1165e0b711f03ee97da5ecad6105a0fad52ba56658e9885e0dd0",
+  "segments": [
+    {
+      "score": 244,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 92
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 127
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 131
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 136
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 138
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 140
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 143
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 147
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 151
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 154
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 156
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 160
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 161
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 244
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 248
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 250
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

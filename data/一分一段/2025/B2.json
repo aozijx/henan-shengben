@@ -1,0 +1,228 @@
+{
+  "majorCode": "B2",
+  "majorName": "汉语言文学",
+  "controlScore": 200,
+  "sourceId": "score-segments:2025:B2:b7f3ba36b49c",
+  "sourcePdf": "一分一段/原始PDF/2025/B2_汉语言文学.pdf",
+  "sourceSha256": "b7f3ba36b49c6ad8596f4240cbeb202a80d6db68c86387116aa102ed03a9be7f",
+  "segments": [
+    {
+      "score": 265,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 263,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 258,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 256,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 255,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 146
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 175
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 208
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 242
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 275
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 311
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 345
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 384
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 427
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 463
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 518
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 560
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 620
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 679
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 744
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 791
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 845
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 904
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 965
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 1023
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 1074
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 1128
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 1178
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 1245
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 1300
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 1356
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 1415
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 1482
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 1537
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 1595
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 1648
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 1720
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 1778
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 1825
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 1889
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 1951
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 2018
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

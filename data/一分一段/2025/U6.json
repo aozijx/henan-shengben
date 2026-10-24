@@ -1,0 +1,172 @@
+{
+  "majorCode": "U6",
+  "majorName": "大数据管理与应用",
+  "controlScore": 86,
+  "sourceId": "score-segments:2025:U6:7bd639b5a50a",
+  "sourcePdf": "一分一段/原始PDF/2025/U6_大数据管理与应用.pdf",
+  "sourceSha256": "7bd639b5a50adf875041eff544d7940d08193189fb6662516b2e4e50c9bf3a43",
+  "segments": [
+    {
+      "score": 206,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 97,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 49
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

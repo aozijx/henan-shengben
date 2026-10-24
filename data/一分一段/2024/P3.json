@@ -1,0 +1,140 @@
+{
+  "majorCode": "P3",
+  "majorName": "社会工作",
+  "controlScore": 135,
+  "sourceId": "score-segments:2024:P3:409af599c43b",
+  "sourcePdf": "一分一段/原始PDF/2024/P3_社会工作.pdf",
+  "sourceSha256": "409af599c43b47f1477882b6a0c774b0e85285a6a934eb6595386d7e1248d2a8",
+  "segments": [
+    {
+      "score": 211,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 36
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

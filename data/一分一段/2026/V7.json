@@ -1,0 +1,80 @@
+{
+  "majorCode": "V7",
+  "majorName": "数字经济",
+  "controlScore": 107,
+  "sourceId": "score-segments:2026:V7:5dde5d7beb64",
+  "sourcePdf": "一分一段/原始PDF/2026/V7_数字经济.pdf",
+  "sourceSha256": "5dde5d7beb64d69f4004f5306852ab92d95ef5c1017308a4383d1633dfa1026d",
+  "segments": [
+    {
+      "score": 213,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 18
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

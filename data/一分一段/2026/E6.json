@@ -1,0 +1,172 @@
+{
+  "majorCode": "E6",
+  "majorName": "摄影",
+  "controlScore": 180,
+  "sourceId": "score-segments:2026:E6:3e74a44eb758",
+  "sourcePdf": "一分一段/原始PDF/2026/E6_摄影.pdf",
+  "sourceSha256": "3e74a44eb758def1b69188af10a7805fa7e37f96955f771dd8b91204bc7e2628",
+  "segments": [
+    {
+      "score": 240,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 102
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 137
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 140
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 148
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 155
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 167
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 178
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 190
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 196
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 199
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 205
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 213
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

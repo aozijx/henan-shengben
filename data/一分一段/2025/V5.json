@@ -1,0 +1,36 @@
+{
+  "majorCode": "V5",
+  "majorName": "非物质文化遗产保护",
+  "controlScore": 133,
+  "sourceId": "score-segments:2025:V5:eca97531b19d",
+  "sourcePdf": "一分一段/原始PDF/2025/V5_非物质文化遗产保护.pdf",
+  "sourceSha256": "eca97531b19d5d21234e66253ac9ffc167d533d9e403586b8a639c46a1d46219",
+  "segments": [
+    {
+      "score": 202,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 6
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

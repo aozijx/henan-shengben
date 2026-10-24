@@ -1,0 +1,228 @@
+{
+  "majorCode": "17",
+  "majorName": "学前教育",
+  "controlScore": 172,
+  "sourceId": "score-segments:2024:17:2f3aed8fe2d6",
+  "sourcePdf": "一分一段/原始PDF/2024/17_学前教育.pdf",
+  "sourceSha256": "2f3aed8fe2d6d5732d6a58c8bfc33180ec9068d88479a9ffbf84ff16688c5a85",
+  "segments": [
+    {
+      "score": 250,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 138
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 161
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 191
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 222
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 262
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 304
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 344
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 392
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 443
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 492
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 551
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 621
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 692
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 766
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 849
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 929
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 1023
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 1114
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 1223
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 1332
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 1440
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 1571
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 1679
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 1788
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 1895
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 2017
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 2121
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 2255
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 2395
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 2529
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 2670
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 2814
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 2945
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 3101
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 3264
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 3432
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 3570
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 3733
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,176 @@
+{
+  "majorCode": "D8",
+  "majorName": "音乐学",
+  "controlScore": 181,
+  "sourceId": "score-segments:2024:D8:91dec1c94b01",
+  "sourcePdf": "一分一段/原始PDF/2024/D8_音乐学.pdf",
+  "sourceSha256": "91dec1c94b018d0c26a6b55fde86d80726ca80746dd038de828257772ce7b0f9",
+  "segments": [
+    {
+      "score": 239,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 78
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 89
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 94
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

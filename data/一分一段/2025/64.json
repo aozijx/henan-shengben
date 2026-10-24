@@ -1,0 +1,32 @@
+{
+  "majorCode": "64",
+  "majorName": "纺织工程",
+  "controlScore": 114,
+  "sourceId": "score-segments:2025:64:d386c93cc502",
+  "sourcePdf": "一分一段/原始PDF/2025/64_纺织工程.pdf",
+  "sourceSha256": "d386c93cc5027693ecec31fb0ef7b5440943216ffd5fe414c29f0ce3e9e82ffb",
+  "segments": [
+    {
+      "score": 171,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 5
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

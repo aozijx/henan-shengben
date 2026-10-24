@@ -1,0 +1,228 @@
+{
+  "majorCode": "D9",
+  "majorName": "舞蹈编导",
+  "controlScore": 171,
+  "sourceId": "score-segments:2026:D9:0e26dbcbb499",
+  "sourcePdf": "一分一段/原始PDF/2026/D9_舞蹈编导.pdf",
+  "sourceSha256": "0e26dbcbb499a411d7cb0076848009987983829b0140a9247492cb0db6abd1c3",
+  "segments": [
+    {
+      "score": 242,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 84
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 110
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 126
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 130
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 140
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 149
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 162
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 167
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 182
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 193
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 205
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 214
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 218
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 223
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 230
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 235
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 244
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 248
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 254
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 262
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 271
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

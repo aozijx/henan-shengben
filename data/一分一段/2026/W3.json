@@ -1,0 +1,60 @@
+{
+  "majorCode": "W3",
+  "majorName": "化学",
+  "controlScore": 80,
+  "sourceId": "score-segments:2026:W3:b0e3617f47d5",
+  "sourcePdf": "一分一段/原始PDF/2026/W3_化学.pdf",
+  "sourceSha256": "b0e3617f47d52b5c6ab9262ab133ca85122a7f32328cd4f6dfb952f5b2656c95",
+  "segments": [
+    {
+      "score": 139,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 13
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

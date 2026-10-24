@@ -1,0 +1,24 @@
+{
+  "majorCode": "S2",
+  "majorName": "税收学",
+  "controlScore": 84,
+  "sourceId": "score-segments:2026:S2:76a22821a883",
+  "sourcePdf": "一分一段/原始PDF/2026/S2_税收学.pdf",
+  "sourceSha256": "76a22821a883b1ad28458075f38a20f62ccea3e2a0cb388a28166cd482d0786e",
+  "segments": [
+    {
+      "score": 231,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 4
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

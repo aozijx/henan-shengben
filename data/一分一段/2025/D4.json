@@ -1,0 +1,164 @@
+{
+  "majorCode": "D4",
+  "majorName": "针灸推拿学",
+  "controlScore": 211,
+  "sourceId": "score-segments:2025:D4:7a06ae17f6aa",
+  "sourcePdf": "一分一段/原始PDF/2025/D4_针灸推拿学.pdf",
+  "sourceSha256": "7a06ae17f6aa1594a83cdd24bdb6d1a49ef3abfd2dcb1e2b019a81667966fb27",
+  "segments": [
+    {
+      "score": 255,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 81
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 106
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 108
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 121
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 128
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 134
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

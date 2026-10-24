@@ -1,0 +1,64 @@
+{
+  "majorCode": "U2",
+  "majorName": "风景园林",
+  "controlScore": 107,
+  "sourceId": "score-segments:2025:U2:889dbdacb378",
+  "sourcePdf": "一分一段/原始PDF/2025/U2_风景园林.pdf",
+  "sourceSha256": "889dbdacb378efa001a89d621477f50f6510798153c1c25584d742267b554e03",
+  "segments": [
+    {
+      "score": 226,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 14
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

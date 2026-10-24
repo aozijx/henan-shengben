@@ -1,0 +1,88 @@
+{
+  "majorCode": "X4",
+  "majorName": "烹饪与营养教育",
+  "controlScore": 100,
+  "sourceId": "score-segments:2026:X4:42e636339551",
+  "sourcePdf": "一分一段/原始PDF/2026/X4_烹饪与营养教育.pdf",
+  "sourceSha256": "42e636339551758b007b9e502a0dc2e8026c03aeb186df7d33a3234a0ed61fea",
+  "segments": [
+    {
+      "score": 166,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 19
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

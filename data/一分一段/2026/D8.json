@@ -1,0 +1,116 @@
+{
+  "majorCode": "D8",
+  "majorName": "音乐学",
+  "controlScore": 181,
+  "sourceId": "score-segments:2026:D8:beb5666e8dff",
+  "sourcePdf": "一分一段/原始PDF/2026/D8_音乐学.pdf",
+  "sourceSha256": "beb5666e8dff6ba5c7b0aba45d7fac0edad69a1462aa9c22dd4836c499082e4e",
+  "segments": [
+    {
+      "score": 248,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 34
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}
