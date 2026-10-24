@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from pipeline_config import REQUEST_TIMEOUT, USER_AGENT
 from crawler.source_rules import is_official_pdf_url
 
 
@@ -79,12 +80,16 @@ def main():
     if not seeds:
         parser.error('no matching year-links seeds')
     session = requests.Session()
-    session.headers['User-Agent'] = 'henan-shengben-data/1.0'
+    session.headers['User-Agent'] = USER_AGENT
     for seed in seeds:
+        year = seed['year']
+        print(f'[{year}] 解析官方分数段来源页 …', flush=True)
         target = resolve_score_segment_target(seed, session)
-        response = session.get(target.discovery_url, timeout=60)
+        print(f'[{year}] 来源页：{target.discovery_url}', flush=True)
+        response = session.get(target.discovery_url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         entries = discover_year(target, response.text)
+        print(f'[{year}] 发现 {len(entries)} 个官方 PDF', flush=True)
         document = {'schemaVersion': 1, 'dataset': target.dataset, 'year': target.year,
                     'sourcePageUrl': target.source_page_url,
                     'discoveryUrl': target.discovery_url,
@@ -92,7 +97,7 @@ def main():
         output = args.data_root / target.manifest_path
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        print(f'{target.year}: {len(entries)} 个官方 PDF -> {output}')
+        print(f'[{target.year}] 清单已写入 {output}', flush=True)
 
 
 if __name__ == '__main__':

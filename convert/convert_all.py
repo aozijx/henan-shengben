@@ -10,6 +10,7 @@ from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, w
 from .issue_reports import apply_manual_correction
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
+from pipeline_config import SCORE_SEGMENT_WORKERS
 
 
 def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]) -> dict[str, Any]:
@@ -54,20 +55,27 @@ def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]
     }
 
 
-def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None, workers: int = 1) -> dict[str, Any]:
+def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None, workers: int | None = None) -> dict[str, Any]:
+    workers = max(1, SCORE_SEGMENT_WORKERS if workers is None else workers)
     manifest = read_json(data_root / target["manifestPath"])
     entries = [entry for entry in manifest["entries"] if not major_codes or entry["majorCode"] in major_codes]
     correction_path = data_root / "一分一段" / "人工修正.json"
     correction_values = read_json(correction_path).get("corrections", []) if correction_path.exists() else []
     corrections = {(int(item["year"]), item["majorCode"]): item for item in correction_values}
     arguments = [(entry, data_root, corrections.get((int(target["year"]), entry["majorCode"]))) for entry in entries]
-    if workers > 1 and len(entries) > 1:
-        with ProcessPoolExecutor(max_workers=workers) as executor:
-            majors = list(executor.map(_convert_entry, arguments))
-    else:
-        majors = [_convert_entry(item) for item in arguments]
-    for position, item in enumerate(majors, start=1):
-        print(f"[{target['year']}] {position}/{len(majors)} {item['majorCode']} {item['status']}", flush=True)
+    print(f"[{target['year']}] 开始抽取一分一段：{target['manifestPath']}，共 {len(entries)} 个专业", flush=True)
+
+    def _converted():
+        if workers > 1 and len(entries) > 1:
+            with ProcessPoolExecutor(max_workers=workers) as executor:
+                yield from executor.map(_convert_entry, arguments)
+        else:
+            yield from (_convert_entry(item) for item in arguments)
+
+    majors = []
+    for position, item in enumerate(_converted(), start=1):
+        print(f"[{target['year']}] {position}/{len(entries)} {item['majorCode']} {item['status']}", flush=True)
+        majors.append(item)
     output_path = data_root / target["extractionPath"]
     if major_codes and output_path.exists():
         existing = read_json(output_path)
@@ -97,7 +105,7 @@ def main() -> int:
     parser.add_argument("--dataset", default="score-segments")
     parser.add_argument("--year", dest="years", action="append", type=int)
     parser.add_argument("--major", dest="major_codes", action="append")
-    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--workers", type=int, default=None, help="并发进程数，默认取 pipeline_config.py 的 SCORE_SEGMENT_WORKERS")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--registry", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -113,7 +121,7 @@ def main() -> int:
     if not targets:
         parser.error("year-links 中没有匹配的数据集/年份")
     for target in targets:
-        result = convert_target(target, data_root, set(args.major_codes or []), max(1, args.workers))
+        result = convert_target(target, data_root, set(args.major_codes or []), args.workers)
         print(f"{result['year']}: {result['summary']['ok']} ok, {result['summary']['needsReview']} needs review")
     return 0
 

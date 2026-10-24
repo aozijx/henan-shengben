@@ -11,6 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from crawler.source_rules import CrawlTarget, is_official_pdf_url
+from pipeline_config import REQUEST_TIMEOUT
 
 
 class SourceResolutionError(ValueError):
@@ -181,7 +182,7 @@ def _search_candidates(seed: dict, session) -> dict[str, set[str]]:
     url = seed.get('searchPageUrl')
     if not url:
         return {}
-    response = session.get(url, timeout=60)
+    response = session.get(url, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
     candidates: dict[str, set[str]] = {}
@@ -212,7 +213,7 @@ def resolve_score_segment_target(seed: dict, session) -> CrawlTarget:
 
 
 def _page_attachments(page_url: str, session, year: int) -> list[tuple[str, str]]:
-    response = session.get(page_url, timeout=60)
+    response = session.get(page_url, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
     found = []
@@ -251,7 +252,7 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
         if len(urls) != 1:
             raise SourceResolutionError(f'{year} {role}: expected one official page, found {len(urls)}; add an exact pageUrl')
         pages[role] = next(iter(urls))
-        response = session.get(pages[role], timeout=60)
+        response = session.get(pages[role], timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         page_text = BeautifulSoup(response.text, 'html.parser').get_text(' ', strip=True)
         if str(year) not in page_text or not any(word in page_text for word in SOURCE_ROLES[role]):

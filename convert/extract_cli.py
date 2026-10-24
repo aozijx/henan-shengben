@@ -35,6 +35,8 @@ def extract_registered_year(plan: dict, data_root: Path, year: int, *, write: bo
     for entry in plan["sources"]:
         if int(entry["year"]) != year or (parser and entry["parser"] != parser):
             continue
+        pdfs = '、'.join(entry.get('pdfPaths') or [])
+        print(f"[{year}] 开始抽取 {entry['parser']}：{pdfs or entry['outputPath']} …", flush=True)
         extracted = extract_entry(entry, data_root)
         output_path = data_root / entry["outputPath"]
         existing = read_json(output_path) if output_path.is_file() else []

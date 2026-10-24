@@ -16,6 +16,7 @@ from convert.convert_all import convert_target
 from convert.extract_cli import extract_registered_year
 from convert.normalize import normalize_target
 from convert.refresh_catalog import refresh_catalog
+from pipeline_config import REQUEST_TIMEOUT, USER_AGENT
 from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
 from crawler.year_sources import (
@@ -73,6 +74,7 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     if any((root / relative).exists() for relative in collision_paths):
         raise ValueError(f'{year} already exists; new-year publish would overwrite existing file')
     resolved = resolve_year_sources(seed, session)
+    print(f'[{year}] 已解析并校验官方来源页', flush=True)
     source_rows, crawl_target = execution_rows_for_year(resolved)
     plan = {'seeds': [seed], 'sources': source_rows, 'targets': [crawl_target]}
 
@@ -80,21 +82,25 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     provenance = []
     for row in source_rows:
         for index, (relative, url) in enumerate(zip(row['pdfPaths'], row['pdfUrls'])):
+            print(f'[{year}] 下载官方 PDF：{relative}', flush=True)
             result = download_entry(url, root / relative, session)
             if result['downloadStatus'] != 'downloaded':
                 raise ValueError(f"{year}: failed source download {url}: {result.get('error')}")
             role = source_role_for_attachment(row['parser'], index)
             validate_attachment(role, year, (root / relative).read_bytes())
+            print(f'[{year}] 校验通过：{relative}', flush=True)
             provenance.append({'year': year, 'type': role, 'sourcePageUrl': row['pageUrls'][index],
                 'sourceUrl': url, 'finalUrl': result['finalUrl'], 'localPath': relative,
                 'sha256': result['sha256'], 'bytes': result['bytes']})
     _write(root / f'来源清单/官方来源_{year}.json', {'schemaVersion': 1, 'year': year, 'sources': provenance})
 
-    page = session.get(crawl_target['discoveryUrl'], timeout=60)
+    page = session.get(crawl_target['discoveryUrl'], timeout=REQUEST_TIMEOUT)
     page.raise_for_status()
+    print(f'[{year}] 发现一分一段官方 PDF …', flush=True)
     target = SimpleNamespace(year=year, source_page_url=crawl_target['sourcePageUrl'],
                              download_directory=crawl_target['downloadDirectory'])
     entries = discover_year(target, page.text, base_url=crawl_target['sourcePageUrl'])
+    print(f'[{year}] 发现 {len(entries)} 个一分一段官方 PDF', flush=True)
     manifest = {'schemaVersion': 1, 'dataset': 'score-segments', 'year': year,
                 'sourcePageUrl': crawl_target['sourcePageUrl'], 'discoveryUrl': crawl_target['discoveryUrl'],
                 'entries': [entry_document(item) for item in entries]}
@@ -107,11 +113,14 @@ def _run_in_staging(seed: dict, root: Path, session) -> dict:
     for item in segment_provenance:
         validate_attachment('scoreSegments', year, (root / item['localPath']).read_bytes())
     results = extract_registered_year(plan, root, year, write=True)
+    print(f'[{year}] 官方表格抽取完成：{len(results)} 张', flush=True)
     if len(results) != len(source_rows) or any(item['expectedCountMismatch'] for item in results):
         raise ValueError(f'{year}: tabular source extraction incomplete or unexpected row count')
-    segment_result = convert_target(crawl_target, root, workers=1)
+    print(f'[{year}] 抽取一分一段分数段 …', flush=True)
+    segment_result = convert_target(crawl_target, root)
     if segment_result['summary']['needsReview']:
         raise ValueError(f'{year}: OCR requires human review before publication')
+    print(f'[{year}] 归一化一分一段数据 …', flush=True)
     normalized, normalization_report = normalize_target(crawl_target, plan, root)
     _write(root / crawl_target['normalizedPath'], normalized)
     _write(root / crawl_target['conversionReportPath'], normalization_report)
@@ -129,9 +138,10 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
     if Path(seed_path).stem != str(seed['year']):
         raise ValueError(f"year-links filename/year mismatch: {Path(seed_path).name}")
     session = session or requests.Session()
-    session.headers['User-Agent'] = 'henan-shengben-data/1.0'
+    session.headers['User-Agent'] = USER_AGENT
     data_root, metadata_path = Path(data_root).resolve(), Path(metadata_path).resolve()
     with tempfile.TemporaryDirectory(prefix='.ingest-year-', dir=data_root.parent) as temporary:
+        print(f"[{seed['year']}] 准备暂存目录 …", flush=True)
         staging_root = Path(temporary) / 'data'
         shutil.copytree(data_root, staging_root)
         staged_seed = staging_root / 'year-links' / f"{seed['year']}.json"

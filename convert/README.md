@@ -2,7 +2,7 @@
 
 转换层只读取 `data/year-links/YYYY.json` 的年度身份与官方来源链接。清单、PDF、提取、规范数据和报告路径由共享构造器按年份派生，不在多个 CLI 或 JSON 文件中重复维护。
 
-一分一段 PDF 没有文本层，是整页扫描图。流水线先由 `pdfplumber` 读取页码和内嵌图片，再由 RapidOCR 识别表格数字，最后通过纯解析器检查分数唯一性及累计人数单调性。快速识别违反约束时会自动逐单元格重试；仍无法确认的数字写入 `issues`，不会被静默补造。全量模式默认使用 4 个工作进程，并限制每个 OCR 引擎的线程数，避免 CPU 过度争用。
+一分一段 PDF 没有文本层，是整页扫描图。流水线先由 `pdfplumber` 读取页码和内嵌图片，再由 RapidOCR 识别表格数字，最后通过纯解析器检查分数唯一性及累计人数单调性。快速识别违反约束时会自动逐单元格重试；仍无法确认的数字写入 `issues`，不会被静默补造。全量模式默认使用 4 个工作进程，并限制每个 OCR 引擎的线程数，避免 CPU 过度争用；并发参数统一在根目录 `pipeline_config.py` 配置，CLI `--workers` 可临时覆盖。
 
 ```powershell
 python -m pip install -r convert/requirements.txt

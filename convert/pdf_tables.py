@@ -7,6 +7,8 @@ import re
 from typing import Iterable
 
 import pdfplumber
+
+from pipeline_config import ocr_engine_params
 from PIL import Image, ImageOps
 
 
@@ -100,11 +102,7 @@ def extract_rows(pdf_path: Path, thorough: bool = False) -> list[RawPdfRow]:
                     from rapidocr import RapidOCR
                 except ImportError as exc:
                     raise RuntimeError("扫描 PDF 需要 rapidocr 和 onnxruntime；请安装 convert/requirements.txt") from exc
-                _OCR_ENGINE = RapidOCR(params={
-                    "Global.log_level": "warning",
-                    "EngineConfig.onnxruntime.intra_op_num_threads": 2,
-                    "EngineConfig.onnxruntime.inter_op_num_threads": 1,
-                })
+                _OCR_ENGINE = RapidOCR(params=ocr_engine_params())
             for image in _embedded_images(page):
                 rows.extend(_ocr_rows(image, page_number, _OCR_ENGINE, thorough=thorough))
     return rows

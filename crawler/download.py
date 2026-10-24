@@ -1,6 +1,7 @@
 import hashlib
 import argparse
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import sys
 
@@ -9,6 +10,7 @@ import requests
 if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT, USER_AGENT
 from crawler.source_rules import is_official_pdf_url
 from crawler.year_sources import load_seed_targets, seed_paths_in
 
@@ -23,7 +25,7 @@ def download_entry(url, target: Path, session, expected_sha256=None):
             raise ValueError('PDF URL is not on the official host allowlist')
         if expected_sha256 and target.is_file() and _sha256(target.read_bytes()) == expected_sha256:
             return {'downloadStatus': 'skipped', 'sha256': expected_sha256, 'bytes': target.stat().st_size}
-        response = session.get(url, timeout=60)
+        response = session.get(url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         final_url = getattr(response, 'url', url)
         if not is_official_pdf_url(final_url):
@@ -44,7 +46,10 @@ def download_entry(url, target: Path, session, expected_sha256=None):
         return {'downloadStatus': 'failed', 'error': str(error)}
 
 
-def download_manifest(manifest_path: Path, data_root: Path, session):
+DOWNLOAD_STATUS_LABELS = {'downloaded': '已下载', 'skipped': '跳过（SHA-256 一致）', 'failed': '失败'}
+
+
+def download_manifest(manifest_path: Path, data_root: Path, session, workers: int | None = None):
     document = json.loads(manifest_path.read_text(encoding='utf-8'))
     counts = {'downloaded': 0, 'skipped': 0, 'failed': 0}
     destinations = set()
@@ -59,8 +64,26 @@ def download_manifest(manifest_path: Path, data_root: Path, session):
             raise ValueError(f"manifest PDF URL is not on the official host allowlist: {entry['pdfUrl']}")
         destinations.add(target)
         targets.append(target)
-    for entry, target in zip(document['entries'], targets):
+    year = document.get('year', manifest_path.stem)
+    total = len(document['entries'])
+    workers = max(1, DOWNLOAD_WORKERS if workers is None else workers)
+    print(f'[{year}] 下载一分一段官方 PDF：共 {total} 个，{workers} 线程（{manifest_path}）', flush=True)
+
+    def _download(position_entry):
+        position, (entry, target) = position_entry
         result = download_entry(entry['pdfUrl'], target, session, entry.get('sha256'))
+        status = DOWNLOAD_STATUS_LABELS[result['downloadStatus']]
+        suffix = f"：{result['error']}" if result['downloadStatus'] == 'failed' else ''
+        print(f'[{year}] {position}/{total} {status} {Path(entry["localPath"]).name}{suffix}', flush=True)
+        return entry, result
+
+    pairs = list(zip(document['entries'], targets))
+    if workers > 1:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            outcomes = list(executor.map(_download, enumerate(pairs, start=1)))
+    else:
+        outcomes = [_download(item) for item in enumerate(pairs, start=1)]
+    for entry, result in outcomes:
         entry.update(result)
         counts[result['downloadStatus']] += 1
     manifest_path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
@@ -82,7 +105,7 @@ def main():
     parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
     session = requests.Session()
-    session.headers['User-Agent'] = 'henan-shengben-data/1.0'
+    session.headers['User-Agent'] = USER_AGENT
     seed_paths = args.seed or seed_paths_in(args.data_root)
     if not seed_paths:
         parser.error('no year-links seeds found')
