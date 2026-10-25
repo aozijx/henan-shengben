@@ -246,11 +246,14 @@ def _attachment_identity_evidence(text: str, metadata: dict) -> str:
             continue
         evidence.append(value)
         encoded = value.strip()
-        if len(encoded) < 4 or not (encoded.startswith('<') and encoded.endswith('>')):
+        if len(encoded) < 4 or not encoded.startswith('<'):
             continue
+        encoded = encoded[1:-1] if encoded.endswith('>') else encoded[1:]
+        if len(encoded) % 2:
+            encoded += '0'
         try:
-            evidence.append(bytes.fromhex(encoded[1:-1]).decode('gb18030'))
-        except (ValueError, UnicodeDecodeError):
+            evidence.append(bytes.fromhex(encoded).decode('gb18030', errors='ignore'))
+        except ValueError:
             continue
     return ' '.join(evidence)
 

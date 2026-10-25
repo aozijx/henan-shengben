@@ -157,6 +157,11 @@ class YearSourcesTests(unittest.TestCase):
         self.assertIn('2026年河南省普通高校专升本招生分数段统计表', evidence)
         self.assertIn('2026', evidence)
 
+    def test_scanned_pdf_identity_can_be_read_from_truncated_hex_title(self):
+        title_hex = 'E:\\2026年河南省普通高校专升本招生分数段统计表(38机械设计制造及其自动化).FRX'.encode('gb18030').hex().upper()
+        evidence = _attachment_identity_evidence('', {'Title': '<' + title_hex[:-1]})
+        self.assertIn('2026年河南省普通高校专升本招生分数段统计表', evidence)
+
     def test_accepts_the_user_supplied_2026_official_page_and_scoreline_pdf_urls(self):
         seed = {
             'year': 2026,
