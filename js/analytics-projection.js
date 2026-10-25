@@ -31,7 +31,10 @@ export function projectAnalytics(analyticsByYear, mapping, selectedYears, filter
       var splits = {};
       included.forEach(function (type) {
         var part = types[type] || {};
-        var count = filters && filters.povertyStatus === '否' ? (part.ordinarySchoolCount || 0) : (part.allSchoolCount || 0);
+        var ordinarySchoolCount = Array.isArray(part.schools)
+          ? part.schools.filter(function (school) { return Number(school.ordinaryPlanCount) > 0; }).length
+          : (part.ordinarySchoolCount || 0);
+        var count = filters && filters.povertyStatus === '否' ? ordinarySchoolCount : (part.allSchoolCount || 0);
         schools += count;
         splits[type] = { schoolCount: count, ordinaryPlanCount: part.ordinaryPlanCount || 0,
           povertyPlanCount: filters && filters.povertyStatus === '否' ? 0 : (part.povertyPlanCount || 0) };

@@ -304,11 +304,7 @@ def _analytics(year, mapping, scores, plans):
                 school['hasPovertyPlan' if special else 'hasOrdinaryPlan'] = True
             school_types[key] = {
                 'allSchoolCount': len(schools),
-                'ordinarySchoolCount': len({
-                    (str(r.get('院校代号') or '').strip(), str(r.get('院校名称') or '').strip())
-                    if r.get('院校代号') else ('', str(r.get('院校名称') or '').strip())
-                    for r in ordinary
-                }),
+                'ordinarySchoolCount': sum(1 for school in schools.values() if school['ordinaryPlanCount'] > 0),
                 'ordinaryPlanCount': sum(int(r.get('计划人数') or 0) for r in ordinary),
                 'povertyPlanCount': sum(int(r.get('计划人数') or 0) for r in poverty),
                 'schools': [schools[identity] for identity in sorted(schools)],

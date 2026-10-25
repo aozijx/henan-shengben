@@ -26,6 +26,8 @@ class YearlyWorkflowContractTests(unittest.TestCase):
         self.assertRegex(self.workflow, r'(?s)while IFS= read -r seed; do.*?--seed "\$seed" --check.*?done < changed-seeds\.txt')
 
     def test_workflow_uses_pinned_runtime_versions_and_does_not_publish(self):
+        self.assertRegex(self.workflow, r'(?m)^\s+runs-on:\s*ubuntu-24\.04\s*$')
+        self.assertRegex(self.workflow, r'(?ms)^\s+WAF_BROWSER_PATH:\s*/usr/bin/microsoft-edge\s*$.*?WAF_HEADLESS:\s*[\'"]?true')
         self.assertRegex(self.workflow, r'python-version:\s*["\']?3\.12')
         self.assertRegex(self.workflow, r'node-version:\s*["\']?22')
         self.assertNotRegex(self.workflow, r'(?im)^\s*(?:git push|git commit|gh pr merge)\b')

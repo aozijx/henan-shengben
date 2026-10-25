@@ -110,13 +110,13 @@ class DownloadTest(unittest.TestCase):
             manifest = root / 'manifest.json'
             session = CountingSession(Response(b'%PDF-1.4 test'))
             manifest.write_text(json.dumps({'entries': [
-                {'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '../outside.pdf'}]}), encoding='utf-8')
+                {'majorCode': '01', 'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '../outside.pdf'}]}), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'escapes data root'):
                 download_manifest(manifest, root, session)
             self.assertEqual(session.calls, 0)
             manifest.write_text(json.dumps({'entries': [
-                {'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '2027/a.pdf'},
-                {'pdfUrl': 'https://www.haeea.cn/b.pdf', 'localPath': '2027/a.pdf'}]}), encoding='utf-8')
+                {'majorCode': '01', 'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '2027/a.pdf'},
+                {'majorCode': '02', 'pdfUrl': 'https://www.haeea.cn/b.pdf', 'localPath': '2027/a.pdf'}]}), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'duplicate manifest destination'):
                 download_manifest(manifest, root, session)
             self.assertEqual(session.calls, 0)
@@ -128,8 +128,8 @@ class DownloadTest(unittest.TestCase):
             manifest = root / 'manifest.json'
             session = CountingSession(Response(b'%PDF-1.4 test'))
             manifest.write_text(json.dumps({'entries': [
-                {'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '2027/a.pdf'},
-                {'pdfUrl': 'https://evil.example/b.pdf', 'localPath': '2027/b.pdf'}]}), encoding='utf-8')
+                {'majorCode': '01', 'pdfUrl': 'https://www.haeea.cn/a.pdf', 'localPath': '2027/a.pdf'},
+                {'majorCode': '02', 'pdfUrl': 'https://evil.example/b.pdf', 'localPath': '2027/b.pdf'}]}), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'official host allowlist'):
                 download_manifest(manifest, root, session)
             self.assertEqual(session.calls, 0)
@@ -166,6 +166,7 @@ class DownloadTest(unittest.TestCase):
                 manifest = {
                     'entries': [{
                         'pdfUrl': f'https://www.haeea.cn/{year}.pdf',
+                    'majorCode': '01',
                         'localPath': f'一分一段/原始PDF/{year}/01.pdf',
                         'sha256': None,
                     }]
