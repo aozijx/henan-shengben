@@ -21,6 +21,7 @@ class YearlyWorkflowContractTests(unittest.TestCase):
         self.assertRegex(self.workflow, r"(?ms)- name: Upload review reports\n\s+if: always\(\) && steps\.seeds\.outputs\.has_seeds == 'true'.*?actions/upload-artifact@v4")
         self.assertIn('yearly-ingest-reports/', self.workflow)
         self.assertIn('yearly-ingest-output/', self.workflow)
+        self.assertIn('source-review', self.workflow)
 
     def test_pull_request_and_dispatch_feed_the_same_ingest_loop(self):
         self.assertIn('$GITHUB_EVENT_NAME" == "pull_request', self.workflow)

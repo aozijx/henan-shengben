@@ -107,6 +107,31 @@ jobs:
           PY
             if ! xvfb-run --auto-servernum python -m convert.ingest_year --seed "$seed" --data-root "$stage/data" --template metadata/school-data.template.json --metadata "$stage/metadata.json" > "yearly-ingest-reports/${name}.json"; then
               cat "yearly-ingest-reports/${name}.json"
+              python - "$stage/data" "yearly-ingest-reports/${name}.json" "yearly-ingest-output/$name/source-review" "$name" <<'PY'
+          import json
+          import re
+          import shutil
+          import sys
+          from pathlib import Path
+
+          data_root, report_path, review_root, year = map(Path, sys.argv[1:])
+          try:
+              report = json.loads(report_path.read_text(encoding='utf-8'))
+              match = re.match(r'^(?P<path>.+?\.pdf):', report.get('error', ''), re.IGNORECASE)
+              if match:
+                  relative = Path(match.group('path'))
+                  source = (data_root / relative).resolve()
+                  if source.is_relative_to(data_root.resolve()) and source.is_file():
+                      destination = review_root / relative
+                      destination.parent.mkdir(parents=True, exist_ok=True)
+                      shutil.copy2(source, destination)
+                      manifest = data_root / '来源清单' / f'来源清单_{year}.json'
+                      if manifest.is_file():
+                          shutil.copy2(manifest, review_root / manifest.name)
+                      print(f'Preserved failed PDF for review: {relative}')
+          except Exception as error:
+              print(f'Could not preserve failed PDF for review: {error}', file=sys.stderr)
+          PY
               status=1
               continue
             fi
