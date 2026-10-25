@@ -18,6 +18,7 @@ from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
 from crawler.waf import build_session
 from crawler.year_sources import (
+    SourceResolutionError,
     crawl_target_record,
     load_year_links,
     execution_rows_for_year,
@@ -41,6 +42,17 @@ def source_role_for_attachment(parser: str, index: int) -> str:
     if parser in {'scorelines', 'plans', 'master'} and index == 0:
         return parser
     raise ValueError(f'unsupported parser attachment: {parser}[{index}]')
+
+
+def validate_score_segment_pdfs(entries: list[dict], data_root: Path, year: int) -> None:
+    """Validate each downloaded score-segment PDF and identify failures by path."""
+    for item in entries:
+        relative = item['localPath']
+        print(f'[{year}] 校验一分一段 PDF：{relative}', flush=True)
+        try:
+            validate_attachment('scoreSegments', year, (Path(data_root) / relative).read_bytes())
+        except SourceResolutionError as error:
+            raise SourceResolutionError(f'{relative}: {error}') from error
 
 
 def publish_staged_files(staging_root: Path, data_root: Path) -> None:
@@ -108,8 +120,7 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
     if counts['failed'] or counts['downloaded'] + counts['skipped'] != len(entries):
         raise ValueError(f'{year}: score-segment downloads incomplete: {counts}')
     segment_provenance = read_json(manifest_path)['entries']
-    for item in segment_provenance:
-        validate_attachment('scoreSegments', year, (root / item['localPath']).read_bytes())
+    validate_score_segment_pdfs(segment_provenance, root, year)
     results = extract_year_sources(plan, root, year, write=True)
     print(f'[{year}] 官方表格抽取完成：{len(results)} 张', flush=True)
     if len(results) != len(source_rows) or any(item['expectedCountMismatch'] for item in results):
