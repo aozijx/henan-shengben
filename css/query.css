@@ -1,10 +1,9 @@
 /* 河南专升本查询：搜索、聚合结果、筛选与导出。 */
 .search-row{display:flex;gap:8px;margin:14px 0 6px;}.search-row input{flex:1;min-width:0;height:48px;padding:0 16px;font-size:16px;border:1px solid var(--line-strong);border-radius:var(--radius);background:var(--card);color:var(--ink);outline:none;font-family:var(--sans);transition:border-color .15s,box-shadow .15s;}.search-row input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--focus-ring);}.search-row input::placeholder{color:var(--faint);}.clear,.go{height:48px;padding:0 16px;border-radius:var(--radius);font:inherit;font-size:15px;font-weight:600;cursor:pointer;border:1px solid var(--line-strong);background:var(--card);color:var(--ink);}.clear{display:none;}.clear:active,.go:active{transform:translateY(1px);}.go{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg);}.go:hover{background:var(--btn-bg-hover);border-color:var(--btn-bg-hover);}.hint{min-height:20px;margin:0 2px 8px;font-size:13px;color:var(--muted);}.result .empty{padding:44px 16px;text-align:center;color:var(--muted);background:var(--card);border:1px dashed var(--line-strong);border-radius:var(--radius);font-size:14px;}
 
-/* 查询工作区顺序：搜索 → 上下文 → 筛选 → 统一结果工作区（含导出入口）。 */
+/* 查询工作区顺序：搜索 → 筛选与结果；提示和结果工具栏并排。 */
 #view-query.is-active{display:grid;grid-template-columns:minmax(226px,278px) minmax(0,1fr);gap:12px 20px;align-items:start;min-width:0;}
 #view-query .search-row{grid-column:1/-1;order:1;}
-#view-query .hint{grid-column:1/-1;order:2;}
 #view-query .explorer{display:contents;}
 #view-query .explorer-status{grid-column:1/-1;order:3;}
 #view-query .filter-panel{grid-column:1;grid-row:4;order:4;align-self:stretch;}
@@ -13,6 +12,9 @@
 .result{height:100%;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;}
 .result.has-results{align-items:stretch;justify-content:flex-start;}
 .result-toolbar{width:100%;min-width:0;justify-content:flex-start;padding:13px 14px 0;margin:0 0 12px;}
+.result-feedback-toolbar{display:flex;align-items:center;gap:12px;width:100%;min-width:0;padding:13px 14px 0;}
+.result-feedback-toolbar>.hint{flex:1 1 auto;min-width:0;margin:0;}
+.result-feedback-toolbar>.result-toolbar{flex:0 0 auto;width:auto;min-width:0;margin:0;padding:0;}
 .result-content{width:100%;min-width:0;}
 .result-state{width:100%;margin:auto;padding:34px 16px;text-align:center;color:var(--muted);}
 .result .result-state.empty{background:none;border:0;border-radius:0;}
@@ -86,7 +88,7 @@
 
 @media (max-width:899px){
   #view-query.is-active{grid-template-columns:minmax(0,1fr);gap:10px;}
-  #view-query .search-row,#view-query .hint,#view-query .explorer-status,#view-query .filter-panel,#view-query .result{grid-column:1;grid-row:auto;}
+  #view-query .search-row,#view-query .explorer-status,#view-query .filter-panel,#view-query .result{grid-column:1;grid-row:auto;}
   #view-query .filter-panel{order:4;padding:13px;}
   #view-query .result{order:6;}
   .result-toolbar{margin-bottom:12px;padding-inline:13px;}
@@ -134,7 +136,7 @@
 /* The result card fills the same grid cell as filters; only its empty state centers. */
 #view-query #result.result{height:100%;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;}
 #view-query #result.result.has-results{align-items:stretch;justify-content:flex-start;}
-#view-query #result-toolbar.result-toolbar{display:flex;width:100%;min-width:0;justify-content:flex-start;gap:8px;margin:0 0 12px;padding:13px 14px 0;}
+#view-query #result-toolbar.result-toolbar{display:flex;width:auto;min-width:0;flex:0 0 auto;justify-content:flex-start;gap:8px;margin:0;padding:0;}
 #view-query #result-content{width:100%;min-width:0;}
 #view-query #result-content .aggregate-table-wrap{width:100%;}
 #view-query #result-state.result-state{width:100%;margin:auto;padding:34px 16px;text-align:center;color:var(--muted);}
@@ -146,7 +148,9 @@
 
 @media(max-width:899px){
   #view-query #result.result{min-width:0;}
-  #view-query #result-toolbar.result-toolbar{flex-wrap:wrap;margin:0 0 12px;padding:13px 12px 0;overflow:visible;white-space:normal;}
+  #view-query .result-feedback-toolbar{align-items:flex-start;flex-wrap:wrap;gap:4px 8px;padding:12px 12px 0;}
+  #view-query .result-feedback-toolbar>.hint{flex-basis:180px;}
+  #view-query #result-toolbar.result-toolbar{flex-wrap:wrap;margin-left:auto;overflow:visible;white-space:normal;}
   #view-query .selected-major-section{grid-column:1;grid-row:auto;order:7;}
 }
 
@@ -180,7 +184,9 @@
 #view-query .year-kind{display:grid;gap:3px;min-width:0;font-size:11px;line-height:1.45;overflow-wrap:anywhere;}
 
 #view-query .selected-major-section{grid-column:1/-1;grid-row:5;order:7;width:100%;min-width:0;margin-top:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;}
+#view-query .selected-major-section{scroll-margin-top:16px;}
 #view-query .selected-major-section[hidden]{display:none!important;}
+.school-detail-return{display:none;}
 .selected-major-section-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line);}
 .selected-major-section-header h3{margin:0;font-size:15px;}
 .selected-major-section-header p{margin:4px 0 0;color:var(--muted);font-size:12px;}
@@ -203,6 +209,8 @@
 .selected-major-section[data-school-layout="list"] .school-plan-record{grid-row:1/span 2;margin:0;padding:0;border:0;}
 
 @media(max-width:600px){
+  #view-query .school-detail-return:not([hidden]){position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:20;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border:1px solid var(--line-strong);border-radius:var(--radius-pill);background:var(--card);color:var(--blue-deep);font:600 14px/1 var(--sans);box-shadow:0 4px 18px rgb(0 0 0 / .18);cursor:pointer;}
+  #view-query .school-detail-return:focus-visible{outline:2px solid var(--blue);outline-offset:3px;}
   #view-query .aggregate-table-wrap{max-height:none;overflow:auto;border-radius:var(--radius-sm);}
   #view-query .aggregate-table-scroll-hint{display:block;position:sticky;left:0;width:max-content;padding:6px 10px;color:var(--muted);font-size:11px;}
   #view-query .aggregate-table{display:table;width:100%;min-width:var(--table-min-width,850px)!important;border-collapse:separate;table-layout:fixed;}

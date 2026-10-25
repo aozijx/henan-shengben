@@ -76,15 +76,13 @@ function createAggregateRenderer(loaded) {
           sort: state && state.sort
         });
         renderWorkspace({ status: 'ready', hasQuery: true, aggregates: resultModel.aggregates }, years, state, dispatch,
-          function (aggregate, selected, holder, hiddenFields) {
-            holder.innerHTML = '<div class="loading">正在读取该专业的一分一段…</div>';
-            Promise.all([data.loadYears(loaded.store, selected), Promise.all(selected.map(function (year) {
+          function (aggregate, selected, hiddenFields) {
+            return Promise.all([data.loadYears(loaded.store, selected), Promise.all(selected.map(function (year) {
               return loaded.repository.ensureScoreSegmentIndex(year).then(function (index) {
                 var code = lookupScoreSegmentCode(index, aggregate.major.majorCode);
                 return code ? loaded.repository.ensureScoreSegment(year, code) : null;
               });
             }))]).then(function (values) {
-              if (!holder.isConnected || holder.hidden) return;
               var shards = values[1];
               var detail = buildMajorAggregates({ majors: [aggregate.major], years: selected,
                 plansByYear: data.normalizedPlansForYears(loaded.store, selected),
@@ -98,9 +96,8 @@ function createAggregateRenderer(loaded) {
                 yearValue.scoreSegments = shards[index] ? normalizeScoreSegmentSeries(shards[index]) : null;
                 yearValue.scoreContext = resolveScoreContext(yearValue.scoreSegments, null, yearValue.score);
               });
-              if (!holder.isConnected || holder.hidden) return;
-              holder.innerHTML = buildExpandedMajorHtml(detail, selected, hiddenFields);
-            }).catch(function (error) { if (holder.isConnected && !holder.hidden) holder.textContent = '数据加载失败：' + error.message; });
+              return { html: buildExpandedMajorHtml(detail, selected, hiddenFields) };
+            }).catch(function (error) { return { error: error.message }; });
           });
       })
       .catch(function (error) {
