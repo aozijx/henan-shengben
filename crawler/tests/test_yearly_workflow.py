@@ -15,7 +15,9 @@ class YearlyWorkflowContractTests(unittest.TestCase):
 
     def test_workflow_runs_check_mode_and_uploads_reports_after_failures(self):
         self.assertRegex(self.workflow, r'python -m convert\.ingest_year --seed .*--check')
-        self.assertRegex(self.workflow, r'(?ms)- name: Upload review reports\n\s+if: always\(\).*?actions/upload-artifact@v4')
+        self.assertIn('has_seeds=false', self.workflow)
+        self.assertIn('has_seeds=true', self.workflow)
+        self.assertRegex(self.workflow, r"(?ms)- name: Upload review reports\n\s+if: always\(\) && steps\.seeds\.outputs\.has_seeds == 'true'.*?actions/upload-artifact@v4")
         self.assertIn('yearly-ingest-reports/', self.workflow)
 
     def test_pull_request_and_dispatch_feed_the_same_ingest_check_loop(self):
