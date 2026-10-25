@@ -31,7 +31,9 @@ class YearlyWorkflowContractTests(unittest.TestCase):
 
     def test_workflow_uses_pinned_runtime_versions_and_does_not_push_generated_data(self):
         self.assertRegex(self.workflow, r'(?m)^\s+runs-on:\s*ubuntu-24\.04\s*$')
-        self.assertRegex(self.workflow, r'(?ms)^\s+WAF_BROWSER_PATH:\s*/usr/bin/microsoft-edge\s*$.*?WAF_HEADLESS:\s*[\'"]?true')
+        self.assertRegex(self.workflow, r'(?ms)^\s+WAF_BROWSER_PATH:\s*/usr/bin/microsoft-edge\s*$.*?WAF_HEADLESS:\s*[\'"]?false')
+        self.assertIn('Ensure Xvfb is available for headed Edge', self.workflow)
+        self.assertIn('xvfb-run --auto-servernum python -m convert.ingest_year', self.workflow)
         self.assertRegex(self.workflow, r'python-version:\s*["\']?3\.12')
         self.assertRegex(self.workflow, r'node-version:\s*["\']?22')
         self.assertNotRegex(self.workflow, r'(?im)^\s*(?:git push|git commit|gh pr merge)\b')

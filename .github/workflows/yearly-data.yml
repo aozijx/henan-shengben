@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       WAF_BROWSER_PATH: /usr/bin/microsoft-edge
-      WAF_HEADLESS: 'true'
+      WAF_HEADLESS: 'false'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,6 +37,12 @@ jobs:
         run: |
           python -m pip install -r crawler/requirements.txt -r convert/requirements.txt
           npm ci
+      - name: Ensure Xvfb is available for headed Edge
+        run: |
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          fi
       - name: Discover changed yearly seed files
         id: seeds
         shell: bash
@@ -99,7 +105,7 @@ jobs:
               if path.is_dir():
                   shutil.rmtree(path)
           PY
-            if ! python -m convert.ingest_year --seed "$seed" --data-root "$stage/data" --template metadata/school-data.template.json --metadata "$stage/metadata.json" > "yearly-ingest-reports/${name}.json"; then
+            if ! xvfb-run --auto-servernum python -m convert.ingest_year --seed "$seed" --data-root "$stage/data" --template metadata/school-data.template.json --metadata "$stage/metadata.json" > "yearly-ingest-reports/${name}.json"; then
               cat "yearly-ingest-reports/${name}.json"
               status=1
               continue

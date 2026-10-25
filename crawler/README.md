@@ -18,7 +18,7 @@
 
 ## 公告页访问受限
 
-官方公告页可能返回 400/403/412。默认开启自动引导：会话遇到挑战时会使用 DrissionPage 启动本机 Chrome 或 Edge，通过后把 Cookie 和浏览器标识写入仓库根目录的 `.waf-cookie`，然后重试原请求。安装 `crawler/requirements.txt` 中的依赖；本机交互模式下挑战期间保持弹出的浏览器窗口打开。GitHub Actions 使用 Ubuntu 24.04 预装的 Microsoft Edge，并通过 `WAF_BROWSER_PATH` 和 `WAF_HEADLESS=true` 选择无头模式；Linux 无头启动会加入 Chromium 所需的 `--no-sandbox` 参数。是否能通过官方站的 WAF 挑战仍以实际工作流运行为准。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
+官方公告页可能返回 400/403/412。默认开启自动引导：会话遇到挑战时会使用 DrissionPage 启动本机 Chrome 或 Edge，通过后把 Cookie 和浏览器标识写入仓库根目录的 `.waf-cookie`，然后重试原请求。浏览器必须加载有效正文后才会保存 Cookie，避免把空白错误页误判为挑战通过。安装 `crawler/requirements.txt` 中的依赖；本机交互模式下挑战期间保持弹出的浏览器窗口打开。GitHub Actions 使用 Ubuntu 24.04 预装的 Microsoft Edge，通过 Xvfb 虚拟显示器以有头模式运行；Linux 启动会加入 Chromium 所需的 `--no-sandbox` 参数。是否能通过官方站的 WAF 挑战仍以实际工作流运行为准。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
 
 需要手动提供会话时，先在浏览器确认官方公告页可正常打开，再从该请求复制完整的 Cookie 请求头到 `.waf-cookie`。建议保存 JSON 对象，包含 `userAgent` 和 `cookie` 两个字段，以保持 Cookie 与浏览器标识一致。该文件已被 Git 忽略。会话失效后重新获取即可。
 

@@ -42,9 +42,15 @@ def _build_browser_options(options_type):
     headless = os.getenv('WAF_HEADLESS', '').strip().lower() in {'1', 'true', 'yes', 'on'}
     if headless:
         options.headless()
-        if sys.platform.startswith('linux'):
-            options.set_argument('--no-sandbox')
+    if sys.platform.startswith('linux'):
+        options.set_argument('--no-sandbox')
     return options
+
+
+def _browser_page_ready(html: str | None) -> bool:
+    """Reject blank browser error pages and WAF challenges as successful loads."""
+    html = (html or '').strip()
+    return len(html) > 128 and '$_ts' not in html
 
 
 def _load_waf_session() -> dict:
@@ -95,10 +101,15 @@ def bootstrap_cookie(url: str) -> bool:
             browser = ChromiumPage(options)
         print(f'[WAF] 启动真实浏览器通过官方站挑战：{url}', flush=True)
         browser.get(url)
-        for _ in range(20):  # 瑞数挑战页执行 JS 后自动重载，等待真实内容出现
-            if '$_ts' not in (browser.html or ''):
+        page_html = ''
+        for _ in range(30):  # 空白错误页不代表挑战通过；等待公告正文或挑战脚本消失
+            page_html = browser.html or ''
+            if _browser_page_ready(page_html):
                 break
             time.sleep(1)
+        if not _browser_page_ready(page_html):
+            print(f'[WAF] 浏览器未能加载有效页面（html={len(page_html)}），不保存挑战 Cookie', flush=True)
+            return False
         cookie_header = '; '.join(f"{item['name']}={item['value']}" for item in browser.cookies())
         if not cookie_header:
             print('[WAF] 未取到官方站 Cookie，引导失败', flush=True)
