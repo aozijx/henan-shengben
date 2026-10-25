@@ -1,9 +1,9 @@
 """官方站会话构建与瑞数 WAF 自动引导。
 
-官方站公告页部署了瑞数动态安全 WAF（403/412 挑战页），纯 HTTP 客户端无法
-解出挑战；PDF 附件域不受影响。两种通过方式：
+官方站公告页和部分 PDF 附件会被瑞数动态安全 WAF 拦截，可能返回 400/403/412；
+纯 HTTP 客户端无法解出挑战。两种通过方式：
 
-1. 自动引导：首次遇到 403/412 时用 DrissionPage 驱动真实 Chromium 打开
+1. 自动引导：首次遇到 400/403/412 时用 DrissionPage 驱动真实 Chromium 打开
    目标页，挑战通过后把 Cookie 与 UA 写回 .waf-cookie 并原地重试一次。
 2. 手动借用：在真浏览器打开任一公告页，把请求头 Cookie 保存到仓库根
    .waf-cookie（纯字符串，或 {'userAgent','cookie'} JSON，已 gitignore）。
@@ -25,7 +25,7 @@ import requests
 from pipeline_config import WAF_AUTO_BOOTSTRAP
 
 WAF_COOKIE_FILE = Path(__file__).resolve().parent.parent / '.waf-cookie'
-WAF_BLOCKED_STATUS = {403, 412}
+WAF_BLOCKED_STATUS = {400, 403, 412}
 EDGE_PATHS = (
     r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
     r'C:\Program Files\Microsoft\Edge\Application\msedge.exe',
@@ -114,7 +114,7 @@ def bootstrap_cookie(url: str) -> bool:
 
 
 class WafSession(requests.Session):
-    """官方站会话：首次 403/412 自动引导 WAF Cookie 并重试一次。"""
+    """官方站会话：首次 400/403/412 自动引导 WAF Cookie 并重试一次。"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

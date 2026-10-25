@@ -100,6 +100,14 @@ class WafSessionTest(unittest.TestCase):
 
 
 class WafRetryTest(unittest.TestCase):
+    def test_bad_request_bootstraps_once_and_retries(self):
+        with patch.object(requests.Session, 'get', side_effect=[FakeResponse(400), FakeResponse(200)]) as get:
+            with patch.object(crawler.waf, 'bootstrap_cookie', return_value=True) as bootstrap:
+                session = build_session()
+                self.assertEqual(session.get('https://www.haeea.cn/a/page.shtml').status_code, 200)
+        self.assertEqual(get.call_count, 2)
+        self.assertEqual(bootstrap.call_count, 1)
+
     def test_blocked_response_bootstraps_once_and_retries(self):
         with patch.object(requests.Session, 'get', side_effect=[FakeResponse(412), FakeResponse(200)]) as get:
             with patch.object(crawler.waf, 'bootstrap_cookie', return_value=True) as bootstrap:
