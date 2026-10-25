@@ -22,6 +22,7 @@ class YearlyWorkflowContractTests(unittest.TestCase):
         self.assertIn('yearly-ingest-reports/', self.workflow)
         self.assertIn('yearly-ingest-output/', self.workflow)
         self.assertIn('source-review', self.workflow)
+        self.assertIn('JSONDecoder().raw_decode', self.workflow)
 
     def test_pull_request_and_dispatch_feed_the_same_ingest_loop(self):
         self.assertIn('$GITHUB_EVENT_NAME" == "pull_request', self.workflow)

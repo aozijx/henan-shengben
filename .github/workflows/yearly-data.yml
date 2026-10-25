@@ -116,7 +116,19 @@ jobs:
 
           data_root, report_path, review_root, year = map(Path, sys.argv[1:])
           try:
-              report = json.loads(report_path.read_text(encoding='utf-8'))
+              report_text = report_path.read_text(encoding='utf-8')
+              report = None
+              for position, character in enumerate(report_text):
+                  if character != '{':
+                      continue
+                  try:
+                      candidate, _ = json.JSONDecoder().raw_decode(report_text[position:])
+                  except json.JSONDecodeError:
+                      continue
+                  if isinstance(candidate, dict) and candidate.get('status') == 'failed':
+                      report = candidate
+              if report is None:
+                  raise ValueError('failed report JSON was not found')
               match = re.match(r'^(?P<path>.+?\.pdf):', report.get('error', ''), re.IGNORECASE)
               if match:
                   relative = Path(match.group('path'))
