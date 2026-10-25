@@ -49,7 +49,10 @@ jobs:
             printf '%s\n' "$SEED_PATH" > changed-seeds.txt
           fi
           if [[ ! -s changed-seeds.txt ]]; then
+            echo "has_seeds=false" >> "$GITHUB_OUTPUT"
             echo "No yearly seed files to validate" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "has_seeds=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Validate seeds and generate review reports
         id: validate
@@ -65,7 +68,7 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
       - name: Upload review reports
-        if: always()
+        if: always() && steps.seeds.outputs.has_seeds == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: yearly-ingest-review
