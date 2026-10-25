@@ -150,18 +150,26 @@
   #view-query .selected-major-section{grid-column:1;grid-row:auto;order:7;}
 }
 
-/* Keep year summaries side by side inside the horizontally scrolling result table. */
-.year-overview-compact{display:flex;flex-wrap:nowrap;align-items:stretch;width:max-content;min-width:100%;gap:8px;}
-.year-overview-compact .year-overview-item{flex:0 0 176px;min-width:176px;}
-.year-overview-compact .year-summary{grid-template-columns:repeat(2,minmax(0,1fr));}
+/* Keep each year and metric in one compact, comparable table column. */
 #view-query .aggregate-table{min-width:var(--table-min-width,850px);}
-#view-query .aggregate-table th:nth-child(1),#view-query .aggregate-table td:nth-child(1){width:210px;}
-#view-query .aggregate-table th:nth-child(2),#view-query .aggregate-table td:nth-child(2){width:var(--year-column-width,514px);}
-#view-query .aggregate-table th:nth-child(3),#view-query .aggregate-table td:nth-child(3){width:120px;}
-.aggregate-table td:nth-child(2){white-space:normal;}
+#view-query .aggregate-table th,#view-query .aggregate-table td{box-sizing:border-box;padding:10px 12px;}
+#view-query .aggregate-table th.aggregate-major-column,#view-query .aggregate-table td.aggregate-major-cell{width:210px;}
+#view-query .aggregate-table th.score-year-column,#view-query .aggregate-table td.score-year-cell{width:var(--score-column-width,96px);}
+#view-query .aggregate-table th.admission-year-column,#view-query .aggregate-table td.admission-year-cell{width:var(--admissions-column-width,200px);}
+#view-query .aggregate-table th.aggregate-detail-column,#view-query .aggregate-table td:last-child{width:var(--detail-column-width,112px);}
+#view-query .aggregate-table th{vertical-align:middle;white-space:nowrap;}
+#view-query .aggregate-table th.sortable button{padding:6px 0;}
+#view-query .aggregate-table .score-year-column.sortable button{min-width:0;padding:6px 0;}
+#view-query .aggregate-table td.score-year-cell,#view-query .aggregate-table td.admission-year-cell{white-space:nowrap;}
+.aggregate-table-scroll-hint{display:none;}
+#view-query .aggregate-table .score-year-cell .year-score{display:block;border:0;padding:0;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;}
+#view-query .aggregate-table .score-year-cell .year-score>span{font-size:inherit;}
+#view-query .aggregate-table .admission-year-cell .year-kind{display:block;margin:0;white-space:nowrap;font-size:11px;line-height:1.5;}
+.admission-year-label{font-size:11px;font-weight:650;white-space:nowrap;}
+.admission-year-label .year-kind-public,.admission-year-label .year-kind-private{font-size:10px;}
+.year-unpublished-description{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 .aggregate-major-cell strong{display:block;font-size:14px;color:var(--ink);}
 .aggregate-major-meta{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.5;white-space:normal;}
-.aggregate-table-mobile-label{display:none;}
 .year-overview .year-rank{display:none;}
 
 /* Keep numeric comparison balanced: the score spans the row; public/private totals share it. */
@@ -195,30 +203,19 @@
 .selected-major-section[data-school-layout="list"] .school-plan-record{grid-row:1/span 2;margin:0;padding:0;border:0;}
 
 @media(max-width:600px){
-  #view-query .aggregate-table-wrap{max-height:none;overflow:visible;border:0;border-radius:0;background:transparent;}
-  #view-query .aggregate-table{display:block;width:100%;min-width:0!important;border:0;border-collapse:initial;table-layout:auto;}
-  #view-query .aggregate-table thead{position:static;display:block;width:auto;height:auto;margin:0 0 9px;overflow:visible;clip:auto;white-space:normal;border:0;}
-  #view-query .aggregate-table thead tr{display:flex;gap:7px;}
-  #view-query .aggregate-table thead th{position:static;width:auto!important;min-height:34px;padding:0;border:1px solid var(--line);border-radius:var(--radius-xs);background:var(--surface-2);box-shadow:none;z-index:auto;}
-  #view-query .aggregate-table thead th:nth-child(3){display:none;}
-  #view-query .aggregate-table thead th.sortable button{width:auto;min-height:34px;padding:6px 9px;border:0;border-radius:inherit;white-space:nowrap;}
-  #view-query .aggregate-table tbody{display:grid;gap:10px;}
-  #view-query .aggregate-table tr.aggregate-table-row{display:grid;grid-template-columns:minmax(0,1fr);overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);}
-  #view-query .aggregate-table tr.aggregate-table-row td{display:block;width:auto!important;min-width:0;padding:11px 12px;border:0;white-space:normal;}
-  #view-query .aggregate-table-row .aggregate-major-cell{padding-bottom:8px!important;}
-  #view-query .aggregate-table-row td:nth-child(2){border-top:1px solid var(--line)!important;}
-  #view-query .aggregate-table-mobile-label{display:block;margin-bottom:7px;color:var(--muted);font-size:11px;font-weight:650;}
-  #view-query .aggregate-table .year-overview-compact{display:grid;width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
-  #view-query .aggregate-table .year-overview-compact .year-overview-item{width:auto;min-width:0;flex:initial;padding:8px;border:1px solid var(--line);border-radius:var(--radius-xs);background:var(--surface);}
-  #view-query .aggregate-table .year-overview-compact .year-overview-item h4{margin-bottom:5px;}
-  #view-query .aggregate-table .year-overview-compact .year-summary{grid-template-columns:minmax(0,1fr);gap:4px;font-size:11px;}
-  #view-query .year-summary{grid-template-columns:minmax(0,1fr);gap:5px;}
-  #view-query .year-score{grid-column:1;}
-  #view-query .aggregate-table tr.aggregate-table-row td:nth-child(3){padding-top:7px;}
-  #view-query .aggregate-table tr.aggregate-table-row td:nth-child(3) button{width:100%;}
-  #view-query .aggregate-table tr.aggregate-table-detail{display:block;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface-3);}
+  #view-query .aggregate-table-wrap{max-height:none;overflow:auto;border-radius:var(--radius-sm);}
+  #view-query .aggregate-table-scroll-hint{display:block;position:sticky;left:0;width:max-content;padding:6px 10px;color:var(--muted);font-size:11px;}
+  #view-query .aggregate-table{display:table;width:100%;min-width:var(--table-min-width,850px)!important;border-collapse:separate;table-layout:fixed;}
+  #view-query .aggregate-table thead{position:static;display:table-header-group;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:normal;border:0;}
+  #view-query .aggregate-table thead tr{display:table-row;}
+  #view-query .aggregate-table thead th{position:sticky;top:0;min-height:0;padding:8px 10px;border:0;border-bottom:1px solid var(--line-strong);border-radius:0;background:var(--surface-2);box-shadow:none;z-index:2;}
+  #view-query .aggregate-table thead th.sortable button{width:100%;min-height:28px;padding:5px 0;border:0;border-radius:0;white-space:nowrap;}
+  #view-query .aggregate-table tbody{display:table-row-group;}
+  #view-query .aggregate-table tr.aggregate-table-row{display:table-row;overflow:visible;border:0;border-radius:0;background:transparent;}
+  #view-query .aggregate-table tr.aggregate-table-row td{display:table-cell;min-width:0;padding:10px;border:0;border-bottom:1px solid var(--line);white-space:normal;}
+  #view-query .aggregate-table tr.aggregate-table-detail{display:table-row;overflow:visible;border:0;border-radius:0;background:var(--surface-3);}
   #view-query .aggregate-table tr.aggregate-table-detail[hidden]{display:none!important;}
-  #view-query .aggregate-table tr.aggregate-table-detail td{display:block;width:100%;padding:0;border:0;white-space:normal;}
+  #view-query .aggregate-table tr.aggregate-table-detail td{display:table-cell;width:auto;padding:0;border:0;white-space:normal;}
   .selected-major-section-header{align-items:flex-start;flex-direction:column;padding:12px;}
   .selected-major-section .school-comparison{padding:12px;}
   .selected-major-section[data-school-layout="list"] .school-detail{grid-template-columns:minmax(0,1fr);gap:0;padding:12px 2px;}

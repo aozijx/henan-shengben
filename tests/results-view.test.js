@@ -138,20 +138,41 @@ test('cards render only selected years and keep lazy detail content out of the i
   assert.doesNotMatch(html, /<h4>2025 年<\/h4>|0371-12345678|完整分数段/);
 });
 
-test('table layout groups course details and yearly admissions without embedding school details', () => {
+test('table layout separates yearly scores and admissions into comparable fields', () => {
   const html = buildResultWorkspaceHtml({
     aggregates: [aggregate], status: 'ready', hasQuery: true,
     selectedYears: [2026], resultLayout: 'table'
   }, { supportedYears: [2026] });
   assert.match(html, /class="aggregate-table-wrap"/);
   assert.match(html, /软件工程/);
-  assert.match(html, /180/);
-  assert.match(html, /<strong>公办<\/strong><span>1 所 · 普通 20 人 · 专项 3 人<\/span>/);
-  assert.match(html, /历年成绩与招生/);
+  assert.match(html, /<th class="score-year-column">2026 年<\/th>/);
+  assert.match(html, /<th class="admission-year-column"><span class="admission-year-label">2026 年 <span class="year-kind-public">公办<\/span>\/<span class="year-kind-private">民办<\/span><\/span><\/th>/);
+  assert.match(html, /<td class="aggregate-score-cell score-year-cell"><span class="year-score"><span>180<\/span><\/span><\/td><td class="aggregate-admissions-cell admission-year-cell"><span class="year-kind year-kind-public"><span>1 所 · 普通 20 人 · 专项 3 人<\/span><\/span><span class="year-kind year-kind-private"><span>1 所 · 普通 10 人 · 专项 0 人<\/span><\/span><\/td>/);
+  assert.doesNotMatch(html, /<strong>省控线<\/strong>|<strong>公办<\/strong>|<strong>民办<\/strong>|历年成绩|历年招生/);
+  assert.doesNotMatch(html, /历年成绩与招生/);
   assert.match(html, /专业基础课 高等数学/);
   assert.doesNotMatch(html, /2026 省控线|2026 院校\(公\/民\)/);
   assert.match(html, /data-select-major="0" aria-pressed="false">查看院校/);
   assert.doesNotMatch(html, /selected-major-section|aggregate-table-detail|0371-12345678|完整分数段/);
+});
+
+test('table fields use the same selected year order and mark unpublished years', () => {
+  const html = buildResultWorkspaceHtml({
+    aggregates: [aggregate], status: 'ready', hasQuery: true,
+    selectedYears: [2024, 2026], resultLayout: 'table'
+  }, { supportedYears: [2024, 2026] });
+  const scoreCells = Array.from(html.matchAll(/<td class="aggregate-score-cell score-year-cell">([\s\S]*?)<\/td>/g), (match) => match[1]);
+  const admissionCells = Array.from(html.matchAll(/<td class="aggregate-admissions-cell admission-year-cell">([\s\S]*?)<\/td>/g), (match) => match[1]);
+  assert.equal(scoreCells.length, 2);
+  assert.equal(admissionCells.length, 2);
+  assert.match(scoreCells[0], /year-unpublished" title="该年份数据尚未发布">—/);
+  assert.match(admissionCells[0], /year-unpublished" title="该年份数据尚未发布">—/);
+  assert.match(scoreCells[1], />180</);
+  assert.match(admissionCells[1], /year-kind-public[\s\S]*?普通 20 人/);
+  assert.doesNotMatch(scoreCells.join(''), /普通 20 人|公办|民办/);
+  assert.match(html, /class="score-year-column">2024 年<\/th>[\s\S]*class="score-year-column">2026 年<\/th>/);
+  assert.match(html, /class="admission-year-column"><span class="admission-year-label">2024 年/);
+  assert.match(html, /class="admission-year-label">2026 年/);
 });
 
 test('year controls make selected years and focus year visible', () => {

@@ -1,6 +1,6 @@
 import { esc } from './utils.js';
 import { getSortedYears, normalizeSelectedYears } from './metadata.js';
-import { buildSchoolComparisonHtml, buildScoreSegmentsHtml, buildYearSummaryHtml } from './year-stack.js';
+import { buildSchoolComparisonHtml, buildScoreSegmentsHtml, buildYearAdmissionsHtml, buildYearScoreHtml, buildYearSummaryHtml } from './year-stack.js';
 import { hiddenResultFields } from './result-visibility.js';
 
 export function resultMessage(model) {
@@ -54,8 +54,8 @@ function majorHeaderHtml(aggregate, index, selected, showProfessionalCourse) {
     '<div class="aggregate-detail-action">' + detailButtonHtml(index, selected) + '</div></div></header>';
 }
 
-function yearOverviewHtml(aggregate, years, compact, hiddenFields) {
-  return '<div class="year-overview' + (compact ? ' year-overview-compact' : '') + '">' + years.map(function (year) {
+function yearOverviewHtml(aggregate, years, hiddenFields) {
+  return '<div class="year-overview">' + years.map(function (year) {
     var value = aggregate.years && aggregate.years[year];
     return '<section class="year-overview-item"><h4>' + year + ' 年</h4>' + buildYearSummaryHtml(value, hiddenFields) + '</section>';
   }).join('') + '</div>';
@@ -64,19 +64,27 @@ function yearOverviewHtml(aggregate, years, compact, hiddenFields) {
 function majorSummaryHtml(aggregate, years, index, selectedMajorKey, hiddenFields, showProfessionalCourse) {
   var selected = selectedMajorKey === detailKey(aggregate);
   return '<article class="aggregate-card" data-major-index="' + index + '">' +
-    majorHeaderHtml(aggregate, index, selected, showProfessionalCourse) + yearOverviewHtml(aggregate, years, false, hiddenFields) + '</article>';
+    majorHeaderHtml(aggregate, index, selected, showProfessionalCourse) + yearOverviewHtml(aggregate, years, hiddenFields) + '</article>';
 }
 
-function sortButton(label, key, model, metadata) {
+function sortButton(label, key, model, metadata, trailingHtml, ariaLabel, className) {
   var field = (metadata.fields || []).find(function (item) { return item.key === key; });
-  if (!field || !field.sortEnable) return '<th>' + esc(label) + '</th>';
+  var classes = (field && field.sortEnable ? 'sortable ' : '') + (className || '');
+  if (!field || !field.sortEnable) return '<th' + (classes ? ' class="' + classes.trim() + '"' : '') + '>' + esc(label) + (trailingHtml || '') + '</th>';
   var direction = model.sort && model.sort.key === key ? model.sort.direction : null;
   var indicator = direction === 'desc' ? '▼' : direction === 'asc' ? '▲' : '';
   var ariaSort = direction === 'desc' ? ' aria-sort="descending"'
     : direction === 'asc' ? ' aria-sort="ascending"' : '';
-  return '<th class="sortable"' + ariaSort + '>' +
-    '<button type="button" data-result-sort="' + esc(key) + '" aria-label="按' + esc(label) + '排序">' +
-    esc(label) + '<span class="sort-ind" aria-hidden="true">' + indicator + '</span></button></th>';
+  return '<th class="' + classes.trim() + '"' + ariaSort + '>' +
+    '<button type="button" data-result-sort="' + esc(key) + '" aria-label="' + esc(ariaLabel || '按' + label + '排序') + '">' +
+    esc(label) + '<span class="sort-ind" aria-hidden="true">' + indicator + '</span></button>' +
+    (trailingHtml || '') + '</th>';
+}
+
+function tableMetricValue(aggregate, year, renderMetric, hiddenFields) {
+  var value = aggregate.years && aggregate.years[year];
+  if (value) return renderMetric(value, hiddenFields);
+  return '<span class="year-unpublished" title="该年份数据尚未发布">—<span class="visually-hidden">该年份数据尚未发布</span></span>';
 }
 
 function tableRowsHtml(aggregates, years, selectedMajorKey, hiddenFields, showProfessionalCourse) {
@@ -86,22 +94,41 @@ function tableRowsHtml(aggregates, years, selectedMajorKey, hiddenFields, showPr
     var selected = selectedMajorKey === detailKey(aggregate);
     var majorMeta = '专业代码 ' + (major.majorCode || '—') + ' · 公共课 ' + (major.publicCourse || '—') +
       (showProfessionalCourse ? ' · 专业基础课 ' + (course.name || '—') + (course.code ? ' (' + course.code + ')' : '') : '');
+    var scoreCells = years.map(function (year) {
+      return '<td class="aggregate-score-cell score-year-cell">' + tableMetricValue(aggregate, year, function (value) {
+        return buildYearScoreHtml(value, false);
+      }, hiddenFields) + '</td>';
+    }).join('');
+    var admissionCells = years.map(function (year) {
+      return '<td class="aggregate-admissions-cell admission-year-cell">' + tableMetricValue(aggregate, year, function (value, fields) {
+        return buildYearAdmissionsHtml(value, fields, true);
+      }, hiddenFields) + '</td>';
+    }).join('');
     return '<tr class="aggregate-table-row"><td class="aggregate-major-cell"><strong>' + esc(major.majorName || '') +
       '</strong><span class="aggregate-major-meta">' + esc(majorMeta) + '</span></td>' +
-      '<td><span class="aggregate-table-mobile-label">历年成绩与招生</span>' + yearOverviewHtml(aggregate, years, true, hiddenFields) + '</td>' +
-      '<td><span class="aggregate-table-mobile-label">院校</span>' + detailButtonHtml(index, selected) + '</td></tr>';
+      scoreCells + admissionCells +
+      '<td>' + detailButtonHtml(index, selected) + '</td></tr>';
   }).join('');
 }
 
 function tableHtml(model, metadata) {
-  var focusYear = model.selectedYears.length ? model.selectedYears[model.selectedYears.length - 1] : null;
-  var yearColumnWidth = model.selectedYears.length * 158 + Math.max(0, model.selectedYears.length - 1) * 8 + 24;
-  var tableMinWidth = Math.max(850, 330 + yearColumnWidth);
-  var headers = '<thead><tr>' + sortButton('本科专业', 'majorName', model, metadata) +
-    (focusYear == null ? '<th>历年成绩与招生</th>' : sortButton('历年成绩与招生', 'score' + focusYear, model, metadata)) +
-    '<th>院校详情</th>' +
+  var yearCount = model.selectedYears.length;
+  var scoreColumnWidth = 96;
+  var admissionsColumnWidth = 200;
+  var detailColumnWidth = 112;
+  var tableMinWidth = Math.max(720, 210 + detailColumnWidth + yearCount * (scoreColumnWidth + admissionsColumnWidth));
+  var scoreHeaders = model.selectedYears.map(function (year) {
+    return sortButton(year + ' 年', 'score' + year, model, metadata, '', '按' + year + ' 年省控线排序', 'score-year-column');
+  }).join('');
+  var admissionsHeaders = model.selectedYears.map(function (year) {
+    return '<th class="admission-year-column"><span class="admission-year-label">' + year + ' 年 ' +
+      '<span class="year-kind-public">公办</span>/<span class="year-kind-private">民办</span></span></th>';
+  }).join('');
+  var headers = '<thead><tr>' + sortButton('本科专业', 'majorName', model, metadata, '', null, 'aggregate-major-column') +
+    scoreHeaders + admissionsHeaders +
+    '<th class="aggregate-detail-column">院校详情</th>' +
     '</tr></thead>';
-  return '<div class="aggregate-table-wrap"><table class="aggregate-table" style="--table-min-width:' + tableMinWidth + 'px;--year-column-width:' + yearColumnWidth + 'px">' + headers +
+  return '<div class="aggregate-table-wrap"><div class="aggregate-table-scroll-hint">横向滑动查看其他年份和院校列</div><table class="aggregate-table" style="--table-min-width:' + tableMinWidth + 'px;--score-column-width:' + scoreColumnWidth + 'px;--admissions-column-width:' + admissionsColumnWidth + 'px;--detail-column-width:' + detailColumnWidth + 'px;--year-count:' + yearCount + '">' + headers +
     '<tbody>' + tableRowsHtml(model.aggregates, model.selectedYears || getSortedYears(metadata), model.selectedMajorKey, model.hiddenFields, model.showProfessionalCourse) + '</tbody></table></div>';
 }
 
