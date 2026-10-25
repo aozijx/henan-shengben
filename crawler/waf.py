@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -38,8 +39,11 @@ def _build_browser_options(options_type):
     browser_path = os.getenv('WAF_BROWSER_PATH')
     if browser_path:
         options.set_browser_path(browser_path)
-    if os.getenv('WAF_HEADLESS', '').strip().lower() in {'1', 'true', 'yes', 'on'}:
+    headless = os.getenv('WAF_HEADLESS', '').strip().lower() in {'1', 'true', 'yes', 'on'}
+    if headless:
         options.headless()
+        if sys.platform.startswith('linux'):
+            options.set_argument('--no-sandbox')
     return options
 
 
