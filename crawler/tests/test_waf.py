@@ -28,6 +28,9 @@ class FakeChromiumOptions:
     def headless(self):
         self.calls.append(('headless',))
 
+    def set_argument(self, argument):
+        self.calls.append(('set_argument', argument))
+
 
 class WafSessionTest(unittest.TestCase):
     def test_browser_options_use_explicit_headless_edge_settings(self):
@@ -42,6 +45,15 @@ class WafSessionTest(unittest.TestCase):
             ('set_browser_path', '/usr/bin/microsoft-edge'),
             ('headless',),
         ])
+
+    def test_linux_headless_browser_disables_sandbox_for_ci(self):
+        with patch.dict('os.environ', {
+            'WAF_BROWSER_PATH': '/usr/bin/microsoft-edge',
+            'WAF_HEADLESS': 'true',
+        }, clear=False), patch('sys.platform', 'linux'):
+            options = crawler.waf._build_browser_options(FakeChromiumOptions)
+
+        self.assertIn(('set_argument', '--no-sandbox'), options.calls)
 
     def test_browser_options_keep_local_defaults_when_environment_is_unset(self):
         with patch.dict('os.environ', {}, clear=True):
