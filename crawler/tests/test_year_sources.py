@@ -13,6 +13,7 @@ from crawler.year_sources import (
     execution_rows_for_year,
     resolve_year_sources,
     seed_paths_in,
+    _attachment_identity_evidence,
     validate_attachment,
 )
 
@@ -149,6 +150,12 @@ class YearSourcesTests(unittest.TestCase):
     def test_master_type_marker_matches_committed_official_2026_pdf(self):
         source_pdf = Path(__file__).resolve().parents[2] / 'data/招生高校及专业/原始PDF/招生高校及专业_2026.pdf'
         validate_attachment('master', 2026, source_pdf.read_bytes())
+
+    def test_scanned_pdf_title_metadata_confirms_year_and_source_type(self):
+        title = '<' + 'E:\\2026年河南省普通高校专升本招生分数段统计表'.encode('gb18030').hex().upper() + '>'
+        evidence = _attachment_identity_evidence('', {'Title': title})
+        self.assertIn('2026年河南省普通高校专升本招生分数段统计表', evidence)
+        self.assertIn('2026', evidence)
 
     def test_accepts_the_user_supplied_2026_official_page_and_scoreline_pdf_urls(self):
         seed = {

@@ -230,11 +230,29 @@ def validate_attachment(role: str, year: int, content: bytes) -> None:
     try:
         with pdfplumber.open(BytesIO(content)) as pdf:
             text = ' '.join((page.extract_text() or '') for page in pdf.pages[:3])
+            text = _attachment_identity_evidence(text, pdf.metadata or {})
     except Exception as error:
         raise SourceResolutionError(f'{year} {role}: attachment is not a readable PDF: {error}') from error
     markers = PDF_MARKERS[role]
     if str(year) not in text or not any(marker in text for marker in markers):
         raise SourceResolutionError(f'{year} {role}: PDF content does not confirm year and source type')
+
+
+def _attachment_identity_evidence(text: str, metadata: dict) -> str:
+    """Include decoded PDF metadata for scanned official documents without a text layer."""
+    evidence = [text]
+    for value in metadata.values():
+        if not isinstance(value, str):
+            continue
+        evidence.append(value)
+        encoded = value.strip()
+        if len(encoded) < 4 or not (encoded.startswith('<') and encoded.endswith('>')):
+            continue
+        try:
+            evidence.append(bytes.fromhex(encoded[1:-1]).decode('gb18030'))
+        except (ValueError, UnicodeDecodeError):
+            continue
+    return ' '.join(evidence)
 
 
 def resolve_year_sources(seed: dict, session=None) -> dict:
