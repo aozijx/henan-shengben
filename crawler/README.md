@@ -12,7 +12,7 @@
 | `download.py` | `--compact-url-fields` | 只清理清单中与原 PDF 地址等价的 `finalUrl`，不联网或重新下载。 |
 | `download.py` | `--major CODE` | 只下载或重试所选专业的 PDF；可重复传入，与 `--years` 配合缩小范围。 |
 
-发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。允许的 HTTPS 域名包括 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和已验证的政府附件域名 `xcoss.henan.gov.cn`。
+发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。公告页允许使用 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和河南省教育厅高考信息网 `gaokao.haedu.cn`；PDF 附件允许使用这些官方域名及已验证的政府附件域名 `xcoss.henan.gov.cn`。
 
 `pdfUrl` 是公告页给出的地址。只有服务器真正跳转到另一地址时才记录 `finalUrl`；单纯的中文 URL 百分号编码差异不算跳转。清理旧清单的重复字段时，`--compact-url-fields` 只删除这种等价地址，保留真实跳转、哈希和其他来源信息。
 
@@ -26,4 +26,6 @@
 
 `data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。`searchPageUrl` 只用于发现唯一的候选公告页。来源缺失、候选不唯一、网页不可访问，或网页年份及类型不匹配时，采集会停止；应修正官方链接配置后重试，不使用转载镜像。
 
-新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。检查结果确认后去掉 `--check` 才发布。GitHub Actions 只执行检查并上传报告，不提交或合并生成数据。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。
+2026 年的 `mappingOverview` 与 `mappingCodeTable` 是两份不同的官方表：前者按专科专业列出可报考的本科专业及考试科目，后者按招生专业列出专业代号和考试科目，均需保留。
+
+新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。GitHub Actions 会把仓库数据复制到临时工作区，在那里执行完整导入，并上传与仓库不同的生成文件和报告供审核；它不会提交或合并这些文件。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。

@@ -22,8 +22,8 @@ SOURCE_ROLES = {
     'scoreSegments': ('分数段统计表', '一分一段'),
     'scorelines': ('录取控制分数线', '控制分数线'),
     'plans': ('招生计划',),
-    'mappingCodeTable': ('专业代号对照', '代号对照表'),
-    'mappingOverview': ('专业对照一览', '专业对照表', '可报本科专业'),
+    'mappingCodeTable': ('专业代号对照', '代号对照表', '专业与考试科目对照表'),
+    'mappingOverview': ('专业对照一览', '专业对照表', '可报本科专业', '专业对照及考试科目一览表'),
     'master': ('招生高校及专业总表', '招生高校及专业'),
 }
 PDF_MARKERS = {
@@ -37,7 +37,7 @@ PDF_MARKERS = {
 def _official_page(url: str) -> bool:
     parsed = urlparse(url)
     return parsed.scheme == 'https' and parsed.hostname in {
-        'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn'
+        'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn', 'gaokao.haedu.cn'
     }
 
 
