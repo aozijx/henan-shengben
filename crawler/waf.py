@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 
@@ -28,6 +29,18 @@ EDGE_PATHS = (
     r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
     r'C:\Program Files\Microsoft\Edge\Application\msedge.exe',
 )
+
+
+def _build_browser_options(options_type):
+    """Build DrissionPage options, honoring explicit CI browser settings."""
+    options = options_type()
+    options.auto_port()
+    browser_path = os.getenv('WAF_BROWSER_PATH')
+    if browser_path:
+        options.set_browser_path(browser_path)
+    if os.getenv('WAF_HEADLESS', '').strip().lower() in {'1', 'true', 'yes', 'on'}:
+        options.headless()
+    return options
 
 
 def _load_waf_session() -> dict:
@@ -65,8 +78,7 @@ def bootstrap_cookie(url: str) -> bool:
         print('[WAF] 未安装 DrissionPage（pip install DrissionPage），无法自动过 WAF；'
               '可改用手动 .waf-cookie 方式（见 crawler/README.md）', flush=True)
         return False
-    options = ChromiumOptions()
-    options.auto_port()
+    options = _build_browser_options(ChromiumOptions)
     browser = None
     try:
         try:

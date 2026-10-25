@@ -15,7 +15,40 @@ class FakeResponse:
         self.status_code = status_code
 
 
+class FakeChromiumOptions:
+    def __init__(self):
+        self.calls = []
+
+    def auto_port(self):
+        self.calls.append(('auto_port',))
+
+    def set_browser_path(self, path):
+        self.calls.append(('set_browser_path', path))
+
+    def headless(self):
+        self.calls.append(('headless',))
+
+
 class WafSessionTest(unittest.TestCase):
+    def test_browser_options_use_explicit_headless_edge_settings(self):
+        with patch.dict('os.environ', {
+            'WAF_BROWSER_PATH': '/usr/bin/microsoft-edge',
+            'WAF_HEADLESS': 'true',
+        }, clear=False):
+            options = crawler.waf._build_browser_options(FakeChromiumOptions)
+
+        self.assertEqual(options.calls, [
+            ('auto_port',),
+            ('set_browser_path', '/usr/bin/microsoft-edge'),
+            ('headless',),
+        ])
+
+    def test_browser_options_keep_local_defaults_when_environment_is_unset(self):
+        with patch.dict('os.environ', {}, clear=True):
+            options = crawler.waf._build_browser_options(FakeChromiumOptions)
+
+        self.assertEqual(options.calls, [('auto_port',)])
+
     def test_session_without_cookie_file_keeps_default_user_agent(self):
         with tempfile.TemporaryDirectory() as directory:
             with patch.object(crawler.waf, 'WAF_COOKIE_FILE', Path(directory) / '.waf-cookie'):

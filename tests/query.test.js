@@ -12,6 +12,7 @@ function createResultRoot() {
   return {
     innerHTML: '',
     classList: { remove() {} },
+    closest() { return null; },
     querySelector(selector) { return slots[selector] || null; },
     querySelectorAll() { return []; }
   };

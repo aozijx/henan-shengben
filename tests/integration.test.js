@@ -59,7 +59,7 @@ test('a metadata-only new year flows through selection, table, preview and expor
   assert.match(buildExplorerControlsHtml(loaded.metadata, state), /year-selection-dialog/);
   assert.doesNotMatch(tableHtml, /year-selection-dialog/);
   assert.match(tableHtml, /data-result-sort="score2027" aria-label="按2027 年省控线排序"/);
-  assert.match(tableHtml, /class="(?:sortable )?score-year-column"[^>]*>2027 年/);
+  assert.match(tableHtml, /class="(?:sortable )?score-year-column"[^>]*>(?:<button[^>]*>)?2027 年/);
   assert.match(tableHtml, /class="admission-year-label">2027 年 <span class="year-kind-public">公办<\/span>\/<span class="year-kind-private">民办<\/span>/);
   assert.doesNotMatch(tableHtml, /<th>2027 省控线<\/th>/);
   assert.match(csv, /^\uFEFF本科专业,2027分数线,2027院校数\(公\/民\),2027计划人数\(公\/民\)\r\n数据工程,220,0\/1,0\/0\r\n智能工程,180,1\/0,20\/0/);
