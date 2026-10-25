@@ -31,12 +31,14 @@ function filterYear(yearAggregate, filters) {
     if (filters.schoolType && filters.schoolType !== '全部' && school.schoolType !== filters.schoolType) return false;
     var entries = Array.isArray(school.planEntries) ? school.planEntries : [];
     var visibleEntries = filters.povertyStatus === '否' ? entries.filter(function (entry) { return !isPovertyPlan(entry); }) : entries;
-    if (entries.length && !visibleEntries.length) return false;
-    if (!entries.length && filters.povertyStatus === '否' && !(Number(school.ordinaryPlanCount) > 0)) return false;
+    var ordinaryPlanCount = visibleEntries.length
+      ? visibleEntries.reduce(function (sum, entry) { return sum + (isPovertyPlan(entry) ? 0 : planCount(entry)); }, 0)
+      : Number(school.ordinaryPlanCount) || 0;
+    if (filters.povertyStatus === '否' && ordinaryPlanCount <= 0) return false;
     return {
       ...school,
       planEntries: visibleEntries,
-      ordinaryPlanCount: visibleEntries.length ? visibleEntries.filter(function (entry) { return !isPovertyPlan(entry); }).reduce(function (sum, entry) { return sum + planCount(entry); }, 0) : Number(school.ordinaryPlanCount) || 0,
+      ordinaryPlanCount: ordinaryPlanCount,
       povertyPlanCount: visibleEntries.length ? visibleEntries.filter(isPovertyPlan).reduce(function (sum, entry) { return sum + planCount(entry); }, 0) : (filters.povertyStatus === '否' ? 0 : Number(school.povertyPlanCount) || 0)
     };
   }).filter(Boolean);

@@ -77,12 +77,13 @@ export function buildPreviewRows(input) {
       var hasPlansForYear = false;
       (input.getPlans(major, year) || []).forEach(function (planRow) {
         if (!rowMatchesPlan(planRow, filters)) return;
+        var count = Number(planRow['计划人数']) || 0;
+        if (filters.povertyStatus === '否' && count <= 0) return;
         hasPlans = true;
         hasPlansForYear = true;
         var school = admissionSchoolKey(planRow);
         var isPrivate = planRow['办学性质'] === '民办';
         var isPoverty = planRow['建档立卡'] === '是';
-        var count = Number(planRow['计划人数']) || 0;
         if (school) {
           if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
         }
