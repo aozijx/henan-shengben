@@ -4,6 +4,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "dev": "node ./scripts/dev-server.js",
     "test": "node --test"
   },
   "devDependencies": {

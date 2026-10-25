@@ -4,13 +4,15 @@
 
 ## 快速开始
 
-在仓库根目录启动静态服务器：
+在仓库根目录启动页面服务：
 
 ```bash
-python -m http.server 8000
+npm run dev
 ```
 
-浏览器打开 `http://localhost:8000/`。运行自动化测试：
+服务默认监听局域网接口的 `8765` 端口，终端会显示本机和局域网地址。手机或其他设备需连接同一局域网，并打开终端显示的局域网地址。CSS 保存后会即时热替换；HTML、JS、metadata 或数据文件保存后会自动刷新页面。服务只提供页面运行所需的 `index.html`、`css/`、`js/`、`metadata/` 和 `data/`，不会开放仓库中的其他文件。若端口已占用，可在 PowerShell 中运行 `$env:PORT=8766; npm run dev` 更换端口。
+
+运行自动化测试：
 
 ```bash
 npm test
