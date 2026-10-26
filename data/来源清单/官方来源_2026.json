@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "year": 2026,
+  "sources": [
+    {
+      "year": 2026,
+      "type": "scorelines",
+      "sourcePageUrl": "https://www.haeea.cn/a/202604/43662_a29105c7.shtml",
+      "sourceUrl": "https://www.haeea.cn/attach/file/20260409/20260409072504_5957_16c52a46.pdf",
+      "localPath": "省控线/原始PDF/省控线_2026.pdf",
+      "sha256": "d6feb1f0583d6f08f552c3ca3465939bc991a2483b122990a1b8f4943e8c0fb8",
+      "bytes": 550918
+    },
+    {
+      "year": 2026,
+      "type": "plans",
+      "sourcePageUrl": "https://gaokao.haedu.cn/501/552/2026/0408/151445.html",
+      "sourceUrl": "https://www.haeea.cn/attach/file/20260408/20260408104158_4057_369b9c32.pdf",
+      "localPath": "招生计划/原始PDF/招生计划_2026.pdf",
+      "sha256": "055b00fbf462575e4a91a10a1f34ae2e72c2cbd9e5fadd2a72dfda2ab42deaef",
+      "bytes": 2255617
+    },
+    {
+      "year": 2026,
+      "type": "master",
+      "sourcePageUrl": "https://gaokao.haedu.cn/152/432/639/2025/1023/139252.html",
+      "sourceUrl": "https://xcoss.henan.gov.cn/typtfile/20251024/90ca9dfe8f6e4047b16b5ae372f1b29c.pdf",
+      "localPath": "招生高校及专业/原始PDF/招生高校及专业_2026.pdf",
+      "sha256": "d4b7b2ea3a31b7b7fd04a7192d04591e131e33ee359cbf6a341d5dcdd95f351f",
+      "bytes": 208745
+    },
+    {
+      "year": 2026,
+      "type": "mappingCodeTable",
+      "sourcePageUrl": "https://gaokao.haedu.cn/152/432/639/2025/1024/139278.html",
+      "sourceUrl": "https://www.haeea.cn/attach/file/20251024/20251024155551_1229_ba9e8e9d.pdf",
+      "localPath": "专业对照/原始PDF/专业代号对照_2026.pdf",
+      "sha256": "d34d8b3db46d8051afc96de9264e9c3dc0ecff435b6b03b7a2db661e8c438812",
+      "bytes": 104185
+    },
+    {
+      "year": 2026,
+      "type": "mappingOverview",
+      "sourcePageUrl": "https://gaokao.haedu.cn/152/432/639/2025/1023/139253.html",
+      "sourceUrl": "https://xcoss.henan.gov.cn/typtfile/20251024/5eda9a6b9db9429c9c162381d99440a7.pdf",
+      "localPath": "专业对照/原始PDF/专业对照一览_附件2_2026.pdf",
+      "sha256": "629a1f1ee27e555a30a66b8fc42fbba50afd147dd38038ebd06f5e76d13609ff",
+      "bytes": 236524
+    }
+  ]
+}
