@@ -13,7 +13,7 @@ DOWNLOAD_WORKERS = 6
 # 官方站请求超时（秒）：爬虫与转换流程的联网步骤共用
 REQUEST_TIMEOUT = 60
 
-# 官方站 WAF 自动引导：首次 403/412 时用 DrissionPage 驱动真实浏览器过挑战
+# 官方站 WAF 自动引导：首次 400/403/412 时用 DrissionPage 驱动真实浏览器过挑战
 # （需要 pip install DrissionPage，本机需装 Chrome 或 Edge；False = 只靠手动 .waf-cookie）
 WAF_AUTO_BOOTSTRAP = True
 

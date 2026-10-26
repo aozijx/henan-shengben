@@ -13,6 +13,8 @@ from crawler.year_sources import (
     execution_rows_for_year,
     resolve_year_sources,
     seed_paths_in,
+    source_rows_for_seed,
+    _attachment_identity_evidence,
     validate_attachment,
 )
 
@@ -125,6 +127,24 @@ class YearSourcesTests(unittest.TestCase):
         with self.assertRaisesRegex(SourceResolutionError, 'master'):
             resolve_year_sources(without_master, FakeSession())
 
+    def test_seed_local_path_can_keep_distinct_official_attachment_versions(self):
+        seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
+        seed['sources']['mappingOverview']['localPath'] = '专业对照/原始PDF/专业对照一览_附件2_2027.pdf'
+        resolved = resolve_year_sources(seed, FakeSession())
+        mapping_row = next(row for row in execution_rows_for_year(resolved)[0] if row['parser'] == 'mapping')
+        self.assertEqual(mapping_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
+        seed_row = next(row for row in source_rows_for_seed(seed, Path('data')) if row['parser'] == 'mapping')
+        self.assertEqual(seed_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
+
+    def test_seed_rejects_unsafe_source_local_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / '2027.json'
+            seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
+            seed['sources']['mappingOverview']['localPath'] = '../outside.pdf'
+            path.write_text(json.dumps(seed), encoding='utf-8')
+            with self.assertRaisesRegex(SourceResolutionError, 'localPath'):
+                load_year_links(path)
+
     def test_xcoss_host_is_allowed_but_arbitrary_pdf_host_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'year-links.json'
@@ -149,6 +169,17 @@ class YearSourcesTests(unittest.TestCase):
     def test_master_type_marker_matches_committed_official_2026_pdf(self):
         source_pdf = Path(__file__).resolve().parents[2] / 'data/招生高校及专业/原始PDF/招生高校及专业_2026.pdf'
         validate_attachment('master', 2026, source_pdf.read_bytes())
+
+    def test_scanned_pdf_title_metadata_confirms_year_and_source_type(self):
+        title = '<' + 'E:\\2026年河南省普通高校专升本招生分数段统计表'.encode('gb18030').hex().upper() + '>'
+        evidence = _attachment_identity_evidence('', {'Title': title})
+        self.assertIn('2026年河南省普通高校专升本招生分数段统计表', evidence)
+        self.assertIn('2026', evidence)
+
+    def test_scanned_pdf_identity_can_be_read_from_truncated_hex_title(self):
+        title_hex = 'E:\\2026年河南省普通高校专升本招生分数段统计表(38机械设计制造及其自动化).FRX'.encode('gb18030').hex().upper()
+        evidence = _attachment_identity_evidence('', {'Title': '<' + title_hex[:-1]})
+        self.assertIn('2026年河南省普通高校专升本招生分数段统计表', evidence)
 
     def test_accepts_the_user_supplied_2026_official_page_and_scoreline_pdf_urls(self):
         seed = {

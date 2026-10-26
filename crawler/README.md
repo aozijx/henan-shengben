@@ -12,18 +12,24 @@
 | `download.py` | `--compact-url-fields` | 只清理清单中与原 PDF 地址等价的 `finalUrl`，不联网或重新下载。 |
 | `download.py` | `--major CODE` | 只下载或重试所选专业的 PDF；可重复传入，与 `--years` 配合缩小范围。 |
 
-发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。允许的 HTTPS 域名包括 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和已验证的政府附件域名 `xcoss.henan.gov.cn`。
+发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。公告页允许使用 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和河南省教育厅高考信息网 `gaokao.haedu.cn`；PDF 附件允许使用这些官方域名及已验证的政府附件域名 `xcoss.henan.gov.cn`。
+
+年度导入还会校验 PDF 是否能确认年份和来源类型。扫描版 PDF 没有正文文本时，也会检查可解码的标题元数据；正文和元数据都无法确认时仍会停止导入。
 
 `pdfUrl` 是公告页给出的地址。只有服务器真正跳转到另一地址时才记录 `finalUrl`；单纯的中文 URL 百分号编码差异不算跳转。清理旧清单的重复字段时，`--compact-url-fields` 只删除这种等价地址，保留真实跳转、哈希和其他来源信息。
 
 ## 公告页访问受限
 
-官方公告页可能返回 403/412。默认开启自动引导：会话遇到挑战时会使用 DrissionPage 启动本机 Chrome 或 Edge，通过后把 Cookie 和浏览器标识写入仓库根目录的 `.waf-cookie`，然后重试原请求。安装 `crawler/requirements.txt` 中的依赖；本机交互模式下挑战期间保持弹出的浏览器窗口打开。GitHub Actions 使用 Ubuntu 24.04 预装的 Microsoft Edge，并通过 `WAF_BROWSER_PATH` 和 `WAF_HEADLESS=true` 选择无头模式；Linux 无头启动会加入 Chromium 所需的 `--no-sandbox` 参数。是否能通过官方站的 WAF 挑战仍以实际工作流运行为准。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
+官方公告页可能返回 400/403/412。默认开启自动引导：会话遇到挑战时会使用 DrissionPage 启动本机 Chrome 或 Edge，通过后把 Cookie 和浏览器标识写入仓库根目录的 `.waf-cookie`，然后重试原请求。浏览器必须加载有效正文后才会保存 Cookie，避免把空白错误页误判为挑战通过。安装 `crawler/requirements.txt` 中的依赖；本机交互模式下挑战期间保持弹出的浏览器窗口打开。GitHub Actions 使用 Ubuntu 24.04 预装的 Microsoft Edge，通过 Xvfb 虚拟显示器以有头模式运行；Linux 启动会加入 Chromium 所需的 `--no-sandbox` 参数。是否能通过官方站的 WAF 挑战仍以实际工作流运行为准。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
 
 需要手动提供会话时，先在浏览器确认官方公告页可正常打开，再从该请求复制完整的 Cookie 请求头到 `.waf-cookie`。建议保存 JSON 对象，包含 `userAgent` 和 `cookie` 两个字段，以保持 Cookie 与浏览器标识一致。该文件已被 Git 忽略。会话失效后重新获取即可。
 
 ## 新年度来源
 
-`data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。`searchPageUrl` 只用于发现唯一的候选公告页。来源缺失、候选不唯一、网页不可访问，或网页年份及类型不匹配时，采集会停止；应修正官方链接配置后重试，不使用转载镜像。
+`data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。需要在同一年度保留不同版本的官方附件时，可用 `localPath` 指定单独的相对 PDF 路径；路径不得越出 `data/`。`searchPageUrl` 只用于发现唯一的候选公告页。来源缺失、候选不唯一、网页不可访问，或网页年份及类型不匹配时，采集会停止；应修正官方链接配置后重试，不使用转载镜像。
 
-新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。检查结果确认后去掉 `--check` 才发布。GitHub Actions 只执行检查并上传报告，不提交或合并生成数据。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。
+2026 年的 `mappingOverview` 与 `mappingCodeTable` 是两份不同的官方表：前者按专科专业列出可报考的本科专业及考试科目，后者按招生专业列出专业代号和考试科目，均需保留。
+
+2026 `mappingOverview` 的 Attachment 2 下载为 `专业对照/原始PDF/专业对照一览_附件2_2026.pdf`。仓库已有 Attachment 3 保留在 `专业对照/原始PDF/专业对照一览_2026.pdf`；两者字节不同，但本地解析出的 558 条对照数据相同，因此新附件使用单独路径，不覆盖现有文件。
+
+新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。GitHub Actions 会把仓库数据复制到临时工作区，在那里执行完整导入，并上传与仓库不同的生成文件和报告供审核；它不会提交或合并这些文件。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。

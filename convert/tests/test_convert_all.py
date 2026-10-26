@@ -8,12 +8,22 @@ from contextlib import redirect_stdout
 from io import StringIO
 from unittest.mock import patch
 
-from convert.convert_all import convert_target
+from convert.convert_all import _convert_entry, convert_target
 from convert.normalize import normalize_target
 from convert.segment_store import merge_year
 
 
 class ConvertAllTest(unittest.TestCase):
+    def test_official_empty_manual_correction_skips_ocr(self):
+        entry = {'majorCode': 'N8', 'majorName': '金融工程', 'localPath': 'N8.pdf', 'sha256': 'source'}
+        correction = {'status': 'official-empty', 'evidenceNote': '官方 PDF 没有分数表'}
+        with patch('convert.convert_all.extract_rows') as extract:
+            result = _convert_entry((entry, Path('.'), correction))
+        extract.assert_not_called()
+        self.assertEqual(result['status'], 'official-empty')
+        self.assertEqual(result['segments'], [])
+        self.assertEqual(result['issues'], [])
+
     @staticmethod
     def fixture(root, year, majors):
         entries = []

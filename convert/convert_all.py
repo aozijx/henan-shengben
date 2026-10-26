@@ -18,6 +18,16 @@ from pipeline_config import SCORE_SEGMENT_WORKERS
 def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]) -> dict[str, Any]:
     entry, data_root, correction = arguments
     pdf_path = data_root / entry["localPath"]
+    if correction and correction.get('status') == 'official-empty':
+        return {
+            "majorCode": entry["majorCode"],
+            "majorName": entry["majorName"],
+            "sourcePdf": entry["localPath"],
+            "sourceSha256": entry.get("sha256"),
+            "status": "official-empty",
+            "segments": [],
+            "issues": [],
+        }
     try:
         if correction and correction.get("status") == "confirmed":
             rows = extract_rows(pdf_path, thorough=True)
@@ -117,7 +127,7 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
         "summary": {
             "total": len(majors),
             "ok": sum(item["status"] == "ok" for item in majors),
-            "needsReview": sum(item["status"] != "ok" for item in majors),
+            "needsReview": sum(item["status"] == "needs-review" for item in majors),
         },
     }
     normalized, _ = save_normalized_target(target, plan, data_root, result, full_report=full_report)

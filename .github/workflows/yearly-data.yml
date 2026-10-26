@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       WAF_BROWSER_PATH: /usr/bin/microsoft-edge
-      WAF_HEADLESS: 'true'
+      WAF_HEADLESS: 'false'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,6 +37,12 @@ jobs:
         run: |
           python -m pip install -r crawler/requirements.txt -r convert/requirements.txt
           npm ci
+      - name: Ensure Xvfb is available for headed Edge
+        run: |
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          fi
       - name: Discover changed yearly seed files
         id: seeds
         shell: bash
@@ -54,16 +60,114 @@ jobs:
           else
             echo "has_seeds=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Validate seeds and generate review reports
+      - name: Import changed seeds in disposable workspaces
         id: validate
         shell: bash
         run: |
-          mkdir -p yearly-ingest-reports
+          mkdir -p yearly-ingest-reports yearly-ingest-output
           status=0
           while IFS= read -r seed; do
             [[ -n "$seed" ]] || continue
+            if [[ "$seed" != data/year-links/*.json ]]; then
+              echo "Unsupported seed path: $seed" >&2
+              status=1
+              continue
+            fi
             name="$(basename "$seed" .json)"
-            python -m convert.ingest_year --seed "$seed" --check > "yearly-ingest-reports/${name}.json" || status=1
+            stage="$RUNNER_TEMP/yearly-ingest-stage/$name"
+            mkdir -p "$stage"
+            cp -a data "$stage/data"
+            cp metadata/school-data.json "$stage/metadata.json"
+            python - "$seed" "$stage/data" <<'PY' || { status=1; continue; }
+          import shutil
+          import sys
+          from pathlib import Path
+          from crawler.year_sources import crawl_target_record, load_year_links, source_rows_for_seed
+
+          seed_path = Path(sys.argv[1])
+          data_root = Path(sys.argv[2]).resolve()
+          seed_data = load_year_links(seed_path)
+          year = seed_data['year']
+          paths = [row['outputPath'] for row in source_rows_for_seed(seed_data, data_root)]
+          target = crawl_target_record(seed_data)
+          paths.extend(target[key] for key in ('manifestPath', 'normalizedPath', 'conversionReportPath'))
+          paths.extend((f'reports/异常数据_{year}.json', f'来源清单/官方来源_{year}.json'))
+          for relative in paths:
+              path = (data_root / relative).resolve()
+              if not path.is_relative_to(data_root):
+                  raise ValueError(f'year output escapes staging data root: {relative}')
+              if path.is_file():
+                  path.unlink()
+          for relative in (f'一分一段/{year}', f'generated/{year}'):
+              path = (data_root / relative).resolve()
+              if not path.is_relative_to(data_root):
+                  raise ValueError(f'year directory escapes staging data root: {relative}')
+              if path.is_dir():
+                  shutil.rmtree(path)
+          PY
+            if ! xvfb-run --auto-servernum python -m convert.ingest_year --seed "$seed" --data-root "$stage/data" --template metadata/school-data.template.json --metadata "$stage/metadata.json" > "yearly-ingest-reports/${name}.json"; then
+              cat "yearly-ingest-reports/${name}.json"
+              python - "$stage/data" "yearly-ingest-reports/${name}.json" "yearly-ingest-output/$name/source-review" "$name" <<'PY'
+          import json
+          import re
+          import shutil
+          import sys
+          from pathlib import Path
+
+          data_root, report_path, review_root, year = map(Path, sys.argv[1:])
+          try:
+              report_text = report_path.read_text(encoding='utf-8')
+              report = None
+              for position, character in enumerate(report_text):
+                  if character != '{':
+                      continue
+                  try:
+                      candidate, _ = json.JSONDecoder().raw_decode(report_text[position:])
+                  except json.JSONDecodeError:
+                      continue
+                  if isinstance(candidate, dict) and candidate.get('status') == 'failed':
+                      report = candidate
+              if report is None:
+                  raise ValueError('failed report JSON was not found')
+              match = re.match(r'^(?P<path>.+?\.pdf):', report.get('error', ''), re.IGNORECASE)
+              if match:
+                  relative = Path(match.group('path'))
+                  source = (data_root / relative).resolve()
+                  if source.is_relative_to(data_root.resolve()) and source.is_file():
+                      destination = review_root / relative
+                      destination.parent.mkdir(parents=True, exist_ok=True)
+                      shutil.copy2(source, destination)
+                      manifest = data_root / '来源清单' / f'来源清单_{year}.json'
+                      if manifest.is_file():
+                          shutil.copy2(manifest, review_root / manifest.name)
+                      print(f'Preserved failed PDF for review: {relative}')
+          except Exception as error:
+              print(f'Could not preserve failed PDF for review: {error}', file=sys.stderr)
+          PY
+              status=1
+              continue
+            fi
+            python - "$stage/data" data "yearly-ingest-output/$name/data" "$stage/metadata.json" "metadata/school-data.json" "yearly-ingest-output/$name/metadata/school-data.json" <<'PY' || status=1
+          import shutil
+          import sys
+          from pathlib import Path
+
+          generated, baseline, output, generated_metadata, baseline_metadata, output_metadata = map(Path, sys.argv[1:])
+          output.mkdir(parents=True, exist_ok=True)
+          for path in generated.rglob('*'):
+              if not path.is_file():
+                  continue
+              relative = path.relative_to(generated)
+              original = baseline / relative
+              if original.is_file() and original.read_bytes() == path.read_bytes():
+                  continue
+              destination = output / relative
+              destination.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(path, destination)
+          if not baseline_metadata.is_file() or baseline_metadata.read_bytes() != generated_metadata.read_bytes():
+              output_metadata.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(generated_metadata, output_metadata)
+          PY
           done < changed-seeds.txt
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
@@ -72,7 +176,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yearly-ingest-review
-          path: yearly-ingest-reports/
+          path: |
+            yearly-ingest-reports/
+            yearly-ingest-output/
           if-no-files-found: warn
           retention-days: 14
       - name: Run application regression suite

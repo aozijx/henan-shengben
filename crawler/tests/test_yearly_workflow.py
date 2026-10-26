@@ -13,23 +13,29 @@ class YearlyWorkflowContractTests(unittest.TestCase):
         self.assertRegex(self.workflow, r'(?m)^permissions:\s*\n\s+contents:\s*read\s*$')
         self.assertIn("- 'data/year-links/*.json'", self.workflow)
 
-    def test_workflow_runs_check_mode_and_uploads_reports_after_failures(self):
-        self.assertRegex(self.workflow, r'python -m convert\.ingest_year --seed .*--check')
+    def test_workflow_runs_isolated_import_without_check_and_uploads_outputs_after_failures(self):
+        self.assertRegex(self.workflow, r'python -m convert\.ingest_year --seed .*--data-root "\$stage/data"')
+        self.assertNotRegex(self.workflow, r'python -m convert\.ingest_year[^\n]*--check')
         self.assertIn('has_seeds=false', self.workflow)
         self.assertIn('has_seeds=true', self.workflow)
         self.assertRegex(self.workflow, r"(?ms)- name: Upload review reports\n\s+if: always\(\) && steps\.seeds\.outputs\.has_seeds == 'true'.*?actions/upload-artifact@v4")
         self.assertIn('yearly-ingest-reports/', self.workflow)
+        self.assertIn('yearly-ingest-output/', self.workflow)
+        self.assertIn('source-review', self.workflow)
+        self.assertIn('JSONDecoder().raw_decode', self.workflow)
 
-    def test_pull_request_and_dispatch_feed_the_same_ingest_check_loop(self):
+    def test_pull_request_and_dispatch_feed_the_same_ingest_loop(self):
         self.assertIn('$GITHUB_EVENT_NAME" == "pull_request', self.workflow)
         self.assertIn('git diff --name-only', self.workflow)
         self.assertIn('printf \'%s\\n\' "$SEED_PATH" > changed-seeds.txt', self.workflow)
         self.assertEqual(self.workflow.count('python -m convert.ingest_year'), 1)
-        self.assertRegex(self.workflow, r'(?s)while IFS= read -r seed; do.*?--seed "\$seed" --check.*?done < changed-seeds\.txt')
+        self.assertRegex(self.workflow, r'(?s)while IFS= read -r seed; do.*?--seed "\$seed" --data-root "\$stage/data".*?done < changed-seeds\.txt')
 
-    def test_workflow_uses_pinned_runtime_versions_and_does_not_publish(self):
+    def test_workflow_uses_pinned_runtime_versions_and_does_not_push_generated_data(self):
         self.assertRegex(self.workflow, r'(?m)^\s+runs-on:\s*ubuntu-24\.04\s*$')
-        self.assertRegex(self.workflow, r'(?ms)^\s+WAF_BROWSER_PATH:\s*/usr/bin/microsoft-edge\s*$.*?WAF_HEADLESS:\s*[\'"]?true')
+        self.assertRegex(self.workflow, r'(?ms)^\s+WAF_BROWSER_PATH:\s*/usr/bin/microsoft-edge\s*$.*?WAF_HEADLESS:\s*[\'"]?false')
+        self.assertIn('Ensure Xvfb is available for headed Edge', self.workflow)
+        self.assertIn('xvfb-run --auto-servernum python -m convert.ingest_year', self.workflow)
         self.assertRegex(self.workflow, r'python-version:\s*["\']?3\.12')
         self.assertRegex(self.workflow, r'node-version:\s*["\']?22')
         self.assertNotRegex(self.workflow, r'(?im)^\s*(?:git push|git commit|gh pr merge)\b')

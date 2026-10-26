@@ -55,6 +55,27 @@ class WafSessionTest(unittest.TestCase):
 
         self.assertIn(('set_argument', '--no-sandbox'), options.calls)
 
+    def test_linux_headed_browser_disables_sandbox_for_xvfb(self):
+        with patch.dict('os.environ', {
+            'WAF_BROWSER_PATH': '/usr/bin/microsoft-edge',
+            'WAF_HEADLESS': 'false',
+        }, clear=False), patch('sys.platform', 'linux'):
+            options = crawler.waf._build_browser_options(FakeChromiumOptions)
+
+        self.assertIn(('set_argument', '--no-sandbox'), options.calls)
+
+    def test_blank_browser_document_is_not_treated_as_a_completed_challenge(self):
+        self.assertFalse(crawler.waf._browser_page_ready(
+            '<html><head></head><body></body></html>'))
+
+    def test_challenge_document_is_not_treated_as_a_completed_challenge(self):
+        html = '<html><body>$_ts challenge</body></html>' + ('x' * 256)
+        self.assertFalse(crawler.waf._browser_page_ready(html))
+
+    def test_rendered_browser_document_is_ready(self):
+        html = '<html><body>' + ('official source content ' * 20) + '</body></html>'
+        self.assertTrue(crawler.waf._browser_page_ready(html))
+
     def test_browser_options_keep_local_defaults_when_environment_is_unset(self):
         with patch.dict('os.environ', {}, clear=True):
             options = crawler.waf._build_browser_options(FakeChromiumOptions)
@@ -100,6 +121,14 @@ class WafSessionTest(unittest.TestCase):
 
 
 class WafRetryTest(unittest.TestCase):
+    def test_bad_request_bootstraps_once_and_retries(self):
+        with patch.object(requests.Session, 'get', side_effect=[FakeResponse(400), FakeResponse(200)]) as get:
+            with patch.object(crawler.waf, 'bootstrap_cookie', return_value=True) as bootstrap:
+                session = build_session()
+                self.assertEqual(session.get('https://www.haeea.cn/a/page.shtml').status_code, 200)
+        self.assertEqual(get.call_count, 2)
+        self.assertEqual(bootstrap.call_count, 1)
+
     def test_blocked_response_bootstraps_once_and_retries(self):
         with patch.object(requests.Session, 'get', side_effect=[FakeResponse(412), FakeResponse(200)]) as get:
             with patch.object(crawler.waf, 'bootstrap_cookie', return_value=True) as bootstrap:
