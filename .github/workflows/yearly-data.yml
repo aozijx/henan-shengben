@@ -8,17 +8,24 @@ on:
         required: true
         type: string
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     paths:
+      - '.github/workflows/yearly-data.yml'
       - 'data/year-links/*.json'
       - 'crawler/**'
       - 'convert/**'
       - 'metadata/school-data.template.json'
+  push:
+    branches: [main]
+    paths:
+      - 'data/year-links/*.json'
 
 permissions:
   contents: read
 
 jobs:
   validate:
+    if: github.event_name != 'push' && (github.event_name != 'pull_request' || github.event.action != 'closed')
     runs-on: ubuntu-24.04
     env:
       WAF_BROWSER_PATH: /usr/bin/microsoft-edge
@@ -51,7 +58,7 @@ jobs:
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
             git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.sha }}" -- 'data/year-links/*.json' > changed-seeds.txt
-          else
+          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
             printf '%s\n' "$SEED_PATH" > changed-seeds.txt
           fi
           if [[ ! -s changed-seeds.txt ]]; then
@@ -74,112 +81,300 @@ jobs:
               continue
             fi
             name="$(basename "$seed" .json)"
-            stage="$RUNNER_TEMP/yearly-ingest-stage/$name"
-            mkdir -p "$stage"
-            cp -a data "$stage/data"
-            cp metadata/school-data.json "$stage/metadata.json"
-            python - "$seed" "$stage/data" <<'PY' || { status=1; continue; }
-          import shutil
-          import sys
-          from pathlib import Path
-          from crawler.year_sources import crawl_target_record, load_year_links, source_rows_for_seed
-
-          seed_path = Path(sys.argv[1])
-          data_root = Path(sys.argv[2]).resolve()
-          seed_data = load_year_links(seed_path)
-          year = seed_data['year']
-          paths = [row['outputPath'] for row in source_rows_for_seed(seed_data, data_root)]
-          target = crawl_target_record(seed_data)
-          paths.extend(target[key] for key in ('manifestPath', 'normalizedPath', 'conversionReportPath'))
-          paths.extend((f'reports/异常数据_{year}.json', f'来源清单/官方来源_{year}.json'))
-          for relative in paths:
-              path = (data_root / relative).resolve()
-              if not path.is_relative_to(data_root):
-                  raise ValueError(f'year output escapes staging data root: {relative}')
-              if path.is_file():
-                  path.unlink()
-          for relative in (f'一分一段/{year}', f'generated/{year}'):
-              path = (data_root / relative).resolve()
-              if not path.is_relative_to(data_root):
-                  raise ValueError(f'year directory escapes staging data root: {relative}')
-              if path.is_dir():
-                  shutil.rmtree(path)
-          PY
-            if ! xvfb-run --auto-servernum python -m convert.ingest_year --seed "$seed" --data-root "$stage/data" --template metadata/school-data.template.json --metadata "$stage/metadata.json" > "yearly-ingest-reports/${name}.json"; then
-              cat "yearly-ingest-reports/${name}.json"
-              python - "$stage/data" "yearly-ingest-reports/${name}.json" "yearly-ingest-output/$name/source-review" "$name" <<'PY'
-          import json
-          import re
-          import shutil
-          import sys
-          from pathlib import Path
-
-          data_root, report_path, review_root, year = map(Path, sys.argv[1:])
-          try:
-              report_text = report_path.read_text(encoding='utf-8')
-              report = None
-              for position, character in enumerate(report_text):
-                  if character != '{':
-                      continue
-                  try:
-                      candidate, _ = json.JSONDecoder().raw_decode(report_text[position:])
-                  except json.JSONDecodeError:
-                      continue
-                  if isinstance(candidate, dict) and candidate.get('status') == 'failed':
-                      report = candidate
-              if report is None:
-                  raise ValueError('failed report JSON was not found')
-              match = re.match(r'^(?P<path>.+?\.pdf):', report.get('error', ''), re.IGNORECASE)
-              if match:
-                  relative = Path(match.group('path'))
-                  source = (data_root / relative).resolve()
-                  if source.is_relative_to(data_root.resolve()) and source.is_file():
-                      destination = review_root / relative
-                      destination.parent.mkdir(parents=True, exist_ok=True)
-                      shutil.copy2(source, destination)
-                      manifest = data_root / '来源清单' / f'来源清单_{year}.json'
-                      if manifest.is_file():
-                          shutil.copy2(manifest, review_root / manifest.name)
-                      print(f'Preserved failed PDF for review: {relative}')
-          except Exception as error:
-              print(f'Could not preserve failed PDF for review: {error}', file=sys.stderr)
-          PY
-              status=1
-              continue
+            export_args=()
+            if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+              export_args=(--export-dir "yearly-ingest-output/${name}")
             fi
-            python - "$stage/data" data "yearly-ingest-output/$name/data" "$stage/metadata.json" "metadata/school-data.json" "yearly-ingest-output/$name/metadata/school-data.json" <<'PY' || status=1
-          import shutil
-          import sys
-          from pathlib import Path
-
-          generated, baseline, output, generated_metadata, baseline_metadata, output_metadata = map(Path, sys.argv[1:])
-          output.mkdir(parents=True, exist_ok=True)
-          for path in generated.rglob('*'):
-              if not path.is_file():
-                  continue
-              relative = path.relative_to(generated)
-              original = baseline / relative
-              if original.is_file() and original.read_bytes() == path.read_bytes():
-                  continue
-              destination = output / relative
-              destination.parent.mkdir(parents=True, exist_ok=True)
-              shutil.copy2(path, destination)
-          if not baseline_metadata.is_file() or baseline_metadata.read_bytes() != generated_metadata.read_bytes():
-              output_metadata.parent.mkdir(parents=True, exist_ok=True)
-              shutil.copy2(generated_metadata, output_metadata)
-          PY
+            if ! xvfb-run --auto-servernum python -m convert.ingest_year --seed "$seed" --check "${export_args[@]}" \
+                2>&1 | tee "yearly-ingest-reports/${name}.log"; then
+              status=1
+            fi
           done < changed-seeds.txt
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
+      - name: Package checked outputs for merge
+        if: success() && github.event_name == 'pull_request' && steps.seeds.outputs.has_seeds == 'true'
+        run: >-
+          python -m convert.ingest_artifact package
+          --root yearly-ingest-output
+          --repository "$GITHUB_REPOSITORY"
+          --pr-number "${{ github.event.pull_request.number }}"
+          --pr-head-sha "${{ github.event.pull_request.head.sha }}"
+          --run-id "$GITHUB_RUN_ID"
+          --seeds-file changed-seeds.txt
+      - name: Upload checked data for merge publisher
+        if: success() && github.event_name == 'pull_request' && steps.seeds.outputs.has_seeds == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: yearly-ingest-pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: yearly-ingest-output/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload manually selected data for a later PR merge
+        if: success() && github.event_name == 'workflow_dispatch' && steps.seeds.outputs.has_seeds == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: yearly-ingest-manual-${{ github.sha }}
+          path: yearly-ingest-output/
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload review reports
         if: always() && steps.seeds.outputs.has_seeds == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: yearly-ingest-review
-          path: |
-            yearly-ingest-reports/
-            yearly-ingest-output/
+          path: yearly-ingest-reports/
           if-no-files-found: warn
           retention-days: 14
       - name: Run application regression suite
         run: npm test
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: read
+    env:
+      WAF_BROWSER_PATH: /usr/bin/microsoft-edge
+      WAF_HEADLESS: 'true'
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install converter dependencies
+        run: python -m pip install -r crawler/requirements.txt -r convert/requirements.txt
+      - name: Discover pushed yearly seed files
+        id: seeds
+        env:
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          git diff --name-only "$EVENT_BEFORE" "$GITHUB_SHA" -- 'data/year-links/*.json' > changed-seeds.txt
+          if [[ ! -s changed-seeds.txt ]]; then
+            echo "No yearly seed files to publish" >> "$GITHUB_STEP_SUMMARY"
+            echo "has_seeds=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_seeds=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Find checked artifact from merged pull request
+        id: artifact
+        if: steps.seeds.outputs.has_seeds == 'true'
+        shell: bash
+        run: |
+          pr_json="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" --jq '[.[] | select(.merged_at != null)] | last // empty')"
+          if [[ -z "$pr_json" ]]; then
+            echo "No merged pull request is associated with this push; running the selected annual ingest directly."
+            echo "mode=ingest" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          pr_number="$(jq -r '.number' <<<"$pr_json")"
+          pr_head_sha="$(jq -r '.head.sha' <<<"$pr_json")"
+          artifact_name="yearly-ingest-pr-${pr_number}-${pr_head_sha}"
+          artifact_row="$(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/artifacts?name=$artifact_name&per_page=100" \
+            --jq ".artifacts[] | select(.name == \"$artifact_name\" and .expired == false) | [.created_at, .workflow_run.id] | @tsv" \
+            | sort | tail -n 1)"
+          if [[ -z "$artifact_row" ]]; then
+            echo "No successful checked artifact found; running the selected annual ingest directly."
+            echo "mode=ingest" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          run_id="${artifact_row##*$'\t'}"
+          run_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id")"
+          workflow_id="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/yearly-data.yml" --jq '.id')"
+          if [[ "$(jq -r '.event' <<<"$run_json")" != "pull_request" || \
+                "$(jq -r '.conclusion' <<<"$run_json")" != "success" || \
+                "$(jq -r '.workflow_id' <<<"$run_json")" != "$workflow_id" ]]; then
+            echo "Matching artifact is not from a successful yearly-data PR check" >&2
+            exit 1
+          fi
+          echo "mode=artifact" >> "$GITHUB_OUTPUT"
+          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
+          echo "pr_head_sha=$pr_head_sha" >> "$GITHUB_OUTPUT"
+          echo "artifact_name=$artifact_name" >> "$GITHUB_OUTPUT"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+      - name: Download checked data artifact
+        if: steps.seeds.outputs.has_seeds == 'true' && steps.artifact.outputs.mode == 'artifact'
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.artifact.outputs.artifact_name }}
+          run-id: ${{ steps.artifact.outputs.run_id }}
+          github-token: ${{ github.token }}
+          path: .yearly-ingest-artifact
+      - name: Apply checked data artifact
+        if: steps.seeds.outputs.has_seeds == 'true' && steps.artifact.outputs.mode == 'artifact'
+        run: >-
+          python -m convert.ingest_artifact apply
+          --root .yearly-ingest-artifact
+          --repo-root .
+          --repository "$GITHUB_REPOSITORY"
+          --pr-number "${{ steps.artifact.outputs.pr_number }}"
+          --pr-head-sha "${{ steps.artifact.outputs.pr_head_sha }}"
+          --run-id "${{ steps.artifact.outputs.run_id }}"
+          --seeds-file changed-seeds.txt
+          --applied-paths-file applied-data-paths.txt
+      - name: Check whether every checked year is complete
+        id: catalog
+        if: steps.seeds.outputs.has_seeds == 'true' && steps.artifact.outputs.mode == 'artifact'
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('.yearly-ingest-artifact/run.json').read_text(encoding='utf-8'))
+          years = manifest.get('years', [])
+          complete = set(manifest.get('completeYears', []))
+          print(f"complete={'true' if years and set(years) <= complete else 'false'}")
+          PY
+      - name: Run selected annual import when no checked artifact exists
+        if: steps.seeds.outputs.has_seeds == 'true' && steps.artifact.outputs.mode == 'ingest'
+        shell: bash
+        run: |
+          while IFS= read -r seed; do
+            [[ -n "$seed" ]] || continue
+            python -m convert.ingest_year --seed "$seed"
+          done < changed-seeds.txt
+      - name: Refresh catalog from checked canonical data
+        if: steps.seeds.outputs.has_seeds == 'true' && steps.artifact.outputs.mode == 'artifact' && steps.catalog.outputs.complete == 'true'
+        run: >-
+          python -m convert.refresh_catalog
+          --data-root data
+          --template metadata/school-data.template.json
+          --metadata metadata/school-data.json
+      - name: Commit generated yearly data
+        if: steps.seeds.outputs.has_seeds == 'true'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- data metadata/school-data.json
+          if git diff --cached --quiet; then
+            echo "No generated data changes to commit" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git commit -m "data: publish checked yearly import"
+          git push origin HEAD:main
+
+  publish-manual-pr-seed:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install converter dependencies
+        run: python -m pip install -r crawler/requirements.txt -r convert/requirements.txt
+      - name: Find a manual artifact for an unchanged seed
+        id: manual
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files?per_page=100" --paginate \
+            --jq '.[].filename | select(test("^data/year-links/[0-9]{4}\\.json$"))' > changed-seeds.txt
+          if [[ -s changed-seeds.txt ]]; then
+            echo "PR changes a seed; the main publisher handles it" >> "$GITHUB_STEP_SUMMARY"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          run_id="$(gh run list --workflow yearly-data.yml --event workflow_dispatch --commit "$PR_HEAD_SHA" \
+            --json databaseId,conclusion,createdAt --jq '[.[] | select(.conclusion == "success")] | sort_by(.createdAt) | last | .databaseId // empty')"
+          if [[ -z "$run_id" ]]; then
+            echo "No successful manual seed check matches this PR head; no data will be published" >> "$GITHUB_STEP_SUMMARY"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          run_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id")"
+          workflow_id="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/yearly-data.yml" --jq '.id')"
+          if [[ "$(jq -r '.event' <<<"$run_json")" != "workflow_dispatch" || \
+                "$(jq -r '.conclusion' <<<"$run_json")" != "success" || \
+                "$(jq -r '.head_sha' <<<"$run_json")" != "$PR_HEAD_SHA" || \
+                "$(jq -r '.head_branch' <<<"$run_json")" != "$PR_HEAD_REF" || \
+                "$(jq -r '.workflow_id' <<<"$run_json")" != "$workflow_id" ]]; then
+            echo "Manual artifact run does not match the merged PR head" >&2
+            exit 1
+          fi
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          echo "artifact_name=yearly-ingest-manual-${PR_HEAD_SHA}" >> "$GITHUB_OUTPUT"
+      - name: Download manually checked seed output
+        if: steps.manual.outputs.publish == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.manual.outputs.artifact_name }}
+          run-id: ${{ steps.manual.outputs.run_id }}
+          github-token: ${{ github.token }}
+          path: .yearly-ingest-artifact
+      - name: Package and apply manual artifact
+        id: manual-artifact
+        if: steps.manual.outputs.publish == 'true'
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_ID: ${{ steps.manual.outputs.run_id }}
+        run: |
+          python - <<'PY' > changed-seeds.txt
+          import json
+          import re
+          from pathlib import Path
+
+          manifests = sorted(Path('.yearly-ingest-artifact').rglob('manifest.json'))
+          if not manifests:
+              raise SystemExit('Manual artifact contains no yearly-ingest manifest')
+          for path in manifests:
+              seed = json.loads(path.read_text(encoding='utf-8')).get('seedPath', '')
+              if not re.fullmatch(r'data/year-links/\d{4}\.json', seed):
+                  raise SystemExit(f'Invalid seed path in artifact manifest: {seed!r}')
+              print(seed)
+          PY
+          python -m convert.ingest_artifact package --root .yearly-ingest-artifact \
+            --repository "$GITHUB_REPOSITORY" --pr-number "$PR_NUMBER" \
+            --pr-head-sha "$PR_HEAD_SHA" --run-id "$RUN_ID" --seeds-file changed-seeds.txt
+          python -m convert.ingest_artifact apply --root .yearly-ingest-artifact --repo-root . \
+            --repository "$GITHUB_REPOSITORY" --pr-number "$PR_NUMBER" \
+            --pr-head-sha "$PR_HEAD_SHA" --run-id "$RUN_ID" \
+            --seeds-file changed-seeds.txt --applied-paths-file applied-data-paths.txt
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('.yearly-ingest-artifact/run.json').read_text(encoding='utf-8'))
+          years = manifest.get('years', [])
+          complete = set(manifest.get('completeYears', []))
+          print(f"complete={'true' if years and set(years) <= complete else 'false'}")
+          PY
+      - name: Refresh catalog from complete manual artifact
+        if: steps.manual.outputs.publish == 'true' && steps.manual-artifact.outputs.complete == 'true'
+        run: python -m convert.refresh_catalog --data-root data --template metadata/school-data.template.json --metadata metadata/school-data.json
+      - name: Commit generated data for the unchanged seed
+        if: steps.manual.outputs.publish == 'true'
+        shell: bash
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- data metadata/school-data.json
+          if git diff --cached --quiet; then
+            echo "No generated data changes to commit" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git commit -m "data: publish manually checked yearly import"
+          git push origin "HEAD:${BASE_REF}"

@@ -9,37 +9,48 @@ class YearlyWorkflowContractTests(unittest.TestCase):
         cls.workflow = (Path(__file__).resolve().parents[2] / '.github/workflows/yearly-data.yml').read_text(
             encoding='utf-8')
 
-    def test_workflow_is_read_only_and_targets_year_link_changes(self):
-        self.assertRegex(self.workflow, r'(?m)^permissions:\s*\n\s+contents:\s*read\s*$')
-        self.assertIn("- 'data/year-links/*.json'", self.workflow)
-
-    def test_workflow_runs_isolated_import_without_check_and_uploads_outputs_after_failures(self):
-        self.assertRegex(self.workflow, r'python -m convert\.ingest_year --seed .*--data-root "\$stage/data"')
-        self.assertNotRegex(self.workflow, r'python -m convert\.ingest_year[^\n]*--check')
-        self.assertIn('has_seeds=false', self.workflow)
-        self.assertIn('has_seeds=true', self.workflow)
-        self.assertRegex(self.workflow, r"(?ms)- name: Upload review reports\n\s+if: always\(\) && steps\.seeds\.outputs\.has_seeds == 'true'.*?actions/upload-artifact@v4")
-        self.assertIn('yearly-ingest-reports/', self.workflow)
-        self.assertIn('yearly-ingest-output/', self.workflow)
-        self.assertIn('source-review', self.workflow)
-        self.assertIn('JSONDecoder().raw_decode', self.workflow)
-
-    def test_pull_request_and_dispatch_feed_the_same_ingest_loop(self):
-        self.assertIn('$GITHUB_EVENT_NAME" == "pull_request', self.workflow)
+    def test_pull_request_detects_changed_seeds_and_exports_checked_artifact(self):
+        self.assertIn("types: [opened, synchronize, reopened, closed]", self.workflow)
         self.assertIn('git diff --name-only', self.workflow)
-        self.assertIn('printf \'%s\\n\' "$SEED_PATH" > changed-seeds.txt', self.workflow)
-        self.assertEqual(self.workflow.count('python -m convert.ingest_year'), 1)
-        self.assertRegex(self.workflow, r'(?s)while IFS= read -r seed; do.*?--seed "\$seed" --data-root "\$stage/data".*?done < changed-seeds\.txt')
+        self.assertIn('yearly-ingest-pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}', self.workflow)
+        self.assertIn('yearly-ingest-manual-${{ github.sha }}', self.workflow)
+        self.assertIn('python -m convert.ingest_artifact package', self.workflow)
 
-    def test_workflow_uses_pinned_runtime_versions_and_does_not_push_generated_data(self):
+    def test_validation_runs_isolated_check_with_edge_and_preserves_failure_reports(self):
         self.assertRegex(self.workflow, r'(?m)^\s+runs-on:\s*ubuntu-24\.04\s*$')
         self.assertRegex(self.workflow, r'(?ms)^\s+WAF_BROWSER_PATH:\s*/usr/bin/microsoft-edge\s*$.*?WAF_HEADLESS:\s*[\'"]?false')
         self.assertIn('Ensure Xvfb is available for headed Edge', self.workflow)
-        self.assertIn('xvfb-run --auto-servernum python -m convert.ingest_year', self.workflow)
-        self.assertRegex(self.workflow, r'python-version:\s*["\']?3\.12')
-        self.assertRegex(self.workflow, r'node-version:\s*["\']?22')
-        self.assertNotRegex(self.workflow, r'(?im)^\s*(?:git push|git commit|gh pr merge)\b')
-        self.assertNotIn('contents: write', self.workflow)
+        self.assertRegex(self.workflow, r'python -m convert\.ingest_year --seed .*--check')
+        self.assertIn('--export-dir "yearly-ingest-output/${name}"', self.workflow)
+        self.assertRegex(self.workflow, r"(?ms)- name: Upload review reports\n\s+if: always\(\).*?actions/upload-artifact@v4")
+        self.assertIn('yearly-ingest-reports/', self.workflow)
+
+    def test_seed_discovery_does_not_keep_the_unreachable_push_branch(self):
+        match = re.search(r'(?ms)- name: Discover changed yearly seed files(?P<body>.*?)(?=^      - name:)',
+                          self.workflow)
+        self.assertIsNotNone(match)
+        self.assertNotIn('EVENT_BEFORE', match.group('body'))
+        self.assertNotIn('github.event.before', match.group('body'))
+
+    def test_review_report_upload_does_not_duplicate_checked_data_artifact(self):
+        match = re.search(r'(?ms)- name: Upload review reports(?P<body>.*?)(?=^      - name:)',
+                          self.workflow)
+        self.assertIsNotNone(match)
+        self.assertIn('yearly-ingest-reports/', match.group('body'))
+        self.assertNotIn('yearly-ingest-output/', match.group('body'))
+
+    def test_only_trusted_publisher_jobs_can_write_to_main(self):
+        validate, publishers = self.workflow.split('  publish:', 1)
+        self.assertIn('contents: read', validate)
+        self.assertNotIn('contents: write', validate)
+        self.assertIn('contents: write', publishers)
+        self.assertIn('python -m convert.ingest_artifact apply', publishers)
+        self.assertIn('git push origin HEAD:main', publishers)
+        self.assertIn('git push origin "HEAD:${BASE_REF}"', publishers)
+
+    def test_partial_artifact_does_not_refresh_catalog(self):
+        self.assertIn('completeYears', self.workflow)
+        self.assertIn("steps.catalog.outputs.complete == 'true'", self.workflow)
 
 
 if __name__ == '__main__':

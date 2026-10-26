@@ -37,7 +37,8 @@ PDF_MARKERS = {
 def _official_page(url: str) -> bool:
     parsed = urlparse(url)
     return parsed.scheme == 'https' and parsed.hostname in {
-        'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn', 'gaokao.haedu.cn'
+        'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn',
+        'gaokao.haedu.cn', 'jyt.henan.gov.cn'
     }
 
 
@@ -141,9 +142,14 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
             local_path = declared.get(role, {}).get('localPath')
             if local_path:
                 pdf_paths[index] = local_path
-        available = any(role in declared for role in roles)
-        available = available or (data_root / output_path).is_file()
-        available = available or any((data_root / path).is_file() for path in pdf_paths)
+        if parser == 'mapping':
+            inputs_available = all(
+                role in declared or (data_root / pdf_path).is_file()
+                for role, pdf_path in zip(roles, pdf_paths)
+            )
+        else:
+            inputs_available = roles[0] in declared or (data_root / pdf_paths[0]).is_file()
+        available = (data_root / output_path).is_file() or inputs_available
         if not available:
             continue
         row = {'outputPath': output_path, 'pdfPaths': pdf_paths, 'parser': parser, 'year': year}
@@ -275,11 +281,13 @@ def _attachment_identity_evidence(text: str, metadata: dict) -> str:
 def resolve_year_sources(seed: dict, session=None) -> dict:
     session = session or requests.Session()
     year = seed['year']
-    page_missing = any(not seed.get('sources', {}).get(role, {}).get('pageUrl') for role in SOURCE_ROLES)
+    declared = seed.get('sources', {})
+    roles = [role for role in SOURCE_ROLES if role in declared]
+    page_missing = any(not declared[role].get('pageUrl') for role in roles)
     candidates = _search_candidates(seed, session) if page_missing else {}
     pages = {}
-    for role in SOURCE_ROLES:
-        explicit = seed.get('sources', {}).get(role, {}).get('pageUrl')
+    for role in roles:
+        explicit = declared[role].get('pageUrl')
         urls = {explicit} if explicit else candidates.get(role, set())
         urls = {url for url in urls if _official_page(url)}
         if len(urls) != 1:
@@ -293,7 +301,7 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
 
     attachments = {}
     for role, page_url in pages.items():
-        exact = seed.get('sources', {}).get(role, {}).get('attachmentUrl')
+        exact = declared.get(role, {}).get('attachmentUrl')
         files = [(exact, '')] if exact else _page_attachments(page_url, session, year)
         if not exact and role == 'mappingCodeTable':
             files = [item for item in files if any(word in (item[0] + item[1]) for word in ('代号', '代码'))]
@@ -318,19 +326,40 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
 def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
     year = resolved['year']
     attachments = resolved['attachments']
-    sources = [
-        {'outputPath': f'省控线/省控线_{year}.json', 'pdfPaths': [f'省控线/原始PDF/省控线_{year}.pdf'], 'pdfUrls': [attachments['scorelines'][0]['url']], 'pageUrls': [resolved['pages']['scorelines']], 'parser': 'scorelines', 'year': year},
-        {'outputPath': f'招生计划/招生计划_{year}.json', 'pdfPaths': [f'招生计划/原始PDF/招生计划_{year}.pdf'], 'pdfUrls': [attachments['plans'][0]['url']], 'pageUrls': [resolved['pages']['plans']], 'parser': 'plans', 'year': year},
-        {'outputPath': f'招生高校及专业/招生高校及专业_{year}.json', 'pdfPaths': [f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf'], 'pdfUrls': [attachments['master'][0]['url']], 'pageUrls': [resolved['pages']['master']], 'parser': 'master', 'year': year},
-        {'outputPath': f'专业对照/专业对照_{year}.json', 'pdfPaths': [attachments['mappingCodeTable'][0].get('localPath', f'专业对照/原始PDF/专业代号对照_{year}.pdf'), attachments['mappingOverview'][0].get('localPath', f'专业对照/原始PDF/专业对照一览_{year}.pdf')], 'pdfUrls': [attachments['mappingCodeTable'][0]['url'], attachments['mappingOverview'][0]['url']], 'pageUrls': [resolved['pages']['mappingCodeTable'], resolved['pages']['mappingOverview']], 'parser': 'mapping', 'year': year},
-    ]
-    crawl = {
-        'dataset': 'score-segments', 'year': year,
-        'sourcePageUrl': resolved['pages']['scoreSegments'],
-        'discoveryUrl': resolved['pages']['scoreSegments'],
-        'manifestPath': f'来源清单/来源清单_{year}.json',
-        'downloadDirectory': f'一分一段/原始PDF/{year}',
-        'normalizedPath': f'一分一段/一分一段_{year}.json',
-        'conversionReportPath': f'reports/转换报告_{year}.json', 'parser': 'score-segments',
-    }
+    sources = []
+    single_sources = (
+        ('scorelines', f'省控线/省控线_{year}.json', f'省控线/原始PDF/省控线_{year}.pdf'),
+        ('plans', f'招生计划/招生计划_{year}.json', f'招生计划/原始PDF/招生计划_{year}.pdf'),
+        ('master', f'招生高校及专业/招生高校及专业_{year}.json',
+         f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf'),
+    )
+    for role, output_path, pdf_path in single_sources:
+        if role not in attachments:
+            continue
+        sources.append({'outputPath': output_path, 'pdfPaths': [pdf_path],
+                        'pdfUrls': [attachments[role][0]['url']],
+                        'pageUrls': [resolved['pages'][role]], 'parser': role, 'year': year})
+    mapping_roles = ('mappingCodeTable', 'mappingOverview')
+    if all(role in attachments for role in mapping_roles):
+        sources.append({
+            'outputPath': f'专业对照/专业对照_{year}.json',
+            'pdfPaths': [attachments['mappingCodeTable'][0].get(
+                             'localPath', f'专业对照/原始PDF/专业代号对照_{year}.pdf'),
+                         attachments['mappingOverview'][0].get(
+                             'localPath', f'专业对照/原始PDF/专业对照一览_{year}.pdf')],
+            'pdfUrls': [attachments[role][0]['url'] for role in mapping_roles],
+            'pageUrls': [resolved['pages'][role] for role in mapping_roles],
+            'parser': 'mapping', 'year': year,
+        })
+    crawl = None
+    if 'scoreSegments' in resolved['pages']:
+        crawl = {
+            'dataset': 'score-segments', 'year': year,
+            'sourcePageUrl': resolved['pages']['scoreSegments'],
+            'discoveryUrl': resolved['pages']['scoreSegments'],
+            'manifestPath': f'来源清单/来源清单_{year}.json',
+            'downloadDirectory': f'一分一段/原始PDF/{year}',
+            'normalizedPath': f'一分一段/一分一段_{year}.json',
+            'conversionReportPath': f'reports/转换报告_{year}.json', 'parser': 'score-segments',
+        }
     return sources, crawl

@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 
-from convert.common import load_data_plan
+from convert.common import load_data_plan, read_json
 from convert.normalize import normalize_target
 from convert.segment_store import merge_year
 
@@ -10,9 +10,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class NormalizeTest(unittest.TestCase):
+    def _published_plan(self, data_root):
+        metadata = read_json(REPO_ROOT / 'metadata/school-data.json')
+        return load_data_plan(data_root, set(metadata['supportedYears']))
+
     def test_reviewed_inputs_never_become_published_majors(self):
         data_root = REPO_ROOT / "data"
-        plan = load_data_plan(data_root)
+        plan = self._published_plan(data_root)
         for target in plan["targets"]:
             current = merge_year(data_root / target['normalizedPath'], data_root)
             document, report = normalize_target(target, plan, data_root, current)
@@ -26,7 +30,7 @@ class NormalizeTest(unittest.TestCase):
 
     def test_normalized_majors_are_sorted_and_traceable(self):
         data_root = REPO_ROOT / "data"
-        plan = load_data_plan(data_root)
+        plan = self._published_plan(data_root)
         target = plan["targets"][2]
         current = merge_year(data_root / target['normalizedPath'], data_root)
         document, _ = normalize_target(target, plan, data_root, current)
@@ -37,7 +41,7 @@ class NormalizeTest(unittest.TestCase):
 
     def test_default_report_omits_success_resolutions_and_full_report_includes_them(self):
         data_root = REPO_ROOT / 'data'
-        plan = load_data_plan(data_root)
+        plan = self._published_plan(data_root)
         target = plan['targets'][0]
         current = merge_year(data_root / target['normalizedPath'], data_root)
         _, report = normalize_target(target, plan, data_root, current)

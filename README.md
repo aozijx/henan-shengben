@@ -34,7 +34,7 @@ npm test
 python -m convert.ingest_year --seed data/year-links/YYYY.json --check
 ```
 
-确认检查报告后，去掉 `--check` 执行发布。已有年度复核、采集、转换、异常处理和回滚步骤见 [转换与导入指南](convert/README.md)。
+确认检查报告后，本地去掉 `--check` 执行发布。PR 中变更的新年度 seed 会逐个检查并暂存核验产物；合并到 `main` 后，Action 复用该 artifact、重建 catalog 并提交生成物。若 seed 已在仓库且无需改动，可在 PR 分支上手动运行 Action，指定 `data/year-links/YYYY.json`；合并后 Action 会按 PR head commit 找到并校验该次运行的 artifact。直接推送新年度 seed 到 `main` 时，Action 会针对变更年度执行完整导入；已发布年度仍不能用新年度导入入口覆盖。已有年度复核、采集、转换、异常处理和回滚步骤见 [转换与导入指南](convert/README.md)。
 
 | 文档 | 内容 |
 | --- | --- |
