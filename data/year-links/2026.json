@@ -2,6 +2,13 @@
   "year": 2026,
   "searchPageUrl": "https://www.haeea.cn/GovSearch/News/Index?words=%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E4%B8%93%E5%8D%87%E6%9C%AC&page=1",
   "sources": {
+    "scoreSegments": {
+      "pageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml"
+    },
+    "scorelines": {
+      "pageUrl": "https://www.haeea.cn/a/202604/43662_a29105c7.shtml",
+      "attachmentUrl": "https://www.haeea.cn/attach/file/20260409/20260409072504_5957_16c52a46.pdf"
+    },
     "plans": {
       "pageUrl": "https://gaokao.haedu.cn/501/552/2026/0408/151445.html",
       "attachmentUrl": "https://www.haeea.cn/attach/file/20260408/20260408104158_4057_369b9c32.pdf"
@@ -11,20 +18,12 @@
       "attachmentUrl": "https://www.haeea.cn/attach/file/20251024/20251024155551_1229_ba9e8e9d.pdf"
     },
     "mappingOverview": {
-      "pageUrl": "https://gaokao.haedu.cn/152/432/639/2025/1023/139253.html",
-      "attachmentUrl": "https://xcoss.henan.gov.cn/typtfile/20251024/5eda9a6b9db9429c9c162381d99440a7.pdf",
-      "localPath": "专业对照/原始PDF/专业对照一览_附件2_2026.pdf"
+      "pageUrl": "https://jyt.henan.gov.cn/2025/10-24/3238096.html",
+      "attachmentUrl": "https://xcoss.henan.gov.cn/typtfile/20251024/5eda9a6b9db9429c9c162381d99440a7.pdf"
     },
     "master": {
       "pageUrl": "https://gaokao.haedu.cn/152/432/639/2025/1023/139252.html",
       "attachmentUrl": "https://xcoss.henan.gov.cn/typtfile/20251024/90ca9dfe8f6e4047b16b5ae372f1b29c.pdf"
-    },
-    "scoreSegments": {
-      "pageUrl": "https://www.haeea.cn/a/202604/43664_744774c0.shtml"
-    },
-    "scorelines": {
-      "pageUrl": "https://www.haeea.cn/a/202604/43662_a29105c7.shtml",
-      "attachmentUrl": "https://www.haeea.cn/attach/file/20260409/20260409072504_5957_16c52a46.pdf"
     }
   }
 }
