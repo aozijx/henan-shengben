@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "derivationVersion": 3,
+  "supportedYears": [
+    2024,
+    2025,
+    2026
+  ],
+  "yearSources": {
+    "2024": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2024.json",
+      "planSource": "data/招生计划/招生计划_2024.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
+      "analyticsSource": "data/generated/2024/9b4b6918fe7e13aa/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2024.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2024/{majorCode}.json",
+      "mappingReferenceYear": 2026
+    },
+    "2025": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2025.json",
+      "planSource": "data/招生计划/招生计划_2025.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
+      "analyticsSource": "data/generated/2025/6c09b54cb29e7c06/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2025.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2025/{majorCode}.json",
+      "mappingReferenceYear": 2026
+    },
+    "2026": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2026.json",
+      "planSource": "data/招生计划/招生计划_2026.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
+      "analyticsSource": "data/generated/2026/cb46257c5d32ac55/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
+      "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
+    }
+  },
+  "inputSha256": {
+    "2024": {
+      "mapping": "3b04a0ec7cee4776a56967cf537a75bb86a3043e43ab584aed714e9d064bc0bb",
+      "scorelines": "23c6b14194a8487ff045ce65b1a114af86b0cc00ddc09d739cfb2113cba264da",
+      "plans": "3df9d745e6d53b20fa138545fcdc72873f826cae2d61e747675d04f2614cdf7b",
+      "score-segments": "f64be040b0b1ca08ec8d8435f7650149058d856a930c2cbc0807b6cf966641fe",
+      "report": "fb1006418f076b4386ca79a866f5bf77d5b46ed721dec0640112e5df9abe6485",
+      "manifest": "eeb3c3e7a2ec405a94f90af4fc8e596e1dc305888a041d03881da778e36079bb"
+    },
+    "2025": {
+      "mapping": "3b04a0ec7cee4776a56967cf537a75bb86a3043e43ab584aed714e9d064bc0bb",
+      "scorelines": "740c08084645e84e6d709109f4f000b39cf64499901dcfe40a1c38120a296007",
+      "plans": "bcce2a859328837853b44cc749e827a605140d9039deec2d6f9ad19b6657eb57",
+      "score-segments": "bc3c3fcf398b035213eaeaa370b4a28c727f5890ccd17461552aa2a3ed516f48",
+      "report": "b6b15f7a6962b90198394408cc90ad5e5e0c9d0a2f9c0ccddf54bbef7da4e581",
+      "manifest": "de80e23a05308738d92b13a123851feb2c5a3496635ed7c482b2a665bb08ada5"
+    },
+    "2026": {
+      "mapping": "3b04a0ec7cee4776a56967cf537a75bb86a3043e43ab584aed714e9d064bc0bb",
+      "scorelines": "c7e7e5480e0998890c70dee95faf024686cb9f956a7a1a0c965f52c8a2265cba",
+      "plans": "c47c05230ef299a3f8ed4c5e64011ad4f11ad47bb3e30f735cf79586eede50b7",
+      "score-segments": "8432374ed8b0629626bd74f96898a21a750e21419f1925df3e7897143f959fb2",
+      "report": "a62f90a61fcecad03e404eab2b2446b9ade5eea5a2df85f4566c124b5eea09f2",
+      "manifest": "3eed9ae70e9b1a09fffcd7e46625a2718dafd467ed3acf1aa18649388e37c972"
+    }
+  }
+}
