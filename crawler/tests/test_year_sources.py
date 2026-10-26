@@ -118,14 +118,17 @@ class YearSourcesTests(unittest.TestCase):
             plan = build_data_plan(directory)
             self.assertEqual([target['year'] for target in plan['targets']], [2027])
 
-    def test_master_is_required_and_resolves_as_official_source(self):
+    def test_master_is_optional_and_resolves_when_declared(self):
         self.assertIn('master', SOURCE_ROLES)
         resolved = resolve_year_sources(self.seed, FakeSession())
         self.assertEqual(resolved['attachments']['master'][0]['url'], self.seed['sources']['master']['attachmentUrl'])
 
         without_master = dict(self.seed, sources={k: v for k, v in self.seed['sources'].items() if k != 'master'})
-        with self.assertRaisesRegex(SourceResolutionError, 'master'):
-            resolve_year_sources(without_master, FakeSession())
+        partial = resolve_year_sources(without_master, FakeSession())
+        self.assertNotIn('master', partial['attachments'])
+        rows, crawl = execution_rows_for_year(partial)
+        self.assertNotIn('master', [row['parser'] for row in rows])
+        self.assertIsNotNone(crawl)
 
     def test_seed_local_path_can_keep_distinct_official_attachment_versions(self):
         seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
@@ -158,6 +161,18 @@ class YearSourcesTests(unittest.TestCase):
             path.write_text(json.dumps(self.seed), encoding='utf-8')
             with self.assertRaisesRegex(SourceResolutionError, 'official HTTPS host'):
                 load_year_links(path)
+
+    def test_education_authority_hosts_are_allowed_for_official_pages(self):
+        for host, page in (
+            ('gaokao.haedu.cn', 'https://gaokao.haedu.cn/501/552/2026/0408/151445.html'),
+            ('jyt.henan.gov.cn', 'https://jyt.henan.gov.cn/2025/10-24/3238096.html'),
+        ):
+            with self.subTest(host=host), tempfile.TemporaryDirectory() as directory:
+                seed = dict(self.seed, sources=dict(self.seed['sources']))
+                seed['sources']['plans'] = {'pageUrl': page}
+                path = Path(directory) / '2027.json'
+                path.write_text(json.dumps(seed), encoding='utf-8')
+                self.assertEqual(load_year_links(path), seed)
 
     def test_execution_rows_include_master_parser(self):
         resolved = resolve_year_sources(self.seed, FakeSession())
@@ -218,10 +233,10 @@ class YearSourcesTests(unittest.TestCase):
         with self.assertRaisesRegex(SourceResolutionError, 'expected one official page, found 2'):
             resolve_year_sources(seed, SearchSession(html))
 
-    def test_rejects_missing_required_role_and_html_412(self):
+    def test_skips_undeclared_role_but_rejects_html_412_for_declared_source(self):
         seed = dict(self.seed, sources={k: v for k, v in self.seed['sources'].items() if k != 'master'})
-        with self.assertRaisesRegex(SourceResolutionError, 'master'):
-            resolve_year_sources(seed, FakeSession())
+        resolved = resolve_year_sources(seed, FakeSession())
+        self.assertNotIn('master', resolved['attachments'])
         with self.assertRaisesRegex(RuntimeError, '412'):
             resolve_year_sources(self.seed, SearchSession('', blocked_url=self.seed['sources']['scorelines']['pageUrl']))
 

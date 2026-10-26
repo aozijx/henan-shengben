@@ -9,14 +9,15 @@ from convert.common import DATA_ROOT, load_data_plan
 class AnnualSourcePlanTests(unittest.TestCase):
     def test_repository_plan_is_derived_from_year_seeds_and_local_files(self):
         plan = load_data_plan(DATA_ROOT)
-        self.assertEqual([target['year'] for target in plan['targets']], [2024, 2025, 2026])
+        self.assertEqual([target['year'] for target in plan['targets']], [2023, 2024, 2025, 2026])
         self.assertEqual(
             [(row['year'], row['parser']) for row in plan['sources']],
-            [(2024, 'plans'), (2024, 'scorelines'),
+            [(2023, 'scorelines'),
+             (2024, 'plans'), (2024, 'scorelines'),
              (2025, 'plans'), (2025, 'scorelines'),
              (2026, 'mapping'), (2026, 'master'), (2026, 'plans'), (2026, 'scorelines')],
         )
-        target = plan['targets'][2]
+        target = plan['targets'][3]
         self.assertEqual(target['manifestPath'], '来源清单/来源清单_2026.json')
         self.assertEqual(target['conversionReportPath'], 'reports/转换报告_2026.json')
 

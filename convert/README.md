@@ -17,7 +17,8 @@
 | `issue_reports` | `--years YYYY …`、`--full-report` | 限定年份；默认只保留可疑 OCR 行及上下文，完整 OCR 行仅在完整报告中写入。 |
 | `refresh_catalog` | `--data-root PATH`、`--template PATH`、`--metadata PATH` | 校验最终规范分片和转换报告，刷新 catalog。 |
 | `segment_store` | `--year YYYY --output NEW_PATH` | 核对规范索引和分片哈希后导出合并副本；拒绝覆盖已有路径。 |
-| `ingest_year` | `--seed YEAR_LINKS --check` | 在暂存目录核验新年度，不发布。去掉 `--check` 才发布。 |
+| `ingest_year` | `--seed YEAR_LINKS --check` | 在暂存目录核验新年度，不发布。 |
+| `ingest_year` | `--export-dir PATH` | 仅与 `--check` 同用；导出核验通过的新年度原始来源、规范表和转换结果，供合并后的可信发布任务复用。 |
 | `ingest_year` | `--full-report` | 默认输出导入摘要和异常；加此项显示来源溯源与逐专业明细。 |
 | `crawler.download` | `--major CODE`（可重复） | 只下载或重试指定专业的官方 PDF，可与年份筛选一起使用。 |
 | 各入口 | `--data-root PATH` | 改用指定数据根目录，适合隔离演练。 |
@@ -71,6 +72,8 @@ python -m convert.refresh_catalog --data-root $verifyData --template metadata/sc
 }
 ```
 
-`ingest_year` 的 `--seed` 指向新年度链接配置；首次运行附加 `--check`，默认摘要包含来源数量、转换计数、阻塞项和 metadata diff。加 `--full-report` 可输出所有来源 URL、实际跳转 URL（如有）、哈希和逐专业解析。检查模式只在临时目录生成结果，不写入 `data/` 或 metadata。人工确认后，去掉 `--check` 发布；已有年份会被拒绝，不能用此入口重跑覆盖。若发现官方网页返回 403/412、来源不唯一或缺附件，导入会失败且保留当前 metadata；先补齐或修正官方链接配置，再重试。当前入口要求官方公告页可读取；直接本地 PDF 离线导入尚未支持。
+`ingest_year` 的 `--seed` 指向新年度链接配置；首次运行附加 `--check`，默认摘要包含来源数量、转换计数、阻塞项和 metadata diff。加 `--full-report` 可输出所有来源 URL、实际跳转 URL（如有）、哈希和逐专业解析。检查模式只在临时目录生成结果，不写入 `data/` 或 metadata。人工确认后，本地去掉 `--check` 发布；已有年份会被拒绝，不能用此入口重跑覆盖。若发现官方网页返回 403/412、来源不唯一或缺附件，导入会失败且保留当前 metadata；先补齐或修正官方链接配置，再重试。当前入口要求官方公告页可读取；直接本地 PDF 离线导入尚未支持。`--export-dir` 为 GitHub Actions 导出受哈希清单约束的 artifact；它不改变 `--check` 的只读语义。PR 合并到 `main` 后，发布 job 校验 PR、seed 哈希及 artifact 文件哈希，将规范数据放入仓库并重建 catalog/metadata；OCR 结果直接复用，不重跑 OCR。没有匹配的成功 artifact 时，主分支 seed push 会针对变更 seed 执行一次完整导入。
+
+如果 seed 已在仓库且无需修改，在对应 PR 分支上手动运行 `Validate yearly data seed`，将 `seed_path` 设为 `data/year-links/YYYY.json`。必须选择 PR 当前 head 所在分支，并在合并前完成该次成功运行；合并后的 workflow 会用 PR head commit 找到 artifact、比对仓库和运行身份，再导入生成物。手动运行只接受尚未发布的年度 seed。此流程需在仓库 **Settings → Actions → General → Workflow permissions** 允许 read/write；发布 job 使用 GitHub 自动提供的短期 `GITHUB_TOKEN`，不需要 PAT 或自建密钥。主分支若有保护规则，还需允许 Actions bot 直接推送。
 
 PDF/OCR 产生 `needs-review` 或字段冲突时，不发布。按 `data/reports/README.md` 审阅异常，并仅在 `data/一分一段/人工修正.json` 中添加有官方依据的确认修正，然后重新执行 `--check`。成功发布后，生成物按版本不可变；若需回滚，使用版本控制回退该年度发布提交（包括 metadata 和新增数据），不要手工覆盖旧 catalog 或 shard。

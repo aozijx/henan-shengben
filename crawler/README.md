@@ -12,7 +12,7 @@
 | `download.py` | `--compact-url-fields` | 只清理清单中与原 PDF 地址等价的 `finalUrl`，不联网或重新下载。 |
 | `download.py` | `--major CODE` | 只下载或重试所选专业的 PDF；可重复传入，与 `--years` 配合缩小范围。 |
 
-发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。公告页允许使用 `haeea.cn`、`news.haeea.cn`、`heao.com.cn` 和河南省教育厅高考信息网 `gaokao.haedu.cn`；PDF 附件允许使用这些官方域名及已验证的政府附件域名 `xcoss.henan.gov.cn`。
+发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。公告页允许使用 `haeea.cn`、`news.haeea.cn`、`heao.com.cn`、河南省教育厅域名 `jyt.henan.gov.cn` 和河南省教育厅高考信息网 `gaokao.haedu.cn`；PDF 附件允许使用这些官方域名及已验证的政府附件域名 `xcoss.henan.gov.cn`。
 
 年度导入还会校验 PDF 是否能确认年份和来源类型。扫描版 PDF 没有正文文本时，也会检查可解码的标题元数据；正文和元数据都无法确认时仍会停止导入。
 
@@ -26,10 +26,10 @@
 
 ## 新年度来源
 
-`data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。需要在同一年度保留不同版本的官方附件时，可用 `localPath` 指定单独的相对 PDF 路径；路径不得越出 `data/`。`searchPageUrl` 只用于发现唯一的候选公告页。来源缺失、候选不唯一、网页不可访问，或网页年份及类型不匹配时，采集会停止；应修正官方链接配置后重试，不使用转载镜像。
+`data/year-links/YYYY.json` 是年度官方链接的配置入口。每种来源可填写公告页 `pageUrl`；当页面包含多个附件时，用 `attachmentUrl` 精确指定官方 PDF。需要在同一年度保留不同版本的官方附件时，可用 `localPath` 指定单独的相对 PDF 路径；路径不得越出 `data/`。`searchPageUrl` 只用于发现唯一的候选公告页。seed 中未声明的来源会跳过，不阻止已提供来源的验证与归档；只有来源齐全时才生成年度解析数据并更新 catalog。已声明的来源若候选不唯一、网页不可访问，或网页年份及类型不匹配，仍会停止导入。
 
 2026 年的 `mappingOverview` 与 `mappingCodeTable` 是两份不同的官方表：前者按专科专业列出可报考的本科专业及考试科目，后者按招生专业列出专业代号和考试科目，均需保留。
 
 2026 `mappingOverview` 的 Attachment 2 下载为 `专业对照/原始PDF/专业对照一览_附件2_2026.pdf`。仓库已有 Attachment 3 保留在 `专业对照/原始PDF/专业对照一览_2026.pdf`；两者字节不同，但本地解析出的 558 条对照数据相同，因此新附件使用单独路径，不覆盖现有文件。
 
-新年度完整导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。GitHub Actions 会把仓库数据复制到临时工作区，在那里执行完整导入，并上传与仓库不同的生成文件和报告供审核；它不会提交或合并这些文件。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。
+新年度导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。GitHub Actions 会按 PR 中变更的 seed 执行验证，把新增原始来源和来源清单上传为 artifact；PR 合并后，可信发布任务校验 artifact 的 PR、seed 哈希和文件哈希，再将源文件提交到 `main`。来源不完整时只归档原始来源，不刷新年度 catalog；来源齐全时在合并后由发布任务生成数据和 metadata。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。

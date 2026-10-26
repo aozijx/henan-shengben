@@ -1,3 +1,4 @@
+import hashlib
 import json
 import tempfile
 import unittest
@@ -253,6 +254,65 @@ class IngestYearTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'already exists'):
                     ingest_year(seed, data, template, metadata, FakeSession())
                 self.assertEqual(metadata.read_bytes(), published_metadata)
+
+    def test_check_exports_verified_files_with_the_exact_seed_fingerprint(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            data, metadata, original_metadata = seed_data(root)
+            seed = make_seed(root)
+            export_dir = root / 'artifact' / str(YEAR)
+            mocks = mocked_tabular_parsers()
+            with mocks[0], mocks[1], mocks[2]:
+                result = ingest_year(seed, data, REPO_ROOT / 'metadata/school-data.template.json',
+                                     metadata, FakeSession(), check=True, export_dir=export_dir)
+
+            manifest = json.loads((export_dir / 'manifest.json').read_text(encoding='utf-8'))
+            self.assertEqual(manifest['year'], YEAR)
+            self.assertEqual(manifest['seedPath'], f'data/year-links/{YEAR}.json')
+            self.assertEqual(manifest['seedSha256'], hashlib.sha256(seed.read_bytes()).hexdigest())
+            self.assertTrue(manifest['files'])
+            self.assertTrue(all((export_dir / item['path']).is_file() for item in manifest['files']))
+            self.assertEqual(metadata.read_bytes(), original_metadata)
+            self.assertFalse((data / '专业对照/专业对照_2027.json').exists())
+            self.assertEqual(result['year'], YEAR)
+
+    def test_partial_seed_skips_undeclared_sources_and_exports_only_available_source(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            data, metadata, original_metadata = seed_data(root)
+            seed = root / 'year-links' / '2027.json'
+            seed.parent.mkdir()
+            seed.write_text(json.dumps({'year': YEAR, 'sources': {
+                'mappingCodeTable': {
+                    'pageUrl': PAGES['mappingCodeTable'],
+                    'attachmentUrl': ATTACHMENTS['mappingCodeTable'],
+                },
+            }}, ensure_ascii=False), encoding='utf-8')
+            export_dir = root / 'artifact' / str(YEAR)
+
+            def download(url, destination, session, expected_sha256=None):
+                destination = Path(destination)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(FakeSession.pdf_bytes)
+                return {'downloadStatus': 'downloaded', 'finalUrl': None,
+                        'sha256': hashlib.sha256(FakeSession.pdf_bytes).hexdigest(),
+                        'bytes': len(FakeSession.pdf_bytes)}
+
+            with patch('convert.ingest_year.validate_attachment'), \
+                    patch('convert.ingest_year.download_entry', side_effect=download):
+                report = ingest_year(seed, data, REPO_ROOT / 'metadata/school-data.template.json',
+                                     metadata, FakeSession(), check=True, export_dir=export_dir)
+
+            self.assertFalse(report['complete'])
+            self.assertIn('plans', report['missingSources'])
+            self.assertIn('mappingOverview', report['missingSources'])
+            self.assertNotIn('metadataDiff', report)
+            self.assertEqual(metadata.read_bytes(), original_metadata)
+            self.assertFalse((data / '专业对照/专业对照_2027.json').exists())
+            manifest = json.loads((export_dir / 'manifest.json').read_text(encoding='utf-8'))
+            self.assertFalse(manifest['complete'])
+            self.assertTrue(any(item['path'].endswith('专业代号对照_2027.pdf')
+                                for item in manifest['files']))
 
     def test_412_missing_pdf_and_ocr_review_leave_active_metadata_unchanged(self):
         for failure in ('412', 'missing-pdf', 'ocr-review'):
