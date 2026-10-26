@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from urllib.parse import urljoin, urlparse
 from io import BytesIO
 
@@ -58,6 +58,15 @@ def load_year_links(path: Path) -> dict:
             url = item.get(key)
             if url and not _official_page(url) and not is_official_pdf_url(url):
                 raise SourceResolutionError(f'{role}.{key} must use an official HTTPS host')
+        if 'localPath' in item:
+            local_path = item['localPath']
+            if not isinstance(local_path, str) or not local_path.strip():
+                raise SourceResolutionError(f'{role}.localPath must be a safe relative PDF path')
+            normalized_path = Path(str(local_path).replace('\\', '/'))
+            if (PureWindowsPath(local_path).is_absolute() or normalized_path.is_absolute()
+                    or '..' in normalized_path.parts
+                    or normalized_path.suffix.lower() != '.pdf'):
+                raise SourceResolutionError(f'{role}.localPath must be a safe relative PDF path')
     return seed
 
 
@@ -127,12 +136,17 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
     rows = []
     declared = seed.get('sources', {})
     for parser, roles, output_path, pdf_paths in specs:
+        pdf_paths = list(pdf_paths)
+        for index, role in enumerate(roles):
+            local_path = declared.get(role, {}).get('localPath')
+            if local_path:
+                pdf_paths[index] = local_path
         available = any(role in declared for role in roles)
         available = available or (data_root / output_path).is_file()
         available = available or any((data_root / path).is_file() for path in pdf_paths)
         if not available:
             continue
-        row = {'outputPath': output_path, 'pdfPaths': list(pdf_paths), 'parser': parser, 'year': year}
+        row = {'outputPath': output_path, 'pdfPaths': pdf_paths, 'parser': parser, 'year': year}
         output = data_root / output_path
         if output.is_file():
             value = json.loads(output.read_text(encoding='utf-8'))
@@ -295,7 +309,9 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
         for url, _label in files:
             if not is_official_pdf_url(url):
                 raise SourceResolutionError(f'{year} {role}: attachment is not an official PDF')
-        attachments[role] = [{'url': url, 'title': title} for url, title in files]
+        local_path = seed.get('sources', {}).get(role, {}).get('localPath')
+        attachments[role] = [{'url': url, 'title': title, **({'localPath': local_path} if local_path else {})}
+                              for url, title in files]
     return {'year': year, 'pages': pages, 'attachments': attachments}
 
 
@@ -306,7 +322,7 @@ def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
         {'outputPath': f'省控线/省控线_{year}.json', 'pdfPaths': [f'省控线/原始PDF/省控线_{year}.pdf'], 'pdfUrls': [attachments['scorelines'][0]['url']], 'pageUrls': [resolved['pages']['scorelines']], 'parser': 'scorelines', 'year': year},
         {'outputPath': f'招生计划/招生计划_{year}.json', 'pdfPaths': [f'招生计划/原始PDF/招生计划_{year}.pdf'], 'pdfUrls': [attachments['plans'][0]['url']], 'pageUrls': [resolved['pages']['plans']], 'parser': 'plans', 'year': year},
         {'outputPath': f'招生高校及专业/招生高校及专业_{year}.json', 'pdfPaths': [f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf'], 'pdfUrls': [attachments['master'][0]['url']], 'pageUrls': [resolved['pages']['master']], 'parser': 'master', 'year': year},
-        {'outputPath': f'专业对照/专业对照_{year}.json', 'pdfPaths': [f'专业对照/原始PDF/专业代号对照_{year}.pdf', f'专业对照/原始PDF/专业对照一览_{year}.pdf'], 'pdfUrls': [attachments['mappingCodeTable'][0]['url'], attachments['mappingOverview'][0]['url']], 'pageUrls': [resolved['pages']['mappingCodeTable'], resolved['pages']['mappingOverview']], 'parser': 'mapping', 'year': year},
+        {'outputPath': f'专业对照/专业对照_{year}.json', 'pdfPaths': [attachments['mappingCodeTable'][0].get('localPath', f'专业对照/原始PDF/专业代号对照_{year}.pdf'), attachments['mappingOverview'][0].get('localPath', f'专业对照/原始PDF/专业对照一览_{year}.pdf')], 'pdfUrls': [attachments['mappingCodeTable'][0]['url'], attachments['mappingOverview'][0]['url']], 'pageUrls': [resolved['pages']['mappingCodeTable'], resolved['pages']['mappingOverview']], 'parser': 'mapping', 'year': year},
     ]
     crawl = {
         'dataset': 'score-segments', 'year': year,

@@ -13,6 +13,7 @@ from crawler.year_sources import (
     execution_rows_for_year,
     resolve_year_sources,
     seed_paths_in,
+    source_rows_for_seed,
     _attachment_identity_evidence,
     validate_attachment,
 )
@@ -125,6 +126,24 @@ class YearSourcesTests(unittest.TestCase):
         without_master = dict(self.seed, sources={k: v for k, v in self.seed['sources'].items() if k != 'master'})
         with self.assertRaisesRegex(SourceResolutionError, 'master'):
             resolve_year_sources(without_master, FakeSession())
+
+    def test_seed_local_path_can_keep_distinct_official_attachment_versions(self):
+        seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
+        seed['sources']['mappingOverview']['localPath'] = '专业对照/原始PDF/专业对照一览_附件2_2027.pdf'
+        resolved = resolve_year_sources(seed, FakeSession())
+        mapping_row = next(row for row in execution_rows_for_year(resolved)[0] if row['parser'] == 'mapping')
+        self.assertEqual(mapping_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
+        seed_row = next(row for row in source_rows_for_seed(seed, Path('data')) if row['parser'] == 'mapping')
+        self.assertEqual(seed_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
+
+    def test_seed_rejects_unsafe_source_local_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / '2027.json'
+            seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
+            seed['sources']['mappingOverview']['localPath'] = '../outside.pdf'
+            path.write_text(json.dumps(seed), encoding='utf-8')
+            with self.assertRaisesRegex(SourceResolutionError, 'localPath'):
+                load_year_links(path)
 
     def test_xcoss_host_is_allowed_but_arbitrary_pdf_host_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
