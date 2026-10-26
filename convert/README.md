@@ -29,7 +29,7 @@
 
 合并命令仅用于临时导出，不参与处理链；日常转换、复核、重试和 catalog 都使用同一套规范分片。
 
-批量转换和异常报告均枚举 `data/year-links/*.json`，再使用同一个年度派生视图；年份参数只筛选 seed，不扫描未声明年份。转换空清单也会生成完整的零计数结果，便于自动化流程稳定处理。
+批量转换、异常报告、爬取和 catalog 均从 `data/year-links/*.json` 构建同一年度计划，再按年份过滤，不扫描 seed 未声明的来源。分数段来源尚未发布或 seed 未声明时，不会创建抓取目标；本地已有表格 PDF/规范数据仍可供离线转换入口使用。转换空清单也会生成完整的零计数结果，便于自动化流程稳定处理。官方站 HTTP 请求通过同一个线程安全会话串行执行，下载默认 1 个线程；OCR 进程数仍独立配置。
 
 异常报告写入 `data/reports/异常数据_<年份>.json`，默认保留错误、可疑 OCR 行及上下文；只有 `issue_reports --full-report` 才附带每个待审专业的完整 OCR 行。人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖。确认修正后重新运行 `python -m convert.issue_reports`：它只复核待审专业，将 `status: confirmed` 的修正直接应用并覆盖对应规范分片；`official-empty` 不作为待审异常，也不会生成分数段。年度全量转换也会跳过标注为 `official-empty` 的 OCR 任务，并在进度里显示该状态，而不是显示原始识别的 `needs-review`。这样无需重跑全量 OCR 或再次运行 `normalize`。
 

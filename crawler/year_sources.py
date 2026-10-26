@@ -71,13 +71,18 @@ def load_year_links(path: Path) -> dict:
     return seed
 
 
-def crawl_target_for_seed(seed: dict) -> CrawlTarget:
-    """Derive the stable score-segment execution paths from one annual seed."""
+def score_segment_target_for_seed(seed: dict, *, resolved_page_url: str | None = None) -> CrawlTarget | None:
+    """Derive the optional score-segment target only when that role is declared."""
     year = int(seed['year'])
-    segment_page = seed.get('sources', {}).get('scoreSegments', {}).get('pageUrl')
+    score_segments = seed.get('sources', {}).get('scoreSegments')
+    if score_segments is None:
+        return None
+    segment_page = resolved_page_url or score_segments.get('pageUrl')
     discovery_url = segment_page or seed.get('searchPageUrl')
-    if not discovery_url or not _official_page(discovery_url):
-        raise SourceResolutionError(f'{year} scoreSegments: add an official pageUrl or searchPageUrl')
+    if not discovery_url:
+        return None
+    if not _official_page(discovery_url):
+        raise SourceResolutionError(f'{year} scoreSegments: pageUrl/searchPageUrl must use an official HTTPS host')
     return CrawlTarget(
         dataset='score-segments',
         year=year,
@@ -91,22 +96,10 @@ def crawl_target_for_seed(seed: dict) -> CrawlTarget:
     )
 
 
-def load_seed_targets(seed_paths, years: set[int] | None = None) -> list[CrawlTarget]:
-    targets = []
-    seen = set()
-    for path in seed_paths:
-        seed = load_year_links(Path(path))
-        year = int(seed['year'])
-        if year in seen:
-            raise SourceResolutionError(f'duplicate year-links seed: {year}')
-        seen.add(year)
-        if years is None or year in years:
-            targets.append(crawl_target_for_seed(seed))
-    return sorted(targets, key=lambda target: (target.dataset, target.year))
-
-
-def crawl_target_record(seed: dict) -> dict:
-    target = crawl_target_for_seed(seed)
+def crawl_target_record(seed: dict) -> dict | None:
+    target = score_segment_target_for_seed(seed)
+    if target is None:
+        return None
     return {
         'dataset': target.dataset,
         'year': target.year,
@@ -168,17 +161,26 @@ def seed_paths_in(data_root: Path) -> list[Path]:
     return [path for path in sorted((data_root / 'year-links').glob('*.json')) if path.stem.isdigit()]
 
 
-def build_data_plan(data_root: Path, years: set[int] | None = None) -> dict:
+def build_data_plan(data_root: Path, years: set[int] | None = None,
+                    seed_paths: list[Path] | None = None) -> dict:
     data_root = Path(data_root)
     seeds = []
-    for path in seed_paths_in(data_root):
+    seen_years = set()
+    for path in seed_paths if seed_paths is not None else seed_paths_in(data_root):
         seed = load_year_links(path)
         if path.stem != str(seed['year']):
             raise SourceResolutionError(f'year-links filename/year mismatch: {path.name}')
+        if seed['year'] in seen_years:
+            raise SourceResolutionError(f'duplicate year-links seed: {seed["year"]}')
+        seen_years.add(seed['year'])
         if years is None or int(seed['year']) in years:
             seeds.append(seed)
     rows = [row for seed in seeds for row in source_rows_for_seed(seed, data_root)]
-    targets = [crawl_target_record(seed) for seed in seeds]
+    targets = []
+    for seed in seeds:
+        target = crawl_target_record(seed)
+        if target is not None:
+            targets.append(target)
     return {
         'seeds': seeds,
         'sources': sorted(rows, key=lambda row: (int(row['year']), row['parser'])),
@@ -214,20 +216,25 @@ def _search_candidates(seed: dict, session) -> dict[str, set[str]]:
     return candidates
 
 
-def resolve_score_segment_target(seed: dict, session) -> CrawlTarget:
-    """Resolve the one score-segment announcement needed by the crawler."""
-    explicit = seed.get('sources', {}).get('scoreSegments', {}).get('pageUrl')
+def resolve_score_segment_target(seed: dict, session) -> CrawlTarget | None:
+    """Resolve a published score-segment announcement, or return None if absent."""
+    sources = seed.get('sources', {})
+    target = score_segment_target_for_seed(seed)
+    if target is None:
+        return None
+    explicit = sources['scoreSegments'].get('pageUrl')
     if explicit:
-        return crawl_target_for_seed(seed)
+        return target
+    if not seed.get('searchPageUrl'):
+        return None
     candidates = _search_candidates(seed, session).get('scoreSegments', set())
     candidates = {url for url in candidates if _official_page(url)}
+    if not candidates:
+        return None
     if len(candidates) != 1:
         raise SourceResolutionError(
             f"{seed['year']} scoreSegments: expected one official page, found {len(candidates)}; add an exact pageUrl")
-    resolved = dict(seed)
-    resolved['sources'] = dict(seed.get('sources', {}))
-    resolved['sources']['scoreSegments'] = {'pageUrl': next(iter(candidates))}
-    return crawl_target_for_seed(resolved)
+    return score_segment_target_for_seed(seed, resolved_page_url=next(iter(candidates)))
 
 
 def _page_attachments(page_url: str, session, year: int) -> list[tuple[str, str]]:
@@ -352,14 +359,9 @@ def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
             'parser': 'mapping', 'year': year,
         })
     crawl = None
-    if 'scoreSegments' in resolved['pages']:
-        crawl = {
-            'dataset': 'score-segments', 'year': year,
-            'sourcePageUrl': resolved['pages']['scoreSegments'],
-            'discoveryUrl': resolved['pages']['scoreSegments'],
-            'manifestPath': f'来源清单/来源清单_{year}.json',
-            'downloadDirectory': f'一分一段/原始PDF/{year}',
-            'normalizedPath': f'一分一段/一分一段_{year}.json',
-            'conversionReportPath': f'reports/转换报告_{year}.json', 'parser': 'score-segments',
-        }
+    segment_page = resolved['pages'].get('scoreSegments')
+    if segment_page:
+        crawl = crawl_target_record({
+            'year': year, 'sources': {'scoreSegments': {'pageUrl': segment_page}},
+        })
     return sources, crawl

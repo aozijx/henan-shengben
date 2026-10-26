@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from crawler.download import compact_manifest_urls, download_entry, download_manifest, download_targets
+from pipeline_config import DOWNLOAD_WORKERS
 
 
 class Response:
@@ -48,6 +49,9 @@ class CountingSession(Session):
 
 
 class DownloadTest(unittest.TestCase):
+    def test_official_download_default_is_serial(self):
+        self.assertEqual(DOWNLOAD_WORKERS, 1)
+
     def test_rejects_official_allowlist_escape_before_and_after_redirect(self):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / '01.pdf'
@@ -183,6 +187,23 @@ class DownloadTest(unittest.TestCase):
             self.assertEqual(['https://www.haeea.cn/2025.pdf'], session.urls)
             self.assertTrue((data_root / '一分一段/原始PDF/2025/01.pdf').is_file())
             self.assertFalse((data_root / '一分一段/原始PDF/2024/01.pdf').exists())
+
+    def test_download_targets_skips_year_without_score_segment_source_or_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            data_root = Path(directory)
+            seed = data_root / 'year-links' / '2027.json'
+            seed.parent.mkdir(parents=True)
+            seed.write_text(json.dumps({
+                'year': 2027,
+                'searchPageUrl': 'https://www.haeea.cn/search',
+                'sources': {'mappingCodeTable': {'pageUrl': 'https://www.haeea.cn/mapping'}},
+            }), encoding='utf-8')
+            session = RecordingSession()
+
+            counts = download_targets([seed], data_root, {2027}, session)
+
+            self.assertEqual({}, counts)
+            self.assertEqual([], session.urls)
 
 
 if __name__ == '__main__':

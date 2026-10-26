@@ -74,17 +74,19 @@ def main():
     parser.add_argument('--years', nargs='*', type=int)
     parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
-    from crawler.year_sources import load_year_links, resolve_score_segment_target, seed_paths_in
+    from crawler.year_sources import build_data_plan, resolve_score_segment_target, seed_paths_in
     seed_paths = args.seed or seed_paths_in(args.data_root)
-    seeds = [load_year_links(path) for path in seed_paths]
-    seeds = [seed for seed in seeds if not args.years or seed['year'] in set(args.years)]
-    if not seeds:
+    plan = build_data_plan(args.data_root, set(args.years) if args.years else None, seed_paths)
+    if not plan['seeds']:
         parser.error('no matching year-links seeds')
     session = build_session()
-    for seed in seeds:
+    for seed in plan['seeds']:
         year = seed['year']
         print(f'[{year}] 解析官方分数段来源页 …', flush=True)
         target = resolve_score_segment_target(seed, session)
+        if target is None:
+            print(f'[{year}] 没有可抓取的一分一段来源，跳过', flush=True)
+            continue
         print(f'[{year}] 来源页：{target.discovery_url}', flush=True)
         response = session.get(target.discovery_url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()

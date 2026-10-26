@@ -7,13 +7,13 @@ from crawler.year_sources import (
     SOURCE_ROLES,
     SourceResolutionError,
     build_data_plan,
-    crawl_target_for_seed,
-    load_seed_targets,
+    crawl_target_record,
     load_year_links,
     execution_rows_for_year,
     resolve_year_sources,
     seed_paths_in,
     source_rows_for_seed,
+    score_segment_target_for_seed,
     _attachment_identity_evidence,
     validate_attachment,
 )
@@ -60,8 +60,36 @@ class SearchSession(FakeSession):
 
 
 class YearSourcesTests(unittest.TestCase):
+    def test_mapping_only_seed_has_no_score_segment_execution_target(self):
+        seed = {
+            'year': 2027,
+            'searchPageUrl': 'https://www.haeea.cn/search',
+            'sources': {'mappingCodeTable': {'pageUrl': 'https://www.haeea.cn/mapping'}},
+        }
+        self.assertIsNone(score_segment_target_for_seed(seed))
+        self.assertIsNone(crawl_target_record(seed))
+
+        with tempfile.TemporaryDirectory() as directory:
+            data_root = Path(directory)
+            year_links = data_root / 'year-links'
+            year_links.mkdir()
+            (year_links / '2027.json').write_text(json.dumps(seed), encoding='utf-8')
+            plan = build_data_plan(data_root)
+            self.assertEqual(plan['targets'], [])
+
+    def test_shared_data_plan_rejects_duplicate_year_seeds(self):
+        seed = {'year': 2027, 'sources': {}}
+        with tempfile.TemporaryDirectory() as directory:
+            first = Path(directory) / '2027.json'
+            second = Path(directory) / 'other' / '2027.json'
+            second.parent.mkdir()
+            first.write_text(json.dumps(seed), encoding='utf-8')
+            second.write_text(json.dumps(seed), encoding='utf-8')
+            with self.assertRaisesRegex(SourceResolutionError, 'duplicate year-links seed'):
+                build_data_plan(Path(directory), seed_paths=[first, second])
+
     def test_seed_derives_every_year_specific_execution_path(self):
-        target = crawl_target_for_seed({
+        target = score_segment_target_for_seed({
             'year': 2027,
             'searchPageUrl': 'https://www.haeea.cn/search',
             'sources': {'scoreSegments': {'pageUrl': 'https://www.haeea.cn/segments'}},
@@ -70,6 +98,15 @@ class YearSourcesTests(unittest.TestCase):
         self.assertEqual(target.download_directory, '一分一段/原始PDF/2027')
         self.assertEqual(target.normalized_path, '一分一段/一分一段_2027.json')
         self.assertEqual(target.conversion_report_path, 'reports/转换报告_2027.json')
+
+    def test_resolved_ingest_target_matches_shared_seed_target_record(self):
+        page_url = 'https://www.haeea.cn/a/segments-2027.shtml'
+        _sources, resolved_target = execution_rows_for_year({
+            'year': 2027, 'pages': {'scoreSegments': page_url}, 'attachments': {},
+        })
+        self.assertEqual(resolved_target, crawl_target_record({
+            'year': 2027, 'sources': {'scoreSegments': {'pageUrl': page_url}},
+        }))
 
     def test_historical_year_links_are_the_authoritative_seed_inputs(self):
         data_root = Path(__file__).resolve().parents[2] / 'data' / 'year-links'

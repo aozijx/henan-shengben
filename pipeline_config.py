@@ -7,8 +7,9 @@ CLI 参数可临时覆盖对应值。
 
 # ---------- 爬虫（官方站抓取与 PDF 下载） ----------
 
-# 下载一分一段 PDF 的线程池大小；1 = 保持顺序下载
-DOWNLOAD_WORKERS = 6
+# 官方站下载共享一个 WAF 会话；默认串行，避免并发触发挑战或竞争会话状态。
+# 可由 download_manifest(..., workers=N) 在确认来源允许并发时临时覆盖。
+DOWNLOAD_WORKERS = 1
 
 # 官方站请求超时（秒）：爬虫与转换流程的联网步骤共用
 REQUEST_TIMEOUT = 60

@@ -1,6 +1,6 @@
 # 官方一分一段采集
 
-采集器读取 `data/year-links/YYYY.json` 中的年份和官方来源链接。`discover.py` 从官方公告页生成一分一段 PDF 清单；`download.py` 读取这份清单并下载 PDF。清单和 PDF 路径由年份自动派生，下一步直接使用上一步的输出，无需手填每个专业的文件名。依赖见 `crawler/requirements.txt`。
+采集器读取 `data/year-links/YYYY.json` 中的年份和官方来源链接。`discover.py` 从官方公告页生成一分一段 PDF 清单；`download.py` 读取这份清单并下载 PDF。只有 seed 在 `sources` 中声明了 `scoreSegments`，才会处理该年度；未声明就直接跳过，不要求提前填写一分一段来源。已声明但未填写 `pageUrl` 时，才会从搜索页寻找唯一公告；下载时若清单尚不存在，也会跳过该年。清单和 PDF 路径由年份自动派生，下一步直接使用上一步的输出，无需手填每个专业的文件名。依赖见 `crawler/requirements.txt`。
 
 ## 参数
 
@@ -20,7 +20,17 @@
 
 ## 公告页访问受限
 
-官方公告页可能返回 400/403/412。默认开启自动引导：会话遇到挑战时会使用 DrissionPage 启动本机 Chrome 或 Edge，通过后把 Cookie 和浏览器标识写入仓库根目录的 `.waf-cookie`，然后重试原请求。浏览器必须加载有效正文后才会保存 Cookie，避免把空白错误页误判为挑战通过。安装 `crawler/requirements.txt` 中的依赖；本机交互模式下挑战期间保持弹出的浏览器窗口打开。GitHub Actions 使用 Ubuntu 24.04 预装的 Microsoft Edge，通过 Xvfb 虚拟显示器以有头模式运行；Linux 启动会加入 Chromium 所需的 `--no-sandbox` 参数。是否能通过官方站的 WAF 挑战仍以实际工作流运行为准。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
+官方公告页可能返回 400/403/412。只有遇到这些状态且 `WAF_AUTO_BOOTSTRAP` 开启时，才会启动浏览器；普通成功请求不会打开浏览器。DrissionPage 会驱动 Chromium 内核浏览器。本机 Windows 默认优先使用已安装的 Microsoft Edge；找不到 Edge 时才使用 DrissionPage 自行选择的 Chromium（可能是 Chrome）。也可以用 `WAF_BROWSER_PATH` 明确指定浏览器程序路径。GitHub Actions 在 Ubuntu 24.04 上把此变量设为 `/usr/bin/microsoft-edge`，并通过 Xvfb 虚拟显示器以有头模式运行；Linux 启动会加入 `--no-sandbox`。共享 WAF 会话会串行处理 HTTP 请求和挑战重试；`pipeline_config.py` 中的 `DOWNLOAD_WORKERS` 默认是 1，避免多个下载线程同时争用 Cookie 状态。
+
+本机 PowerShell 可显式指定 Edge 并运行单年导入：
+
+```powershell
+$env:WAF_BROWSER_PATH = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+$env:WAF_HEADLESS = 'false'
+python -m convert.ingest_year --seed data/year-links/2027.json --check
+```
+
+如果 Edge 安装在 64 位程序目录，把路径改为 `C:\Program Files\Microsoft\Edge\Application\msedge.exe`。交互模式下挑战期间保持浏览器窗口打开。自动引导要求浏览器页面长度超过 128 字符且不再含 `$_ts` 挑战标记；捕获到的 Cookie 先用于原请求重试，只有重试不再返回 400/403/412 才会保存到 `.waf-cookie`。日志中的“HTTP 重试通过，Cookie 已保存”表示请求已接受，日志不会输出 Cookie 或 User-Agent 值。程序启动的是独立浏览器会话，不能直接沿用已打开 Edge 窗口中的登录态或 Cookie。如果重试仍返回 400/412，可从已能访问的 Edge 手动复制匹配的 Cookie 和 User-Agent，见下文。检查 `[WAF] 浏览器：...` 日志可确认实际启动的程序。可在 `pipeline_config.py` 中将 `WAF_AUTO_BOOTSTRAP` 设为 `False` 关闭自动引导。
 
 需要手动提供会话时，先在浏览器确认官方公告页可正常打开，再从该请求复制完整的 Cookie 请求头到 `.waf-cookie`。建议保存 JSON 对象，包含 `userAgent` 和 `cookie` 两个字段，以保持 Cookie 与浏览器标识一致。该文件已被 Git 忽略。会话失效后重新获取即可。
 

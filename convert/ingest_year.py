@@ -79,8 +79,7 @@ def publish_staged_files(staging_root: Path, data_root: Path) -> None:
 def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = False) -> dict:
     year = seed['year']
     prospective_rows = source_rows_for_seed(seed, root)
-    prospective_target = (crawl_target_record(seed)
-                          if seed.get('sources', {}).get('scoreSegments') else None)
+    prospective_target = crawl_target_record(seed)
     collision_paths = [row['outputPath'] for row in prospective_rows]
     if prospective_target:
         collision_paths.extend(prospective_target[key] for key in (

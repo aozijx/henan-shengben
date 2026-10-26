@@ -13,7 +13,7 @@ if __package__ in {None, ''}:
 from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT
 from crawler.source_rules import is_official_pdf_url
 from crawler.waf import build_session
-from crawler.year_sources import load_seed_targets, seed_paths_in
+from crawler.year_sources import build_data_plan, seed_paths_in
 
 
 def _sha256(content):
@@ -121,8 +121,15 @@ def download_targets(seed_paths, data_root: Path, years: set[int] | None, sessio
                      major_codes: set[str] | None = None) -> dict[int, dict[str, int]]:
     counts_by_year = {}
     matched_codes = set()
-    for target in load_seed_targets(seed_paths, years):
-        manifest_path = data_root / target.manifest_path
+    targets = build_data_plan(data_root, years, seed_paths)['targets']
+    if not targets:
+        print('[下载] 所选年份没有声明一分一段来源，跳过', flush=True)
+    for target in targets:
+        year = int(target['year'])
+        manifest_path = data_root / target['manifestPath']
+        if not manifest_path.is_file():
+            print(f'[{year}] 一分一段清单不存在，跳过下载：{manifest_path}', flush=True)
+            continue
         target_codes = major_codes
         if major_codes:
             document = json.loads(manifest_path.read_text(encoding='utf-8'))
@@ -131,7 +138,7 @@ def download_targets(seed_paths, data_root: Path, years: set[int] | None, sessio
             matched_codes.update(target_codes)
             if not target_codes:
                 continue
-        counts_by_year[target.year] = download_manifest(
+        counts_by_year[year] = download_manifest(
             manifest_path, data_root, session, major_codes=target_codes)
     if major_codes and matched_codes != major_codes:
         missing = ', '.join(sorted(major_codes - matched_codes))
@@ -156,9 +163,10 @@ def main():
     if args.compact_url_fields:
         if args.major_codes:
             parser.error('--major cannot be used with --compact-url-fields')
-        for target in load_seed_targets(seed_paths, set(args.years) if args.years else None):
-            path = args.data_root / target.manifest_path
-            print(f'{target.year}: 删除 {compact_manifest_urls(path)} 个重复 finalUrl — {path}')
+        plan = build_data_plan(args.data_root, set(args.years) if args.years else None, seed_paths)
+        for target in plan['targets']:
+            path = args.data_root / target['manifestPath']
+            print(f'{target["year"]}: 删除 {compact_manifest_urls(path)} 个重复 finalUrl — {path}')
         return
     session = build_session()
     for year, counts in download_targets(seed_paths, args.data_root,
