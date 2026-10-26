@@ -55,14 +55,11 @@ jobs:
         shell: bash
         env:
           SEED_PATH: ${{ inputs.seed_path }}
-          EVENT_BEFORE: ${{ github.event.before }}
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
             git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.sha }}" -- 'data/year-links/*.json' > changed-seeds.txt
           elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
             printf '%s\n' "$SEED_PATH" > changed-seeds.txt
-          else
-            git diff --name-only "$EVENT_BEFORE" "$GITHUB_SHA" -- 'data/year-links/*.json' > changed-seeds.txt
           fi
           if [[ ! -s changed-seeds.txt ]]; then
             echo "has_seeds=false" >> "$GITHUB_OUTPUT"
@@ -126,9 +123,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yearly-ingest-review
-          path: |
-            yearly-ingest-reports/
-            yearly-ingest-output/
+          path: yearly-ingest-reports/
           if-no-files-found: warn
           retention-days: 14
       - name: Run application regression suite

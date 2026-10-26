@@ -25,6 +25,20 @@ class YearlyWorkflowContractTests(unittest.TestCase):
         self.assertRegex(self.workflow, r"(?ms)- name: Upload review reports\n\s+if: always\(\).*?actions/upload-artifact@v4")
         self.assertIn('yearly-ingest-reports/', self.workflow)
 
+    def test_seed_discovery_does_not_keep_the_unreachable_push_branch(self):
+        match = re.search(r'(?ms)- name: Discover changed yearly seed files(?P<body>.*?)(?=^      - name:)',
+                          self.workflow)
+        self.assertIsNotNone(match)
+        self.assertNotIn('EVENT_BEFORE', match.group('body'))
+        self.assertNotIn('github.event.before', match.group('body'))
+
+    def test_review_report_upload_does_not_duplicate_checked_data_artifact(self):
+        match = re.search(r'(?ms)- name: Upload review reports(?P<body>.*?)(?=^      - name:)',
+                          self.workflow)
+        self.assertIsNotNone(match)
+        self.assertIn('yearly-ingest-reports/', match.group('body'))
+        self.assertNotIn('yearly-ingest-output/', match.group('body'))
+
     def test_only_trusted_publisher_jobs_can_write_to_main(self):
         validate, publishers = self.workflow.split('  publish:', 1)
         self.assertIn('contents: read', validate)
