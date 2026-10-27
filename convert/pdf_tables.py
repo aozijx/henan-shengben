@@ -8,11 +8,9 @@ from typing import Iterable
 
 import pdfplumber
 
-from pipeline_config import ocr_engine_params
 from PIL import Image, ImageOps
 
-
-_OCR_ENGINE: object | None = None
+from .ocr_engine import get_ocr_engine
 
 
 @dataclass(frozen=True)
@@ -90,19 +88,12 @@ def _ocr_rows(image: Image.Image, page_number: int, engine: object, thorough: bo
 def extract_rows(pdf_path: Path, thorough: bool = False) -> list[RawPdfRow]:
     """Extract table-shaped rows from text PDFs or scanned official PDFs."""
     rows: list[RawPdfRow] = []
-    global _OCR_ENGINE
     with pdfplumber.open(pdf_path) as document:
         for page_number, page in enumerate(document.pages, start=1):
             page_rows = _text_rows(page, page_number)
             if page_rows:
                 rows.extend(page_rows)
                 continue
-            if _OCR_ENGINE is None:
-                try:
-                    from rapidocr import RapidOCR
-                except ImportError as exc:
-                    raise RuntimeError("扫描 PDF 需要 rapidocr 和 onnxruntime；请安装 convert/requirements.txt") from exc
-                _OCR_ENGINE = RapidOCR(params=ocr_engine_params())
             for image in _embedded_images(page):
-                rows.extend(_ocr_rows(image, page_number, _OCR_ENGINE, thorough=thorough))
+                rows.extend(_ocr_rows(image, page_number, get_ocr_engine(), thorough=thorough))
     return rows

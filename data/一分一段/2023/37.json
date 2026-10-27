@@ -1,0 +1,116 @@
+{
+  "majorCode": "37",
+  "majorName": "无机非金属材料工程",
+  "controlScore": 162,
+  "sourceId": "score-segments:2023:37:30de87a6abf7",
+  "sourcePdf": "一分一段/原始PDF/2023/37_无机非金属材料工程.pdf",
+  "sourceSha256": "30de87a6abf7970a92de6fedea056967a54f569fe3c7692e8a2ab9fb7c27981e",
+  "segments": [
+    {
+      "score": 256,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 31
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

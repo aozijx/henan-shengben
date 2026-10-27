@@ -1,0 +1,120 @@
+{
+  "majorCode": "P6",
+  "majorName": "地理信息科学",
+  "controlScore": 83,
+  "sourceId": "score-segments:2023:P6:e07b045c8593",
+  "sourcePdf": "一分一段/原始PDF/2023/P6_地理信息科学.pdf",
+  "sourceSha256": "e07b045c8593909a695ba8bef90c21493975b66b1352a75b10d3cd9a6fce8739",
+  "segments": [
+    {
+      "score": 195,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 32
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

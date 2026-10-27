@@ -1,0 +1,48 @@
+{
+  "majorCode": "N6",
+  "majorName": "商务经济学",
+  "controlScore": 157,
+  "sourceId": "score-segments:2023:N6:190600d75418",
+  "sourcePdf": "一分一段/原始PDF/2023/N6_商务经济学.pdf",
+  "sourceSha256": "190600d754180473b7ddaf4c040da0a92a2ea1e76c45169f8eefaa8102b25f1d",
+  "segments": [
+    {
+      "score": 226,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 9
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

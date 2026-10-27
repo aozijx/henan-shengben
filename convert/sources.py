@@ -1,8 +1,8 @@
 """官方数据表抽取：省控线 / 代号对照表 / 专业对照表 / 招生计划 / 招生总表。
 
-这些表与一分一段分数段位不同：是 pdfplumber.extract_tables() 可直接解析的
-规则表格，不需要 OCR。分数段位由 convert.pdf_tables + convert.score_segments
-负责，本模块只处理这五张表。
+这些表与一分一段分数段位不同：优先由 pdfplumber.extract_tables() 读取规则表格；
+遇到扫描件时按页面栅格线和 OCR 文字重建单元格。一分一段分数段位由
+convert.pdf_tables + convert.score_segments 负责。
 
 所有函数接受 Path 对象，不依赖全局 DATA_ROOT，方便测试时传临时目录。
 """
@@ -12,7 +12,11 @@ import re
 from pathlib import Path
 from typing import Any
 
-import pdfplumber
+from convert.scanned_tables import tables_of
+from convert.source_references import (
+    canonical_major_code, canonical_plan_major_name, major_codes, major_names,
+    major_rows, school_code, school_names,
+)
 
 
 # ---------- 通用工具 ----------
@@ -64,37 +68,34 @@ def code_ref(code_table: dict[str, dict[str, str]], name: str) -> dict[str, str]
 # ---------- PDF 行迭代 ----------
 
 def rows_of(pdf_path: Path) -> list[list[str | None]]:
-    """跨页拉平所有表格行。"""
-    rows: list[list[str | None]] = []
-    with pdfplumber.open(pdf_path) as document:
-        for page in document.pages:
-            for table in page.extract_tables() or []:
-                rows.extend(table)
-    return rows
-
-
-def tables_of(pdf_path: Path) -> list[list[list[str | None]]]:
-    """跨页拉平所有表格（保留 table 粒度，供 extract_plans 用）。"""
-    tables: list[list[list[str | None]]] = []
-    with pdfplumber.open(pdf_path) as document:
-        for page in document.pages:
-            for table in page.extract_tables() or []:
-                tables.append(table)
-    return tables
+    """Flatten text or scanned tables across all pages."""
+    return [row for table in tables_of(pdf_path) for row in table]
 
 
 # ---------- 省控线 ----------
 
-def extract_scorelines(pdf_path: Path) -> list[dict[str, Any]]:
-    out: list[dict[str, Any]] = []
-    for row in rows_of(pdf_path):
-        if len(row) < 3 or is_header(row) or is_title(row):
+def _scoreline_rows_from_table(row: list[str | None], references: dict[str, set[str]]) -> list[dict[str, Any]]:
+    """Parse one scoreline row from a single or side-by-side table layout."""
+    offsets = (0, 4) if len(row) >= 7 else (0,)
+    parsed = []
+    for offset in offsets:
+        cells = row[offset:offset + 3]
+        if len(cells) < 3 or is_header(cells) or is_title(cells):
             continue
-        code, title, score = squash(row[0]), row[1], to_int(row[2])
-        if not re.fullmatch(r"[0-9A-Z]{1,2}", code) or title is None or score is None:
+        code, title, score = squash(cells[0]), squash(cells[1]), to_int(cells[2])
+        if not title or score is None:
             continue
-        out.append({"专业代号": code, "专业名称": squash(title), "分数线": score})
-    return out
+        code = canonical_major_code(code, title, references)
+        if re.fullmatch(r"[0-9A-Z]{1,2}", code):
+            parsed.append({"专业代号": code, "专业名称": title, "分数线": score})
+    return parsed
+
+
+def extract_scorelines(pdf_path: Path, reference_rows: list[dict[str, Any]] | None = None
+                       ) -> list[dict[str, Any]]:
+    rows = rows_of(pdf_path)
+    references = major_codes(reference_rows)
+    return [parsed for row in rows for parsed in _scoreline_rows_from_table(row, references)]
 
 
 # ---------- 代号对照表 ----------
@@ -246,35 +247,37 @@ def _clean_major_name(raw: str | None) -> str:
 def extract_plans(
     pdf_path: Path,
     year: int,
-    twelve_cols_default: bool = True,
+    reference_rows: list[dict[str, Any]] | None = None,
+    reference_school_names: dict[str, str] | None = None,
 ) -> list[dict[str, Any]]:
-    """修复：跨页遍历 tables_of，不再只取第一页。"""
+    """Extract every page, interpreting optional columns from actual table width."""
     out: list[dict[str, Any]] = []
+    references = major_codes(reference_rows)
+    reference_major_names = major_names(reference_rows)
+    reference_school_names = reference_school_names or {}
     for table in tables_of(pdf_path):
-        header = next((r for r in table if is_header(r)), None)
-        twelve = (
-            header is not None and "其他说明" in squash("".join(c or "" for c in header))
-        ) or twelve_cols_default
-        if header is not None and "其他说明" in squash("".join(c or "" for c in header)):
-            twelve = True
         for row in table:
             if len(row) < 11 or is_header(row):
                 continue
             code = squash(row[0])
-            school_code = squash(row[6])
+            school_code_value = school_code(row[6])
             plan = to_int(row[2])
             if (
                 not re.fullmatch(r"[0-9A-Z]{1,2}", code or "")
-                or not school_code
+                or not school_code_value
                 or plan is None
             ):
                 continue
-            if twelve:
+            if len(row) >= 12:
                 addr, extra, phone, url = row[8], row[9], row[10], row[11]
             else:
                 addr, extra, phone, url = row[8], "", row[9], row[10]
             school, nature, poor = _clean_school_name(row[7])
-            major_raw = squash(row[1])
+            if not school or re.search(r"[A-Za-z]{2,}", str(row[7] or "")):
+                school = reference_school_names.get(school_code_value, school)
+            major_raw_ocr = squash(row[1])
+            code = canonical_major_code(code, major_raw_ocr, references)
+            major_raw = canonical_plan_major_name(major_raw_ocr, code, reference_major_names)
             if "建档立卡" in major_raw:
                 poor = "是"
             category = "建档立卡专项" if poor == "是" else "普通专升本"
@@ -286,7 +289,7 @@ def extract_plans(
                 "学制": to_int(row[3]) or 0,
                 "学费标准": to_int(row[4]) or 0,
                 "最低住宿费": to_int(row[5]) or 0,
-                "院校代号": school_code,
+                "院校代号": school_code_value,
                 "院校名称": school,
                 "办学性质": nature,
                 "招生类别": category,
@@ -331,15 +334,18 @@ def extract_entry(entry: dict[str, Any], data_root: Path) -> list[dict[str, Any]
     """统一的 parser 分派函数，extract_cli / convert_all.py 都从这里走。"""
     parser = entry["parser"]
     pdfs = [data_root / p for p in entry["pdfPaths"]]
+    manifest_rows = major_rows(data_root, int(entry["year"]))
     if parser == "scorelines":
-        return extract_scorelines(pdfs[0])
+        return extract_scorelines(pdfs[0], manifest_rows)
     if parser == "mapping":
         return extract_mapping(pdfs[0], pdfs[1])
     if parser == "plans":
+        reference_school_names = school_names(data_root, int(entry["year"]), _clean_school_name)
         return extract_plans(
             pdfs[0],
             int(entry["year"]),
-            twelve_cols_default=int(entry["year"]) != 2024,
+            reference_rows=manifest_rows,
+            reference_school_names=reference_school_names,
         )
     if parser == "master":
         return extract_master_table(pdfs[0])

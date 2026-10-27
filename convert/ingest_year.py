@@ -12,6 +12,7 @@ from types import SimpleNamespace
 from convert.common import REPO_ROOT, read_json
 from convert.convert_all import convert_target
 from convert.ingest_artifact import export_staged_changes
+from convert.normalize import normalization_input_status
 from convert.extract_cli import extract_year_sources
 from convert.refresh_catalog import refresh_catalog
 from pipeline_config import REQUEST_TIMEOUT
@@ -140,6 +141,7 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
     entries = []
     segment_provenance = []
     normalization_report = None
+    normalization_deferred = []
     if crawl_target:
         page = session.get(crawl_target['discoveryUrl'], timeout=REQUEST_TIMEOUT)
         page.raise_for_status()
@@ -158,13 +160,18 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
             raise ValueError(f'{year}: score-segment downloads incomplete: {counts}')
         segment_provenance = read_json(manifest_path)['entries']
         validate_score_segment_pdfs(segment_provenance, root, year)
-        print(f'[{year}] 抽取并归一化一分一段分数段 …', flush=True)
-        segment_result = convert_target(crawl_target, root, plan=plan, full_report=full_report)
-        if segment_result['summary']['needsReview']:
-            raise ValueError(f'{year}: OCR requires human review before publication')
-        normalization_report = read_json(root / crawl_target['conversionReportPath'])
-        if normalization_report['blockingCount']:
-            raise ValueError(f'{year}: normalization has unresolved blockers')
+        _input_paths, normalization_deferred = normalization_input_status(crawl_target, plan, root)
+        if normalization_deferred:
+            print(f'[{year}] 已归档分数段 PDF，暂不归一化；缺少必要输入：'
+                  f'{"；".join(normalization_deferred)}', flush=True)
+        else:
+            print(f'[{year}] 抽取并归一化一分一段分数段 …', flush=True)
+            segment_result = convert_target(crawl_target, root, plan=plan, full_report=full_report)
+            if segment_result['summary']['needsReview']:
+                raise ValueError(f'{year}: OCR requires human review before publication')
+            normalization_report = read_json(root / crawl_target['conversionReportPath'])
+            if normalization_report['blockingCount']:
+                raise ValueError(f'{year}: normalization has unresolved blockers')
 
     missing_sources = [role for role in SOURCE_ROLES if role not in seed.get('sources', {})]
     complete = not missing_sources and crawl_target is not None
@@ -172,6 +179,7 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
             'sources': len(source_rows), 'sourceProvenance': provenance,
             'scoreSegmentPdfs': len(entries), 'scoreSegmentProvenance': segment_provenance,
             'publishedMajors': normalization_report['publishedMajorCount'] if normalization_report else 0,
+            **({'normalizationDeferred': normalization_deferred} if normalization_deferred else {}),
             **({'conversionReport': normalization_report} if normalization_report else {})}
 
 
@@ -240,6 +248,8 @@ def _summary_report(report: dict, *, check: bool) -> dict:
     }
     if check and 'metadataDiff' in report:
         summary['metadataDiff'] = report['metadataDiff']
+    if report.get('normalizationDeferred'):
+        summary['normalizationDeferred'] = report['normalizationDeferred']
     return summary
 
 

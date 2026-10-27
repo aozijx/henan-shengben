@@ -1,0 +1,212 @@
+{
+  "majorCode": "J9",
+  "majorName": "轨道交通信号与控制",
+  "controlScore": 99,
+  "sourceId": "score-segments:2023:J9:e358d33e1277",
+  "sourcePdf": "一分一段/原始PDF/2023/J9_轨道交通信号与控制.pdf",
+  "sourceSha256": "e358d33e1277a22fc8fa902d50af0c8c30239b920e7fe9725685d022984a703d",
+  "segments": [
+    {
+      "score": 210,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 50
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 54
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 69
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

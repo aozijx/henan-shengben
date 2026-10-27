@@ -1,0 +1,228 @@
+{
+  "majorCode": "E3",
+  "majorName": "美术学",
+  "controlScore": 191,
+  "sourceId": "score-segments:2023:E3:496bcd625b07",
+  "sourcePdf": "一分一段/原始PDF/2023/E3_美术学.pdf",
+  "sourceSha256": "496bcd625b0742ffe2f77059bf349d13a266e41990eaf5158359cc78d9af585e",
+  "segments": [
+    {
+      "score": 260,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 251,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 75
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 103
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 141
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 150
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 159
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 165
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 178
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 184
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 193
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 200
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 214
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 223
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 233
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 238
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 246
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 255
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 260
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 271
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 283
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 291
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 301
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 310
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 317
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

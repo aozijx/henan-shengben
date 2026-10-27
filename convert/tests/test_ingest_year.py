@@ -171,11 +171,13 @@ class IngestYearTests(unittest.TestCase):
                 'sourceUnavailable': [], 'blockers': [], 'validationErrors': [],
                 'resolutions': [{'majorCode': '51', 'reason': 'highest-priority'}]},
             'metadataDiff': {'addedYear': YEAR},
+            'normalizationDeferred': ['plans: 年度计划未声明该来源'],
         }
         compact = _summary_report(report, check=True)
         self.assertNotIn('sourceProvenance', compact)
         self.assertNotIn('resolutions', compact['conversionReport'])
         self.assertEqual([YEAR], compact['supportedYears'])
+        self.assertEqual(['plans: 年度计划未声明该来源'], compact['normalizationDeferred'])
 
     def test_publish_preflights_every_collision_before_copying_new_files(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -313,6 +315,29 @@ class IngestYearTests(unittest.TestCase):
             self.assertFalse(manifest['complete'])
             self.assertTrue(any(item['path'].endswith('专业代号对照_2027.pdf')
                                 for item in manifest['files']))
+
+    def test_score_segments_without_scorelines_or_plans_are_archived_without_normalization(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            data, metadata, original_metadata = seed_data(root)
+            seed = root / 'year-links' / '2027.json'
+            seed.parent.mkdir()
+            seed.write_text(json.dumps({'year': YEAR, 'sources': {
+                'scoreSegments': {'pageUrl': PAGES['scoreSegments']},
+            }}, ensure_ascii=False), encoding='utf-8')
+            template = REPO_ROOT / 'metadata/school-data.template.json'
+
+            with patch('convert.ingest_year.validate_attachment'), \
+                    patch('convert.ingest_year.convert_target') as convert:
+                report = ingest_year(seed, data, template, metadata, FakeSession(), check=True)
+
+            convert.assert_not_called()
+            self.assertFalse(report['complete'])
+            self.assertTrue(any(item.startswith('scorelines:')
+                                for item in report['normalizationDeferred']))
+            self.assertTrue(any(item.startswith('plans:')
+                                for item in report['normalizationDeferred']))
+            self.assertEqual(original_metadata, metadata.read_bytes())
 
     def test_412_missing_pdf_and_ocr_review_leave_active_metadata_unchanged(self):
         for failure in ('412', 'missing-pdf', 'ocr-review'):

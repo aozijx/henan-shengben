@@ -1,4 +1,5 @@
 import unittest
+import tempfile
 from pathlib import Path
 
 from convert.common import load_data_plan, read_json
@@ -31,7 +32,7 @@ class NormalizeTest(unittest.TestCase):
     def test_normalized_majors_are_sorted_and_traceable(self):
         data_root = REPO_ROOT / "data"
         plan = self._published_plan(data_root)
-        target = plan["targets"][2]
+        target = next(item for item in plan["targets"] if item["year"] == 2026)
         current = merge_year(data_root / target['normalizedPath'], data_root)
         document, _ = normalize_target(target, plan, data_root, current)
         codes = [item["majorCode"] for item in document["majors"] if item.get('status') == 'ok']
@@ -49,6 +50,25 @@ class NormalizeTest(unittest.TestCase):
         self.assertEqual([], report['resolutions'])
         self.assertTrue(full_report['resolutions'])
         self.assertEqual(full_report['blockers'], report['blockers'])
+
+    def test_missing_scoreline_or_plan_outputs_fail_with_actionable_input_paths(self):
+        with tempfile.TemporaryDirectory() as directory:
+            data_root = Path(directory)
+            target = {
+                'year': 2023,
+                'dataset': 'score-segments',
+                'manifestPath': '来源清单/来源清单_2023.json',
+            }
+            plan = {'sources': [
+                {'year': 2023, 'parser': 'scorelines', 'outputPath': '省控线/省控线_2023.json'},
+                {'year': 2023, 'parser': 'plans', 'outputPath': '招生计划/招生计划_2023.json'},
+            ]}
+            source_document = {'year': 2023, 'dataset': 'score-segments', 'majors': []}
+
+            with self.assertRaisesRegex(ValueError, '省控线/省控线_2023.json') as error:
+                normalize_target(target, plan, data_root, source_document)
+
+            self.assertIn('招生计划/招生计划_2023.json', str(error.exception))
 
 
 if __name__ == "__main__":

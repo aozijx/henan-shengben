@@ -1,0 +1,240 @@
+{
+  "majorCode": "67",
+  "majorName": "环境工程",
+  "controlScore": 156,
+  "sourceId": "score-segments:2023:67:f7b61d429930",
+  "sourcePdf": "一分一段/原始PDF/2023/67_环境工程.pdf",
+  "sourceSha256": "f7b61d429930056b99500aa37e4b8064ac8e78ec4651811a042e448a269ba5af",
+  "segments": [
+    {
+      "score": 251,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 86
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 100
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 106
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 127
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 135
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 146
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 152
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 155
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 160
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 164
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 171
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 179
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 184
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 189
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 200
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 204
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 216
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 225
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 393
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 395
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 402
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

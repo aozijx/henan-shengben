@@ -1,0 +1,104 @@
+{
+  "majorCode": "F3",
+  "majorName": "酿酒工程",
+  "controlScore": 90,
+  "sourceId": "score-segments:2023:F3:d87f5c01c565",
+  "sourcePdf": "一分一段/原始PDF/2023/F3_酿酒工程.pdf",
+  "sourceSha256": "d87f5c01c5658ac29d562ab23d8c9a83bba7be399284a7bb9230fef9f68a4a08",
+  "segments": [
+    {
+      "score": 199,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 25
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

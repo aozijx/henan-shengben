@@ -8,7 +8,7 @@ from typing import Any
 
 from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json
 from .manual_corrections import apply_manual_correction
-from .normalize import save_normalized_target
+from .normalize import normalization_input_status, save_normalized_target
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
 from .segment_store import iter_year
@@ -161,7 +161,17 @@ def main() -> int:
     ]
     if not targets:
         parser.error("year-links 中没有匹配的数据集/年份")
+    ready_targets = []
     for target in targets:
+        _paths, missing_inputs = normalization_input_status(target, plan, data_root)
+        if missing_inputs:
+            print(f"[{target['year']}] 跳过归一化，缺少必要输入：{'；'.join(missing_inputs)}", flush=True)
+            continue
+        ready_targets.append(target)
+    if not ready_targets:
+        print('[转换] 没有具备省控线和招生计划数据的年度，未启动 OCR。', flush=True)
+        return 1
+    for target in ready_targets:
         convert_target(target, data_root, set(args.major_codes or []), args.workers, plan=plan,
                        retry_review=args.retry_review, verbose=args.verbose)
     return 0

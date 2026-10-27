@@ -1,0 +1,96 @@
+{
+  "majorCode": "P8",
+  "majorName": "工业设计",
+  "controlScore": 80,
+  "sourceId": "score-segments:2023:P8:ac164a2d7bbf",
+  "sourcePdf": "一分一段/原始PDF/2023/P8_工业设计.pdf",
+  "sourceSha256": "ac164a2d7bbf08a2accb23e74977d505f8d67ec2f86219175b712d6919dfb9cd",
+  "segments": [
+    {
+      "score": 189,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 104,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 99,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 23
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -41,7 +41,7 @@ OCR_GPU_DEVICE_ID = 0
 
 
 def ocr_engine_params() -> dict:
-    """组装 RapidOCR 引擎参数，pdf_tables 不再自行维护配置。"""
+    """组装分数段和扫描表格共用的 RapidOCR 引擎参数。"""
     params = {
         'Global.log_level': OCR_LOG_LEVEL,
         'EngineConfig.onnxruntime.intra_op_num_threads': OCR_INTRA_OP_THREADS,

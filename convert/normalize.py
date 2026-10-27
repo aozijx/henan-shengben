@@ -9,17 +9,45 @@ from .validate import validate_score_segment_year
 from .segment_store import write_year
 
 
+def normalization_input_status(target: dict[str, Any], plan: dict[str, Any],
+                               data_root: Path) -> tuple[dict[str, Path], list[str]]:
+    """Return required table paths and gaps before OCR output is normalized."""
+    year = int(target['year'])
+    paths = {}
+    missing = []
+    manifest_path = Path(data_root) / target['manifestPath']
+    if not manifest_path.is_file():
+        missing.append(target['manifestPath'])
+    for parser in ('scorelines', 'plans'):
+        matches = [item for item in plan['sources']
+                   if item['parser'] == parser and int(item['year']) == year]
+        if not matches:
+            missing.append(f'{parser}: 年度计划未声明该来源')
+            continue
+        if len(matches) != 1:
+            missing.append(f'{parser}: 年度计划中应有一条来源记录，实际 {len(matches)} 条')
+            continue
+        relative_path = matches[0]['outputPath']
+        path = Path(data_root) / relative_path
+        if not path.is_file():
+            missing.append(relative_path)
+        else:
+            paths[parser] = path
+    return paths, missing
+
+
 def normalize_target(target: dict[str, Any], plan: dict[str, Any], data_root: Path,
                      source_document: dict[str, Any], *,
                      full_report: bool = False) -> tuple[dict[str, Any], dict[str, Any]]:
     year = int(target["year"])
     if source_document.get('year') != year or source_document.get('dataset', 'score-segments') != 'score-segments':
         raise ValueError(f'{year}: 一分一段年份或数据集不匹配')
-    score_path = next(item["outputPath"] for item in plan["sources"] if item["parser"] == "scorelines" and int(item["year"]) == year)
-    score_rows = read_json(data_root / score_path)
+    input_paths, missing_inputs = normalization_input_status(target, plan, data_root)
+    if missing_inputs:
+        raise ValueError(f'{year}: 归一化缺少必要输入：' + '；'.join(missing_inputs))
+    score_rows = read_json(input_paths['scorelines'])
     scores = {item["专业代号"]: item for item in score_rows}
-    plan_path = next(item["outputPath"] for item in plan["sources"] if item["parser"] == "plans" and int(item["year"]) == year)
-    plan_rows = read_json(data_root / plan_path)
+    plan_rows = read_json(input_paths['plans'])
     plan_names: dict[str, list[str]] = {}
     for item in plan_rows:
         plan_names.setdefault(item["专业代号"], [])

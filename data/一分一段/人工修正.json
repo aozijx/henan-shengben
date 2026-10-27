@@ -2,6 +2,56 @@
   "schemaVersion": 1,
   "corrections": [
     {
+      "issueId": "2023-57",
+      "year": 2023,
+      "majorCode": "57",
+      "majorName": "土木工程",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 2, "rowIndex": 42, "columnIndex": 2, "value": "129"}],
+      "replacementSegments": [],
+      "evidenceNote": "官方分数段PDF第2页右列表末行为129分、累计2390人；OCR将129误识别为1295。"
+    },
+    {
+      "issueId": "2023-81",
+      "year": 2023,
+      "majorCode": "81",
+      "majorName": "药学",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 2, "rowIndex": 42, "columnIndex": 2, "value": "120"}],
+      "replacementSegments": [],
+      "evidenceNote": "官方分数段PDF第2页右列表末行为120分、累计1005人；OCR将120误识别为1205。"
+    },
+    {
+      "issueId": "2023-96",
+      "year": 2023,
+      "majorCode": "96",
+      "majorName": "工商管理",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 2, "rowIndex": 42, "columnIndex": 2, "value": "137"}],
+      "replacementSegments": [],
+      "evidenceNote": "官方分数段PDF第2页右列表末行为137分、累计1474人；OCR将137误识别为1375。"
+    },
+    {
+      "issueId": "2023-D4",
+      "year": 2023,
+      "majorCode": "D4",
+      "majorName": "针灸推拿学",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 1, "rowIndex": 15, "columnIndex": 2, "value": "202"}],
+      "replacementSegments": [],
+      "evidenceNote": "官方分数段PDF第1页右列表末行为202分、累计171人；OCR将202误识别为2025。"
+    },
+    {
+      "issueId": "2023-P9",
+      "year": 2023,
+      "majorCode": "P9",
+      "majorName": "城市地下空间工程",
+      "status": "confirmed",
+      "cellOverrides": [{"pageNumber": 1, "rowIndex": 15, "columnIndex": 2, "value": "83"}],
+      "replacementSegments": [],
+      "evidenceNote": "官方分数段PDF第1页右列表末行为83分、累计63人；OCR将83误识别为835。"
+    },
+    {
       "issueId": "2024-53",
       "year": 2024,
       "majorCode": "53",

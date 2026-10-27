@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "year": 2023,
+  "sources": [
+    {
+      "year": 2023,
+      "type": "scorelines",
+      "sourcePageUrl": "https://www.haeea.cn/a/202304/43077_24cd55c9.shtml",
+      "sourceUrl": "https://www.haeea.cn/attach/file/20230424/20230424111407_6147_38c8a799.pdf",
+      "localPath": "省控线/原始PDF/省控线_2023.pdf",
+      "sha256": "95f95683c021603a99c858b99e5139071556d32d93a9abb9e48a43131e68818d",
+      "bytes": 514577
+    },
+    {
+      "year": 2023,
+      "type": "plans",
+      "sourcePageUrl": "https://www.haeea.cn/a/202304/43073_636fc3b4.shtml",
+      "sourceUrl": "https://www.haeea.cn/attach/file/20230423/20230423110927_5728_7e436f1a.pdf",
+      "localPath": "招生计划/原始PDF/招生计划_2023.pdf",
+      "sha256": "306b0580526583c40411363fbf2275734e2fe62b19a0fdfa71726f6602b44ab1",
+      "bytes": 68788968
+    }
+  ]
+}

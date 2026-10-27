@@ -1,0 +1,272 @@
+{
+  "majorCode": "C7",
+  "majorName": "医学影像技术",
+  "controlScore": 162,
+  "sourceId": "score-segments:2023:C7:e634de4c671d",
+  "sourcePdf": "一分一段/原始PDF/2023/C7_医学影像技术.pdf",
+  "sourceSha256": "e634de4c671d4822810ee2ea52fde3efa0842505706e292f207abd90849bd528",
+  "segments": [
+    {
+      "score": 258,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 257,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 253,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 252,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 250,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 249,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 247,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 85
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 102
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 128
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 135
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 142
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 152
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 163
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 170
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 178
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 190
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 200
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 217
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 232
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 246
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 256
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 270
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 282
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 296
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 312
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 326
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 344
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 354
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 367
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 720
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 739
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 752
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 771
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 789
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 802
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 812
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 827
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 843
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 855
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 866
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

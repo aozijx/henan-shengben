@@ -1,0 +1,276 @@
+{
+  "majorCode": "H2",
+  "majorName": "新能源材料与器件",
+  "controlScore": 120,
+  "sourceId": "score-segments:2023:H2:38f7e1ac644c",
+  "sourcePdf": "一分一段/原始PDF/2023/H2_新能源材料与器件.pdf",
+  "sourceSha256": "38f7e1ac644c3555001a655b7a5d8785d755483951dcbf1c1adffd1275596785",
+  "segments": [
+    {
+      "score": 241,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 68
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 79
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 97
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 99
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 100
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 105
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 108
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 116
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 119
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 198
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 199
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 204
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 209
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 212
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 214
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 216
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 220
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 223
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 224
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 225
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 229
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

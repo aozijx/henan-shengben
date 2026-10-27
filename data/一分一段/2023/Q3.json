@@ -1,0 +1,16 @@
+{
+  "majorCode": "Q3",
+  "majorName": "生物工程",
+  "controlScore": 124,
+  "sourceId": "score-segments:2023:Q3:a0ed185f2b94",
+  "sourcePdf": "一分一段/原始PDF/2023/Q3_生物工程.pdf",
+  "sourceSha256": "a0ed185f2b942ebfcd2a89531ba1ecdf78d95a30ffad2b4734aae3395e6a8032",
+  "segments": [
+    {
+      "score": 124,
+      "cumulativeCount": 1
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,336 @@
+{
+  "majorCode": "G7",
+  "majorName": "会展经济与管理",
+  "controlScore": 125,
+  "sourceId": "score-segments:2023:G7:bd0a408cbf54",
+  "sourcePdf": "一分一段/原始PDF/2023/G7_会展经济与管理.pdf",
+  "sourceSha256": "bd0a408cbf54e4dd43bbebf27eef4b6d368cfba78f0a97b175a0e450469bfa52",
+  "segments": [
+    {
+      "score": 247,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 45
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 57
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 59
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 63
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 67
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 71
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 76
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 83
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 88
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 93
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 96
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 100
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 109
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 112
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 117
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 125
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 127
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 247
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 253
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 258
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 263
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 268
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 273
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 278
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 282
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 287
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 295
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 302
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 309
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 316
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 322
+    },
+    {
+      "score": 137,
+      "cumulativeCount": 329
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 338
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 345
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 349
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 351
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 356
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 360
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 365
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 368
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 374
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 379
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 386
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 391
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

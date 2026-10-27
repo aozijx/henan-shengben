@@ -1,0 +1,228 @@
+{
+  "majorCode": "J1",
+  "majorName": "光电信息科学与工程",
+  "controlScore": 130,
+  "sourceId": "score-segments:2023:J1:b9d8948e4bba",
+  "sourcePdf": "一分一段/原始PDF/2023/J1_光电信息科学与工程.pdf",
+  "sourceSha256": "b9d8948e4bba556c59af22b164f0280a7220516a34eb91d8dcc568f6716bebb8",
+  "segments": [
+    {
+      "score": 228,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 181,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 180,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 41
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 48
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 52
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 58
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 64
+    },
+    {
+      "score": 167,
+      "cumulativeCount": 65
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 69
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 73
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 77
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 95
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 104
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 107
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 113
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 114
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 120
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 126
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

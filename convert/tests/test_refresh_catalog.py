@@ -5,7 +5,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.refresh_catalog import _analytics, _major_name_matches, _source_map, refresh_catalog, validate_year_sources
+from convert.refresh_catalog import (
+    _analytics, _json_content_sha256, _major_name_matches, _manifest_identity_hash, _source_map,
+    refresh_catalog, validate_year_sources,
+)
 from convert.segment_store import merge_year, write_year
 
 
@@ -19,6 +22,27 @@ def write_year_seed(data: Path, year: int) -> None:
 
 
 class RefreshCatalogTest(unittest.TestCase):
+    def test_input_hash_is_stable_across_json_format_and_line_endings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'input.json'
+            path.write_bytes(b'{\r\n  "year": 2023,\r\n  "value": 10\r\n}')
+            first = _json_content_sha256(json.loads(path.read_text(encoding='utf-8')))
+            path.write_text('{"value":10,"year":2023}', encoding='utf-8')
+            self.assertEqual(first, _json_content_sha256(json.loads(path.read_text(encoding='utf-8'))))
+
+    def test_manifest_hash_ignores_download_status_and_json_formatting(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'manifest.json'
+            source = {'year': 2023, 'entries': [{'majorCode': '01', 'pdfUrl': 'https://example.org/one.pdf'}]}
+            path.write_text(json.dumps(source), encoding='utf-8')
+            first = _manifest_identity_hash(path)
+            source['entries'][0]['downloadStatus'] = 'downloaded'
+            path.write_text(json.dumps(source, ensure_ascii=False, indent=2), encoding='utf-8')
+            self.assertEqual(first, _manifest_identity_hash(path))
+            source['entries'][0]['pdfUrl'] = 'https://example.org/two.pdf'
+            path.write_text(json.dumps(source), encoding='utf-8')
+            self.assertNotEqual(first, _manifest_identity_hash(path))
+
     def test_year_validator_is_public_for_ingestion_and_tools(self):
         self.assertTrue(callable(validate_year_sources))
 
@@ -45,6 +69,12 @@ class RefreshCatalogTest(unittest.TestCase):
             'E4', '绘画', {}, {'E4': {'绘画'}}))
         self.assertFalse(_major_name_matches(
             'E4', '绘画', {'E4': {'油画'}}, {'E4': {'绘画'}}))
+
+    def test_borrowed_mapping_accepts_teacher_training_direction_only(self):
+        self.assertTrue(_major_name_matches(
+            'R2', '书法学', {}, {'R2': {'书法学(师范)'}}))
+        self.assertFalse(_major_name_matches(
+            'R2', '书法学', {}, {'R2': {'书法学(错配)'}}))
 
     def test_discovers_seeded_new_year_canonical_files_and_ignores_unseeded_files(self):
         with tempfile.TemporaryDirectory() as folder:

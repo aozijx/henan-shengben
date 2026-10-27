@@ -184,18 +184,30 @@
   "pageSize": 50,
   "exportFormat": "csv",
   "supportedYears": [
+    2023,
     2024,
     2025,
     2026
   ],
   "yearSources": {
+    "2023": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2023.json",
+      "planSource": "data/招生计划/招生计划_2023.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2023.json",
+      "analyticsSource": "data/generated/2023/4e599b0e6fbf8dae/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2023.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2023/{majorCode}.json",
+      "mappingReferenceYear": 2026
+    },
     "2024": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
       "queryIndexSource": "data/专业对照/专业对照_2026.json",
       "scoreSource": "data/省控线/省控线_2024.json",
       "planSource": "data/招生计划/招生计划_2024.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
-      "analyticsSource": "data/generated/2024/9b4b6918fe7e13aa/analytics.json",
+      "analyticsSource": "data/generated/2024/bc1680e0964c6b57/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2024.json",
       "scoreSegmentShardTemplate": "data/一分一段/2024/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -206,7 +218,7 @@
       "scoreSource": "data/省控线/省控线_2025.json",
       "planSource": "data/招生计划/招生计划_2025.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
-      "analyticsSource": "data/generated/2025/6c09b54cb29e7c06/analytics.json",
+      "analyticsSource": "data/generated/2025/80463ff0d8574b50/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2025.json",
       "scoreSegmentShardTemplate": "data/一分一段/2025/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -217,11 +229,11 @@
       "scoreSource": "data/省控线/省控线_2026.json",
       "planSource": "data/招生计划/招生计划_2026.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
-      "analyticsSource": "data/generated/2026/cb46257c5d32ac55/analytics.json",
+      "analyticsSource": "data/generated/2026/9535583352abb54b/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
       "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
       "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
     }
   },
-  "catalogSource": "data/generated/catalog/b60c923968e6dbcd.json"
+  "catalogSource": "data/generated/catalog/c92e1810ff866e58.json"
 }

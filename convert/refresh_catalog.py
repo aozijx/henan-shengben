@@ -23,6 +23,13 @@ def _json(path: Path):
     return read_json(path)
 
 
+def _json_content_sha256(document: object) -> str:
+    """Hash JSON values consistently across formatting and line endings."""
+    encoded = json.dumps(document, ensure_ascii=False, sort_keys=True,
+                         separators=(',', ':')).encode('utf-8')
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def _write_manifest(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
@@ -46,6 +53,15 @@ def _previous_input_hashes(data_root: Path, metadata: dict) -> dict:
     catalog = _json(path)
     hashes = catalog.get('inputSha256', {})
     return hashes if isinstance(hashes, dict) else {}
+
+
+def _manifest_identity_hash(path: Path) -> str:
+    """Hash source identity, ignoring download bookkeeping and JSON formatting."""
+    document = _json(path)
+    for entry in document.get('entries', []):
+        if isinstance(entry, dict):
+            entry.pop('downloadStatus', None)
+    return _json_content_sha256(document)
 
 
 def validate_year_sources(year: int, files: dict, canonical: dict, report: dict, data_root: Path,
@@ -245,7 +261,7 @@ def _major_name_matches(code: str, expected_name: str, mapping_names: dict, plan
     # Older years borrow the current mapping; when it has no row for a legacy
     # code, validate the scoreline against that year's plan. Current-year
     # mapping coverage is checked separately below.
-    if not mapped and expected in planned:
+    if not mapped and any(name == expected or name == f'{expected}(师范)' for name in planned):
         return True
 
     # The 2026 official A1 scoreline uses this qualified name, while the
@@ -343,13 +359,12 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
             raise ValueError(f'{year}: missing conversion report')
         canonical = {key: _json(_source_path(data_root, files[key])) for key in required}
         report = _json(report_file)
-        year_hashes = {key: hashlib.sha256(_source_path(data_root, files[key]).read_bytes()).hexdigest()
-                       for key in required}
-        year_hashes['report'] = hashlib.sha256(report_file.read_bytes()).hexdigest()
+        year_hashes = {key: _json_content_sha256(canonical[key]) for key in required}
+        year_hashes['report'] = _json_content_sha256(report)
         derivation_hashes = dict(year_hashes)
         manifest_path = canonical['score-segments'].get('sourceManifest')
         if isinstance(manifest_path, str):
-            year_hashes['manifest'] = hashlib.sha256(_source_path(data_root, manifest_path).read_bytes()).hexdigest()
+            year_hashes['manifest'] = _manifest_identity_hash(_source_path(data_root, manifest_path))
         input_hashes[str(year)] = year_hashes
         previous_year_hashes = previously_published_inputs.get(str(year), {})
         unchanged_published_year = previous_year_hashes == year_hashes

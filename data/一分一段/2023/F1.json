@@ -1,0 +1,228 @@
+{
+  "majorCode": "F1",
+  "majorName": "服装与服饰设计",
+  "controlScore": 167,
+  "sourceId": "score-segments:2023:F1:665827cc633f",
+  "sourcePdf": "一分一段/原始PDF/2023/F1_服装与服饰设计.pdf",
+  "sourceSha256": "665827cc633f4d07a5a727f01004c72c79e5fcdc1fcf70e9ee9be460eff3ca78",
+  "segments": [
+    {
+      "score": 242,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 46
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 53
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 60
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 70
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 82
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 91
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 99
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 111
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 125
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 138
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 145
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 151
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 162
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 173
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 182
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 197
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 210
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 224
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 238
+    },
+    {
+      "score": 188,
+      "cumulativeCount": 251
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 265
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 278
+    },
+    {
+      "score": 185,
+      "cumulativeCount": 291
+    },
+    {
+      "score": 184,
+      "cumulativeCount": 299
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 314
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 331
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

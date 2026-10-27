@@ -1,0 +1,160 @@
+{
+  "majorCode": "78",
+  "majorName": "建筑学",
+  "controlScore": 81,
+  "sourceId": "score-segments:2023:78:e8e460f9f8b2",
+  "sourcePdf": "一分一段/原始PDF/2023/78_建筑学.pdf",
+  "sourceSha256": "e8e460f9f8b2a489f639de1926b894fac2502f3f93e7e0629c60d7d0a1631c52",
+  "segments": [
+    {
+      "score": 240,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 148,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 143,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 115,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 110,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 106,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 84,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 44
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

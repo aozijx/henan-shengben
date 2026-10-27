@@ -1,0 +1,20 @@
+{
+  "majorCode": "J4",
+  "majorName": "轻化工程",
+  "controlScore": 122,
+  "sourceId": "score-segments:2023:J4:2e5ac250b28b",
+  "sourcePdf": "一分一段/原始PDF/2023/J4_轻化工程.pdf",
+  "sourceSha256": "2e5ac250b28baf63ec030d0ebfcd0545f2a7f4d591dae6764ba5c195f6e346f1",
+  "segments": [
+    {
+      "score": 157,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 2
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

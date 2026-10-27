@@ -1,0 +1,100 @@
+{
+  "majorCode": "P2",
+  "majorName": "知识产权",
+  "controlScore": 124,
+  "sourceId": "score-segments:2023:P2:db8a10834d3e",
+  "sourcePdf": "一分一段/原始PDF/2023/P2_知识产权.pdf",
+  "sourceSha256": "db8a10834d3eccfabd98064b5687754cb7215827b73f5bb86a1b488fb7bca7b8",
+  "segments": [
+    {
+      "score": 204,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 145,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 29
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

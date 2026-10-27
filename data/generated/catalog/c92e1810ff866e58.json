@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "derivationVersion": 3,
+  "supportedYears": [
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "yearSources": {
+    "2023": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2023.json",
+      "planSource": "data/招生计划/招生计划_2023.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2023.json",
+      "analyticsSource": "data/generated/2023/4e599b0e6fbf8dae/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2023.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2023/{majorCode}.json",
+      "mappingReferenceYear": 2026
+    },
+    "2024": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2024.json",
+      "planSource": "data/招生计划/招生计划_2024.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
+      "analyticsSource": "data/generated/2024/bc1680e0964c6b57/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2024.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2024/{majorCode}.json",
+      "mappingReferenceYear": 2026
+    },
+    "2025": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2025.json",
+      "planSource": "data/招生计划/招生计划_2025.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
+      "analyticsSource": "data/generated/2025/80463ff0d8574b50/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2025.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2025/{majorCode}.json",
+      "mappingReferenceYear": 2026
+    },
+    "2026": {
+      "mappingSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "scoreSource": "data/省控线/省控线_2026.json",
+      "planSource": "data/招生计划/招生计划_2026.json",
+      "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
+      "analyticsSource": "data/generated/2026/9535583352abb54b/analytics.json",
+      "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
+      "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
+      "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
+    }
+  },
+  "inputSha256": {
+    "2023": {
+      "mapping": "ffb696c9e45b756089917d5a3d570162b83f168e56def7e992413f3904bdf6ff",
+      "scorelines": "b9454abbe6fc0d54b683f3d7c7936dfb99be8e295aa9dd0e48ef3fc04c4c6188",
+      "plans": "dbc98c3aca28a14b4fe2694e60edf60dc1f9111b56b7ec109d794a7954ff1703",
+      "score-segments": "3e9eb74ffb51561366b1aaf773f6a20eacc2b64e12c509aa8a0b7df7fa2f7fb6",
+      "report": "5457ce7f9b07012c023e84b54061905577b0da029704d09ccfe8286defd4f93a",
+      "manifest": "fbe15373a2084d4fa5c48af5d8a8bb91c8797319f4bc2c2359f59a8e7b818016"
+    },
+    "2024": {
+      "mapping": "ffb696c9e45b756089917d5a3d570162b83f168e56def7e992413f3904bdf6ff",
+      "scorelines": "7a87428e74b4051e8e9c12e4919a06505ce1cc3e183f424c1aadb43a5714ea94",
+      "plans": "896a153a55e5eeac18c056b6d5b107f4dee26400464f7d49665cf06609ba29ee",
+      "score-segments": "a34bb6b528d448762ee28ea5c735141edf284be32ccad82def9deea17d1303c3",
+      "report": "e994bb461037f3f967344612fd932715b21fd47aa1bd807a76d48de3a1209ff0",
+      "manifest": "7e9492a8a834d5f42da925ce95b5e58bc841f43d097b515f0f06cfdd03c9a6e0"
+    },
+    "2025": {
+      "mapping": "ffb696c9e45b756089917d5a3d570162b83f168e56def7e992413f3904bdf6ff",
+      "scorelines": "7ac83fd9939242fd75cc199a8ba5ff2aae03d1f06c40f8472e3d9b03afa3b421",
+      "plans": "5e62269fc263100f64459bcd10148ccfda0bf18c591883b407f4c376e8bbe113",
+      "score-segments": "bc6b326bb49754a339b8e199aa80bdb41811b440c018b0d3279c5b6c11b26be2",
+      "report": "845eb26af9e59f99ed6160edcbc60ee2aa65bc9fad83444531d4dc5b45a2e3f8",
+      "manifest": "d88ce34f4d8139ee71acdd0741123d4930a766ce4e69884bcc553d91d09ce102"
+    },
+    "2026": {
+      "mapping": "ffb696c9e45b756089917d5a3d570162b83f168e56def7e992413f3904bdf6ff",
+      "scorelines": "c09d15c80cf19beba37e8e68ff01e0099902dc8f4ea5d11b3cedcf1a4cacf10f",
+      "plans": "02e2bba6b51030f720e172cd14917ef9e9db0d08b21950c6ff3bc296dba32b02",
+      "score-segments": "b4082a3dc40d93968eca1b2ca6e20cd38930c748d8d721b35fb6c87a7b048dbc",
+      "report": "3e6c3757b426ea44288010f9e08991f17d788b0d8748696ee586cef3760ad1c9",
+      "manifest": "22ab21679c92d288ddc91d73cb3c18c1b5f2bac52167d8864f49597a03346319"
+    }
+  }
+}

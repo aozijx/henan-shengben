@@ -1,0 +1,164 @@
+{
+  "majorCode": "J7",
+  "majorName": "自然地理与资源环境",
+  "controlScore": 80,
+  "sourceId": "score-segments:2023:J7:5ee49a55bfaf",
+  "sourcePdf": "一分一段/原始PDF/2023/J7_自然地理与资源环境.pdf",
+  "sourceSha256": "5ee49a55bfaf1d33668dc00883bfac94fc76b9f987210823527f5f00546c1ea4",
+  "segments": [
+    {
+      "score": 217,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 141,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 131,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 128,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 117,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 109,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 88,
+      "cumulativeCount": 40
+    },
+    {
+      "score": 87,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 43
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 82,
+      "cumulativeCount": 47
+    },
+    {
+      "score": 80,
+      "cumulativeCount": 48
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,68 @@
+{
+  "majorCode": "73",
+  "majorName": "高分子材料与工程",
+  "controlScore": 177,
+  "sourceId": "score-segments:2023:73:6376f4752f87",
+  "sourcePdf": "一分一段/原始PDF/2023/73_高分子材料与工程.pdf",
+  "sourceSha256": "6376f4752f8758e52276cbe89faca1aca31691f34da64f8732577510d8e18acb",
+  "segments": [
+    {
+      "score": 226,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 21
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

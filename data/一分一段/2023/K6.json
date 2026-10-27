@@ -1,0 +1,40 @@
+{
+  "majorCode": "K6",
+  "majorName": "家政学",
+  "controlScore": 127,
+  "sourceId": "score-segments:2023:K6:5b0a7b0694bf",
+  "sourcePdf": "一分一段/原始PDF/2023/K6_家政学.pdf",
+  "sourceSha256": "5b0a7b0694bfe0ac1cdcea4267bdba56e576cc12ec52de191dd6045712a58ce5",
+  "segments": [
+    {
+      "score": 226,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 140,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 138,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 7
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

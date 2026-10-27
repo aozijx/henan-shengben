@@ -1,0 +1,84 @@
+{
+  "majorCode": "P4",
+  "majorName": "运动康复",
+  "controlScore": 118,
+  "sourceId": "score-segments:2023:P4:fe060c120663",
+  "sourcePdf": "一分一段/原始PDF/2023/P4_运动康复.pdf",
+  "sourceSha256": "fe060c120663ad836f949ae819621325c7288a95b8d48a655b20952e383e28d6",
+  "segments": [
+    {
+      "score": 195,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 182,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 175,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 169,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 165,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 144,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 122,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 20
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

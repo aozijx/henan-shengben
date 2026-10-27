@@ -1,0 +1,104 @@
+{
+  "majorCode": "28",
+  "majorName": "应用心理学",
+  "controlScore": 150,
+  "sourceId": "score-segments:2023:28:7a728fa49296",
+  "sourcePdf": "一分一段/原始PDF/2023/28_应用心理学.pdf",
+  "sourceSha256": "7a728fa49296ec1117d587514683f2abeb96b0f354528670174dc84b8a367f44",
+  "segments": [
+    {
+      "score": 238,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 186,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 183,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 176,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 170,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 153,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 32
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

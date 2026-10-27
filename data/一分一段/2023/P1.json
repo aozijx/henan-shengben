@@ -1,0 +1,52 @@
+{
+  "majorCode": "P1",
+  "majorName": "金融科技",
+  "controlScore": 89,
+  "sourceId": "score-segments:2023:P1:372d9ae72114",
+  "sourcePdf": "一分一段/原始PDF/2023/P1_金融科技.pdf",
+  "sourceSha256": "372d9ae72114bc04ff095b977b5a0d7741a89dde739067e5621134917db769b6",
+  "segments": [
+    {
+      "score": 183,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 10
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

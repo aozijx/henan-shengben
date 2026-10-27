@@ -1,0 +1,164 @@
+{
+  "majorCode": "E4",
+  "majorName": "绘画",
+  "controlScore": 209,
+  "sourceId": "score-segments:2023:E4:aadee6fded42",
+  "sourcePdf": "一分一段/原始PDF/2023/E4_绘画.pdf",
+  "sourceSha256": "aadee6fded4245c25948c0c042ff708c840e98a5afe372a9d54d1bbfbe8dcf68",
+  "segments": [
+    {
+      "score": 250,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 246,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 245,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 243,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 242,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 238,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 38
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 228,
+      "cumulativeCount": 49
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 55
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 61
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 72
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 87
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 94
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 101
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 112
+    },
+    {
+      "score": 219,
+      "cumulativeCount": 122
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 134
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 142
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 156
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 171
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 178
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 194
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 211
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 230
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 246
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 263
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

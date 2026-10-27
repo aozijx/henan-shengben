@@ -1,0 +1,256 @@
+{
+  "majorCode": "55",
+  "majorName": "数字媒体技术",
+  "controlScore": 155,
+  "sourceId": "score-segments:2023:55:5871362bc7f4",
+  "sourcePdf": "一分一段/原始PDF/2023/55_数字媒体技术.pdf",
+  "sourceSha256": "5871362bc7f4e64010f791240f07cbb1ed1d998c99c0ede65d9aeacd9a7c9aee",
+  "segments": [
+    {
+      "score": 259,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 254,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 248,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 244,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 241,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 240,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 239,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 237,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 236,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 235,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 234,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 233,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 232,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 231,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 230,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 229,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 227,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 226,
+      "cumulativeCount": 42
+    },
+    {
+      "score": 225,
+      "cumulativeCount": 44
+    },
+    {
+      "score": 224,
+      "cumulativeCount": 51
+    },
+    {
+      "score": 223,
+      "cumulativeCount": 56
+    },
+    {
+      "score": 222,
+      "cumulativeCount": 62
+    },
+    {
+      "score": 221,
+      "cumulativeCount": 66
+    },
+    {
+      "score": 220,
+      "cumulativeCount": 74
+    },
+    {
+      "score": 218,
+      "cumulativeCount": 80
+    },
+    {
+      "score": 217,
+      "cumulativeCount": 90
+    },
+    {
+      "score": 216,
+      "cumulativeCount": 98
+    },
+    {
+      "score": 215,
+      "cumulativeCount": 106
+    },
+    {
+      "score": 214,
+      "cumulativeCount": 115
+    },
+    {
+      "score": 213,
+      "cumulativeCount": 118
+    },
+    {
+      "score": 212,
+      "cumulativeCount": 123
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 132
+    },
+    {
+      "score": 210,
+      "cumulativeCount": 144
+    },
+    {
+      "score": 209,
+      "cumulativeCount": 150
+    },
+    {
+      "score": 208,
+      "cumulativeCount": 162
+    },
+    {
+      "score": 207,
+      "cumulativeCount": 171
+    },
+    {
+      "score": 206,
+      "cumulativeCount": 177
+    },
+    {
+      "score": 205,
+      "cumulativeCount": 187
+    },
+    {
+      "score": 204,
+      "cumulativeCount": 198
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 206
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 218
+    },
+    {
+      "score": 201,
+      "cumulativeCount": 237
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 243
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 262
+    },
+    {
+      "score": 198,
+      "cumulativeCount": 274
+    },
+    {
+      "score": 197,
+      "cumulativeCount": 294
+    },
+    {
+      "score": 196,
+      "cumulativeCount": 307
+    },
+    {
+      "score": 195,
+      "cumulativeCount": 326
+    },
+    {
+      "score": 194,
+      "cumulativeCount": 346
+    },
+    {
+      "score": 193,
+      "cumulativeCount": 364
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 380
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 403
+    },
+    {
+      "score": 190,
+      "cumulativeCount": 424
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 447
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 1293
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 1333
+    },
+    {
+      "score": 159,
+      "cumulativeCount": 1355
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 1385
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 1430
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 1467
+    },
+    {
+      "score": 155,
+      "cumulativeCount": 1508
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

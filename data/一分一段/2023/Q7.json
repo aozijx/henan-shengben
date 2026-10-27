@@ -1,0 +1,132 @@
+{
+  "majorCode": "Q7",
+  "majorName": "公共事业管理",
+  "controlScore": 102,
+  "sourceId": "score-segments:2023:Q7:483e5ca76d94",
+  "sourcePdf": "一分一段/原始PDF/2023/Q7_公共事业管理.pdf",
+  "sourceSha256": "483e5ca76d94f00dae40963921a72c0bac31202ae7eb8766bbd13f80c7c4f02a",
+  "segments": [
+    {
+      "score": 227,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 211,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 203,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 200,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 199,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 192,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 191,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 189,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 187,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 178,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 172,
+      "cumulativeCount": 14
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 164,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 162,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 152,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 147,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 135,
+      "cumulativeCount": 24
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 130,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 127,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 116,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 113,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 111,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 34
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

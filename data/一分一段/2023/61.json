@@ -1,0 +1,96 @@
+{
+  "majorCode": "61",
+  "majorName": "道路桥梁与渡河工程",
+  "controlScore": 80,
+  "sourceId": "score-segments:2023:61:000d20c25de1",
+  "sourcePdf": "一分一段/原始PDF/2023/61_道路桥梁与渡河工程.pdf",
+  "sourceSha256": "000d20c25de164d1f806e6e40e03b615d24cce344441bab51d6d6effc05edc8c",
+  "segments": [
+    {
+      "score": 153,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 146,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 139,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 123,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 120,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 108,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 103,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 102,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 96,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 94,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 93,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 90,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 86,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 83,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 81,
+      "cumulativeCount": 24
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

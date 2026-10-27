@@ -12,7 +12,7 @@ class AnnualSourcePlanTests(unittest.TestCase):
         self.assertEqual([target['year'] for target in plan['targets']], [2023, 2024, 2025, 2026])
         self.assertEqual(
             [(row['year'], row['parser']) for row in plan['sources']],
-            [(2023, 'scorelines'),
+            [(2023, 'plans'), (2023, 'scorelines'),
              (2024, 'plans'), (2024, 'scorelines'),
              (2025, 'plans'), (2025, 'scorelines'),
              (2026, 'mapping'), (2026, 'master'), (2026, 'plans'), (2026, 'scorelines')],

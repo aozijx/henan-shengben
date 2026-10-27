@@ -1,0 +1,160 @@
+{
+  "majorCode": "Q2",
+  "majorName": "安全工程",
+  "controlScore": 91,
+  "sourceId": "score-segments:2023:Q2:ba1353361ba3",
+  "sourcePdf": "一分一段/原始PDF/2023/Q2_安全工程.pdf",
+  "sourceSha256": "ba1353361ba3d6e636343755837c189ed64894ab2b90605a7665e06f28f3a3c5",
+  "segments": [
+    {
+      "score": 210,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 202,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 179,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 177,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 174,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 173,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 171,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 168,
+      "cumulativeCount": 8
+    },
+    {
+      "score": 166,
+      "cumulativeCount": 9
+    },
+    {
+      "score": 163,
+      "cumulativeCount": 10
+    },
+    {
+      "score": 161,
+      "cumulativeCount": 11
+    },
+    {
+      "score": 160,
+      "cumulativeCount": 12
+    },
+    {
+      "score": 158,
+      "cumulativeCount": 13
+    },
+    {
+      "score": 157,
+      "cumulativeCount": 15
+    },
+    {
+      "score": 156,
+      "cumulativeCount": 16
+    },
+    {
+      "score": 154,
+      "cumulativeCount": 17
+    },
+    {
+      "score": 150,
+      "cumulativeCount": 18
+    },
+    {
+      "score": 149,
+      "cumulativeCount": 19
+    },
+    {
+      "score": 142,
+      "cumulativeCount": 20
+    },
+    {
+      "score": 136,
+      "cumulativeCount": 21
+    },
+    {
+      "score": 134,
+      "cumulativeCount": 22
+    },
+    {
+      "score": 132,
+      "cumulativeCount": 23
+    },
+    {
+      "score": 126,
+      "cumulativeCount": 25
+    },
+    {
+      "score": 125,
+      "cumulativeCount": 26
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 27
+    },
+    {
+      "score": 121,
+      "cumulativeCount": 28
+    },
+    {
+      "score": 119,
+      "cumulativeCount": 29
+    },
+    {
+      "score": 118,
+      "cumulativeCount": 30
+    },
+    {
+      "score": 114,
+      "cumulativeCount": 31
+    },
+    {
+      "score": 112,
+      "cumulativeCount": 32
+    },
+    {
+      "score": 107,
+      "cumulativeCount": 33
+    },
+    {
+      "score": 105,
+      "cumulativeCount": 34
+    },
+    {
+      "score": 101,
+      "cumulativeCount": 35
+    },
+    {
+      "score": 100,
+      "cumulativeCount": 36
+    },
+    {
+      "score": 95,
+      "cumulativeCount": 37
+    },
+    {
+      "score": 92,
+      "cumulativeCount": 39
+    },
+    {
+      "score": 91,
+      "cumulativeCount": 40
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}

@@ -1,0 +1,44 @@
+{
+  "majorCode": "Q4",
+  "majorName": "智能医学工程",
+  "controlScore": 85,
+  "sourceId": "score-segments:2023:Q4:5523e8ee6a31",
+  "sourcePdf": "一分一段/原始PDF/2023/Q4_智能医学工程.pdf",
+  "sourceSha256": "5523e8ee6a31dced00c84223af1ce5422b7c59e0b47bdbd6abbae05a654dc7b1",
+  "segments": [
+    {
+      "score": 163,
+      "cumulativeCount": 1
+    },
+    {
+      "score": 151,
+      "cumulativeCount": 2
+    },
+    {
+      "score": 133,
+      "cumulativeCount": 3
+    },
+    {
+      "score": 129,
+      "cumulativeCount": 4
+    },
+    {
+      "score": 124,
+      "cumulativeCount": 5
+    },
+    {
+      "score": 98,
+      "cumulativeCount": 6
+    },
+    {
+      "score": 89,
+      "cumulativeCount": 7
+    },
+    {
+      "score": 85,
+      "cumulativeCount": 8
+    }
+  ],
+  "status": "ok",
+  "issues": []
+}
