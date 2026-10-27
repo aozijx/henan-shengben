@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
-  "defaultYear": 2026,
-  "mappingReferences": { "2023": 2026, "2024": 2026, "2025": 2026 },
+  "defaultYear": "latest",
+  "sourceReuse": { "mapping": "latestAvailable" },
   "uiDefaults": { "selectedYears": "allSupportedYears", "resultLayout": "cards" },
   "resultVisibilityRules": [
     { "when": { "filterKey": "povertyStatus", "equals": "否" }, "hide": ["povertyPlan"] }

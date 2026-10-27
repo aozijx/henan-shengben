@@ -3,7 +3,7 @@
 用法：
   python -m convert.extract_cli            # 校验：逐文件比对，报告差异
   python -m convert.extract_cli --write    # 更新：写回 data/（仅写有差异的文件）
-  python -m convert.extract_cli --year 2026 --parser mapping  # 只跑指定项
+  python -m convert.extract_cli --year YEAR --parser mapping  # 只跑指定项
 
 数据源由 data/year-links/YYYY.json 与约定的本地文件路径共同派生。
 """

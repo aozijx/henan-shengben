@@ -22,18 +22,16 @@ from crawler.waf import build_session
 from crawler.year_sources import (
     SOURCE_ROLES,
     SourceResolutionError,
-    crawl_target_record,
     load_year_links,
     execution_rows_for_year,
     resolve_year_sources,
-    source_rows_for_seed,
     validate_attachment,
 )
 
 
 def _write(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    path.write_bytes((json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
 
 
 def source_role_for_attachment(parser: str, index: int) -> str:
@@ -42,7 +40,7 @@ def source_role_for_attachment(parser: str, index: int) -> str:
         if index not in (0, 1):
             raise ValueError(f'unsupported mapping attachment index: {index}')
         return 'mappingCodeTable' if index == 0 else 'mappingOverview'
-    if parser in {'scorelines', 'plans', 'master'} and index == 0:
+    if parser in {'mappingCodeTable', 'scorelines', 'plans', 'master'} and index == 0:
         return parser
     raise ValueError(f'unsupported parser attachment: {parser}[{index}]')
 
@@ -79,14 +77,6 @@ def publish_staged_files(staging_root: Path, data_root: Path) -> None:
 
 def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = False) -> dict:
     year = seed['year']
-    prospective_rows = source_rows_for_seed(seed, root)
-    prospective_target = crawl_target_record(seed)
-    collision_paths = [row['outputPath'] for row in prospective_rows]
-    if prospective_target:
-        collision_paths.extend(prospective_target[key] for key in (
-            'manifestPath', 'normalizedPath', 'conversionReportPath'))
-    if any((root / relative).exists() for relative in collision_paths):
-        raise ValueError(f'{year} already exists; new-year publish would overwrite existing file')
     resolved = resolve_year_sources(seed, session)
     print(f'[{year}] 已解析并校验官方来源页', flush=True)
     source_rows, crawl_target = execution_rows_for_year(resolved)
@@ -191,6 +181,8 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
         raise ValueError(f"year-links filename/year mismatch: {Path(seed_path).name}")
     session = session or build_session()
     data_root, metadata_path = Path(data_root).resolve(), Path(metadata_path).resolve()
+    if seed['year'] in read_json(metadata_path).get('supportedYears', []):
+        raise ValueError(f"{seed['year']} is already published; new-year import accepts unpublished years only")
     with tempfile.TemporaryDirectory(prefix='.ingest-year-', dir=data_root.parent) as temporary:
         print(f"[{seed['year']}] 准备暂存目录 …", flush=True)
         staging_root = Path(temporary) / 'data'

@@ -118,6 +118,8 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
     year = int(seed['year'])
     data_root = Path(data_root)
     specs = (
+        ('mappingCodeTable', ('mappingCodeTable',), f'专业对照/专业代号对照_{year}.json',
+         (f'专业对照/原始PDF/专业代号对照_{year}.pdf',)),
         ('mapping', ('mappingCodeTable', 'mappingOverview'), f'专业对照/专业对照_{year}.json',
          (f'专业对照/原始PDF/专业代号对照_{year}.pdf', f'专业对照/原始PDF/专业对照一览_{year}.pdf')),
         ('master', ('master',), f'招生高校及专业/招生高校及专业_{year}.json',
@@ -136,13 +138,13 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
             if local_path:
                 pdf_paths[index] = local_path
         if parser == 'mapping':
-            inputs_available = all(
-                role in declared or (data_root / pdf_path).is_file()
-                for role, pdf_path in zip(roles, pdf_paths)
-            )
+            # A complete mapping needs both official roles in the year's seed.
+            # A leftover JSON or PDF alone must not become the latest mapping.
+            inputs_available = all(role in declared for role in roles)
         else:
             inputs_available = roles[0] in declared or (data_root / pdf_paths[0]).is_file()
-        available = (data_root / output_path).is_file() or inputs_available
+        available = (inputs_available if parser == 'mapping'
+                     else (data_root / output_path).is_file() or inputs_available)
         if not available:
             continue
         row = {'outputPath': output_path, 'pdfPaths': pdf_paths, 'parser': parser, 'year': year}
@@ -335,6 +337,8 @@ def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
     attachments = resolved['attachments']
     sources = []
     single_sources = (
+        ('mappingCodeTable', f'专业对照/专业代号对照_{year}.json',
+         f'专业对照/原始PDF/专业代号对照_{year}.pdf'),
         ('scorelines', f'省控线/省控线_{year}.json', f'省控线/原始PDF/省控线_{year}.pdf'),
         ('plans', f'招生计划/招生计划_{year}.json', f'招生计划/原始PDF/招生计划_{year}.pdf'),
         ('master', f'招生高校及专业/招生高校及专业_{year}.json',
@@ -343,7 +347,8 @@ def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
     for role, output_path, pdf_path in single_sources:
         if role not in attachments:
             continue
-        sources.append({'outputPath': output_path, 'pdfPaths': [pdf_path],
+        sources.append({'outputPath': output_path,
+                        'pdfPaths': [attachments[role][0].get('localPath', pdf_path)],
                         'pdfUrls': [attachments[role][0]['url']],
                         'pageUrls': [resolved['pages'][role]], 'parser': role, 'year': year})
     mapping_roles = ('mappingCodeTable', 'mappingOverview')

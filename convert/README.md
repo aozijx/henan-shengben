@@ -78,6 +78,8 @@ python -m convert.refresh_catalog --data-root $verifyData --template metadata/sc
 
 `ingest_year` 的 `--seed` 指向新年度链接配置；首次运行附加 `--check`，默认摘要包含来源数量、转换计数、阻塞项和 metadata diff。加 `--full-report` 可输出所有来源 URL、实际跳转 URL（如有）、哈希和逐专业解析。检查模式只在临时目录生成结果，不写入 `data/` 或 metadata。若分数段来源已发布，但省控线或招生计划来源尚未声明，导入会归档已找到的分数段来源并在摘要列出 `normalizationDeferred`，等待必需表格数据齐全后再归一化。人工确认后，本地去掉 `--check` 发布；已有年份会被拒绝，不能用此入口重跑覆盖。若发现官方网页返回 403/412、来源不唯一或缺附件，导入会失败且保留当前 metadata；先补齐或修正官方链接配置，再重试。当前入口要求官方公告页可读取；直接本地 PDF 离线导入尚未支持。`--export-dir` 为 GitHub Actions 导出受哈希清单约束的 artifact；它不改变 `--check` 的只读语义。PR 合并到 `main` 后，发布 job 校验 PR、seed 哈希及文件哈希，将规范数据放入仓库并重建 catalog/metadata；OCR 结果直接复用，不重跑 OCR。没有匹配的成功 artifact 时，主分支 seed push 会针对变更 seed 执行一次完整导入。
 
+仅有 `mappingCodeTable` 的年度也会生成独立的 `专业对照/专业代号对照_YYYY.json`；完整的 `专业对照_YYYY.json` 需要 `mappingOverview`。`metadata/school-data.template.json` 的 `sourceReuse.mapping = latestAvailable` 允许缺少本年度完整对照的年份引用最新完整对照；来源年份由 seed 和实际产物决定，不能凭残留文件或单独的代号表升级。模板的 `defaultYear = latest` 在首次发布时选择最新完整年度，已发布站点保留当前默认年份直至新年度完整发布。其他来源默认不能跨年度复用。CI 新年度导入会跳过 metadata 中已经发布的 seed；尚未发布的年度可继续添加来源，重新导入时已有文件的内容须保持一致。
+
 如果 seed 已在仓库且无需修改，在对应 PR 分支上手动运行 `Validate yearly data seed`，将 `seed_path` 设为 `data/year-links/YYYY.json`。必须选择 PR 当前 head 所在分支，并在合并前完成该次成功运行；合并后的 workflow 会用 PR head commit 找到 artifact、比对仓库和运行身份，再导入生成物。手动运行只接受尚未发布的年度 seed。此流程需在仓库 **Settings → Actions → General → Workflow permissions** 允许 read/write；发布 job 使用 GitHub 自动提供的短期 `GITHUB_TOKEN`，不需要 PAT 或自建密钥。主分支若有保护规则，还需允许 Actions bot 直接推送。
 
 PDF/OCR 产生 `needs-review` 或字段冲突时，不发布。按 `data/reports/README.md` 审阅异常，并仅在 `data/一分一段/人工修正.json` 中添加有官方依据的确认修正，然后重新执行 `--check`。成功发布后，生成物按版本不可变；若需回滚，使用版本控制回退该年度发布提交（包括 metadata 和新增数据），不要手工覆盖旧 catalog 或 shard。

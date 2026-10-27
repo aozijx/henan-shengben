@@ -31,6 +31,7 @@ ATTACHMENTS = {
     'master': 'https://xcoss.henan.gov.cn/typtfile/2027/master.pdf',
 }
 CANONICAL = {
+    'mappingCodeTable': [{'专业名称': '计算机科学与技术', '专业代号': '51', '考试科目代码': '01'}],
     'mapping': [{'专科专业': '软件技术', '可报本科专业': [
         {'专业代号': '51', '专业名称': '计算机科学与技术'}]}],
     'scorelines': [{'专业代号': '51', '专业名称': '计算机科学与技术', '分数线': 180}],
@@ -253,7 +254,7 @@ class IngestYearTests(unittest.TestCase):
                 self.assertEqual(corrections.read_bytes(), original_corrections)
 
                 published_metadata = metadata.read_bytes()
-                with self.assertRaisesRegex(ValueError, 'already exists'):
+                with self.assertRaisesRegex(ValueError, 'already published'):
                     ingest_year(seed, data, template, metadata, FakeSession())
                 self.assertEqual(metadata.read_bytes(), published_metadata)
 
@@ -301,7 +302,8 @@ class IngestYearTests(unittest.TestCase):
                         'bytes': len(FakeSession.pdf_bytes)}
 
             with patch('convert.ingest_year.validate_attachment'), \
-                    patch('convert.ingest_year.download_entry', side_effect=download):
+                    patch('convert.ingest_year.download_entry', side_effect=download), \
+                    patch('convert.extract_cli.extract_entry', return_value=CANONICAL['mappingCodeTable']):
                 report = ingest_year(seed, data, REPO_ROOT / 'metadata/school-data.template.json',
                                      metadata, FakeSession(), check=True, export_dir=export_dir)
 
@@ -315,6 +317,17 @@ class IngestYearTests(unittest.TestCase):
             self.assertFalse(manifest['complete'])
             self.assertTrue(any(item['path'].endswith('专业代号对照_2027.pdf')
                                 for item in manifest['files']))
+
+            with patch('convert.ingest_year.validate_attachment'), \
+                    patch('convert.ingest_year.download_entry', side_effect=download), \
+                    patch('convert.extract_cli.extract_entry', return_value=CANONICAL['mappingCodeTable']):
+                ingest_year(seed, data, REPO_ROOT / 'metadata/school-data.template.json',
+                            metadata, FakeSession())
+                repeated = ingest_year(seed, data, REPO_ROOT / 'metadata/school-data.template.json',
+                                       metadata, FakeSession(), check=True)
+            self.assertFalse(repeated['complete'])
+            self.assertTrue((data / f'专业对照/专业代号对照_{YEAR}.json').is_file())
+            self.assertEqual(metadata.read_bytes(), original_metadata)
 
     def test_score_segments_without_scorelines_or_plans_are_archived_without_normalization(self):
         with tempfile.TemporaryDirectory() as folder:

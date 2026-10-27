@@ -40,6 +40,8 @@ python -m convert.ingest_year --seed data/year-links/2027.json --check
 
 2026 年的 `mappingOverview` 与 `mappingCodeTable` 是两份不同的官方表：前者按专科专业列出可报考的本科专业及考试科目，后者按招生专业列出专业代号和考试科目，均需保留。
 
+只发布 `mappingCodeTable` 的年度会生成独立的 `专业对照/专业代号对照_YYYY.json`，不会凭代号表构造专科到本科的完整对照。待 `mappingOverview` 发布后才生成 `专业对照/专业对照_YYYY.json`。catalog 对缺少本年度完整对照的年份自动引用已有的最新完整对照；只有代号表的 2027 年不会抢先替代 2026 年对照。
+
 2026 `mappingOverview` 的 Attachment 2 下载为 `专业对照/原始PDF/专业对照一览_附件2_2026.pdf`。仓库已有 Attachment 3 保留在 `专业对照/原始PDF/专业对照一览_2026.pdf`；两者字节不同，但本地解析出的 558 条对照数据相同，因此新附件使用单独路径，不覆盖现有文件。
 
 新年度导入由 `convert.ingest_year` 负责：`--seed` 指向年度链接文件，`--check` 在暂存目录验证而不发布。默认输出简短摘要；需要来源和逐专业细节时加 `--full-report`。GitHub Actions 会按 PR 中变更的 seed 执行验证，把新增原始来源和来源清单上传为 artifact；PR 合并后，可信发布任务校验 artifact 的 PR、seed 哈希和文件哈希，再将源文件提交到 `main`。来源不完整时只归档原始来源，不刷新年度 catalog；来源齐全时在合并后由发布任务生成数据和 metadata。详细参数与审核规则见 [转换与导入指南](../convert/README.md)。

@@ -61,6 +61,7 @@ jobs:
           elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
             printf '%s\n' "$SEED_PATH" > changed-seeds.txt
           fi
+          python -m convert.seed_selection changed-seeds.txt metadata/school-data.json
           if [[ ! -s changed-seeds.txt ]]; then
             echo "has_seeds=false" >> "$GITHUB_OUTPUT"
             echo "No yearly seed files to validate" >> "$GITHUB_STEP_SUMMARY"
@@ -155,6 +156,7 @@ jobs:
           EVENT_BEFORE: ${{ github.event.before }}
         run: |
           git diff --name-only "$EVENT_BEFORE" "$GITHUB_SHA" -- 'data/year-links/*.json' > changed-seeds.txt
+          python -m convert.seed_selection changed-seeds.txt metadata/school-data.json
           if [[ ! -s changed-seeds.txt ]]; then
             echo "No yearly seed files to publish" >> "$GITHUB_STEP_SUMMARY"
             echo "has_seeds=false" >> "$GITHUB_OUTPUT"

@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from convert.refresh_catalog import (
     _analytics, _json_content_sha256, _major_name_matches, _manifest_identity_hash, _source_map,
-    refresh_catalog, validate_year_sources,
+    _apply_source_reuse, refresh_catalog, validate_year_sources,
 )
 from convert.segment_store import merge_year, write_year
 
@@ -17,11 +17,39 @@ def write_year_seed(data: Path, year: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({
         'year': year,
-        'sources': {'scoreSegments': {'pageUrl': f'https://www.haeea.cn/{year}.shtml'}},
+        'sources': {
+            'scoreSegments': {'pageUrl': f'https://www.haeea.cn/{year}.shtml'},
+            'mappingCodeTable': {'pageUrl': f'https://www.haeea.cn/{year}-codes.shtml'},
+            'mappingOverview': {'pageUrl': f'https://www.haeea.cn/{year}-mapping.shtml'},
+        },
     }), encoding='utf-8')
 
 
 class RefreshCatalogTest(unittest.TestCase):
+    def test_latest_complete_mapping_is_used_for_years_without_their_own(self):
+        sources = {
+            2024: {'plans': 'plans-2024.json'},
+            2026: {'mapping': 'mapping-2026.json'},
+            2027: {'mappingCodeTable': 'codes-2027.json'},
+        }
+        _apply_source_reuse(sources, {'mapping': 'latestAvailable'})
+        self.assertEqual(sources[2024]['mapping'], 'mapping-2026.json')
+        self.assertEqual(sources[2024]['mappingReferenceYear'], 2026)
+        sources[2027]['mapping'] = 'mapping-2027.json'
+        del sources[2024]['mapping']
+        del sources[2024]['mappingReferenceYear']
+        _apply_source_reuse(sources, {'mapping': 'latestAvailable'})
+        self.assertEqual(sources[2024]['mapping'], 'mapping-2027.json')
+        self.assertEqual(sources[2024]['mappingReferenceYear'], 2027)
+        self.assertEqual(sources[2026]['mapping'], 'mapping-2026.json')
+
+    def test_source_reuse_requires_explicit_policy(self):
+        sources = {2024: {}, 2026: {'mapping': 'mapping-2026.json'}}
+        _apply_source_reuse(sources, {})
+        self.assertNotIn('mapping', sources[2024])
+        with self.assertRaisesRegex(ValueError, 'unsupported source reuse policy'):
+            _apply_source_reuse(sources, {'plans': 'latestAvailable'})
+
     def test_input_hash_is_stable_across_json_format_and_line_endings(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'input.json'

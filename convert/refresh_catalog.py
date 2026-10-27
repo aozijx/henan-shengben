@@ -237,6 +237,21 @@ def _source_map(data_root: Path):
     return by_year
 
 
+def _apply_source_reuse(sources: dict[int, dict], policies: dict[str, str]) -> None:
+    """Apply configured reuse only to source types that support cross-year validation."""
+    for parser, policy in policies.items():
+        if parser != 'mapping' or policy != 'latestAvailable':
+            raise ValueError(f'unsupported source reuse policy: {parser}={policy}')
+        available = {year: files[parser] for year, files in sources.items() if parser in files}
+        if not available:
+            continue
+        latest = max(available)
+        for files in sources.values():
+            if parser not in files:
+                files[parser] = available[latest]
+                files['mappingReferenceYear'] = latest
+
+
 def _major_rows(mapping):
     found = {}
     for item in mapping:
@@ -264,7 +279,7 @@ def _major_name_matches(code: str, expected_name: str, mapping_names: dict, plan
     if not mapped and any(name == expected or name == f'{expected}(师范)' for name in planned):
         return True
 
-    # The 2026 official A1 scoreline uses this qualified name, while the
+    # An official A1 scoreline uses this qualified name, while the
     # same major is listed as 财务管理 under mapping code 99 and plan code A1.
     # Keep this as an evidence-backed exception rather than stripping arbitrary
     # parentheses or merging names across the two codes.
@@ -338,25 +353,26 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     data_root = Path(data_root)
     template = _json(Path(template_path))
     sources = _source_map(data_root)
-    references = template.get('mappingReferences', {})
-    for year, files in sources.items():
-        if 'mapping' not in files and str(year) in references:
-            reference_year = int(references[str(year)])
-            files['mapping'] = f'专业对照/专业对照_{reference_year}.json'
-            files['mappingReferenceYear'] = reference_year
+    _apply_source_reuse(sources, template.get('sourceReuse', {}))
     previous = _json(Path(metadata_path)) if Path(metadata_path).is_file() else {}
+    previously_published_years = set(previous.get('supportedYears', []))
     previously_published_inputs = _previous_input_hashes(data_root, previous)
     publish = {}
     input_hashes = {}
     output = {}
     for year, files in sorted(sources.items()):
         required = ('mapping', 'scorelines', 'plans', 'score-segments')
-        if any(key not in files for key in required):
-            raise ValueError(f'{year}: incomplete canonical source set')
+        missing = [key for key in required if key not in files]
+        if missing:
+            if year in previously_published_years:
+                raise ValueError(f'{year}: published year missing canonical sources: {missing}')
+            continue
         report_path = files.get('report', f'reports/转换报告_{year}.json')
         report_file = _source_path(data_root, report_path)
         if not report_file.is_file():
-            raise ValueError(f'{year}: missing conversion report')
+            if year in previously_published_years:
+                raise ValueError(f'{year}: missing conversion report')
+            continue
         canonical = {key: _json(_source_path(data_root, files[key])) for key in required}
         report = _json(report_file)
         year_hashes = {key: _json_content_sha256(canonical[key]) for key in required}
@@ -397,7 +413,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     if not publish:
         raise ValueError('No complete years to publish')
     years = [int(y) for y in publish]
-    metadata = {key: value for key, value in template.items() if key not in ('mappingReferences', 'yearSources', 'supportedYears')}
+    metadata = {key: value for key, value in template.items() if key not in ('sourceReuse', 'yearSources', 'supportedYears')}
     metadata.update({'schemaVersion': max(3, template.get('schemaVersion', 1)),
                 'supportedYears': years, 'yearSources': publish})
     previous_years = previous.get('supportedYears') or template.get('supportedYears') or []

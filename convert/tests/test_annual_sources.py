@@ -4,22 +4,27 @@ import unittest
 from pathlib import Path
 
 from convert.common import DATA_ROOT, load_data_plan
+from crawler.year_sources import load_year_links, seed_paths_in
 
 
 class AnnualSourcePlanTests(unittest.TestCase):
     def test_repository_plan_is_derived_from_year_seeds_and_local_files(self):
         plan = load_data_plan(DATA_ROOT)
-        self.assertEqual([target['year'] for target in plan['targets']], [2023, 2024, 2025, 2026])
-        self.assertEqual(
-            [(row['year'], row['parser']) for row in plan['sources']],
-            [(2023, 'plans'), (2023, 'scorelines'),
-             (2024, 'plans'), (2024, 'scorelines'),
-             (2025, 'plans'), (2025, 'scorelines'),
-             (2026, 'mapping'), (2026, 'master'), (2026, 'plans'), (2026, 'scorelines')],
-        )
-        target = plan['targets'][3]
-        self.assertEqual(target['manifestPath'], '来源清单/来源清单_2026.json')
-        self.assertEqual(target['conversionReportPath'], 'reports/转换报告_2026.json')
+        seeds = [load_year_links(path) for path in seed_paths_in(DATA_ROOT)]
+        expected_targets = [seed['year'] for seed in seeds if 'scoreSegments' in seed.get('sources', {})]
+        self.assertEqual([target['year'] for target in plan['targets']], expected_targets)
+        source_parsers = {(row['year'], row['parser']) for row in plan['sources']}
+        for seed in seeds:
+            roles = seed.get('sources', {})
+            year = seed['year']
+            if 'mappingCodeTable' in roles:
+                self.assertIn((year, 'mappingCodeTable'), source_parsers)
+            if 'mappingCodeTable' in roles and 'mappingOverview' not in roles:
+                self.assertNotIn((year, 'mapping'), source_parsers)
+        for target in plan['targets']:
+            year = target['year']
+            self.assertEqual(target['manifestPath'], f'来源清单/来源清单_{year}.json')
+            self.assertEqual(target['conversionReportPath'], f'reports/转换报告_{year}.json')
 
     def test_custom_root_and_non_contiguous_year_filter(self):
         with tempfile.TemporaryDirectory() as directory:

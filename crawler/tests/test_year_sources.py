@@ -176,6 +176,18 @@ class YearSourcesTests(unittest.TestCase):
         seed_row = next(row for row in source_rows_for_seed(seed, Path('data')) if row['parser'] == 'mapping')
         self.assertEqual(seed_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
 
+    def test_partial_mapping_seed_ignores_stale_complete_mapping_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            seed = {'year': 2031, 'sources': {
+                'mappingCodeTable': {'pageUrl': 'https://www.haeea.cn/codes'}}}
+            stale = root / '专业对照/专业对照_2031.json'
+            stale.parent.mkdir(parents=True)
+            stale.write_text('[]', encoding='utf-8')
+            rows = source_rows_for_seed(seed, root)
+            self.assertIn('mappingCodeTable', [row['parser'] for row in rows])
+            self.assertNotIn('mapping', [row['parser'] for row in rows])
+
     def test_seed_rejects_unsafe_source_local_path(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / '2027.json'
