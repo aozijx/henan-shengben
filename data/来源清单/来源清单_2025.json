@@ -12,7 +12,7 @@
       "localPath": "一分一段/原始PDF/2025/01_经济学.pdf",
       "majorCode": "01",
       "majorName": "经济学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "750a95ba0eaef0654451b26d4d9b8993e69c8c5e6520e4391b2bcb02587e6270",
       "bytes": 108433
     },
@@ -23,7 +23,7 @@
       "localPath": "一分一段/原始PDF/2025/02_经济统计学.pdf",
       "majorCode": "02",
       "majorName": "经济统计学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "6e8a14b8017423436e54802eb811b8767d9cdb4ae27a0a8e2d301921377e74af",
       "bytes": 59732
     },
@@ -34,7 +34,7 @@
       "localPath": "一分一段/原始PDF/2025/04_金融学.pdf",
       "majorCode": "04",
       "majorName": "金融学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "7d724d78f92ff1c74b0af246da22953d6181a46671e9c35543c2848b64ddbdbe",
       "bytes": 103023
     },
@@ -45,7 +45,7 @@
       "localPath": "一分一段/原始PDF/2025/06_投资学.pdf",
       "majorCode": "06",
       "majorName": "投资学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b233f33569ce35a63ec247d0f635378f0f3b27b9f849082556b59d2296142f62",
       "bytes": 65623
     },
@@ -56,7 +56,7 @@
       "localPath": "一分一段/原始PDF/2025/07_国际经济与贸易.pdf",
       "majorCode": "07",
       "majorName": "国际经济与贸易",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "667980e9c0d6193831b398d87cac4e6dcc00d4c6b389933155c90e8f4157657a",
       "bytes": 62609
     },
@@ -67,7 +67,7 @@
       "localPath": "一分一段/原始PDF/2025/08_法学.pdf",
       "majorCode": "08",
       "majorName": "法学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ffa069fa940c7c962182b07c395fe6322b349c8455348d833e19eff858750b88",
       "bytes": 131270
     },
@@ -78,7 +78,7 @@
       "localPath": "一分一段/原始PDF/2025/14_思想政治教育.pdf",
       "majorCode": "14",
       "majorName": "思想政治教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "783ecafc5dda5116cecdd395aea5f28144ba37a9a1297e8d2018d9809af65ae4",
       "bytes": 131374
     },
@@ -89,7 +89,7 @@
       "localPath": "一分一段/原始PDF/2025/15_教育学.pdf",
       "majorCode": "15",
       "majorName": "教育学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "885c7640ec836e7e4889b5af475c59d6c104bc4377cca5eaaa439d9221407d9a",
       "bytes": 126055
     },
@@ -100,7 +100,7 @@
       "localPath": "一分一段/原始PDF/2025/17_学前教育.pdf",
       "majorCode": "17",
       "majorName": "学前教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "f6e1bcd278628814ff918f51c6eeb6ada3cf0fab5ffaed1da3a5f9c6ee36fa5e",
       "bytes": 204302
     },
@@ -111,7 +111,7 @@
       "localPath": "一分一段/原始PDF/2025/18_小学教育.pdf",
       "majorCode": "18",
       "majorName": "小学教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "68a397f2c3d921cf60ff8b7819d2bc3110490b3f99f291c4eff8e0abe3e083fb",
       "bytes": 150787
     },
@@ -122,7 +122,7 @@
       "localPath": "一分一段/原始PDF/2025/20_数学与应用数学.pdf",
       "majorCode": "20",
       "majorName": "数学与应用数学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "5b78a6f10939283125fe7aa3ad5e8b3282131e22fde60d70f3d7234185befb5f",
       "bytes": 113305
     },
@@ -133,7 +133,7 @@
       "localPath": "一分一段/原始PDF/2025/28_应用心理学.pdf",
       "majorCode": "28",
       "majorName": "应用心理学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "fbb1cb03505f2424b562146af747bbe69226ffc135ad7657fa593b3f162d94b0",
       "bytes": 134283
     },
@@ -144,7 +144,7 @@
       "localPath": "一分一段/原始PDF/2025/29_地理科学.pdf",
       "majorCode": "29",
       "majorName": "地理科学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "43f37e7ec599b260c535873449ee1e09578e22b32f947a8e021eaf50bf9b8324",
       "bytes": 216288
     },
@@ -155,7 +155,7 @@
       "localPath": "一分一段/原始PDF/2025/35_材料成型及控制工程.pdf",
       "majorCode": "35",
       "majorName": "材料成型及控制工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "d40b52ccefbeaa33f5080f9175a0230d966f7c4b55f9ba3b73958256bbc4f8f7",
       "bytes": 60793
     },
@@ -166,7 +166,7 @@
       "localPath": "一分一段/原始PDF/2025/38_机械设计制造及其自动化.pdf",
       "majorCode": "38",
       "majorName": "机械设计制造及其自动化",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "28e574577fc974d18026f23d8a6de34a15385b3cbcdc4219b2793be873b7613b",
       "bytes": 253396
     },
@@ -177,7 +177,7 @@
       "localPath": "一分一段/原始PDF/2025/39_机械电子工程.pdf",
       "majorCode": "39",
       "majorName": "机械电子工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "4413a878bbf66de36ff81ad98090dce8c277ad71988f51bebb2eb4b5c66284f8",
       "bytes": 276001
     },
@@ -188,7 +188,7 @@
       "localPath": "一分一段/原始PDF/2025/40_车辆工程.pdf",
       "majorCode": "40",
       "majorName": "车辆工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "34d3b0695dcbefdfe032c74c487e2ea42283802d3508518aa69789ad2b76b705",
       "bytes": 253654
     },
@@ -199,7 +199,7 @@
       "localPath": "一分一段/原始PDF/2025/41_汽车服务工程.pdf",
       "majorCode": "41",
       "majorName": "汽车服务工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1529b452dfacd906c48110e61966f626ca6bc5891db15375f5a9f9b126ebfe75",
       "bytes": 239401
     },
@@ -210,7 +210,7 @@
       "localPath": "一分一段/原始PDF/2025/43_电气工程及其自动化.pdf",
       "majorCode": "43",
       "majorName": "电气工程及其自动化",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "7dddcbdac3cf4c2fea958074cb7b89a3ff11b35249734424275169b910a52b8e",
       "bytes": 221765
     },
@@ -221,7 +221,7 @@
       "localPath": "一分一段/原始PDF/2025/44_电子信息工程.pdf",
       "majorCode": "44",
       "majorName": "电子信息工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e6d57773e034d4b721d3a89a8d8dde0ae3f28ed9be22720ac268672e92912bc9",
       "bytes": 242015
     },
@@ -232,7 +232,7 @@
       "localPath": "一分一段/原始PDF/2025/48_自动化.pdf",
       "majorCode": "48",
       "majorName": "自动化",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "59af1aabe4b7d723678b3f920ed1b602a8907d6487529ba406adfdcf45d1db13",
       "bytes": 199593
     },
@@ -243,7 +243,7 @@
       "localPath": "一分一段/原始PDF/2025/49_通信工程.pdf",
       "majorCode": "49",
       "majorName": "通信工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "c9ac9edd43a13e7552c51a646bc232fb8b8a8e191c5e31c496c011bc45b15d88",
       "bytes": 135705
     },
@@ -254,7 +254,7 @@
       "localPath": "一分一段/原始PDF/2025/51_计算机科学与技术.pdf",
       "majorCode": "51",
       "majorName": "计算机科学与技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "08a6dcc376c6e67b1166ae4e3cd36e94712ac182f4cba5e8aa38a62223639bf4",
       "bytes": 254070
     },
@@ -265,7 +265,7 @@
       "localPath": "一分一段/原始PDF/2025/52_软件工程.pdf",
       "majorCode": "52",
       "majorName": "软件工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e54e0eb073fa5e98454d8ad8ccfe2187d6c0295c1ec730eae470005418ad2fc7",
       "bytes": 214792
     },
@@ -276,7 +276,7 @@
       "localPath": "一分一段/原始PDF/2025/53_网络工程.pdf",
       "majorCode": "53",
       "majorName": "网络工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "70e917c5f9261c9934f4851c6a71980ea5ceba9d37d4bbe88d7e3cfc18401dc5",
       "bytes": 259537
     },
@@ -287,7 +287,7 @@
       "localPath": "一分一段/原始PDF/2025/54_物联网工程.pdf",
       "majorCode": "54",
       "majorName": "物联网工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "9e530750ac3a3f2297587390078a74e3a6bc2b28ea37b48b766f0d87dc8f756c",
       "bytes": 221827
     },
@@ -298,7 +298,7 @@
       "localPath": "一分一段/原始PDF/2025/55_数字媒体技术.pdf",
       "majorCode": "55",
       "majorName": "数字媒体技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e0ceef849d0a9a82572ce03040198f68d3a53bc6df0fcd493a35bc212962bfff",
       "bytes": 239990
     },
@@ -309,7 +309,7 @@
       "localPath": "一分一段/原始PDF/2025/57_土木工程.pdf",
       "majorCode": "57",
       "majorName": "土木工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "36d870b3142aeec064491b8f97251d2b7e772dd3f1aded696e721d4e55957f86",
       "bytes": 224597
     },
@@ -320,7 +320,7 @@
       "localPath": "一分一段/原始PDF/2025/58_建筑环境与能源应用工程.pdf",
       "majorCode": "58",
       "majorName": "建筑环境与能源应用工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "bf8d2df9861fc8121ee6e853e9aafeacb4e0201c20a1e4d27e10a716622b882a",
       "bytes": 130248
     },
@@ -331,7 +331,7 @@
       "localPath": "一分一段/原始PDF/2025/59_给排水科学与工程.pdf",
       "majorCode": "59",
       "majorName": "给排水科学与工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "5a466ee12a477370755ea11005602d6e703eae707cf5db9ca12422d2cd09e76c",
       "bytes": 211678
     },
@@ -342,7 +342,7 @@
       "localPath": "一分一段/原始PDF/2025/60_城乡规划.pdf",
       "majorCode": "60",
       "majorName": "城乡规划",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "28cbf33a4a58e15b8cef996024e4cc4aeaeeea4fb3dfe47e9cc976400f40b442",
       "bytes": 241068
     },
@@ -353,7 +353,7 @@
       "localPath": "一分一段/原始PDF/2025/61_道路桥梁与渡河工程.pdf",
       "majorCode": "61",
       "majorName": "道路桥梁与渡河工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "29996c13f08466d135534e7e9c6b55db8373cd7d4ce30e852c433de1530bd6eb",
       "bytes": 247245
     },
@@ -364,7 +364,7 @@
       "localPath": "一分一段/原始PDF/2025/62_水利水电工程.pdf",
       "majorCode": "62",
       "majorName": "水利水电工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "c7652512a2c80138454152843d2a08248fc480f511f47b71186ac61a0dd00808",
       "bytes": 82238
     },
@@ -375,7 +375,7 @@
       "localPath": "一分一段/原始PDF/2025/63_测绘工程.pdf",
       "majorCode": "63",
       "majorName": "测绘工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "783558e6a5096845a6e601f53371636d668de59d0811d075fdd27523e592889f",
       "bytes": 125862
     },
@@ -386,7 +386,7 @@
       "localPath": "一分一段/原始PDF/2025/64_纺织工程.pdf",
       "majorCode": "64",
       "majorName": "纺织工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "d386c93cc5027693ecec31fb0ef7b5440943216ffd5fe414c29f0ce3e9e82ffb",
       "bytes": 53339
     },
@@ -397,7 +397,7 @@
       "localPath": "一分一段/原始PDF/2025/65_交通运输.pdf",
       "majorCode": "65",
       "majorName": "交通运输",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "3495f099ddc3dc576d2bb07eea9fc6f660947be84c4f7200c5c9103bdca3bfee",
       "bytes": 218068
     },
@@ -408,7 +408,7 @@
       "localPath": "一分一段/原始PDF/2025/67_环境工程.pdf",
       "majorCode": "67",
       "majorName": "环境工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "13302091d3dea3dfaba4b365280cb6f1f01866aa6a6e6572bda0147743fe6081",
       "bytes": 126039
     },
@@ -419,7 +419,7 @@
       "localPath": "一分一段/原始PDF/2025/73_高分子材料与工程.pdf",
       "majorCode": "73",
       "majorName": "高分子材料与工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ff0f40165793c0a236f002d65bc42bdfd34ca4bbc1aadc3b21427474ff79592e",
       "bytes": 74788
     },
@@ -430,7 +430,7 @@
       "localPath": "一分一段/原始PDF/2025/74_化学工程与工艺.pdf",
       "majorCode": "74",
       "majorName": "化学工程与工艺",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "45f924048f8d700f33c2ef2eff42e45ff279b9145b146a625cc643d232c90361",
       "bytes": 142494
     },
@@ -441,7 +441,7 @@
       "localPath": "一分一段/原始PDF/2025/75_食品科学与工程.pdf",
       "majorCode": "75",
       "majorName": "食品科学与工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "0c82e0d8244398531a4e6b9297fd3488f78a50ae611af2df4a9cb057b1c403e2",
       "bytes": 275099
     },
@@ -452,7 +452,7 @@
       "localPath": "一分一段/原始PDF/2025/76_食品质量与安全.pdf",
       "majorCode": "76",
       "majorName": "食品质量与安全",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "eaef061df3abb26a90ff8dfc0a892fdb3dd009d5503866b11f3e15af6c5dfd03",
       "bytes": 270966
     },
@@ -463,7 +463,7 @@
       "localPath": "一分一段/原始PDF/2025/78_建筑学.pdf",
       "majorCode": "78",
       "majorName": "建筑学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "5fe36270e9f78965279a1c2ffddfefb6f65d0bec595fcfe7c7e81516aff0a898",
       "bytes": 88508
     },
@@ -474,7 +474,7 @@
       "localPath": "一分一段/原始PDF/2025/80_制药工程.pdf",
       "majorCode": "80",
       "majorName": "制药工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "abd996fcb964e99bc55d57d7df114da3f22b19c61472581056a680d2a3182548",
       "bytes": 142135
     },
@@ -485,7 +485,7 @@
       "localPath": "一分一段/原始PDF/2025/81_药学.pdf",
       "majorCode": "81",
       "majorName": "药学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "4686b39e78f348c906a68f3cba3033dc253269287bb557ae263e6657af1033c2",
       "bytes": 254926
     },
@@ -496,7 +496,7 @@
       "localPath": "一分一段/原始PDF/2025/82_中药学.pdf",
       "majorCode": "82",
       "majorName": "中药学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "9fb5bbff773cf933ad7471085d8926e4b44dc06644205f334a4f9335cbd54cac",
       "bytes": 86016
     },
@@ -507,7 +507,7 @@
       "localPath": "一分一段/原始PDF/2025/83_农学.pdf",
       "majorCode": "83",
       "majorName": "农学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "5b1a9cf6fde3e8fd87a63f61021b2b1924e5117b8f4aade9b530d76cf8712047",
       "bytes": 127045
     },
@@ -518,7 +518,7 @@
       "localPath": "一分一段/原始PDF/2025/84_园艺.pdf",
       "majorCode": "84",
       "majorName": "园艺",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e03a59985a4e71e3beed08371990d9943112ab9fbb88a879ca6b3825d9c5d421",
       "bytes": 147518
     },
@@ -529,7 +529,7 @@
       "localPath": "一分一段/原始PDF/2025/85_植物保护.pdf",
       "majorCode": "85",
       "majorName": "植物保护",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "42e61548a3cbfdd8d7510a85eaf71653ac85a76d75bfde80c2a5c7948aa89308",
       "bytes": 195902
     },
@@ -540,7 +540,7 @@
       "localPath": "一分一段/原始PDF/2025/86_茶学.pdf",
       "majorCode": "86",
       "majorName": "茶学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b93172246fea567c9fd222a401c0ab894ec80fbbdea4a3870d5a0d2402eac4fe",
       "bytes": 120771
     },
@@ -551,7 +551,7 @@
       "localPath": "一分一段/原始PDF/2025/87_林学.pdf",
       "majorCode": "87",
       "majorName": "林学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "028c9f0e0180f547e56993d16e1eb92f61c92c58fffb25d018c3b075eb796f14",
       "bytes": 128394
     },
@@ -562,7 +562,7 @@
       "localPath": "一分一段/原始PDF/2025/88_园林.pdf",
       "majorCode": "88",
       "majorName": "园林",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "60de016b6e1dfd5ea5951c9678af40007b32339455e6f2a8810546173460e49b",
       "bytes": 213675
     },
@@ -573,7 +573,7 @@
       "localPath": "一分一段/原始PDF/2025/89_动物科学.pdf",
       "majorCode": "89",
       "majorName": "动物科学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "21d63f110b25c913ad7df296640b0bb9eb63a6b63ae9963720f961d39f57b171",
       "bytes": 198616
     },
@@ -584,7 +584,7 @@
       "localPath": "一分一段/原始PDF/2025/90_动物医学.pdf",
       "majorCode": "90",
       "majorName": "动物医学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "512df3991fb47d1700015ea512d0c6430c797f4b6880eff2fc372590c7ac9151",
       "bytes": 195936
     },
@@ -595,7 +595,7 @@
       "localPath": "一分一段/原始PDF/2025/93_信息管理与信息系统.pdf",
       "majorCode": "93",
       "majorName": "信息管理与信息系统",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "3f34b621859abb218d9635d6c68eda98af885aa21f619bc36cf526124b732229",
       "bytes": 269566
     },
@@ -606,7 +606,7 @@
       "localPath": "一分一段/原始PDF/2025/94_工程管理.pdf",
       "majorCode": "94",
       "majorName": "工程管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1bc320342b10e5c66b97ad782ff771d71ae0c03b29962402e66d0be31784e990",
       "bytes": 230594
     },
@@ -617,7 +617,7 @@
       "localPath": "一分一段/原始PDF/2025/95_工程造价.pdf",
       "majorCode": "95",
       "majorName": "工程造价",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ebd1f86d2d52609e3a6886343859b46dc31a44e1a19a533023be8276f9abd03b",
       "bytes": 254279
     },
@@ -628,7 +628,7 @@
       "localPath": "一分一段/原始PDF/2025/96_工商管理.pdf",
       "majorCode": "96",
       "majorName": "工商管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "524f97cc04996002badd4e229a252fe9b395b7d1fcbfaf7111c94fae336ffa68",
       "bytes": 154973
     },
@@ -639,7 +639,7 @@
       "localPath": "一分一段/原始PDF/2025/97_市场营销.pdf",
       "majorCode": "97",
       "majorName": "市场营销",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e224530994bbf63a252c54ffaae6dae3b7663204dbef49fc07d844e2817ca077",
       "bytes": 264287
     },
@@ -650,7 +650,7 @@
       "localPath": "一分一段/原始PDF/2025/98_物流管理.pdf",
       "majorCode": "98",
       "majorName": "物流管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "4a8b74d9ff7e8f5b85bfdcb2d2bbd39c85290c2c8efc2eff217b8ab47748de15",
       "bytes": 234769
     },
@@ -661,7 +661,7 @@
       "localPath": "一分一段/原始PDF/2025/99_会计学.pdf",
       "majorCode": "99",
       "majorName": "会计学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "d6c1b80ccc9206d2a0c84e9eb7c6fbae272e89346179692b3e969f6e2ca9a0fd",
       "bytes": 242504
     },
@@ -672,7 +672,7 @@
       "localPath": "一分一段/原始PDF/2025/A1_财务管理.pdf",
       "majorCode": "A1",
       "majorName": "财务管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "bf3359d2d54a61d97258b882a20f25227155b00a8386cdf02097488f97d02819",
       "bytes": 151819
     },
@@ -683,7 +683,7 @@
       "localPath": "一分一段/原始PDF/2025/A2_统计学.pdf",
       "majorCode": "A2",
       "majorName": "统计学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "663efb6f08b5d2a678a159e604323f8798a6e179f5391086b922760d1a7e8f2f",
       "bytes": 106863
     },
@@ -694,7 +694,7 @@
       "localPath": "一分一段/原始PDF/2025/A4_人力资源管理.pdf",
       "majorCode": "A4",
       "majorName": "人力资源管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "0e4d4e2c2705c5f3a06417b63aaa45d09ccf3d6c17c7721f6021c725d66b8ac7",
       "bytes": 246156
     },
@@ -705,7 +705,7 @@
       "localPath": "一分一段/原始PDF/2025/A7_行政管理.pdf",
       "majorCode": "A7",
       "majorName": "行政管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "42f10ff6af2a1485ea06cb5eeaf828cef7ac489e6409a19e1f0c39255af8fd4b",
       "bytes": 135965
     },
@@ -716,7 +716,7 @@
       "localPath": "一分一段/原始PDF/2025/A8_档案学.pdf",
       "majorCode": "A8",
       "majorName": "档案学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "81e0d2dac432e179743660230a8f50d846fb498f5339657296c9628246fc2908",
       "bytes": 99489
     },
@@ -727,7 +727,7 @@
       "localPath": "一分一段/原始PDF/2025/A9_电子商务.pdf",
       "majorCode": "A9",
       "majorName": "电子商务",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "d525c77bae7c5001072429d559f268e719ab37c3442249fef419e6ae6f3f7b6c",
       "bytes": 252986
     },
@@ -738,7 +738,7 @@
       "localPath": "一分一段/原始PDF/2025/B1_旅游管理.pdf",
       "majorCode": "B1",
       "majorName": "旅游管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "abf196f1610df3cc55cd4cfa1e98f8babae9aab81098504f01a2bd7991ef4b1e",
       "bytes": 288411
     },
@@ -749,7 +749,7 @@
       "localPath": "一分一段/原始PDF/2025/B2_汉语言文学.pdf",
       "majorCode": "B2",
       "majorName": "汉语言文学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b7f3ba36b49c6ad8596f4240cbeb202a80d6db68c86387116aa102ed03a9be7f",
       "bytes": 129260
     },
@@ -760,7 +760,7 @@
       "localPath": "一分一段/原始PDF/2025/B5_日语.pdf",
       "majorCode": "B5",
       "majorName": "日语",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "27994863cc277ed26c8e5f3c937e56444c0d1ee1aed236814eda39df0d68fbc8",
       "bytes": 82498
     },
@@ -771,7 +771,7 @@
       "localPath": "一分一段/原始PDF/2025/B6_新闻学.pdf",
       "majorCode": "B6",
       "majorName": "新闻学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "bc379f9ac6979ec3099159f97636df185cb68a08b359ac358ba59d816de11f05",
       "bytes": 111940
     },
@@ -782,7 +782,7 @@
       "localPath": "一分一段/原始PDF/2025/B7_广播电视学.pdf",
       "majorCode": "B7",
       "majorName": "广播电视学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "11f21f210758508fe62ec7fc06fcd6f3827568ee62c2a11989f88186903f270e",
       "bytes": 56640
     },
@@ -793,7 +793,7 @@
       "localPath": "一分一段/原始PDF/2025/B9_广播电视编导.pdf",
       "majorCode": "B9",
       "majorName": "广播电视编导",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "f5001ec4d17d53885b0c02d323fc2d95eeddc04373d782baa4c10288704b5b0b",
       "bytes": 129917
     },
@@ -804,7 +804,7 @@
       "localPath": "一分一段/原始PDF/2025/C1_播音与主持艺术.pdf",
       "majorCode": "C1",
       "majorName": "播音与主持艺术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b5f4e34bba6056f00af5288f7b8fa6d33b8a526593fa2b2efce7e3c04d93cabf",
       "bytes": 135572
     },
@@ -815,7 +815,7 @@
       "localPath": "一分一段/原始PDF/2025/C2_英语.pdf",
       "majorCode": "C2",
       "majorName": "英语",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1dfbaa203cfb256a7b58d215f9f73e9f48a8f27fabcbd7eb75643ac8fe9e47fb",
       "bytes": 120031
     },
@@ -826,7 +826,7 @@
       "localPath": "一分一段/原始PDF/2025/C3_商务英语.pdf",
       "majorCode": "C3",
       "majorName": "商务英语",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a8213a6c81bc631b304b07e9d71b96d416efdb37eca4ff23fe6ec15244bc05ef",
       "bytes": 122667
     },
@@ -837,7 +837,7 @@
       "localPath": "一分一段/原始PDF/2025/C4_临床医学.pdf",
       "majorCode": "C4",
       "majorName": "临床医学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "65b763628c429fb97369df60dd83a9f045a897fbd2d0e7c85e79f9ebc206b8d0",
       "bytes": 88870
     },
@@ -848,7 +848,7 @@
       "localPath": "一分一段/原始PDF/2025/C5_口腔医学.pdf",
       "majorCode": "C5",
       "majorName": "口腔医学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "eca3757f60e965571dd46d711f20ea77a10dafc8d3730fa9722d5e0ac3c4ccc9",
       "bytes": 62535
     },
@@ -859,7 +859,7 @@
       "localPath": "一分一段/原始PDF/2025/C6_医学检验技术.pdf",
       "majorCode": "C6",
       "majorName": "医学检验技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a41b3d644156530ae136fb4e2e976641eac7e2747fcf4dfabd6958c9dc92aadc",
       "bytes": 103045
     },
@@ -870,7 +870,7 @@
       "localPath": "一分一段/原始PDF/2025/C7_医学影像技术.pdf",
       "majorCode": "C7",
       "majorName": "医学影像技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "cb551c4acd86b6cca8f5af0dbe81a30cd7e2617c9c8640d4b1351c61874f68af",
       "bytes": 111423
     },
@@ -881,7 +881,7 @@
       "localPath": "一分一段/原始PDF/2025/C8_眼视光学.pdf",
       "majorCode": "C8",
       "majorName": "眼视光学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "95190682fd0d5cb86b5d98c3f4d5b05400471a3e91b80593745eed99f22a3823",
       "bytes": 199988
     },
@@ -892,7 +892,7 @@
       "localPath": "一分一段/原始PDF/2025/C9_康复治疗学.pdf",
       "majorCode": "C9",
       "majorName": "康复治疗学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "9cda448c8749342464da40616a32c5d0f735949f9ce7ab731c505938caef5f21",
       "bytes": 253018
     },
@@ -903,7 +903,7 @@
       "localPath": "一分一段/原始PDF/2025/D1_口腔医学技术.pdf",
       "majorCode": "D1",
       "majorName": "口腔医学技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "6c609b264a831104dff24d67c352e8ffcb25c86c718172ecbed1ac1d8d1e9ad3",
       "bytes": 144042
     },
@@ -914,7 +914,7 @@
       "localPath": "一分一段/原始PDF/2025/D2_护理学.pdf",
       "majorCode": "D2",
       "majorName": "护理学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "c703c35f17e0d3624660a415c02ccca82aecc642ff1d17222c7ccd93b7f05118",
       "bytes": 202691
     },
@@ -925,7 +925,7 @@
       "localPath": "一分一段/原始PDF/2025/D3_中医学.pdf",
       "majorCode": "D3",
       "majorName": "中医学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "9554fe954837be05873743540465a1cfb9d55296edf9be8b36547edd38447194",
       "bytes": 90296
     },
@@ -936,7 +936,7 @@
       "localPath": "一分一段/原始PDF/2025/D4_针灸推拿学.pdf",
       "majorCode": "D4",
       "majorName": "针灸推拿学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "7a06ae17f6aa1594a83cdd24bdb6d1a49ef3abfd2dcb1e2b019a81667966fb27",
       "bytes": 94039
     },
@@ -947,7 +947,7 @@
       "localPath": "一分一段/原始PDF/2025/D5_体育教育.pdf",
       "majorCode": "D5",
       "majorName": "体育教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "002e813d7cabc9ee0b090cfb0959d7252a3cdb4db86cc2aa295257dbc59325a7",
       "bytes": 127702
     },
@@ -958,7 +958,7 @@
       "localPath": "一分一段/原始PDF/2025/D6_社会体育指导与管理.pdf",
       "majorCode": "D6",
       "majorName": "社会体育指导与管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ed694b342dd796e81d52e0c97f74c5116ac23f9c4083da5572c0272d3ac8b494",
       "bytes": 138489
     },
@@ -969,7 +969,7 @@
       "localPath": "一分一段/原始PDF/2025/D7_音乐表演.pdf",
       "majorCode": "D7",
       "majorName": "音乐表演",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ba28481e4fa40326b2e4048d0dd3b9d8e7170212afc6e7e46affb22fa9524084",
       "bytes": 134974
     },
@@ -980,7 +980,7 @@
       "localPath": "一分一段/原始PDF/2025/D8_音乐学.pdf",
       "majorCode": "D8",
       "majorName": "音乐学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "20181a5f38f3396845d3c57375778e283c6fff3c2398454389c611c05c947113",
       "bytes": 89323
     },
@@ -991,7 +991,7 @@
       "localPath": "一分一段/原始PDF/2025/D9_舞蹈编导.pdf",
       "majorCode": "D9",
       "majorName": "舞蹈编导",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "545067ed35055bbfa8575749a2556eb95ddf37d8c38671996693cf7afb6797f4",
       "bytes": 112408
     },
@@ -1002,7 +1002,7 @@
       "localPath": "一分一段/原始PDF/2025/E3_美术学.pdf",
       "majorCode": "E3",
       "majorName": "美术学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a2efde1b84a116fa5fffdd8ea5546f3f3a20c615f65631935d64bbbc0bc42147",
       "bytes": 120479
     },
@@ -1013,7 +1013,7 @@
       "localPath": "一分一段/原始PDF/2025/E6_摄影.pdf",
       "majorCode": "E6",
       "majorName": "摄影",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a1791bfe08497afebc0b51e5b29a031c9f7ffaa3369dd26e2b6cb9a098c13cc6",
       "bytes": 122970
     },
@@ -1024,7 +1024,7 @@
       "localPath": "一分一段/原始PDF/2025/E7_视觉传达设计.pdf",
       "majorCode": "E7",
       "majorName": "视觉传达设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1c1fbc41dff93aea74f417c1e1f2ceaa0af1794cab1491ba485a98746becc6fe",
       "bytes": 127789
     },
@@ -1035,7 +1035,7 @@
       "localPath": "一分一段/原始PDF/2025/E8_环境设计.pdf",
       "majorCode": "E8",
       "majorName": "环境设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "c2e2e0f04f018955ae320f98792aff2117f3debf1655f48f80f476ee100fb760",
       "bytes": 127746
     },
@@ -1046,7 +1046,7 @@
       "localPath": "一分一段/原始PDF/2025/E9_产品设计.pdf",
       "majorCode": "E9",
       "majorName": "产品设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "93e5c435ec72cd145fd7e0dbff4e335a16b5dfdbfa7da250d9ecd953cbcfbed7",
       "bytes": 133798
     },
@@ -1057,7 +1057,7 @@
       "localPath": "一分一段/原始PDF/2025/F1_服装与服饰设计.pdf",
       "majorCode": "F1",
       "majorName": "服装与服饰设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "9f6af010f877a4ed75d4faeb0183ee1421c887340e7bf35e7ca480d1323f2051",
       "bytes": 133987
     },
@@ -1068,7 +1068,7 @@
       "localPath": "一分一段/原始PDF/2025/F2_动画.pdf",
       "majorCode": "F2",
       "majorName": "动画",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e6dfa5dc58ee1cb0e07c88aa9e6cd4577c4b963cc3748828d2a9b7c4da6fb245",
       "bytes": 127781
     },
@@ -1079,7 +1079,7 @@
       "localPath": "一分一段/原始PDF/2025/F8_酒店管理.pdf",
       "majorCode": "F8",
       "majorName": "酒店管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "cb2e330ad16b7ab323be4bec8cda2d01a74fc4a99c09b741dec029debafeb122",
       "bytes": 292041
     },
@@ -1090,7 +1090,7 @@
       "localPath": "一分一段/原始PDF/2025/G6_物流工程.pdf",
       "majorCode": "G6",
       "majorName": "物流工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a08d5ba3950bdc45c998881a5a5e0eeddc1b2ad7f4bb4a54bcd618295c9dcd47",
       "bytes": 125543
     },
@@ -1101,7 +1101,7 @@
       "localPath": "一分一段/原始PDF/2025/G7_会展经济与管理.pdf",
       "majorCode": "G7",
       "majorName": "会展经济与管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "08731d20667fce75a5b34f9f40ec8e34d9e82a1ec515e9c12ca2914515dbe065",
       "bytes": 253567
     },
@@ -1112,7 +1112,7 @@
       "localPath": "一分一段/原始PDF/2025/G8_网络与新媒体.pdf",
       "majorCode": "G8",
       "majorName": "网络与新媒体",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "8dd42e3b7f10cff9d768744165c0b8a015a8a9ddb14b21614dd3d1b0bb24112f",
       "bytes": 135818
     },
@@ -1123,7 +1123,7 @@
       "localPath": "一分一段/原始PDF/2025/H2_新能源材料与器件.pdf",
       "majorCode": "H2",
       "majorName": "新能源材料与器件",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "f5fe07ebd11c3321f13da6182022054cf8a5a6daffdc6ca14b02b2948d0f04d5",
       "bytes": 132160
     },
@@ -1134,7 +1134,7 @@
       "localPath": "一分一段/原始PDF/2025/H3_机器人工程.pdf",
       "majorCode": "H3",
       "majorName": "机器人工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ccf06defeea13e90152335e5586a5e0e32954fd66864be2ee7a2a6e81dc555a8",
       "bytes": 115093
     },
@@ -1145,7 +1145,7 @@
       "localPath": "一分一段/原始PDF/2025/H5_电缆工程.pdf",
       "majorCode": "H5",
       "majorName": "电缆工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "f3770bacf7c29e5dea51e22df1de968b940191bec456df0bf5029fc4a815053f",
       "bytes": 138485
     },
@@ -1156,7 +1156,7 @@
       "localPath": "一分一段/原始PDF/2025/H8_健康服务与管理.pdf",
       "majorCode": "H8",
       "majorName": "健康服务与管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "f05edfda1be3e864b3a95e9025d42645badca0dc28b4ce989593810f00375e10",
       "bytes": 200462
     },
@@ -1167,7 +1167,7 @@
       "localPath": "一分一段/原始PDF/2025/H9_智能制造工程.pdf",
       "majorCode": "H9",
       "majorName": "智能制造工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "694359d20b546eb95fe720679149ac0b99bc693bf3ac6bc0d2617e923e173140",
       "bytes": 213735
     },
@@ -1178,7 +1178,7 @@
       "localPath": "一分一段/原始PDF/2025/J2_数据科学与大数据技术.pdf",
       "majorCode": "J2",
       "majorName": "数据科学与大数据技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "199417e20f948fa1670c6739a10d3997a9b753726929dfbbfcf62153ad4c1870",
       "bytes": 201233
     },
@@ -1189,7 +1189,7 @@
       "localPath": "一分一段/原始PDF/2025/J6_特殊教育.pdf",
       "majorCode": "J6",
       "majorName": "特殊教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "cfb6f10bde4621c2de6fb8596f69bd5300ed23b365e2bf6b0da4128c4ef3dd4b",
       "bytes": 128678
     },
@@ -1200,7 +1200,7 @@
       "localPath": "一分一段/原始PDF/2025/J8_电子科学与技术.pdf",
       "majorCode": "J8",
       "majorName": "电子科学与技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "7e480bf3b13f01c042ea8d8143d0f4b0c8dbf278c21b980cf4666a7a9bbba51c",
       "bytes": 103076
     },
@@ -1211,7 +1211,7 @@
       "localPath": "一分一段/原始PDF/2025/K2_人工智能.pdf",
       "majorCode": "K2",
       "majorName": "人工智能",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "6b31b30c815cd620b0215842d877590d74a71d84e8d45cc2c82a249b107bb105",
       "bytes": 241744
     },
@@ -1222,7 +1222,7 @@
       "localPath": "一分一段/原始PDF/2025/K4_生物技术.pdf",
       "majorCode": "K4",
       "majorName": "生物技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "2b9d800a793011ba6c1b8674c3a73cab081d5b86a3372882cf278b530a096b5b",
       "bytes": 51372
     },
@@ -1233,7 +1233,7 @@
       "localPath": "一分一段/原始PDF/2025/K5_翻译.pdf",
       "majorCode": "K5",
       "majorName": "翻译",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "7003768beb59842d127f3b280211f2dfdcce438eb92fd48173ab0b07a584195f",
       "bytes": 82864
     },
@@ -1244,7 +1244,7 @@
       "localPath": "一分一段/原始PDF/2025/K6_家政学.pdf",
       "majorCode": "K6",
       "majorName": "家政学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "23257dd0c1e4eeef8075eb839562070a8ad1f460cc0553189c6568ca814039f7",
       "bytes": 99064
     },
@@ -1255,7 +1255,7 @@
       "localPath": "一分一段/原始PDF/2025/K7_舞蹈学.pdf",
       "majorCode": "K7",
       "majorName": "舞蹈学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "5bec7f4b531eaae09265c9da14a409e0c9b9521d5878ed7a931fc3c60aa3b009",
       "bytes": 82661
     },
@@ -1266,7 +1266,7 @@
       "localPath": "一分一段/原始PDF/2025/N8_金融工程.pdf",
       "majorCode": "N8",
       "majorName": "金融工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "42aaec762602e3fe8ff9d30934232cbb5d310a04dadaf2079b33040d3238aaf2",
       "bytes": 50476
     },
@@ -1277,7 +1277,7 @@
       "localPath": "一分一段/原始PDF/2025/P1_金融科技.pdf",
       "majorCode": "P1",
       "majorName": "金融科技",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "fc050e6b24959f597e2e7fcf517851f232db18d7c68be8d38a38498bf902fa94",
       "bytes": 52367
     },
@@ -1288,7 +1288,7 @@
       "localPath": "一分一段/原始PDF/2025/P2_知识产权.pdf",
       "majorCode": "P2",
       "majorName": "知识产权",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "efc74b50e035125037b83ef68785c7405cb8869e1b6310af5256f014cec7bef7",
       "bytes": 117793
     },
@@ -1299,7 +1299,7 @@
       "localPath": "一分一段/原始PDF/2025/P3_社会工作.pdf",
       "majorCode": "P3",
       "majorName": "社会工作",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "c99564a9ca53856116129e516f38d5b27e0894d5bd2fd7740f09df68ca25f470",
       "bytes": 97060
     },
@@ -1310,7 +1310,7 @@
       "localPath": "一分一段/原始PDF/2025/P4_运动康复.pdf",
       "majorCode": "P4",
       "majorName": "运动康复",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "6e0e230bcb880ff0082797a01c759922e6883f1265a348a4b2fc57954e5dff84",
       "bytes": 119199
     },
@@ -1321,7 +1321,7 @@
       "localPath": "一分一段/原始PDF/2025/P5_汉语国际教育.pdf",
       "majorCode": "P5",
       "majorName": "汉语国际教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1a93e4be5d311fb0b316461ffc629a1628602d49c332994757bbd353bd187a55",
       "bytes": 51957
     },
@@ -1332,7 +1332,7 @@
       "localPath": "一分一段/原始PDF/2025/P6_地理信息科学.pdf",
       "majorCode": "P6",
       "majorName": "地理信息科学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "e23c60edf83164b034b5a9a458cf98c76a5d2bbe5e78024d68393daf877fbbf6",
       "bytes": 194737
     },
@@ -1343,7 +1343,7 @@
       "localPath": "一分一段/原始PDF/2025/P7_心理学.pdf",
       "majorCode": "P7",
       "majorName": "心理学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1c4c10681ac347810c34505c70eef9e8b594b0d842fd61fbdac92be1eb22cbce",
       "bytes": 61434
     },
@@ -1354,7 +1354,7 @@
       "localPath": "一分一段/原始PDF/2025/P8_工业设计.pdf",
       "majorCode": "P8",
       "majorName": "工业设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "3faacdad0d3b7de0e7416e17098cc90c9e679c42144fc2becb4bd1f99fc5ef6a",
       "bytes": 59384
     },
@@ -1365,7 +1365,7 @@
       "localPath": "一分一段/原始PDF/2025/P9_城市地下空间工程.pdf",
       "majorCode": "P9",
       "majorName": "城市地下空间工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "5e52067a12434e14e3be425101143290e8d06fea43f8260eb6a96bec67f6c8db",
       "bytes": 216387
     },
@@ -1376,7 +1376,7 @@
       "localPath": "一分一段/原始PDF/2025/Q1_水文与水资源工程.pdf",
       "majorCode": "Q1",
       "majorName": "水文与水资源工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "d7f4d9efc416ce080c84498651b91fe0caa20a3591ad28704e49d575b5fe0f67",
       "bytes": 127607
     },
@@ -1387,7 +1387,7 @@
       "localPath": "一分一段/原始PDF/2025/Q2_安全工程.pdf",
       "majorCode": "Q2",
       "majorName": "安全工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "78a3aa5ba7cd525c0383748ffe72e45cf2dda3ebf7c888a27e2767d074173192",
       "bytes": 136700
     },
@@ -1398,7 +1398,7 @@
       "localPath": "一分一段/原始PDF/2025/Q3_生物工程.pdf",
       "majorCode": "Q3",
       "majorName": "生物工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "68847e9b05ed2d131d7a94f9149462fd6f6cbc00459697763a16fb8a50533951",
       "bytes": 114727
     },
@@ -1409,7 +1409,7 @@
       "localPath": "一分一段/原始PDF/2025/Q4_智能医学工程.pdf",
       "majorCode": "Q4",
       "majorName": "智能医学工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "41698e46fa1a65581828bc7c3449ffe50a0775144eb3eaba036fec4b18e59656",
       "bytes": 124390
     },
@@ -1420,7 +1420,7 @@
       "localPath": "一分一段/原始PDF/2025/Q5_审计学.pdf",
       "majorCode": "Q5",
       "majorName": "审计学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ac80f3b3e168b742a0cfcfadfb612498c4da79c5f1f48b00ed5edc680a3427e8",
       "bytes": 146427
     },
@@ -1431,7 +1431,7 @@
       "localPath": "一分一段/原始PDF/2025/Q6_财务会计教育.pdf",
       "majorCode": "Q6",
       "majorName": "财务会计教育",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b902876c1e50e13936a4ede5f02ff04e12cbb34ac56c8e5833fd21820a0f05af",
       "bytes": 71163
     },
@@ -1442,7 +1442,7 @@
       "localPath": "一分一段/原始PDF/2025/Q9_舞蹈表演.pdf",
       "majorCode": "Q9",
       "majorName": "舞蹈表演",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "1e4dc8eb7fe84613954d4344c9ee34c9f36acc309855f6631f0093aa8bb27e22",
       "bytes": 100809
     },
@@ -1453,7 +1453,7 @@
       "localPath": "一分一段/原始PDF/2025/R1_表演.pdf",
       "majorCode": "R1",
       "majorName": "表演",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "49779c521f288973ea7b6226ce806d72de430d469cfb42bb50da558e1442c5ed",
       "bytes": 56235
     },
@@ -1464,7 +1464,7 @@
       "localPath": "一分一段/原始PDF/2025/R3_数字媒体艺术.pdf",
       "majorCode": "R3",
       "majorName": "数字媒体艺术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b406458fccc375a79de485e2bd1bbe2cb4ce061e4e89912d021136a0c7dba106",
       "bytes": 129103
     },
@@ -1475,7 +1475,7 @@
       "localPath": "一分一段/原始PDF/2025/R4_互联网金融.pdf",
       "majorCode": "R4",
       "majorName": "互联网金融",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "8750cfb0abf86db40739e0237601f64a630b8738dabd43fbe3e9e20ecd385099",
       "bytes": 60861
     },
@@ -1486,7 +1486,7 @@
       "localPath": "一分一段/原始PDF/2025/R5_宝石及材料工艺学.pdf",
       "majorCode": "R5",
       "majorName": "宝石及材料工艺学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ec499ba2dc2f7c5579e57b4058a3b69595495f81250c00b199584b231ee8f801",
       "bytes": 56387
     },
@@ -1497,7 +1497,7 @@
       "localPath": "一分一段/原始PDF/2025/R6_机械工程.pdf",
       "majorCode": "R6",
       "majorName": "机械工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "09cdf2bb0269f3dbde5141eb66b338678099a33c2cc696fc5e39c87a50cb2ec2",
       "bytes": 51334
     },
@@ -1508,7 +1508,7 @@
       "localPath": "一分一段/原始PDF/2025/R7_包装工程.pdf",
       "majorCode": "R7",
       "majorName": "包装工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ff450638367cf372d76c3d946ad638966657705bd08258f9a3103d56a2b075f1",
       "bytes": 205497
     },
@@ -1519,7 +1519,7 @@
       "localPath": "一分一段/原始PDF/2025/R8_能源与动力工程.pdf",
       "majorCode": "R8",
       "majorName": "能源与动力工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "ae8da0ec44a833a3d602425d2cdf1b5873c27402f882d43e2969e9792bebb85b",
       "bytes": 133342
     },
@@ -1530,7 +1530,7 @@
       "localPath": "一分一段/原始PDF/2025/R9_智能科学与技术.pdf",
       "majorCode": "R9",
       "majorName": "智能科学与技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "903cd11211dcc021a17e58e2ca8ae1d380f4ef8aa1d82a7dc930bd843af19ba1",
       "bytes": 210983
     },
@@ -1541,7 +1541,7 @@
       "localPath": "一分一段/原始PDF/2025/S1_国际商务.pdf",
       "majorCode": "S1",
       "majorName": "国际商务",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a4278b1fcd4575c92d6d39f6a4186181d4a456de6b43ceb927a6fb0c342771ee",
       "bytes": 113962
     },
@@ -1552,7 +1552,7 @@
       "localPath": "一分一段/原始PDF/2025/S2_税收学.pdf",
       "majorCode": "S2",
       "majorName": "税收学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "71decd18b525df37262a33e1ceda3e3a7a346e3bd3200fb5b7b555e68f19199e",
       "bytes": 57361
     },
@@ -1563,7 +1563,7 @@
       "localPath": "一分一段/原始PDF/2025/S3_金融数学.pdf",
       "majorCode": "S3",
       "majorName": "金融数学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a8c863882061e6c1d741001dacd7f28112b015dd449ce1bea9476117ebd69897",
       "bytes": 52569
     },
@@ -1574,7 +1574,7 @@
       "localPath": "一分一段/原始PDF/2025/S4_教育技术学.pdf",
       "majorCode": "S4",
       "majorName": "教育技术学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "d0216c7c8734ab59e0bdf788ab04a19bb369f7c7aac947463f2f3a8d294c60ae",
       "bytes": 94815
     },
@@ -1585,7 +1585,7 @@
       "localPath": "一分一段/原始PDF/2025/S5_应用物理学.pdf",
       "majorCode": "S5",
       "majorName": "应用物理学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "78a1efd9253b95f83e6933200db978c9faab195abca71f691a902c74d70a9880",
       "bytes": 69723
     },
@@ -1596,7 +1596,7 @@
       "localPath": "一分一段/原始PDF/2025/S6_应用化学.pdf",
       "majorCode": "S6",
       "majorName": "应用化学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "4458185e6b13cb5e9a39113c67845073ec65fa8987b337849ff78f3191eac06b",
       "bytes": 58464
     },
@@ -1607,7 +1607,7 @@
       "localPath": "一分一段/原始PDF/2025/S7_新能源汽车工程.pdf",
       "majorCode": "S7",
       "majorName": "新能源汽车工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b97106a279aa080a5c7218a6341d750fe01d5dad193e9e5badfcb73a839bd7b7",
       "bytes": 61183
     },
@@ -1618,7 +1618,7 @@
       "localPath": "一分一段/原始PDF/2025/S8_材料化学.pdf",
       "majorCode": "S8",
       "majorName": "材料化学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "eab1b49b3efc11fe9bf0209e412415bc61e44ac7e25a094d78b0c7c43b44b970",
       "bytes": 70550
     },
@@ -1629,7 +1629,7 @@
       "localPath": "一分一段/原始PDF/2025/S9_广告学.pdf",
       "majorCode": "S9",
       "majorName": "广告学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "fc5ea1b9912c929ce03f5cc0a139f7e675c70ce507cb7125ae4a1331d3822ca0",
       "bytes": 80916
     },
@@ -1640,7 +1640,7 @@
       "localPath": "一分一段/原始PDF/2025/T1_无机非金属材料工程.pdf",
       "majorCode": "T1",
       "majorName": "无机非金属材料工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a8ceefcb4c1af4beb708077d50d9dbc82efdd5127be3dc1b06ce3a74933ca3eb",
       "bytes": 58614
     },
@@ -1651,7 +1651,7 @@
       "localPath": "一分一段/原始PDF/2025/T2_新能源科学与工程.pdf",
       "majorCode": "T2",
       "majorName": "新能源科学与工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "6575671215a355fcee362c1acd2300f4734e53c3c5ba9d856c815ccbaa33cb39",
       "bytes": 91026
     },
@@ -1662,7 +1662,7 @@
       "localPath": "一分一段/原始PDF/2025/T3_电气工程与智能控制.pdf",
       "majorCode": "T3",
       "majorName": "电气工程与智能控制",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "a402fbdefdbab0a0eddf7c7ee74d66099fef65a2f411b7113e4f1515ba8cb0a8",
       "bytes": 197377
     },
@@ -1673,7 +1673,7 @@
       "localPath": "一分一段/原始PDF/2025/T4_智能工程与创意设计.pdf",
       "majorCode": "T4",
       "majorName": "智能工程与创意设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "2968a2a6545131427576f18668643f46578262a61a5487a3225dc9c30c177712",
       "bytes": 85253
     },
@@ -1684,7 +1684,7 @@
       "localPath": "一分一段/原始PDF/2025/T5_虚拟现实技术.pdf",
       "majorCode": "T5",
       "majorName": "虚拟现实技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "3be0cdf97d37e0fdb3b7503580317800107d9da6f9255ba9f8d9da6558133b32",
       "bytes": 201519
     },
@@ -1695,7 +1695,7 @@
       "localPath": "一分一段/原始PDF/2025/T6_建筑电气与智能化.pdf",
       "majorCode": "T6",
       "majorName": "建筑电气与智能化",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "552a45ef0352bb779f30c470c378e9531d271c7dc9952b596e6afef8cb653b9f",
       "bytes": 97632
     },
@@ -1706,7 +1706,7 @@
       "localPath": "一分一段/原始PDF/2025/T7_智能建造.pdf",
       "majorCode": "T7",
       "majorName": "智能建造",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "cd6b318dac6fe16e0c13a1a86038ca2a2f362a3fa90e7bd0371c535a6132deda",
       "bytes": 200600
     },
@@ -1717,7 +1717,7 @@
       "localPath": "一分一段/原始PDF/2025/T8_遥感科学与技术.pdf",
       "majorCode": "T8",
       "majorName": "遥感科学与技术",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "4ad0e7eaf32b380cb808ef02fca3ee731e735964f611c9bc7f2f74e09eceaf95",
       "bytes": 91754
     },
@@ -1728,7 +1728,7 @@
       "localPath": "一分一段/原始PDF/2025/T9_交通工程.pdf",
       "majorCode": "T9",
       "majorName": "交通工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "269a9e67083530ba46a9d053a95550c9b2892a295387a12cc035bcab7b9ef35a",
       "bytes": 101550
     },
@@ -1739,7 +1739,7 @@
       "localPath": "一分一段/原始PDF/2025/U1_假肢矫形工程.pdf",
       "majorCode": "U1",
       "majorName": "假肢矫形工程",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "08ea0386d309548ca5d0fd6fe6820f099251d6b80644a87b5d73a48e106597be",
       "bytes": 67396
     },
@@ -1750,7 +1750,7 @@
       "localPath": "一分一段/原始PDF/2025/U2_风景园林.pdf",
       "majorCode": "U2",
       "majorName": "风景园林",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "889dbdacb378efa001a89d621477f50f6510798153c1c25584d742267b554e03",
       "bytes": 61750
     },
@@ -1761,7 +1761,7 @@
       "localPath": "一分一段/原始PDF/2025/U3_生物制药.pdf",
       "majorCode": "U3",
       "majorName": "生物制药",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "8ca6d27469b35a95e57ae1716c4214b9a6c3cd0cdf0125364f519a70e1a162a5",
       "bytes": 105874
     },
@@ -1772,7 +1772,7 @@
       "localPath": "一分一段/原始PDF/2025/U4_中药资源与开发.pdf",
       "majorCode": "U4",
       "majorName": "中药资源与开发",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "492f6200820aa394d9559f849c6449a0c10779d405c198ac70e5d2afbc127077",
       "bytes": 133149
     },
@@ -1783,7 +1783,7 @@
       "localPath": "一分一段/原始PDF/2025/U5_助产学.pdf",
       "majorCode": "U5",
       "majorName": "助产学",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "4f2f7712fcd90d20723146cada5fa1ef3fa73633b71bc887dde04a9a55206e05",
       "bytes": 59197
     },
@@ -1794,7 +1794,7 @@
       "localPath": "一分一段/原始PDF/2025/U6_大数据管理与应用.pdf",
       "majorCode": "U6",
       "majorName": "大数据管理与应用",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "7bd639b5a50adf875041eff544d7940d08193189fb6662516b2e4e50c9bf3a43",
       "bytes": 93862
     },
@@ -1805,7 +1805,7 @@
       "localPath": "一分一段/原始PDF/2025/U7_工程审计.pdf",
       "majorCode": "U7",
       "majorName": "工程审计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "b9708bd25c20f9db12e665ec05543c75374b36a59b92535717562feddd2e5f41",
       "bytes": 140981
     },
@@ -1816,7 +1816,7 @@
       "localPath": "一分一段/原始PDF/2025/U8_资产评估.pdf",
       "majorCode": "U8",
       "majorName": "资产评估",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "75588b97ddae5902e845e7fd1dd6edbb61553ef923bce39175bef3e705bc0e91",
       "bytes": 98906
     },
@@ -1827,7 +1827,7 @@
       "localPath": "一分一段/原始PDF/2025/U9_土地资源管理.pdf",
       "majorCode": "U9",
       "majorName": "土地资源管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "38fbfe51d48bb54e4fd770a743e9bad6b3964c3e577a6d47640657954f6da25a",
       "bytes": 83101
     },
@@ -1838,7 +1838,7 @@
       "localPath": "一分一段/原始PDF/2025/V1_城市管理.pdf",
       "majorCode": "V1",
       "majorName": "城市管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "2ee6171c94d817ea1ab9c05c129da2eafa2b9a6833e3457fb9822f23b18f447d",
       "bytes": 74741
     },
@@ -1849,7 +1849,7 @@
       "localPath": "一分一段/原始PDF/2025/V2_养老服务管理.pdf",
       "majorCode": "V2",
       "majorName": "养老服务管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "c3cf3965731de16c50b79d3d648b5d01714499c3a4375fe5b6a37bfa10731cc5",
       "bytes": 100497
     },
@@ -1860,7 +1860,7 @@
       "localPath": "一分一段/原始PDF/2025/V3_供应链管理.pdf",
       "majorCode": "V3",
       "majorName": "供应链管理",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "06c5eb787b42caac237273f479ee3cd08ad01badf485665b8aa1532599f774d0",
       "bytes": 88122
     },
@@ -1871,7 +1871,7 @@
       "localPath": "一分一段/原始PDF/2025/V4_跨境电子商务.pdf",
       "majorCode": "V4",
       "majorName": "跨境电子商务",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "725bd6d117894dbba9f4d30b397827feb96da2db971ed257750766c304252317",
       "bytes": 196626
     },
@@ -1882,7 +1882,7 @@
       "localPath": "一分一段/原始PDF/2025/V5_非物质文化遗产保护.pdf",
       "majorCode": "V5",
       "majorName": "非物质文化遗产保护",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "eca97531b19d5d21234e66253ac9ffc167d533d9e403586b8a639c46a1d46219",
       "bytes": 55715
     },
@@ -1893,7 +1893,7 @@
       "localPath": "一分一段/原始PDF/2025/V6_包装设计.pdf",
       "majorCode": "V6",
       "majorName": "包装设计",
-      "downloadStatus": "skipped",
+      "downloadStatus": "downloaded",
       "sha256": "397fc05062481278ed5b616942e6d0d4788f89e93b83475033aeb227bbace425",
       "bytes": 91635
     }
