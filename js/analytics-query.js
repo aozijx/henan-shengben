@@ -1,5 +1,6 @@
 /* Lightweight annual summaries in the shape consumed by the existing preview
    and aggregate pipeline. These rows are never shown as detailed plan records. */
+import { normalizeCollegeMasterRow } from './model.js';
 export function queryRowsFromAnalytics(analyticsByYear, years) {
   var scoresByYear = {}, plansByYear = {};
   (years || []).forEach(function (year) {
@@ -26,4 +27,28 @@ export function queryRowsFromAnalytics(analyticsByYear, years) {
   });
   return { years: (years || []).slice(), scoresByYear: scoresByYear, plansByYear: plansByYear,
     fallbacksByYear: {} };
+}
+
+export function queryRowsFromPublishedSources(analyticsByYear, collegeByYear, years) {
+  var completeYears = (years || []).filter(function (year) { return Boolean(analyticsByYear[year]); });
+  var result = queryRowsFromAnalytics(analyticsByYear, completeYears);
+  result.years = (years || []).slice();
+  result.planPublishedByYear = {};
+  result.scorePublishedByYear = {};
+  (years || []).forEach(function (year) {
+    if (analyticsByYear[year]) {
+      result.planPublishedByYear[year] = true;
+      result.scorePublishedByYear[year] = true;
+      return;
+    }
+    var source = collegeByYear[year] || { plans: [], colleges: [], planPublished: false };
+    result.scoresByYear[year] = source.scores || [];
+    result.plansByYear[year] = source.plans;
+    result.fallbacksByYear[year] = source.colleges.map(function (row) {
+      return normalizeCollegeMasterRow(row, source.planPublished);
+    });
+    result.planPublishedByYear[year] = source.planPublished;
+    result.scorePublishedByYear[year] = source.scorePublished === true;
+  });
+  return result;
 }

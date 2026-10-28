@@ -12,14 +12,14 @@ import * as query from './query.js';
 import * as explorer from './explorer.js';
 import { renderStatsPage } from './stats-page.js';
 import { bootstrapData } from './bootstrap.js';
-import { getLatestYear, getSortedYears } from './metadata.js';
-import { normalizeMajorOption, normalizeScoreSegmentSeries } from './model.js';
+import { getLatestYear, getSelectableYears, getSortedYears } from './metadata.js';
+import { normalizeCollegeMasterRow, normalizeMajorOption, normalizePlanEntry, normalizeScoreSegmentSeries } from './model.js';
 import { buildMajorAggregates, resolveScoreContext } from './aggregate.js';
-import { buildResultModel } from './result-model.js';
+import { buildResultModel, filterYear } from './result-model.js';
 import { buildExpandedMajorHtml } from './results-view.js';
 import { renderResultWorkspace, setResultState } from './results-controller.js';
 import { lookupScoreSegmentCode } from './score-curves.js';
-import { queryRowsFromAnalytics } from './analytics-query.js';
+import { queryRowsFromPublishedSources } from './analytics-query.js';
 
 var $ = function (id) { return document.getElementById(id); };
 var $q = $('q'), $result = $('result'), $hint = $('hint');
@@ -64,6 +64,9 @@ function createAggregateRenderer(loaded) {
           }),
           years: years,
           plansByYear: data.normalizedPlansForYears(summaryStore, years),
+          fallbacksByYear: summaryStore.fallbacksByYear,
+          planPublishedByYear: summaryStore.planPublishedByYear,
+          scorePublishedByYear: summaryStore.scorePublishedByYear,
           scoresByYear: summaryStore.scoresByYear,
           segmentsByYear: segmentsByYear,
           fallbacksByYear: summaryStore.fallbacksByYear
@@ -76,18 +79,28 @@ function createAggregateRenderer(loaded) {
           sort: state && state.sort
         });
         renderWorkspace({ status: 'ready', hasQuery: true, aggregates: resultModel.aggregates }, years, state, dispatch,
-          function (aggregate, selected, hiddenFields) {
+          function (aggregate, selected, hiddenFields, schoolYears) {
+            var extraYears = (schoolYears || []).filter(function (year) { return selected.indexOf(year) < 0; });
             return Promise.all([data.loadYears(loaded.store, selected), Promise.all(selected.map(function (year) {
+              if (!loaded.metadata.yearSources[year]) return Promise.resolve(null);
               return loaded.repository.ensureScoreSegmentIndex(year).then(function (index) {
                 var code = lookupScoreSegmentCode(index, aggregate.major.majorCode);
                 return code ? loaded.repository.ensureScoreSegment(year, code) : null;
               });
+            })), Promise.all(extraYears.map(function (year) {
+              return loaded.repository.ensureCollegeYear(year);
             }))]).then(function (values) {
               var shards = values[1];
               var detail = buildMajorAggregates({ majors: [aggregate.major], years: selected,
                 plansByYear: data.normalizedPlansForYears(loaded.store, selected),
                 scoresByYear: loaded.store.scoresByYear, segmentsByYear: {},
-                fallbacksByYear: loaded.store.fallbacksByYear })[0];
+                fallbacksByYear: loaded.store.fallbacksByYear,
+                planPublishedByYear: Object.fromEntries(selected.map(function (year) {
+                  return [year, Boolean(((loaded.metadata.sourceCatalog || {}).plans || {})[year] || loaded.metadata.yearSources[year])];
+                })),
+                scorePublishedByYear: Object.fromEntries(selected.map(function (year) {
+                  return [year, Boolean(((loaded.metadata.sourceCatalog || {}).scorelines || {})[year] || loaded.metadata.yearSources[year])];
+                })) })[0];
               detail = buildResultModel({ aggregates: [detail], metadata: loaded.metadata,
                 selectedYears: selected, filters: state && state.filters }).aggregates[0] || detail;
               selected.forEach(function (year, index) {
@@ -96,7 +109,24 @@ function createAggregateRenderer(loaded) {
                 yearValue.scoreSegments = shards[index] ? normalizeScoreSegmentSeries(shards[index]) : null;
                 yearValue.scoreContext = resolveScoreContext(yearValue.scoreSegments, null, yearValue.score);
               });
-              return { html: buildExpandedMajorHtml(detail, selected, hiddenFields) };
+              extraYears.forEach(function (year, index) {
+                var source = values[2][index];
+                var extra = buildMajorAggregates({ majors: [aggregate.major], years: [year],
+                  plansByYear: { [year]: source.plans.map(normalizePlanEntry) },
+                  scoresByYear: { [year]: source.scores },
+                  scorePublishedByYear: { [year]: source.scorePublished },
+                  planPublishedByYear: { [year]: source.planPublished },
+                  fallbacksByYear: { [year]: source.colleges.map(function (row) {
+                    return normalizeCollegeMasterRow(row, source.planPublished);
+                  }) }
+                })[0].years[year];
+                extra.planPublished = source.planPublished;
+                extra.schools = extra.schools.map(function (school) {
+                  return { ...school, planPublished: source.planPublished };
+                });
+                detail.years[year] = filterYear(extra, state && state.filters || {});
+              });
+              return { html: buildExpandedMajorHtml(detail, selected, hiddenFields, schoolYears) };
             }).catch(function (error) { return { error: error.message }; });
           });
       })
@@ -142,10 +172,22 @@ function initStats(repository, metadata) {
 
 function applyYearLabels(metadata) {
   var years = getSortedYears(metadata);
+  var selectableYears = getSelectableYears(metadata);
   var latestYear = getLatestYear(metadata);
   document.querySelectorAll('[data-latest-year]').forEach(function (node) { node.textContent = String(latestYear || ''); });
+  document.querySelectorAll('[data-mapping-year]').forEach(function (node) {
+    node.textContent = String(metadata.queryMappingYear || latestYear || '');
+  });
+  var collegeYears = Object.keys(metadata.sourceCatalog && metadata.sourceCatalog.colleges || {}).map(Number);
+  var collegeYear = collegeYears.length ? Math.max.apply(null, collegeYears) : latestYear;
+  document.querySelectorAll('[data-college-year]').forEach(function (node) {
+    node.textContent = String(collegeYear || '');
+  });
   document.querySelectorAll('[data-year-range]').forEach(function (node) {
     node.textContent = years.length ? years[0] + '–' + years[years.length - 1] : '';
+  });
+  document.querySelectorAll('[data-selectable-range]').forEach(function (node) {
+    node.textContent = selectableYears.length ? selectableYears[0] + '–' + selectableYears[selectableYears.length - 1] : '';
   });
 }
 
@@ -238,7 +280,7 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
       var requestId = ++yearRequestId;
       loaded.repository.ensureQueryIndex(state.focusYear).then(function (mapping) {
         if (requestId !== yearRequestId || explorerController.getState().focusYear !== state.focusYear) return;
-        loaded.store.mappingByYear[state.focusYear] = mapping;
+        loaded.store.queryIndexByYear[state.focusYear] = mapping;
         if ($q.value.trim()) query.doQuery($q, $hint, $result);
         else if (currentView === 'stats' && statsContext) renderStatsPage(loaded.repository, loaded.metadata,
           explorerController.getState(), mapping);
@@ -259,12 +301,20 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
     var selectedYears = state.selectedYears.slice();
     var focusYear = state.focusYear;
     setResultState($result, '正在读取所选年份的统计摘要…', 'loading');
-    Promise.all(selectedYears.map(function (year) { return loaded.repository.ensureAnalytics(year); })).then(function (documents) {
+    Promise.all(selectedYears.map(function (year) {
+      return loaded.metadata.yearSources[year]
+        ? loaded.repository.ensureAnalytics(year).then(function (document) { return { analytics: document }; })
+        : loaded.repository.ensureCollegeYear(year).then(function (source) { return { college: source }; });
+    })).then(function (documents) {
       var currentState = explorerController.getState();
       if (requestId !== queryRequestId || currentState.focusYear !== focusYear ||
           currentState.selectedYears.join(',') !== selectedYears.join(',')) return;
-      var analyticsByYear = Object.fromEntries(selectedYears.map(function (year, index) { return [year, documents[index]]; }));
-      loaded.store.querySummaryStore = queryRowsFromAnalytics(analyticsByYear, selectedYears);
+      var analyticsByYear = {}, collegeByYear = {};
+      selectedYears.forEach(function (year, index) {
+        if (documents[index].analytics) analyticsByYear[year] = documents[index].analytics;
+        if (documents[index].college) collegeByYear[year] = documents[index].college;
+      });
+      loaded.store.querySummaryStore = queryRowsFromPublishedSources(analyticsByYear, collegeByYear, selectedYears);
       data.buildIndexes(loaded.store.querySummaryStore, loaded.metadata);
       explorer.setSearchResult(majors, specName);
     }).catch(function (error) {
@@ -277,7 +327,7 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
   var initialYearRequestId = ++yearRequestId;
   loaded.repository.ensureQueryIndex(initialFocusYear).then(function (mapping) {
     if (initialYearRequestId !== yearRequestId || explorerController.getState().focusYear !== initialFocusYear) return;
-    loaded.store.mappingByYear[initialFocusYear] = mapping;
+    loaded.store.queryIndexByYear[initialFocusYear] = mapping;
     afterLoad();
   }).catch(function (error) { if (initialYearRequestId === yearRequestId) $hint.textContent = error.message; });
 }).catch(function (err) {

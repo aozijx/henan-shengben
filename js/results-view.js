@@ -1,5 +1,5 @@
 import { esc } from './utils.js';
-import { getSortedYears, normalizeSelectedYears } from './metadata.js';
+import { getSelectableYears, getSortedYears, normalizeSelectedYears } from './metadata.js';
 import { buildSchoolComparisonHtml, buildScoreSegmentsHtml, buildYearAdmissionsHtml, buildYearScoreHtml, buildYearSummaryHtml } from './year-stack.js';
 import { hiddenResultFields } from './result-visibility.js';
 
@@ -133,7 +133,7 @@ function tableHtml(model, metadata) {
 }
 
 export function buildYearDialogHtml(metadata, selectedYears) {
-  var years = getSortedYears(metadata);
+  var years = getSelectableYears(metadata);
   var selected = selectedYears || years;
   var focusYear = selected.length ? selected[selected.length - 1] : null;
   return '<dialog class="year-selection-dialog" aria-labelledby="year-selection-title">' +
@@ -158,12 +158,12 @@ export function buildResultWorkspaceHtml(model, metadata) {
   return content;
 }
 
-export function buildExpandedMajorHtml(aggregate, years, hiddenFields) {
+export function buildExpandedMajorHtml(aggregate, years, hiddenFields, schoolYears) {
   var segments = (years || []).map(function (year) {
     var yearAggregate = aggregate && aggregate.years && aggregate.years[year];
     return '<details class="score-segment-year"><summary>' + year + ' 年一分一段</summary>' +
       buildScoreSegmentsHtml(yearAggregate && yearAggregate.scoreSegments) + '</details>';
   }).join('');
-  return '<section class="school-comparison"><h4>院校计划对比</h4>' + buildSchoolComparisonHtml(aggregate, years, hiddenFields) +
+  return '<section class="school-comparison"><h4>院校计划对比</h4>' + buildSchoolComparisonHtml(aggregate, schoolYears || years, hiddenFields) +
     '</section><section class="score-segment-comparison"><h4>一分一段</h4>' + segments + '</section>';
 }

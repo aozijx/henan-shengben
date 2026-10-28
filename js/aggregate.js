@@ -128,11 +128,15 @@ export function buildMajorAggregates(input) {
       if (controlScore == null) controlScore = score;
       aggregate.years[year] = {
         year: year,
+        planPublished: !input.planPublishedByYear || input.planPublishedByYear[year] !== false,
+        scorePublished: !input.scorePublishedByYear || input.scorePublishedByYear[year] !== false,
         score: score,
         scoreContext: resolveScoreContext(series, null, controlScore),
         publicSummary: summarize(schoolList, '公办'),
         privateSummary: summarize(schoolList, '民办'),
-        schools: schoolList,
+        schools: schoolList.map(function (school) {
+          return { ...school, planPublished: !input.planPublishedByYear || input.planPublishedByYear[year] !== false };
+        }),
         scoreSegments: series
       };
     });

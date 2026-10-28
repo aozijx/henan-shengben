@@ -47,6 +47,24 @@ test('first-screen query index does not request plans or score segments', async 
   assert.deepEqual(calls, ['index.json']);
 });
 
+test('latest mapping and a master-only college year load independently of annual plans', async () => {
+  const calls = [];
+  const config = metadata();
+  config.queryMappingYear = 2028;
+  config.queryMappingSource = 'mapping-2028.json';
+  config.sourceCatalog = { colleges: { 2028: 'colleges-2028.json' }, plans: {} };
+  const repository = createDataRepository(config, async (url) => {
+    calls.push(url);
+    return { ok: true, json: async () => [{ source: url }] };
+  });
+  assert.deepEqual(await repository.ensureQueryIndex(2027), [{ source: 'mapping-2028.json' }]);
+  assert.deepEqual(await repository.ensureCollegeYear(2028), {
+    plans: [], colleges: [{ source: 'colleges-2028.json' }], scores: [],
+    planPublished: false, scorePublished: false
+  });
+  assert.deepEqual(calls, ['mapping-2028.json', 'colleges-2028.json']);
+});
+
 test('retry evicts a failed URL and requests it again', async () => {
   let attempt = 0;
   const repository = createDataRepository(metadata(), async () => {

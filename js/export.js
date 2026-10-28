@@ -1,7 +1,8 @@
 import { formatFieldValue } from './preview.js';
+import { getSelectableYears } from './metadata.js';
 
 function isSelectedYearField(field, metadata, selectedYears) {
-  var supportedYears = metadata.supportedYears || [];
+  var supportedYears = getSelectableYears(metadata);
   var fieldYear = supportedYears.find(function (year) { return String(field.key).endsWith(String(year)); });
   return fieldYear == null || !Array.isArray(selectedYears) || selectedYears.indexOf(fieldYear) >= 0;
 }

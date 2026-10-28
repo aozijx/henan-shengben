@@ -44,6 +44,19 @@ test('yearly search reuses the already loaded query mapping when paths agree', a
   ]);
 });
 
+test('loading annual data does not replace a newer independent query mapping', async () => {
+  const calls = [];
+  const metadata = metadata2027({ queryIndexSource: 'fixtures/new-mapping.json' });
+  metadata.queryMappingSource = 'fixtures/new-mapping.json';
+  const payloads = fixturePayloads();
+  payloads['fixtures/new-mapping.json'] = [{ 专科专业: '新专科', 可报本科专业: [] }];
+  const fetchImpl = createFetch(payloads, calls);
+  const store = await loadAll(metadata, fetchImpl);
+  await loadYears(store, [2027], fetchImpl);
+  assert.equal(getMappingByYear(2027)[0].专科专业, '新专科');
+  assert.equal(store.mappingByYear[2027][0].专科专业, '软件技术');
+});
+
 function metadata2027(overrides = {}) {
   return {
     defaultYear: 2027,

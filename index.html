@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>河南专升本 · 专业对照与分数线查询</title>
-<meta name="description" content="河南普通高校专升本：按专科专业查可报本科专业、考试科目与 2024–2026 录取控制分数线，并查看 2026 招生院校。数据来自河南省教育厅、河南省教育考试院公开文件。">
+<meta name="description" content="河南普通高校专升本：按专科专业查可报本科专业、考试科目、历年控制分数线和招生院校。已发布的专业对照与院校总表可先行查询，计划人数和分数线按发布时间显示。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='6' width='26' height='22' rx='3' fill='%23f5f6f8' stroke='%231f4e79' stroke-width='2'/%3E%3Cpath d='M9 13h14M9 18h10M9 23h7' stroke='%23c2410c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <script>
   /* 首屏防闪烁：在样式表生效前确定配色（浅色 / 深色 / 跟随系统） */
@@ -34,7 +34,7 @@
 
   <header class="masthead">
     <div class="masthead-top">
-      <p class="eyebrow">河南省普通高校专升本 · <span data-latest-year>最新</span> 招生季</p>
+      <p class="eyebrow">河南省普通高校专升本 · <span data-latest-year>最新</span> 招生季 · 使用 <span data-mapping-year>最新</span> 年专业对照表</p>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换配色" title="切换配色">
         <svg class="ico ico-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
@@ -50,7 +50,7 @@
       </button>
     </div>
     <h1>专科专业 · 可报本科专业 · 分数线 查询</h1>
-      <p class="lede">输入你的专科专业，查看可以报考的本科专业、考试科目、历年录取控制分数线，以及 <span data-year-range>已配置年份</span> 招收该专业的院校（公办 / 民办分别列出）。数据来源与口径见「数据说明」。</p>
+      <p class="lede">输入你的专科专业，查看可以报考的本科专业、考试科目、历年录取控制分数线，以及 <span data-selectable-range>已配置年份</span> 的招生院校。招生计划、分数线尚未发布的年份仍可查询专业对照和院校总表。数据来源与口径见「数据说明」。</p>
     <dl class="stats" id="stats" aria-label="数据规模">
       <div><dt id="stat-spec">–</dt><dd>专科专业</dd></div>
       <div><dt id="stat-major">–</dt><dd>本科专业</dd></div>
@@ -114,9 +114,12 @@
             <h3 id="selected-major-title">院校与招生计划</h3>
             <p id="selected-major-name">按专业查看各院校招生信息</p>
           </div>
-          <div class="school-layout-switch" role="group" aria-label="院校展示方式">
-            <button type="button" data-school-layout="cards" aria-pressed="true">卡片</button>
-            <button type="button" data-school-layout="list" aria-pressed="false">列表</button>
+          <div class="school-detail-controls">
+            <label class="school-year-filter">院校年份 <select id="school-year-filter" aria-label="筛选院校年份"></select></label>
+            <div class="school-layout-switch" role="group" aria-label="院校展示方式">
+              <button type="button" data-school-layout="cards" aria-pressed="true">卡片</button>
+              <button type="button" data-school-layout="list" aria-pressed="false">列表</button>
+            </div>
           </div>
         </header>
         <div id="selected-major-content" class="selected-major-content">
@@ -183,10 +186,10 @@
       <div class="about-block">
         <h3>数据内容</h3>
         <ul>
-          <li><b>专业对照</b>：《<span data-latest-year>最新</span> 年河南省普通高校专升本考试招生专业对照及考试科目一览表》——专科专业可报考的本科专业与专业基础考试课程。</li>
-          <li><b>填报代号</b>：河南省教育考试院《<span data-latest-year>最新</span> 年普通高等学校专升本考试招生专业与考试科目对照表》中的专业代号与考试科目代号。</li>
+          <li><b>专业对照</b>：《<span data-mapping-year>最新</span> 年河南省普通高校专升本考试招生专业对照及考试科目一览表》——专科专业可报考的本科专业与专业基础考试课程。</li>
+          <li><b>填报代号</b>：河南省教育考试院《<span data-mapping-year>最新</span> 年普通高等学校专升本考试招生专业与考试科目对照表》中的专业代号与考试科目代号。</li>
           <li><b>控制分数线</b>：<span data-year-range>已配置年份</span> 年《河南省普通高校专升本招生录取控制分数线》，按专业代号与名称双口径匹配。</li>
-          <li><b>招生院校</b>：《河南省 <span data-latest-year>最新</span> 年普通高职（专科）毕业生进入本科阶段学习招生高校及专业总表》，含学制、师范 / 艺术标记与就读地点备注。</li>
+          <li><b>招生院校</b>：《河南省 <span data-college-year>最新</span> 年普通高职（专科）毕业生进入本科阶段学习招生高校及专业总表》，含学制、师范 / 艺术标记与就读地点备注。总表早于招生计划发布时，院校明细会标注计划人数未公布。</li>
           <li><b>招生计划</b>：<span data-year-range>已配置年份</span> 年《河南省普通高等学校专科毕业生升入本科阶段学习招生计划》结构化数据，含计划人数、学制、学费、住宿费、通信地址、咨询电话、招生章程网址，以及原文标注的<b>办学性质（公办 / 民办）</b>与<b>建档立卡专项</b>。</li>
         </ul>
       </div>
@@ -205,14 +208,14 @@
           <li>分数线优先按「填报代号」精确匹配；未命中再按「专业名称」精确匹配；仍未命中按名称包含匹配（处理年度表中「含 xxx」合并命名）。</li>
           <li>招生院校按年份分别取自对应年度《招生计划》（专业名称 → 填报代号，含财务管理 99 ↔ A1 差异处理）；无计划数据时回退到 metadata 声明的招生总表。同一院校同一专业的普通计划与建档立卡专项为两条独立条目。</li>
           <li>年份折叠中「公办 X 所 / 民办 Y 所」按院校名称去重统计；「计划 Z 人」为该年公办 / 民办各院校计划人数合计（含建档立卡专项）。</li>
-          <li>「—」表示当年控制线表中未单列该专业或未招生，<b>不代表 0 分，也不代表不能报考</b>；最终以当年官方招生计划与文件为准。</li>
+          <li>「未公布」表示该年度表尚未发布；「—」表示已发布的年度表未单列该专业，均<b>不代表 0 分，也不代表不能报考</b>。最终以当年官方文件为准。</li>
         </ul>
       </div>
       <div class="about-block">
         <h3>来源文件（公开渠道）</h3>
         <ol>
-          <li>河南省教育厅《关于做好 <span data-latest-year>最新</span> 年普通高等学校专升本考试招生工作的通知》（含招生高校及专业总表、本专科专业对照及考试课程一览表）。</li>
-          <li>河南省教育考试院《河南省 <span data-latest-year>最新</span> 年普通高等学校专升本考试招生专业与考试科目对照表》。</li>
+          <li>河南省教育厅《关于做好 <span data-college-year>最新</span> 年普通高等学校专升本考试招生工作的通知》（含招生高校及专业总表、本专科专业对照及考试课程一览表）。</li>
+          <li>河南省教育考试院《河南省 <span data-mapping-year>最新</span> 年普通高等学校专升本考试招生专业与考试科目对照表》。</li>
           <li>河南省教育考试院公布的 <span data-year-range>已配置年份</span> 年《河南省普通高校专升本招生录取控制分数线》。</li>
           <li>河南省教育考试院公布的 <span data-year-range>已配置年份</span> 年《河南省普通高等学校专科毕业生升入本科阶段学习招生计划》。</li>
         </ol>

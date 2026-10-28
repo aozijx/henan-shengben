@@ -213,12 +213,21 @@ export async function renderStatsPage(repository, metadata, state, mapping) {
   var token = ++pageGeneration;
   ++curveGeneration;
   var status = document.getElementById('stats-status');
+  var cards = document.querySelectorAll('#view-stats .chart-card');
   status.textContent = '正在读取年度统计…';
   try {
-    var documents = await Promise.all(state.selectedYears.map(function (year) { return repository.ensureAnalytics(year); }));
+    var years = state.selectedYears.filter(function (year) { return Boolean(metadata.yearSources[year]); });
+    if (!years.length) {
+      cards.forEach(function (card) { card.hidden = true; });
+      document.getElementById('stats-context').textContent = '年份：' + state.selectedYears.join('、');
+      status.textContent = '所选年份的省控线及年度统计尚未公布。';
+      return;
+    }
+    cards.forEach(function (card) { card.hidden = false; });
+    var documents = await Promise.all(years.map(function (year) { return repository.ensureAnalytics(year); }));
     if (token !== pageGeneration) return;
-    var analytics = Object.fromEntries(state.selectedYears.map(function (year, index) { return [year, documents[index]]; }));
-    var projection = projectAnalytics(analytics, mapping, state.selectedYears, state.filters,
+    var analytics = Object.fromEntries(years.map(function (year, index) { return [year, documents[index]]; }));
+    var projection = projectAnalytics(analytics, mapping, years, state.filters,
       state.specName ? state.majors : null);
     document.querySelectorAll('[data-stats-focus-year]').forEach(function (node) {
       node.textContent = String(projection.focusYear || '最新');
@@ -230,7 +239,8 @@ export async function renderStatsPage(repository, metadata, state, mapping) {
     var hiddenFields = hiddenResultFields(metadata, state.filters);
     document.getElementById('stats-context').textContent = '年份：' + projection.years.join('、') + ' · 办学性质：' + state.filters.schoolType +
       ' · 建档立卡：' + state.filters.povertyStatus + ' · 专业基础课：' + state.filters.subject + ' · ' + projection.majors.length + ' 个专业';
-    status.textContent = removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' : '';
+    status.textContent = removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' :
+      (years.length < state.selectedYears.length ? '部分年份的分数统计尚未公布。' : '');
     summary(projection, hiddenFields); renderTable(projection, metadata, hiddenFields); choices(projection, hiddenFields); renderCurves();
   } catch (error) { if (token === pageGeneration) status.textContent = '统计加载失败：' + error.message; }
 }

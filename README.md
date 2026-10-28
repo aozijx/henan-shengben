@@ -21,6 +21,7 @@ npm test
 ## 功能
 
 - 输入专科专业，查看匹配的本科专业及按年份分组的成绩、院校数和招生计划。
+- 年份筛选按已发布的专业对照、招生高校总表和招生计划自动扩展；仅有对照与总表的年份也可选专业、查院校，未发布的分数线和计划人数会明确标注。超过三个选中年份时，按钮简写为起止年份。
 - 结果可切换卡片或表格布局；选择专业后，在下方全宽区域查看跨年院校计划。
 - 年份和筛选条件同时作用于结果、数据分析与 CSV 导出；导出字段可单独勾选。
 - 数据分析支持专业筛选、分页和多专业曲线；主题支持浅色、深色及跟随系统。
@@ -33,6 +34,15 @@ npm test
 ```powershell
 python -m convert.ingest_year --seed data/year-links/YYYY.json --check
 ```
+
+若官方表格 PDF 已保存到 `data/` 约定路径，但该年尚无完整的 year-links，可先独立转换已取得的表格：
+
+```powershell
+python -m convert.extract_cli --local --year YYYY --write
+python -m convert.refresh_catalog
+```
+
+前一命令只处理实际存在且输入齐全的本地 PDF，并记录输入与产物哈希；后一命令将各类来源按年份独立登记到 `sourceCatalog`。页面可立即展示专业对照和招生高校总表；完整年度统计仍需招生计划、省控线与一分一段等输入。
 
 确认检查报告后，本地去掉 `--check` 执行发布。PR 中变更的新年度 seed 会逐个检查并暂存核验产物；合并到 `main` 后，Action 复用该 artifact、重建 catalog 并提交生成物。若 seed 已在仓库且无需改动，可在 PR 分支上手动运行 Action，指定 `data/year-links/YYYY.json`；合并后 Action 会按 PR head commit 找到并校验该次运行的 artifact。直接推送新年度 seed 到 `main` 时，Action 会针对变更年度执行完整导入；已发布年度仍不能用新年度导入入口覆盖。已有年度复核、采集、转换、异常处理和回滚步骤见 [转换与导入指南](convert/README.md)。
 

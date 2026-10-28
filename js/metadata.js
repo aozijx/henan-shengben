@@ -10,13 +10,37 @@ export function getLatestYear(metadata) {
   return years.length ? years[years.length - 1] : null;
 }
 
+export function getQueryMappingYear(metadata) {
+  return Number.isInteger(metadata && metadata.queryMappingYear)
+    ? metadata.queryMappingYear : getLatestYear(metadata);
+}
+
+export function getCollegeYears(metadata) {
+  var catalog = metadata && metadata.sourceCatalog || {};
+  var years = Object.keys(catalog.colleges || {}).concat(Object.keys(catalog.plans || {}))
+    .map(Number).filter(Number.isInteger);
+  return years.length ? Array.from(new Set(years)).sort(function (a, b) { return a - b; })
+    : getSortedYears(metadata);
+}
+
+export function getSelectableYears(metadata) {
+  var catalog = metadata && metadata.sourceCatalog || {};
+  var years = getSortedYears(metadata);
+  ['mapping', 'colleges', 'plans'].forEach(function (role) {
+    Object.keys(catalog[role] || {}).forEach(function (year) {
+      if (Number.isInteger(Number(year))) years.push(Number(year));
+    });
+  });
+  return Array.from(new Set(years)).sort(function (a, b) { return a - b; });
+}
+
 export function getPreviousYear(metadata) {
   var years = getSortedYears(metadata);
   return years.length > 1 ? years[years.length - 2] : null;
 }
 
 export function normalizeSelectedYears(years, metadata) {
-  var supported = getSortedYears(metadata);
+  var supported = getSelectableYears(metadata);
   if (!Array.isArray(years)) return supported;
   var selected = {};
   years.forEach(function (year) {
@@ -59,13 +83,14 @@ function replaceYearTokens(value, year) {
 export function expandMetadata(metadata) {
   var expanded = { ...metadata };
   expanded.supportedYears = getSortedYears(metadata);
+  expanded.selectableYears = getSelectableYears(metadata);
   expanded.latestYear = getLatestYear(metadata);
   expanded.previousYear = getPreviousYear(metadata);
   expanded.yearSources = { ...(metadata.yearSources || {}) };
   expanded.fields = (metadata.fields || []).map(function (field) { return replaceMetadataTokens(field, metadata); });
   expanded.defaultSort = replaceMetadataTokens(metadata.defaultSort, metadata);
   (metadata.yearFieldTemplates || []).forEach(function (template) {
-    expanded.supportedYears.forEach(function (year) {
+    expanded.selectableYears.forEach(function (year) {
       expanded.fields.push(replaceMetadataTokens(replaceYearTokens(template, year), metadata));
     });
   });
@@ -105,6 +130,26 @@ export function validateMetadata(value) {
   }
   if (!years.includes(value.defaultYear)) {
     errors.push('默认年份 ' + value.defaultYear + ' 不在 supportedYears 中');
+  }
+  if (value.queryMappingYear != null && (!Number.isInteger(value.queryMappingYear) ||
+      !isNonEmptyString(value.queryMappingSource) ||
+      (value.sourceCatalog && value.sourceCatalog.mapping &&
+       value.sourceCatalog.mapping[value.queryMappingYear] !== value.queryMappingSource))) {
+    errors.push('queryMappingYear 与 queryMappingSource 必须指向同一份对照表');
+  }
+  if (value.sourceCatalog != null) {
+    var roles = ['mapping', 'colleges', 'plans', 'scorelines', 'scoreSegments'];
+    if (!value.sourceCatalog || typeof value.sourceCatalog !== 'object' || Array.isArray(value.sourceCatalog)) {
+      errors.push('sourceCatalog 必须是对象');
+    } else {
+      Object.keys(value.sourceCatalog).forEach(function (role) {
+        var entries = value.sourceCatalog[role];
+        if (roles.indexOf(role) < 0 || !entries || typeof entries !== 'object' || Array.isArray(entries) ||
+            Object.entries(entries).some(function ([year, path]) { return !/^\d{4}$/.test(year) || !isNonEmptyString(path); })) {
+          errors.push('sourceCatalog.' + role + ' 年份路径无效');
+        }
+      });
+    }
   }
   if (value.uiDefaults != null) {
     var uiDefaults = value.uiDefaults;

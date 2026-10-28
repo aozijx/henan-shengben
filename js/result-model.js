@@ -24,7 +24,7 @@ function planCount(entry) {
   return Number(entry && (entry.planCount == null ? entry['计划人数'] : entry.planCount)) || 0;
 }
 
-function filterYear(yearAggregate, filters) {
+export function filterYear(yearAggregate, filters) {
   if ((!filters.schoolType || filters.schoolType === '全部') &&
       (!filters.povertyStatus || filters.povertyStatus === '全部')) return yearAggregate;
   var schools = (yearAggregate && yearAggregate.schools || []).map(function (school) {
@@ -34,7 +34,7 @@ function filterYear(yearAggregate, filters) {
     var ordinaryPlanCount = visibleEntries.length
       ? visibleEntries.reduce(function (sum, entry) { return sum + (isPovertyPlan(entry) ? 0 : planCount(entry)); }, 0)
       : Number(school.ordinaryPlanCount) || 0;
-    if (filters.povertyStatus === '否' && ordinaryPlanCount <= 0) return false;
+    if (filters.povertyStatus === '否' && ordinaryPlanCount <= 0 && yearAggregate.planPublished !== false) return false;
     return {
       ...school,
       planEntries: visibleEntries,
@@ -65,7 +65,7 @@ function matchesYearFilters(yearAggregate, filters) {
   if (min != null && (score == null || score < min)) return false;
   if (max != null && (score == null || score > max)) return false;
   var limit = filters.schoolCount === '' || filters.schoolCount == null ? null : numberOrNull(filters.schoolCount);
-  var count = (yearAggregate.publicSummary.schoolCount || 0) + (yearAggregate.privateSummary.schoolCount || 0);
+  var count = (yearAggregate.schools || []).length;
   if (limit != null && count <= limit) return false;
   return yearAggregate.schools.length > 0;
 }
@@ -92,12 +92,12 @@ function projectAggregate(aggregate, years) {
     row['score' + year] = value.score == null ? null : Number(value.score);
     row['publicSchoolCount' + year] = publicSchools;
     row['privateSchoolCount' + year] = privateSchools;
-    row['schoolCount' + year] = publicSchools + privateSchools;
+    row['schoolCount' + year] = value.schools.length;
     row['schoolSplit' + year] = publicSchools + '/' + privateSchools;
-    row['planCount' + year] = publicPlan + privatePlan;
-    row['povertyPlanCount' + year] = publicPoverty + privatePoverty;
-    row['planSplit' + year] = publicPlan + '/' + privatePlan;
-    row['povertyPlanSplit' + year] = publicPoverty + '/' + privatePoverty;
+    row['planCount' + year] = value.planPublished === false ? null : publicPlan + privatePlan;
+    row['povertyPlanCount' + year] = value.planPublished === false ? null : publicPoverty + privatePoverty;
+    row['planSplit' + year] = value.planPublished === false ? '未公布' : publicPlan + '/' + privatePlan;
+    row['povertyPlanSplit' + year] = value.planPublished === false ? '未公布' : publicPoverty + '/' + privatePoverty;
   });
   return row;
 }
@@ -108,13 +108,23 @@ export function buildResultModel(input) {
   var filters = input.filters || {};
   var selected = (input.aggregates || []).map(function (aggregate, originalOrder) {
     var years = {};
+    var hadSchools = selectedYears.some(function (year) {
+      return (((aggregate.years || {})[year] || {}).schools || []).length > 0;
+    });
     selectedYears.forEach(function (year) {
       years[year] = filterYear((aggregate.years || {})[year] || { score: null, schools: [] }, filters);
     });
-    return { ...aggregate, originalOrder: aggregate.originalOrder == null ? originalOrder : aggregate.originalOrder, years: years };
+    return { ...aggregate, hadSchools: hadSchools,
+      originalOrder: aggregate.originalOrder == null ? originalOrder : aggregate.originalOrder, years: years };
   }).filter(function (aggregate) {
     if (!matchesStaticFilters(aggregate, filters)) return false;
-    return selectedYears.some(function (year) { return matchesYearFilters(aggregate.years[year], filters); });
+    if (selectedYears.some(function (year) { return matchesYearFilters(aggregate.years[year], filters); })) return true;
+    if (aggregate.hadSchools) return false;
+    return (!filters.schoolType || filters.schoolType === '全部') &&
+      (!filters.povertyStatus || filters.povertyStatus === '全部' || filters.povertyStatus === '否') &&
+      (filters.schoolCount == null || filters.schoolCount === '') &&
+      (filters.scoreMin == null || filters.scoreMin === '') &&
+      (filters.scoreMax == null || filters.scoreMax === '');
   });
   var allRows = sortPreviewRows(selected.map(function (aggregate) { return projectAggregate(aggregate, selectedYears); }), input.sort);
   var focusYear = getFocusYear(selectedYears, metadata);

@@ -12,6 +12,7 @@ from pathlib import Path
 from .common import DATA_ROOT, REPO_ROOT, load_data_plan, read_json
 from .validate import validate_score_segment_major
 from .segment_store import iter_year
+from .local_tables import load_local_tables
 
 CODE_RE = re.compile(r'^[A-Za-z0-9]+$')
 DERIVATION_VERSION = 3
@@ -237,6 +238,21 @@ def _source_map(data_root: Path):
     return by_year
 
 
+def _source_catalog(data_root: Path, annual_sources: dict[int, dict]) -> dict[str, dict[str, str]]:
+    """Index each published table independently of complete annual statistics."""
+    roles = {'mapping': 'mapping', 'master': 'colleges', 'plans': 'plans',
+             'scorelines': 'scorelines', 'score-segments': 'scoreSegments'}
+    sources = {year: dict(files) for year, files in annual_sources.items()}
+    for year, files in load_local_tables(data_root).items():
+        sources.setdefault(year, {}).update(files)
+    catalog: dict[str, dict[str, str]] = {name: {} for name in roles.values()}
+    for year, files in sorted(sources.items()):
+        for parser, name in roles.items():
+            if parser in files:
+                catalog[name][str(year)] = f'data/{files[parser]}'
+    return catalog
+
+
 def _apply_source_reuse(sources: dict[int, dict], policies: dict[str, str]) -> None:
     """Apply configured reuse only to source types that support cross-year validation."""
     for parser, policy in policies.items():
@@ -353,6 +369,12 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     data_root = Path(data_root)
     template = _json(Path(template_path))
     sources = _source_map(data_root)
+    source_catalog = _source_catalog(data_root, sources)
+    mapping_years = source_catalog['mapping']
+    if not mapping_years:
+        raise ValueError('No complete professional mapping is available for search')
+    query_mapping_year = max(map(int, mapping_years))
+    query_mapping_source = mapping_years[str(query_mapping_year)]
     _apply_source_reuse(sources, template.get('sourceReuse', {}))
     previous = _json(Path(metadata_path)) if Path(metadata_path).is_file() else {}
     previously_published_years = set(previous.get('supportedYears', []))
@@ -395,7 +417,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
         score_segment_directory = Path(files['score-segments']).parent / str(year)
         publish[str(year)] = {
             'mappingSource': f'data/{files["mapping"]}',
-            'queryIndexSource': f'data/{files["mapping"]}',
+            'queryIndexSource': query_mapping_source,
             'scoreSource': f'data/{files["scorelines"]}',
             'planSource': f'data/{files["plans"]}',
             'scoreSegmentSource': f'data/{files["score-segments"]}',
@@ -415,7 +437,9 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     years = [int(y) for y in publish]
     metadata = {key: value for key, value in template.items() if key not in ('sourceReuse', 'yearSources', 'supportedYears')}
     metadata.update({'schemaVersion': max(3, template.get('schemaVersion', 1)),
-                'supportedYears': years, 'yearSources': publish})
+                'supportedYears': years, 'yearSources': publish,
+                'queryMappingYear': query_mapping_year, 'queryMappingSource': query_mapping_source,
+                'sourceCatalog': source_catalog})
     previous_years = previous.get('supportedYears') or template.get('supportedYears') or []
     previous_default = previous.get('defaultYear', metadata.get('defaultYear'))
     if previous_default not in years or (previous_years and previous_default == max(previous_years)):
@@ -424,6 +448,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
         metadata['defaultYear'] = previous_default
     catalog = {'schemaVersion': 1, 'derivationVersion': DERIVATION_VERSION,
                'supportedYears': years, 'yearSources': publish,
+               'sourceCatalog': source_catalog,
                'inputSha256': input_hashes}
     catalog_version = hashlib.sha256(json.dumps(catalog, ensure_ascii=False, sort_keys=True).encode('utf-8')).hexdigest()[:16]
     catalog_path = f'generated/catalog/{catalog_version}.json'

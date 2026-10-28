@@ -20,6 +20,19 @@
   "properties": {
     "schemaVersion": { "enum": [2, 3] },
     "catalogSource": { "type": "string", "minLength": 1 },
+    "queryMappingYear": { "type": "integer", "minimum": 2000 },
+    "queryMappingSource": { "type": "string", "minLength": 1 },
+    "sourceCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mapping": { "$ref": "#/definitions/yearPaths" },
+        "colleges": { "$ref": "#/definitions/yearPaths" },
+        "plans": { "$ref": "#/definitions/yearPaths" },
+        "scorelines": { "$ref": "#/definitions/yearPaths" },
+        "scoreSegments": { "$ref": "#/definitions/yearPaths" }
+      }
+    },
     "defaultYear": { "type": "integer", "minimum": 2000 },
     "supportedYears": {
       "type": "array",
@@ -30,7 +43,7 @@
     "uiDefaults": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {
+  "properties": {
         "selectedYears": { "const": "allSupportedYears" },
         "resultLayout": { "enum": ["cards", "table"] }
       }
@@ -165,6 +178,13 @@
     },
     "pageSize": { "type": "integer", "minimum": 1 },
     "exportFormat": { "const": "csv" }
+  },
+  "definitions": {
+    "yearPaths": {
+      "type": "object",
+      "patternProperties": { "^[0-9]{4}$": { "type": "string", "minLength": 1 } },
+      "additionalProperties": false
+    }
   },
   "allOf": [
     {

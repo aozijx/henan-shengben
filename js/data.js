@@ -1,8 +1,8 @@
 /* 数据加载、索引与读取。数据源和年份完全由 metadata 声明。 */
 import { normCode6, schoolName } from './utils.js';
 import { createDataRepository } from './data-source.js';
-import { getSortedYears } from './metadata.js';
-import { normalizePlanEntry } from './model.js';
+import { getSelectableYears } from './metadata.js';
+import { normalizeCollegeMasterRow, normalizePlanEntry } from './model.js';
 import { normalizeMajorName, selectMajorRows } from './major-match.js';
 
 export var YEARS = [];
@@ -45,14 +45,14 @@ export async function loadAll(metadata, fetchImpl, repository) {
   var cache = {};
   var store = {
     metadata: metadata,
-    years: getSortedYears(metadata),
-    mappingByYear: {}, scoresByYear: {}, plansByYear: {}, fallbacksByYear: {}, mapping: []
+    years: getSelectableYears(metadata),
+    queryIndexByYear: {}, mappingByYear: {}, scoresByYear: {}, plansByYear: {}, fallbacksByYear: {}, mapping: []
   };
   var defaultYear = metadata.defaultYear;
-  store.mappingByYear[defaultYear] = repository
+  store.queryIndexByYear[defaultYear] = repository
     ? await repository.ensureQueryIndex(defaultYear)
-    : await readJson(metadata.yearSources[defaultYear].queryIndexSource || metadata.yearSources[defaultYear].mappingSource, fetcher, cache);
-  store.mapping = store.mappingByYear[defaultYear] || [];
+    : await readJson(metadata.queryMappingSource || metadata.yearSources[defaultYear].queryIndexSource || metadata.yearSources[defaultYear].mappingSource, fetcher, cache);
+  store.mapping = store.queryIndexByYear[defaultYear] || [];
   activeStore = store;
   activeMetadata = metadata;
   YEARS = store.years.slice();
@@ -68,18 +68,26 @@ export async function loadYears(store, years, fetchImpl) {
   var cache = {};
   await Promise.all(years.map(async function (year) {
     if (store.plansByYear[year] && store.scoresByYear[year]) return;
-    var source = store.metadata.yearSources[year];
+    var source = store.metadata.yearSources[year] || {};
+    var catalog = store.metadata.sourceCatalog || {};
+    var mappingPath = source.mappingSource || catalog.mapping && catalog.mapping[year];
+    var scorePath = source.scoreSource || catalog.scorelines && catalog.scorelines[year];
+    var planPath = source.planSource || catalog.plans && catalog.plans[year];
+    var collegePath = source.collegeFallbackSource || catalog.colleges && catalog.colleges[year];
     var values = await Promise.all([
-      store.mappingByYear[year] && (!source.queryIndexSource || source.queryIndexSource === source.mappingSource)
-        ? Promise.resolve(store.mappingByYear[year]) : readJson(source.mappingSource, fetcher, cache),
-      readJson(source.scoreSource, fetcher, cache),
-      readJson(source.planSource, fetcher, cache),
-      source.collegeFallbackSource ? readJson(source.collegeFallbackSource, fetcher, cache) : Promise.resolve([])
+      store.queryIndexByYear[year] &&
+      (source.queryIndexSource || mappingPath) === mappingPath
+        ? Promise.resolve(store.queryIndexByYear[year]) : mappingPath ? readJson(mappingPath, fetcher, cache) : Promise.resolve([]),
+      scorePath ? readJson(scorePath, fetcher, cache) : Promise.resolve([]),
+      planPath ? readJson(planPath, fetcher, cache) : Promise.resolve([]),
+      collegePath ? readJson(collegePath, fetcher, cache) : Promise.resolve([])
     ]);
     store.mappingByYear[year] = values[0];
     store.scoresByYear[year] = values[1];
     store.plansByYear[year] = values[2];
-    store.fallbacksByYear[year] = values[3];
+    store.fallbacksByYear[year] = values[3].map(function (row) {
+      return normalizeCollegeMasterRow(row, Boolean(planPath));
+    });
   }));
   PLANS = store.plansByYear[store.metadata.defaultYear] || [];
   return store;
@@ -135,7 +143,7 @@ export function buildIndexes(store, metadata) {
 }
 
 export function getMappingByYear(year) {
-  return activeStore && activeStore.mappingByYear[year] ? activeStore.mappingByYear[year] : [];
+  return activeStore && (activeStore.queryIndexByYear[year] || activeStore.mappingByYear[year]) || [];
 }
 
 export function getPlansByYear(year) {

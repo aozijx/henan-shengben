@@ -35,12 +35,19 @@ function rowMatchesYearFilters(row, filters, year) {
 }
 
 function rowMatchesPlan(row, filters) {
-  var type = row['办学性质'] || '公办';
+  var type = row['办学性质'] || (row._planUnpublished ? '未标注' : '公办');
   var poverty = row['建档立卡'] || '否';
   if (filters.schoolType && filters.schoolType !== '全部' && type !== filters.schoolType) return false;
   /* 「否」只看普通计划；「是」与「全部」都包含普通+专项（人数合计），专项人数另计入 povertyPlanCount */
   if (filters.povertyStatus === '否' && poverty === '是') return false;
   return true;
+}
+
+function allowsUnpublishedMajor(filters) {
+  return (!filters.schoolType || filters.schoolType === '全部') &&
+    (!filters.povertyStatus || filters.povertyStatus === '全部' || filters.povertyStatus === '否') &&
+    schoolCountLimit(filters.schoolCount) == null &&
+    scoreBound(filters.scoreMin) == null && scoreBound(filters.scoreMax) == null;
 }
 
 function allSchoolsFor(publicSchools, privateSchools) {
@@ -66,26 +73,30 @@ export function buildPreviewRows(input) {
     };
     var latestSchools = {};
     var hasPlans = false;
+    var hadAnyPlan = false;
     var matchingYears = [];
 
     if (!rowMatchesStaticFilters(row, filters)) return;
 
     years.forEach(function (year) {
-      var publicSchools = {}, privateSchools = {};
+      var publicSchools = {}, privateSchools = {}, unclassifiedSchools = {};
       var publicPlan = 0, privatePlan = 0, planCount = 0;
       var publicPovertyPlan = 0, privatePovertyPlan = 0, povertyPlanCount = 0;
       var hasPlansForYear = false;
-      (input.getPlans(major, year) || []).forEach(function (planRow) {
+      var sourcePlans = input.getPlans(major, year) || [];
+      if (sourcePlans.length) hadAnyPlan = true;
+      sourcePlans.forEach(function (planRow) {
         if (!rowMatchesPlan(planRow, filters)) return;
         var count = Number(planRow['计划人数']) || 0;
-        if (filters.povertyStatus === '否' && count <= 0) return;
+        if (filters.povertyStatus === '否' && count <= 0 && !planRow._planUnpublished) return;
         hasPlans = true;
         hasPlansForYear = true;
         var school = admissionSchoolKey(planRow);
         var isPrivate = planRow['办学性质'] === '民办';
         var isPoverty = planRow['建档立卡'] === '是';
         if (school) {
-          if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
+          if (planRow._planUnpublished) unclassifiedSchools[school] = true;
+          else if (isPrivate) privateSchools[school] = true; else publicSchools[school] = true;
         }
         if (isPoverty) {
           if (isPrivate) privatePovertyPlan += count; else publicPovertyPlan += count;
@@ -99,18 +110,20 @@ export function buildPreviewRows(input) {
       row['score' + year] = score == null ? null : Number(score);
       row['publicSchoolCount' + year] = Object.keys(publicSchools).length;
       row['privateSchoolCount' + year] = Object.keys(privateSchools).length;
-      row['schoolCount' + year] = row['publicSchoolCount' + year] + row['privateSchoolCount' + year];
+      row['unclassifiedSchoolCount' + year] = Object.keys(unclassifiedSchools).length;
+      row['schoolCount' + year] = row['publicSchoolCount' + year] + row['privateSchoolCount' + year] + row['unclassifiedSchoolCount' + year];
       row['schoolSplit' + year] = row['publicSchoolCount' + year] + '/' + row['privateSchoolCount' + year];
-      row['planCount' + year] = planCount;
-      row['povertyPlanCount' + year] = povertyPlanCount;
-      row['planSplit' + year] = publicPlan + '/' + privatePlan;
-      row['povertyPlanSplit' + year] = publicPovertyPlan + '/' + privatePovertyPlan;
-      if (year === latestYear) latestSchools = allSchoolsFor(publicSchools, privateSchools);
+      var planPublished = !input.planPublishedByYear || input.planPublishedByYear[year] !== false;
+      row['planCount' + year] = planPublished ? planCount : null;
+      row['povertyPlanCount' + year] = planPublished ? povertyPlanCount : null;
+      row['planSplit' + year] = planPublished ? publicPlan + '/' + privatePlan : '未公布';
+      row['povertyPlanSplit' + year] = planPublished ? publicPovertyPlan + '/' + privatePovertyPlan : '未公布';
+      if (year === latestYear) latestSchools = allSchoolsFor(allSchoolsFor(publicSchools, privateSchools), unclassifiedSchools);
       if (hasPlansForYear && rowMatchesYearFilters(row, filters, year)) matchingYears.push(year);
     });
 
-    if (!hasPlans) return;
-    if (!matchingYears.length) return;
+    if (!hasPlans && (hadAnyPlan || !allowsUnpublishedMajor(filters))) return;
+    if (hasPlans && !matchingYears.length) return;
     if (latestYear != null) {
       Object.keys(latestSchools).forEach(function (school) { effectiveSchools[school] = true; });
     }

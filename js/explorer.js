@@ -1,5 +1,5 @@
 import { getCollegesByYear, getScore } from './data.js';
-import { enumOptions, getSortedYears } from './metadata.js';
+import { enumOptions, getSelectableYears } from './metadata.js';
 import { createInitialState, reduceExplorerState, sanitizeNumberInput } from './explorer-state.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
@@ -38,16 +38,19 @@ function minControl(field, state, disabled) {
 
 export function buildExplorerControlsHtml(metadata, state) {
   var unavailable = state.status !== 'ready' || !state.majors.length;
-  var years = getSortedYears(metadata);
+  var years = getSelectableYears(metadata);
   var selectedYears = state.selectedYears || years;
-  var yearLabel = selectedYears.length === years.length ? years[0] + '–' + years[years.length - 1] : selectedYears.join('、');
+  var yearLabel = selectedYears.length > 3
+    ? selectedYears[0] + '–' + selectedYears[selectedYears.length - 1]
+    : selectedYears.join('、');
+  var fullYearLabel = selectedYears.join('、');
   return '<div class="explorer-status" aria-live="polite">' +
       (state.status === 'loading' ? '<span class="loading">正在加载院校数据…</span>' : '') +
       (state.status === 'error' ? '<span class="msg-notfound">' + esc(state.error) + '</span>' : '') +
     '</div>' +
     '<section class="filter-panel" aria-label="筛选条件">' +
       '<div class="filter-group"><h3>筛选条件</h3><div class="filter-row">' +
-        '<div class="filter-field"><span>年份</span><button type="button" data-filter-action="years" aria-haspopup="dialog" aria-label="选择展示年份，' + esc(yearLabel) + '">' + esc(yearLabel) + '</button></div>' +
+        '<div class="filter-field"><span>年份</span><button type="button" data-filter-action="years" aria-haspopup="dialog" aria-label="选择展示年份，当前已选 ' + esc(fullYearLabel) + '">' + esc(yearLabel) + '</button></div>' +
         enumControl(filterField(metadata, 'schoolType'), 'schoolType', state, unavailable) +
         enumControl(filterField(metadata, 'povertyStatus'), 'povertyStatus', state, unavailable) +
         enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
@@ -70,7 +73,7 @@ function renderExplorerControls(root, metadata, state, dispatch) {
   });
   yearDialog.querySelectorAll('[data-year-select]').forEach(function (button) {
     button.addEventListener('click', function () {
-      var years = getSortedYears(metadata);
+      var years = getSelectableYears(metadata);
       var selected = button.dataset.yearSelect === 'latest' ? [years[years.length - 1]] : years;
       yearDialog.querySelectorAll('input[name="selected-year"]').forEach(function (input) {
         input.checked = selected.indexOf(Number(input.value)) >= 0;
@@ -144,6 +147,9 @@ function recompute(state, metadata) {
     majors: state.majors,
     years: state.selectedYears,
     filters: state.filters,
+    planPublishedByYear: metadata.sourceCatalog && Object.fromEntries(state.selectedYears.map(function (year) {
+      return [year, Boolean((metadata.sourceCatalog.plans || {})[year] || (metadata.yearSources || {})[year])];
+    })),
     getScore: function (major, year) { return getScore(major, year); },
     getPlans: function (major, year) { return getCollegesByYear(year, major); }
   });

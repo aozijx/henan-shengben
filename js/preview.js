@@ -1,14 +1,15 @@
 import { esc } from './utils.js';
 import { buildResultModel } from './result-model.js';
+import { getSelectableYears } from './metadata.js';
 
 function isSelectedYearField(field, metadata, selectedYears) {
-  var years = metadata.supportedYears || [];
+  var years = getSelectableYears(metadata);
   var matchedYear = years.find(function (year) { return String(field.key).endsWith(String(year)); });
   return matchedYear == null || selectedYears.indexOf(matchedYear) >= 0;
 }
 
 export function getPreviewFields(metadata, selectedYears) {
-  var years = Array.isArray(selectedYears) ? selectedYears : (metadata.supportedYears || []);
+  var years = Array.isArray(selectedYears) ? selectedYears : getSelectableYears(metadata);
   return (metadata.fields || []).filter(function (field) {
     return field.tableShow && isSelectedYearField(field, metadata, years);
   });

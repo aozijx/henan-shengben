@@ -26,8 +26,23 @@ export function createDataRepository(metadata, fetchImpl) {
 
   return {
     ensureQueryIndex: function (year) {
-      var source = metadata.yearSources[year];
-      return load(source.queryIndexSource || source.mappingSource);
+      var source = metadata.yearSources && metadata.yearSources[year] || {};
+      var path = metadata.queryMappingSource || source.queryIndexSource || source.mappingSource ||
+        metadata.sourceCatalog && metadata.sourceCatalog.mapping && metadata.sourceCatalog.mapping[year];
+      return path ? load(path) : Promise.reject(new Error(year + ' 年尚无专业对照表'));
+    },
+    ensureCollegeYear: function (year) {
+      var catalog = metadata.sourceCatalog || {};
+      var annual = metadata.yearSources && metadata.yearSources[year] || {};
+      var planPath = catalog.plans && catalog.plans[year] || annual.planSource;
+      var collegePath = catalog.colleges && catalog.colleges[year] || annual.collegeFallbackSource;
+      var scorePath = catalog.scorelines && catalog.scorelines[year] || annual.scoreSource;
+      return Promise.all([planPath ? load(planPath) : [], collegePath ? load(collegePath) : [],
+        scorePath ? load(scorePath) : []])
+        .then(function ([plans, colleges, scores]) {
+          return { plans: plans, colleges: colleges, scores: scores,
+            planPublished: Boolean(planPath), scorePublished: Boolean(scorePath) };
+        });
     },
     ensureMapping: function (year) { return load(sourceFor(metadata, year, 'mappingSource')); },
     ensureScores: function (year) { return load(sourceFor(metadata, year, 'scoreSource')); },

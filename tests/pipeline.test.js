@@ -137,6 +137,16 @@ test('poverty=否 keeps regular plans and drops the poverty count', () => {
   assert.equal(se.povertyPlanCount2026, 0);
 });
 
+test('a searchable mapping major with no published annual plan remains visible', () => {
+  const result = buildPreviewRows({
+    majors: [{ 专业名称: '新增专业', 考试科目: '管理学' }], years: [2026],
+    filters: { povertyStatus: '否', schoolType: '全部', subject: '全部', schoolCount: '' },
+    getPlans: () => [], getScore: () => null
+  });
+  assert.equal(result.rows.length, 1);
+  assert.equal(result.rows[0].schoolCount2026, 0);
+});
+
 test('splits school counts and plan totals into public/private as pub/min text', () => {
   assert.deepEqual(
     run().rows.map((row) => row.majorName + ':' + row.schoolSplit2026 + ':' + row.planSplit2026),

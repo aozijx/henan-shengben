@@ -111,6 +111,14 @@ test('school details expose the complete plan record instead of only contact fie
   assert.match(html, /https:\/\/example.edu\/charter/);
 });
 
+test('a master-only college listing states that plan counts are unpublished', () => {
+  const school = { schoolName: '新大学', schoolType: '未标注', planPublished: false, planEntries: [] };
+  const html = buildSchoolDetailHtml(school, 2027);
+  assert.match(html, /2027 年/);
+  assert.match(html, /计划人数未公布/);
+  assert.doesNotMatch(html, /普通计划 0 人/);
+});
+
 test('result status helper distinguishes empty query filtered empty unpublished year and load failure', () => {
   const metadata = { supportedYears: [2026], latestYear: 2026 };
   assert.match(resultMessage({ status: 'idle' }, metadata), /输入专科专业/);

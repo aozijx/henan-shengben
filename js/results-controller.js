@@ -1,4 +1,6 @@
 import { nextSortDirection } from './preview.js';
+import { getCollegeYears } from './metadata.js';
+import { esc } from './utils.js';
 import { buildExpandedMajorHtml, buildResultViewModel, buildResultWorkspaceHtml, resultMessage } from './results-view.js';
 
 var resultStates = new WeakMap();
@@ -29,7 +31,7 @@ function resultStateFor(root, model) {
   var state = resultStates.get(root);
   var signature = resultSignature(model);
   if (!state || (model.status !== 'loading' && state.signature !== signature)) {
-    state = { signature: signature, expandedDetails: {}, selectedMajorKey: '', schoolLayout: 'cards', returnScrollY: null, returnMajorIndex: null, detailRequestId: 0 };
+    state = { signature: signature, expandedDetails: {}, selectedMajorKey: '', schoolLayout: 'cards', schoolYear: 'all', returnScrollY: null, returnMajorIndex: null, detailRequestId: 0 };
     resultStates.set(root, state);
   }
   if (model.status !== 'loading') state.signature = signature;
@@ -48,7 +50,16 @@ function renderSelectedMajor(root, context) {
   var title = root.querySelector('#selected-major-name');
   var content = root.querySelector('#selected-major-content');
   var returnButton = root.querySelector('#school-detail-return');
+  var yearSelect = root.querySelector('#school-year-filter');
   if (!section || !content || !state) return Promise.resolve();
+  var collegeYears = context.model.collegeYears || context.model.selectedYears;
+  if (yearSelect) {
+    if (state.schoolYear !== 'all' && collegeYears.indexOf(Number(state.schoolYear)) < 0) state.schoolYear = 'all';
+    yearSelect.innerHTML = '<option value="all">全部可用年份</option>' + collegeYears.map(function (year) {
+      return '<option value="' + esc(year) + '">' + esc(year) + ' 年</option>';
+    }).join('');
+    yearSelect.value = String(state.schoolYear);
+  }
   section.dataset.schoolLayout = state.schoolLayout;
   root.querySelectorAll('[data-select-major]').forEach(function (button) {
     var aggregate = context.model.aggregates[Number(button.dataset.selectMajor)];
@@ -74,11 +85,12 @@ function renderSelectedMajor(root, context) {
   var aggregate = context.model.aggregates[activeIndex];
   var majorName = aggregate.major && aggregate.major.majorName || '';
   var requestId = ++state.detailRequestId;
+  var schoolYears = state.schoolYear === 'all' ? collegeYears : [Number(state.schoolYear)];
   var detailPromise = context.onExpand
     ? Promise.resolve().then(function () {
-      return context.onExpand(aggregate, context.model.selectedYears, context.model.hiddenFields);
+      return context.onExpand(aggregate, context.model.selectedYears, context.model.hiddenFields, schoolYears);
     })
-    : Promise.resolve({ html: buildExpandedMajorHtml(aggregate, context.model.selectedYears, context.model.hiddenFields) });
+    : Promise.resolve({ html: buildExpandedMajorHtml(aggregate, context.model.selectedYears, context.model.hiddenFields, schoolYears) });
   section.setAttribute('aria-busy', 'true');
   return detailPromise.catch(function (error) {
     return { error: error.message || String(error) };
@@ -195,6 +207,12 @@ function handleResultClick(root, event) {
 function bindResultEvents(root) {
   if (boundResults.has(root)) return;
   root.addEventListener('click', function (event) { handleResultClick(root, event); });
+  root.addEventListener('change', function (event) {
+    var context = resultContexts.get(root);
+    if (!context || !event.target || event.target.id !== 'school-year-filter') return;
+    context.state.schoolYear = event.target.value;
+    renderSelectedMajor(root, context);
+  });
   boundResults.add(root);
 }
 
@@ -224,6 +242,7 @@ export function setResultState(root, message, kind) {
 export function renderResultWorkspace(root, model, metadata, dispatch, onExpand) {
   if (!root) return;
   var viewModel = buildResultViewModel(model, metadata);
+  viewModel.collegeYears = getCollegeYears(metadata);
   var state = resultStateFor(root, viewModel);
   viewModel = { ...viewModel, expandedDetails: state.expandedDetails };
   var hasResults = viewModel.status === 'ready' && viewModel.aggregates.length > 0;

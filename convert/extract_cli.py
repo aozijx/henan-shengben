@@ -6,6 +6,7 @@
   python -m convert.extract_cli --year YEAR --parser mapping  # 只跑指定项
 
 数据源由 data/year-links/YYYY.json 与约定的本地文件路径共同派生。
+--local 可只凭本地 PDF 转换，并记录各输入和产物哈希供 catalog 读取。
 """
 from __future__ import annotations
 
@@ -22,6 +23,7 @@ from .common import (
     write_json,
 )
 from .diff import diff_mapping, diff_rows
+from .local_tables import local_source_rows, record_local_tables
 from .sources import extract_entry
 
 
@@ -57,14 +59,21 @@ def main() -> int:
     parser.add_argument("--write", action="store_true", help="将重新抽取的结果写回 data/（仅写有差异的文件）")
     parser.add_argument("--year", type=int, help="只处理指定年份")
     parser.add_argument("--parser", help="只处理指定 parser (scorelines/mapping/plans/master)")
+    parser.add_argument("--local", action="store_true", help="从本地约定路径发现 PDF，不要求 year-links")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     args = parser.parse_args()
-    plan = load_data_plan(args.data_root, {args.year} if args.year is not None else None)
+    if args.local and args.year is None:
+        parser.error('--local requires --year')
+    plan = ({'sources': local_source_rows(args.data_root, args.year)} if args.local
+            else load_data_plan(args.data_root, {args.year} if args.year is not None else None))
+    if args.local and not plan['sources']:
+        parser.error(f'{args.year}: no local PDF table found')
 
     total_bad = 0
     years = sorted({int(item["year"]) for item in plan["sources"]}) if args.year is None else [args.year]
     for year in years:
-        for result in extract_year_sources(plan, args.data_root, year, write=args.write, parser=args.parser):
+        results = extract_year_sources(plan, args.data_root, year, write=args.write, parser=args.parser)
+        for result in results:
             label = "一致" if not result["diffs"] else f"{len(result['diffs'])} 处差异"
             count_note = "  [官方行数异常]" if result["expectedCountMismatch"] else ""
             print(f"{result['outputPath']}: 抽取 {result['rowCount']} 条 — {label}{count_note}")
@@ -75,6 +84,11 @@ def main() -> int:
                 total_bad += 1
             if args.write:
                 print("   -> 已写回")
+        if args.local and args.write and results:
+            selected = {result['parser'] for result in results}
+            manifest = record_local_tables(args.data_root, year, [row for row in plan['sources']
+                                                               if row['parser'] in selected])
+            print(f'{manifest}: 已记录本地来源与产物哈希')
 
     print("结果：" + ("全部一致" if total_bad == 0 else f"共 {total_bad} 处异常/差异"))
     return 1 if total_bad and not args.write else 0

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandMetadata, getFocusYear, getLatestYear, getPreviousYear, getSortedYears, loadMetadata, normalizeSelectedYears, validateMetadata } from '../js/metadata.js';
+import { expandMetadata, getCollegeYears, getFocusYear, getLatestYear, getPreviousYear, getQueryMappingYear, getSortedYears, loadMetadata, normalizeSelectedYears, validateMetadata } from '../js/metadata.js';
 
 function validMetadata() {
   return {
@@ -32,6 +32,17 @@ function validMetadata() {
 
 test('accepts a complete metadata document', () => {
   assert.deepEqual(validateMetadata(validMetadata()), { valid: true, errors: [] });
+});
+
+test('independent mapping and college source years are derived from metadata', () => {
+  const metadata = validMetadata();
+  metadata.queryMappingYear = 2027;
+  metadata.queryMappingSource = 'data/mapping-2027.json';
+  metadata.sourceCatalog = { mapping: { 2027: 'data/mapping-2027.json' },
+    colleges: { 2027: 'data/colleges-2027.json' }, plans: { 2025: 'data/plans-2025.json' } };
+  assert.deepEqual(validateMetadata(metadata), { valid: true, errors: [] });
+  assert.equal(getQueryMappingYear(metadata), 2027);
+  assert.deepEqual(getCollegeYears(metadata), [2025, 2027]);
 });
 
 test('rejects duplicate field keys', () => {

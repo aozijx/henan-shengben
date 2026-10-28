@@ -25,11 +25,15 @@ export function buildYearSummaryHtml(yearAggregate, hiddenFields) {
 export function buildYearScoreHtml(yearAggregate, showLabel) {
   if (!yearAggregate) return '<span class="year-unpublished">该年份数据尚未发布</span>';
   return '<span class="year-score">' + (showLabel === false ? '' : '<strong>省控线</strong>') + '<span>' +
-    text(yearAggregate.score) + '</span></span>';
+    (yearAggregate.scorePublished === false ? '未公布' : text(yearAggregate.score)) + '</span></span>';
 }
 
 export function buildYearAdmissionsHtml(yearAggregate, hiddenFields, compact) {
   if (!yearAggregate) return '<span class="year-unpublished">该年份数据尚未发布</span>';
+  if (yearAggregate.planPublished === false) {
+    var count = (yearAggregate.schools || []).length;
+    return '<span class="year-unpublished">' + (count ? count + ' 所院校 · ' : '') + '招生计划人数未公布</span>';
+  }
   return summaryPart('公办', yearAggregate.publicSummary, hiddenFields, compact) +
     summaryPart('民办', yearAggregate.privateSummary, hiddenFields, compact);
 }
@@ -57,16 +61,19 @@ function planRecordHtml(entry) {
 
 export function buildSchoolDetailHtml(school, year, hiddenFields) {
   var entries = school.planEntries || [];
+  var planPublished = school.planPublished !== false;
   var yearLabel = year == null ? '' : '<span class="school-year-badge">' + esc(String(year)) + ' 年</span>';
   var schoolCode = school.schoolCode ? '<span class="school-type">代码 ' + esc(String(school.schoolCode)) + '</span>' : '';
   var records = entries.length
     ? entries.map(planRecordHtml).join('')
-    : '<p class="school-detail-empty">该院校仅有招生高校总表回退信息，暂无计划明细。</p>';
+    : '<p class="school-detail-empty">' + (planPublished
+      ? '该院校仅有招生高校总表回退信息，暂无计划明细。'
+      : '来自招生高校及专业总表；招生计划人数尚未公布。') + '</p>';
   return '<article class="school-detail">' +
     '<header><h5>' + esc(school.schoolName || '') + '</h5>' + schoolCode + yearLabel +
     '<span class="school-type">' + esc(school.schoolType || '—') + '</span></header>' +
-    '<p class="school-plan-summary">普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人' +
-    (resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人' : '') + '</p>' +
+    '<p class="school-plan-summary">' + (planPublished ? '普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人' : '计划人数未公布') +
+    (planPublished && resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人' : '') + '</p>' +
     records +
     '</article>';
 }

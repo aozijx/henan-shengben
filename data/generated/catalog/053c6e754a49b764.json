@@ -10,7 +10,7 @@
   "yearSources": {
     "2023": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
-      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2027.json",
       "scoreSource": "data/省控线/省控线_2023.json",
       "planSource": "data/招生计划/招生计划_2023.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2023.json",
@@ -21,7 +21,7 @@
     },
     "2024": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
-      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2027.json",
       "scoreSource": "data/省控线/省控线_2024.json",
       "planSource": "data/招生计划/招生计划_2024.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
@@ -32,7 +32,7 @@
     },
     "2025": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
-      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2027.json",
       "scoreSource": "data/省控线/省控线_2025.json",
       "planSource": "data/招生计划/招生计划_2025.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
@@ -43,7 +43,7 @@
     },
     "2026": {
       "mappingSource": "data/专业对照/专业对照_2026.json",
-      "queryIndexSource": "data/专业对照/专业对照_2026.json",
+      "queryIndexSource": "data/专业对照/专业对照_2027.json",
       "scoreSource": "data/省控线/省控线_2026.json",
       "planSource": "data/招生计划/招生计划_2026.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
@@ -51,6 +51,34 @@
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
       "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
       "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
+    }
+  },
+  "sourceCatalog": {
+    "mapping": {
+      "2026": "data/专业对照/专业对照_2026.json",
+      "2027": "data/专业对照/专业对照_2027.json"
+    },
+    "colleges": {
+      "2026": "data/招生高校及专业/招生高校及专业_2026.json",
+      "2027": "data/招生高校及专业/招生高校及专业_2027.json"
+    },
+    "plans": {
+      "2023": "data/招生计划/招生计划_2023.json",
+      "2024": "data/招生计划/招生计划_2024.json",
+      "2025": "data/招生计划/招生计划_2025.json",
+      "2026": "data/招生计划/招生计划_2026.json"
+    },
+    "scorelines": {
+      "2023": "data/省控线/省控线_2023.json",
+      "2024": "data/省控线/省控线_2024.json",
+      "2025": "data/省控线/省控线_2025.json",
+      "2026": "data/省控线/省控线_2026.json"
+    },
+    "scoreSegments": {
+      "2023": "data/一分一段/一分一段_2023.json",
+      "2024": "data/一分一段/一分一段_2024.json",
+      "2025": "data/一分一段/一分一段_2025.json",
+      "2026": "data/一分一段/一分一段_2026.json"
     }
   },
   "inputSha256": {

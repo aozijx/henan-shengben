@@ -51,6 +51,14 @@ export function normalizePlanEntry(row) {
   };
 }
 
+export function normalizeCollegeMasterRow(row, planPublished) {
+  return { ...row,
+    '院校名称': row['院校名称'] || row['学校名称'],
+    '院校代号': row['院校代号'] || row['院校代码'],
+    '办学性质': row['办学性质'] || '未标注',
+    _planUnpublished: planPublished === false };
+}
+
 export function normalizeScoreSegmentSeries(row) {
   return {
     year: numberOrNull(row.year),
