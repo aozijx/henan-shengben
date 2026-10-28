@@ -33,25 +33,15 @@ npm test
 
 ## 数据与维护
 
-年度来源配置位于 `data/year-links/`，规范数据和来源清单位于 `data/`，已发布转换摘要集中在 `metadata/school-data.json`。新增年度需要先检查来源和转换结果，再发布：
+年度来源配置位于 `data/year-links/`，规范数据和来源清单位于 `data/`，已发布转换摘要集中在 `metadata/school-data.json`。新增年度先执行只读检查：
 
 ```powershell
 python -m convert.ingest_year --seed data/year-links/YYYY.json --check
 ```
 
-若官方表格 PDF 已保存到 `data/` 约定路径，但该年尚无完整的 year-links，可先独立转换已取得的表格：
-
-```powershell
-python -m convert.extract_cli --local --year YYYY --write
-python -m convert.refresh_catalog
-```
-
-前一命令只处理实际存在且输入齐全的本地 PDF，并记录输入与产物哈希；后一命令将各类来源按年份独立登记到 `sourceCatalog`。页面可立即展示专业对照和招生高校总表；完整年度统计仍需招生计划、省控线与一分一段等输入。
-
-确认检查报告后，本地去掉 `--check` 执行发布。PR 中变更的新年度 seed 会逐个检查并暂存核验产物；合并到 `main` 后，Action 复用该 artifact、重建 catalog 并提交生成物。若 seed 已在仓库且无需改动，可在 PR 分支上手动运行 Action，指定 `data/year-links/YYYY.json`；合并后 Action 会按 PR head commit 找到并校验该次运行的 artifact。直接推送新年度 seed 到 `main` 时，Action 会针对变更年度执行完整导入；已发布年度仍不能用新年度导入入口覆盖。已有年度复核、采集、转换、异常处理和回滚步骤见 [转换与导入指南](convert/README.md)。
-
 | 文档 | 内容 |
 | --- | --- |
+| [架构说明](docs/architecture.md) | 浏览器分层、数据流和配置所有权 |
 | [转换与导入指南](convert/README.md) | 年度导入、PDF/OCR、校验、异常复核和发布 |
 | [采集器说明](crawler/README.md) | 官方公告发现、PDF 下载和会话处理 |
 | [数据目录说明](data/README.md) | 数据目录、规范文件与权威字段 |
