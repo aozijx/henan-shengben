@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
 from .manual_corrections import apply_manual_correction, ensure_manual_corrections
@@ -88,43 +88,6 @@ def _issue_detail(
     if full_report:
         detail["rawRows"] = raw_rows
     return detail
-
-
-def build_issue_report(
-    majors: Iterable[dict[str, Any]],
-    data_root: Path,
-    control_scores: dict[str, int],
-    source_entries: dict[str, dict[str, Any]] | None = None,
-    *, full_report: bool = False,
-    year: int,
-) -> dict[str, Any]:
-    year = int(year)
-    source_entries = source_entries or {}
-    issues: list[dict[str, Any]] = []
-    issue_position = 0
-    for major in majors:
-        if major.get("status") == "ok":
-            continue
-        issue_position += 1
-        print(f"[{year}] 异常复核 {issue_position}：{major['majorCode']} {major['majorName']} — 开始 OCR", flush=True)
-        source_pdf = major["sourcePdf"]
-        try:
-            rows = extract_rows(data_root / source_pdf, thorough=True)
-            extraction_error = None
-        except Exception as exc:
-            rows = []
-            extraction_error = str(exc)
-        print(f"[{year}] 异常复核 {issue_position}：{major['majorCode']} {major['majorName']} — "
-              f"完成，识别 {len(rows)} 行{'，读取失败：' + extraction_error if extraction_error else ''}", flush=True)
-        issues.append(_issue_detail(major, rows, data_root, control_scores, source_entries,
-                                    full_report=full_report, year=year,
-                                    extraction_error=extraction_error))
-    return {
-        "schemaVersion": 1,
-        "year": year,
-        "issueCount": len(issues),
-        "issues": issues,
-    }
 
 
 def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None,
