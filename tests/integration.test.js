@@ -2,13 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { bootstrapData } from '../js/bootstrap.js';
-import { loadYears, buildIndexes } from '../js/data.js';
 import { buildMajorAggregates } from '../js/aggregate.js';
 import { buildExplorerControlsHtml, canExport, createInitialState, reduceExplorerState } from '../js/explorer.js';
 import { buildExportFilename, prepareExport, serializeCsv } from '../js/export.js';
 import { buildResultModel } from '../js/result-model.js';
 import { buildResultWorkspaceHtml } from '../js/results-view.js';
-import { normalizeMajorOption, normalizePlanEntry } from '../js/model.js';
+import { normalizeCollegeMasterRow, normalizeMajorOption, normalizePlanEntry } from '../js/model.js';
 
 async function fixture(name) {
   return JSON.parse(await readFile(new URL('./fixtures/' + name, import.meta.url), 'utf8'));
@@ -30,18 +29,18 @@ async function fixtureFetch(overrides = {}) {
 
 test('a metadata-only new year flows through selection, result table and export', async () => {
   const loaded = await bootstrapData('fixtures/metadata-2027.json', await fixtureFetch());
-  await loadYears(loaded.store, [2027], await fixtureFetch());
-  buildIndexes(loaded.store, loaded.metadata);
-  const majors = loaded.store.mapping[0].可报本科专业.map((major) => normalizeMajorOption(major));
+  const mapping = await loaded.data.ensureQueryIndex(2027);
+  const yearData = await loaded.data.ensureYear(2027);
+  const majors = mapping[0].可报本科专业.map((major) => normalizeMajorOption(major));
   const state = reduceExplorerState(createInitialState(loaded.metadata), { type: 'LOAD_SUCCESS' }, loaded.metadata);
   const aggregates = buildMajorAggregates({
     majors,
     years: loaded.metadata.supportedYears,
-    scoresByYear: loaded.store.scoresByYear,
-    plansByYear: Object.fromEntries(loaded.metadata.supportedYears.map((year) => [
-      year, (loaded.store.plansByYear[year] || []).map(normalizePlanEntry)
-    ])),
-    fallbacksByYear: loaded.store.fallbacksByYear
+    scoresByYear: { 2027: yearData.scores },
+    plansByYear: { 2027: yearData.plans.map(normalizePlanEntry) },
+    planPublishedByYear: { 2027: yearData.planPublished },
+    scorePublishedByYear: { 2027: yearData.scorePublished },
+    fallbacksByYear: { 2027: yearData.colleges.map((row) => normalizeCollegeMasterRow(row, yearData.planPublished)) }
   });
   const result = buildResultModel({ aggregates, metadata: loaded.metadata,
     selectedYears: state.selectedYears, filters: state.filters, sort: state.sort });
@@ -52,7 +51,7 @@ test('a metadata-only new year flows through selection, result table and export'
     selectedYears: state.selectedYears, resultLayout: 'table'
   }, loaded.metadata);
 
-  assert.deepEqual(loaded.store.years, [2027]);
+  assert.deepEqual(loaded.metadata.supportedYears, [2027]);
   assert.deepEqual(state.selectedYears, loaded.metadata.supportedYears);
   assert.equal(state.focusYear, loaded.metadata.defaultYear);
   assert.deepEqual(result.allRows.map((row) => row.majorName), ['数据工程', '智能工程']);
@@ -83,7 +82,7 @@ test('a missing configured source names its path and leaves export disabled', as
   metadata.yearSources[2027].planSource = 'fixtures/missing-plans-2027.json';
   const fetchImpl = await fixtureFetch({ 'fixtures/metadata-2027.json': metadata });
   await assert.rejects(
-    (async () => { const loaded = await bootstrapData('fixtures/metadata-2027.json', fetchImpl); await loadYears(loaded.store, [2027], fetchImpl); })(),
+    (async () => { const loaded = await bootstrapData('fixtures/metadata-2027.json', fetchImpl); await loaded.data.ensureYear(2027); })(),
     /fixtures\/missing-plans-2027\.json.*404/
   );
 

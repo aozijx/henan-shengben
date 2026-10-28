@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { buildIndexes, getCollegesByYear, getScore } from '../js/data.js';
+import { createDataContext } from '../js/data.js';
 import { expandMetadata, getSelectableYears } from '../js/metadata.js';
 import { queryRowsFromPublishedSources } from '../js/analytics-query.js';
 import { buildPreviewRows } from '../js/pipeline.js';
@@ -30,14 +30,15 @@ test('2027 mapping and college master are searchable before plans and score tabl
   const major = specialty['可报本科专业'].find((item) => schoolMajorNames.has(item['专业名称']));
   const source = queryRowsFromPublishedSources({}, { 2027: { plans: [], colleges, planPublished: false,
     scores: [], scorePublished: false } }, [2027]);
-  const index = buildIndexes(source, metadata);
-  const schoolRows = getCollegesByYear(index, 2027, major);
+  const data = createDataContext({});
+  data.setSummaryStore(source);
+  const schoolRows = data.getColleges(major, 2027);
   assert.ok(schoolRows.length > 0);
 
   const preview = buildPreviewRows({ majors: [major], years: [2027], filters: { povertyStatus: '否' },
     planPublishedByYear: source.planPublishedByYear,
-    getScore: (item, year) => getScore(index, item, year),
-    getPlans: (item, year) => getCollegesByYear(index, year, item) });
+    getScore: (item, year) => data.getScore(item, year),
+    getPlans: (item, year) => data.getColleges(item, year) });
   assert.equal(preview.rows.length, 1);
   assert.equal(preview.rows[0].schoolCount2027, new Set(schoolRows.map((row) => row['院校代码'])).size);
   assert.equal(preview.rows[0].planCount2027, null);

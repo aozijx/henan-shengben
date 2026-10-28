@@ -50,9 +50,6 @@ export function createDataRepository(metadata, fetchImpl) {
       var path = catalog.colleges && catalog.colleges[year] || annual.collegeFallbackSource;
       return path ? load(path) : Promise.resolve([]);
     },
-    ensureMapping: function (year) { return load(sourceFor(metadata, year, 'mappingSource')); },
-    ensureScores: function (year) { return load(sourceFor(metadata, year, 'scoreSource')); },
-    ensurePlans: function (year) { return load(sourceFor(metadata, year, 'planSource')); },
     ensureAnalytics: function (year) { return load(sourceFor(metadata, year, 'analyticsSource')); },
     ensureScoreSegmentIndex: function (year) { return load(sourceFor(metadata, year, 'scoreSegmentIndexSource')); },
     ensureScoreSegment: function (year, majorCode) {
@@ -60,10 +57,6 @@ export function createDataRepository(metadata, fetchImpl) {
       if (!/^[a-zA-Z0-9]+$/.test(code)) return Promise.reject(new Error('专业代号无效'));
       return load(sourceFor(metadata, year, 'scoreSegmentShardTemplate')
         .replace(/\{year\}/g, String(year)).replace(/\{majorCode\}/g, code));
-    },
-    ensureFallbacks: function (year) {
-      var source = metadata.yearSources[year];
-      return source.collegeFallbackSource ? load(source.collegeFallbackSource) : Promise.resolve([]);
     },
     retry: function (url) { cache.delete(url); return load(url); },
     clear: function () { cache.clear(); }

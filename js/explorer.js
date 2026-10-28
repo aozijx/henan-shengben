@@ -1,17 +1,13 @@
-import { getCollegesByYear, getMasterRowsByYear, getScore } from './data.js';
 import { enumOptions, getSelectableYears } from './metadata.js';
 import { createInitialState, reduceExplorerState, sanitizeNumberInput } from './explorer-state.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
 import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWidths, readExplorerState, writeExplorerState } from './preferences.js';
-import { setQueryYear } from './query.js';
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 import { buildYearDialogHtml } from './results-view.js';
 import { setResultState } from './results-controller.js';
 import { bindExportDialog } from './export-dialog.js';
 import { downloadCsv, prepareExport } from './export.js';
-
-var activeExplorer = null;
 
 export { createInitialState, reduceExplorerState, sanitizeNumberInput, canExport } from './explorer-state.js';
 
@@ -139,7 +135,7 @@ function notifyFilteredResult(state, metadata, options) {
   options.onFilteredResult(majors, state, activeFilterNote(state, metadata));
 }
 
-function recompute(state, metadata) {
+function recompute(state, metadata, data) {
   if (state.status !== 'ready' || !state.majors.length) return { ...state, rows: [], effectiveSchoolCount: 0 };
   var preview = buildPreviewRows({
     metadata: metadata,
@@ -149,9 +145,9 @@ function recompute(state, metadata) {
     planPublishedByYear: metadata.sourceCatalog && Object.fromEntries(state.selectedYears.map(function (year) {
       return [year, Boolean((metadata.sourceCatalog.plans || {})[year] || (metadata.yearSources || {})[year])];
     })),
-    getScore: function (major, year) { return getScore(major, year); },
-    getPlans: function (major, year) { return getCollegesByYear(year, major); },
-    getMasters: function (major, year) { return getMasterRowsByYear(year, major); }
+    getScore: function (major, year) { return data.getScore(major, year); },
+    getPlans: function (major, year) { return data.getColleges(major, year); },
+    getMasters: function (major, year) { return data.getMasterRows(major, year); }
   });
   return {
     ...state,
@@ -162,6 +158,8 @@ function recompute(state, metadata) {
 
 export function initExplorer(root, metadata, options) {
   options = options || {};
+  if (!options.data) throw new Error('筛选控制器需要数据上下文');
+  var data = options.data;
   var state = reduceExplorerState(createInitialState(metadata), { type: 'LOAD_SUCCESS' }, metadata);
   state = { ...state, columnWidths: readColumnWidths(localStorage, metadata) };
   var saved = readExplorerState(localStorage, metadata);
@@ -173,11 +171,11 @@ export function initExplorer(root, metadata, options) {
     focusYear: saved.selectedYears[saved.selectedYears.length - 1] || state.focusYear,
     resultLayout: saved.resultLayout
   };
-  setQueryYear(state.focusYear);
   function dispatch(event) {
-    state = reduceExplorerState(state, event, metadata);
+    var nextState = reduceExplorerState(state, event, metadata);
+    if (nextState === state) return state;
+    state = nextState;
     if (event.type === 'SET_SELECTED_YEARS') {
-      setQueryYear(state.focusYear);
       if (typeof options.onYearChange === 'function') options.onYearChange(state);
     }
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
@@ -186,11 +184,13 @@ export function initExplorer(root, metadata, options) {
       writeExplorerState(localStorage, state);
     }
     if (event.type === 'CLEAR_ALL') localStorage.removeItem(EXPLORER_STATE_KEY);
-    state = recompute(state, metadata);
+    state = recompute(state, metadata, data);
     renderExplorerControls(root, metadata, state, dispatch);
     notifyFilteredResult(state, metadata, options);
+    if (typeof options.onStateChange === 'function') options.onStateChange(state, event);
+    return state;
   }
-  activeExplorer = {
+  var controller = {
     dispatch: dispatch,
     getState: function () { return state; }
   };
@@ -207,9 +207,5 @@ export function initExplorer(root, metadata, options) {
   );
   renderExplorerControls(root, metadata, state, dispatch);
   notifyFilteredResult(state, metadata, options);
-  return activeExplorer;
-}
-
-export function setSearchResult(majors, specName) {
-  if (activeExplorer) activeExplorer.dispatch({ type: 'SET_SEARCH_RESULT', majors: majors, specName: specName });
+  return controller;
 }

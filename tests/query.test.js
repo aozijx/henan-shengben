@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { doQuery, findMappingMatches, resolveMappingMatch, setQueryYear, setResultListener } from '../js/query.js';
-import { loadAll, loadYears } from '../js/data.js';
+import { createQueryController, findMappingMatches, resolveMappingMatch } from '../js/query.js';
+import { createDataContext } from '../js/data.js';
+import { createDataRepository } from '../js/data-source.js';
 
 function createResultRoot() {
   const slots = {
@@ -16,6 +17,13 @@ function createResultRoot() {
     querySelector(selector) { return slots[selector] || null; },
     querySelectorAll() { return []; }
   };
+}
+
+function createData(metadata, payloads) {
+  const repository = createDataRepository(metadata, async (url) => ({
+    ok: url in payloads, status: 404, json: async () => structuredClone(payloads[url])
+  }));
+  return createDataContext(repository);
 }
 
 test('searches only the mapping supplied for the selected year', () => {
@@ -39,21 +47,20 @@ test('completes a successful partial query to the selected specialty name', asyn
   const metadata = {
     defaultYear: 2027,
     supportedYears: [2027],
-    yearSources: {
-      2027: { mappingSource: 'mapping.json', scoreSource: 'scores.json', planSource: 'plans.json' }
-    }
+    yearSources: { 2027: { mappingSource: 'mapping.json', scoreSource: 'scores.json', planSource: 'plans.json' } }
   };
   const payloads = {
     'mapping.json': [{ 专科专业: '物联网应用技术', 可报本科专业: [] }],
-    'scores.json': [],
-    'plans.json': []
+    'scores.json': [], 'plans.json': []
   };
-  await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
+  const data = createData(metadata, payloads);
+  await data.ensureQueryIndex(2027);
+  const query = createQueryController(data, { metadata });
   const input = { value: '物联网' };
   const hint = { textContent: '' };
   const result = createResultRoot();
 
-  doQuery(input, hint, result);
+  query.doQuery(input, hint, result);
 
   assert.equal(input.value, '物联网应用技术');
   assert.match(hint.textContent, /物联网应用技术/);
@@ -73,12 +80,14 @@ test('switches completion and context to the focused query year', async () => {
     'mapping-2026.json': [{ 专科专业: '软件技术（2026）', 可报本科专业: [] }],
     'scores-2024.json': [], 'scores-2026.json': [], 'plans-2024.json': [], 'plans-2026.json': []
   };
-  const store = await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
-  await loadYears(store, [2024], async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
-  setQueryYear(2024);
+  const data = createData(metadata, payloads);
+  await data.ensureQueryIndex(2026);
+  await data.ensureQueryIndex(2024);
+  const query = createQueryController(data, { metadata });
+  query.setYear(2024);
   const input = { value: '软件技术' };
   const hint = { textContent: '' };
-  doQuery(input, hint, createResultRoot());
+  query.doQuery(input, hint, createResultRoot());
   assert.equal(input.value, '软件技术（2024）');
   assert.match(hint.textContent, /2024 对照一览表/);
 });
@@ -93,18 +102,19 @@ test('hands successful matches to the aggregate workspace without legacy table m
     'mapping.json': [{ 专科专业: '软件技术', 可报本科专业: [{ 专业名称: '软件工程' }] }],
     'scores.json': [], 'plans.json': []
   };
-  await loadAll(metadata, async (url) => ({ ok: true, json: async () => structuredClone(payloads[url]) }));
+  const data = createData(metadata, payloads);
+  await data.ensureQueryIndex(2027);
+  let received = null;
+  const query = createQueryController(data, { metadata,
+    onResult: (majors, name) => { received = { majors, name }; } });
   const input = { value: '软件' };
   const hint = { textContent: '' };
   const result = createResultRoot();
-  let received = null;
-  setResultListener((majors, name) => { received = { majors, name }; });
 
-  doQuery(input, hint, result);
+  query.doQuery(input, hint, result);
 
   assert.equal(input.value, '软件技术');
   assert.equal(received.name, '软件技术');
   assert.equal(received.majors[0].专业名称, '软件工程');
   assert.equal(result.innerHTML, '');
-  setResultListener(null);
 });

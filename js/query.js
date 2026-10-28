@@ -1,33 +1,6 @@
-/* ============================================================
-   河南专升本 · 查询工具  —  查询模块
-   按专科专业查：输入关键词 → 匹配专科专业 → 展示可报本科专业
-   通过结果监听器交给聚合工作区渲染。不持有 DOM 引用（由入口传入）。
-   ============================================================ */
-
-import { getMappingByYear, getMetadata, isReady } from './data.js';
+/* Specialty search. Each controller owns its selected year and result callback. */
 import { getSelectableYears } from './metadata.js';
 import { setResultState } from './results-controller.js';
-
-var activeQueryYear = null;
-
-export function setQueryYear(year) {
-  activeQueryYear = Number.isInteger(year) ? year : null;
-}
-
-function currentQueryYear(metadata) {
-  if (metadata && getSelectableYears(metadata).indexOf(activeQueryYear) >= 0) return activeQueryYear;
-  return metadata && metadata.defaultYear;
-}
-
-function currentMappingYear(metadata) {
-  return Number.isInteger(metadata && metadata.queryMappingYear)
-    ? metadata.queryMappingYear : currentQueryYear(metadata);
-}
-
-function currentMapping() {
-  var metadata = getMetadata();
-  return getMappingByYear(currentQueryYear(metadata));
-}
 
 export function findMappingMatches(mapping, keyword) {
   var kw = String(keyword || '').trim();
@@ -40,59 +13,77 @@ export function resolveMappingMatch(mapping, keyword) {
   return matches.find(function (item) { return String(item['专科专业'] || '').trim() === kw; }) || matches[0] || null;
 }
 
-/* ---------- 建议填充（datalist） ---------- */
-export function fillSuggest($suggest, kw) {
-  $suggest.innerHTML = '';
-  if (!kw || !isReady()) return;
-  var n = 0;
-  currentMapping().forEach(function (m) {
-    var name = m['专科专业'];
-    if (name.indexOf(kw) > -1 && n < 30) {
-      var opt = document.createElement('option');
-      opt.value = name;
-      $suggest.appendChild(opt);
-      n += 1;
+export function createQueryController(data, options) {
+  options = options || {};
+  var metadata = options.metadata || {};
+  var onResult = options.onResult;
+  var queryYear = metadata.defaultYear;
+
+  function selectedYear() {
+    return getSelectableYears(metadata).includes(queryYear) ? queryYear : metadata.defaultYear;
+  }
+
+  function mappingYear() {
+    return Number.isInteger(metadata.queryMappingYear) ? metadata.queryMappingYear : selectedYear();
+  }
+
+  function currentMapping() { return data.getMapping(selectedYear()); }
+
+  function emitResult(majors, specialtyName) {
+    if (typeof onResult === 'function') onResult(majors, specialtyName);
+  }
+
+  function fillSuggest(suggest, keyword) {
+    suggest.innerHTML = '';
+    var mapping = currentMapping();
+    if (!keyword || !data.hasQueryIndex(selectedYear())) return;
+    var count = 0;
+    mapping.forEach(function (item) {
+      var name = item['专科专业'];
+      if (name.indexOf(keyword) > -1 && count < 30) {
+        var option = document.createElement('option');
+        option.value = name;
+        suggest.appendChild(option);
+        count += 1;
+      }
+    });
+  }
+
+  function showSpecialty(input, hint, result, specialty) {
+    if (!specialty) return;
+    input.value = specialty['专科专业'];
+    var majors = specialty['可报本科专业'] || [];
+    emitResult(majors, specialty['专科专业']);
+    hint.textContent = specialty['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' +
+      (mappingYear() || '') + ' 对照一览表）';
+    if (!majors.length) setResultState(result, '「' + specialty['专科专业'] + '」暂无可报本科专业数据', 'empty');
+  }
+
+  function doQuery(input, hint, result) {
+    if (!data.hasQueryIndex(selectedYear())) return;
+    var keyword = (input.value || '').trim();
+    if (!keyword) {
+      hint.textContent = '';
+      emitResult([], '');
+      setResultState(result, '输入专科专业，回车或点击查询开始检索', 'empty');
+      return;
     }
-  });
-}
 
-var resultListener = null;
-export function setResultListener(listener) { resultListener = listener; }
-
-/* ---------- 查询入口 ---------- */
-export function doQuery($q, $hint, $result) {
-  if (!isReady()) return;
-  var kw = ($q.value || '').trim();
-  if (!kw) {
-    $hint.textContent = '';
-    if (resultListener) resultListener([], '');
-    setResultState($result, '输入专科专业，回车或点击查询开始检索', 'empty');
-    return;
+    var mapping = currentMapping();
+    var matches = findMappingMatches(mapping, keyword);
+    if (!matches.length) {
+      hint.textContent = '';
+      emitResult([], '');
+      setResultState(result, '未找到专科专业「' + keyword + '」。可尝试输入关键词的一部分（如「物联网」）；本工具收录 ' +
+        (mappingYear() || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。', 'empty');
+      return;
+    }
+    showSpecialty(input, hint, result, resolveMappingMatch(mapping, keyword));
   }
 
-  var mapping = currentMapping();
-  var matches = findMappingMatches(mapping, kw);
-  if (!matches.length) {
-    $hint.textContent = '';
-    if (resultListener) resultListener([], '');
-    var metadata = getMetadata();
-    setResultState($result, '未找到专科专业「' + kw + '」。可尝试输入关键词的一部分（如「物联网」）；本工具收录 ' +
-      (currentMappingYear(metadata) || '') + ' 年对照一览表中的 ' + mapping.length + ' 个专科专业。', 'empty');
-    return;
-  }
-  var spec = resolveMappingMatch(mapping, kw);
-  showSpec($q, $hint, $result, spec);
-}
-
-function showSpec($q, $hint, $result, spec) {
-  if (!spec) return;
-  $q.value = spec['专科专业'];
-  var majors = spec['可报本科专业'] || [];
-  if (resultListener) resultListener(majors, spec['专科专业']);
-  var metadata = getMetadata();
-  $hint.textContent = spec['专科专业'] + ' · 共 ' + majors.length + ' 个可报本科专业（' + (currentMappingYear(metadata) || '') + ' 对照一览表）';
-  if (!majors.length) {
-    setResultState($result, '「' + spec['专科专业'] + '」暂无可报本科专业数据', 'empty');
-    return;
-  }
+  return {
+    setYear: function (year) { queryYear = Number.isInteger(year) ? year : metadata.defaultYear; },
+    fillSuggest: fillSuggest,
+    doQuery: doQuery
+  };
 }

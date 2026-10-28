@@ -27,15 +27,14 @@ function metadata() {
   };
 }
 
-test('repository is lazy and shares one promise for the same URL', async () => {
+test('repository is lazy and shares one fetch for the same URL', async () => {
   const calls = [];
   const fetchImpl = async (url) => { calls.push(url); return { ok: true, json: async () => ({ url }) }; };
-  const repository = createDataRepository(metadata(), fetchImpl);
+  const config = metadata();
+  delete config.yearSources[2027].queryIndexSource;
+  const repository = createDataRepository(config, fetchImpl);
   assert.deepEqual(calls, []);
-  const first = repository.ensureMapping(2027);
-  const second = repository.ensureMapping(2027);
-  assert.equal(first, second);
-  await first;
+  await Promise.all([repository.ensureQueryIndex(2027), repository.ensureQueryIndex(2027)]);
   assert.deepEqual(calls, ['mapping.json']);
 });
 
