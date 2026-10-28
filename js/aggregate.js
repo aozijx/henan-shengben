@@ -1,12 +1,6 @@
 import { selectMajorRows } from './major-match.js';
-import { admissionSchoolKey } from './utils.js';
+import { admissionSchoolKey, numberOrNull } from './utils.js';
 import { isPovertyPlan } from './plan-filter.js';
-
-function numberOrNull(value) {
-  if (value == null || value === '') return null;
-  var number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
 
 function codeOf(value) {
   return String(value == null ? '' : value).trim();

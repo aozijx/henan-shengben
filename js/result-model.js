@@ -2,12 +2,7 @@ import { getFocusYear, normalizeSelectedYears } from './metadata.js';
 import { sortPreviewRows } from './pipeline.js';
 import { hasMasterMarkFilter, matchesMasterMarks } from './master-flags.js';
 import { excludesPovertyPlans, matchesSchoolType, isPovertyPlan } from './plan-filter.js';
-
-function numberOrNull(value) {
-  if (value == null || value === '') return null;
-  var number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
+import { numberOrNull } from './utils.js';
 
 function summaryFor(schools, type) {
   return (schools || []).filter(function (school) { return school.schoolType === type; })

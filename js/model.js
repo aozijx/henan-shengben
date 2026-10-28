@@ -1,14 +1,8 @@
-import { admissionSchoolKey } from './utils.js';
+import { admissionSchoolKey, numberOrNull } from './utils.js';
 
 function text(value) {
   var normalized = String(value == null ? '' : value).trim().replace(/（/g, '(').replace(/）/g, ')');
   return normalized || null;
-}
-
-function numberOrNull(value) {
-  if (value === '' || value == null) return null;
-  var number = Number(value);
-  return Number.isFinite(number) ? number : null;
 }
 
 export function normalizeMajorOption(row, publicCourseRules) {

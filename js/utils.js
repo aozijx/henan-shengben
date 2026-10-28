@@ -14,6 +14,12 @@ export function normCode6(s) {
   return String(s || '').replace(/[A-Z]+$/, '');
 }
 
+export function numberOrNull(value) {
+  if (value == null || value === '') return null;
+  var number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 /* 院校名称：招生计划用「院校名称」，总表兜底条目用「学校名称」 */
 export function schoolName(row) {
   return row['院校名称'] || row['学校名称'] || '';
