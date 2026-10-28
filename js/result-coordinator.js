@@ -184,9 +184,9 @@ export function createResultCoordinator(options) {
     },
     start: function (year) {
       var requestId = ++yearRequestId;
+      if (typeof setQueryYear === 'function') setQueryYear(year);
       data.ensureQueryIndex(year).then(function (mapping) {
         if (requestId !== yearRequestId || getState().focusYear !== year) return;
-        if (typeof setQueryYear === 'function') setQueryYear(year);
         if (queryInput.value.trim()) runSearch();
         else if (isStatsVisible()) renderStats(getState(), mapping);
       }).catch(function (error) { if (requestId === yearRequestId) hint.textContent = error.message; });
