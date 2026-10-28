@@ -20,6 +20,25 @@
   "properties": {
     "schemaVersion": { "enum": [2, 3] },
     "catalogSource": { "type": "string", "minLength": 1 },
+    "conversionReports": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["year", "sourceManifest", "inputMajorCount", "publishedMajorCount", "officialEmptyCount", "sourceUnavailableCount", "blockingCount"],
+        "properties": {
+          "year": { "type": "integer", "minimum": 2000 },
+          "sourceManifest": { "type": "string", "minLength": 1 },
+          "inputMajorCount": { "type": "integer", "minimum": 0 },
+          "publishedMajorCount": { "type": "integer", "minimum": 0 },
+          "officialEmptyCount": { "type": "integer", "minimum": 0 },
+          "sourceUnavailableCount": { "type": "integer", "minimum": 0 },
+          "blockingCount": { "const": 0 },
+          "officialEmpty": { "type": "array", "items": { "type": "object" } },
+          "sourceUnavailable": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    },
     "queryMappingYear": { "type": "integer", "minimum": 2000 },
     "queryMappingSource": { "type": "string", "minLength": 1 },
     "sourceCatalog": {

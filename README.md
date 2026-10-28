@@ -32,7 +32,7 @@ npm test
 
 ## 数据与维护
 
-年度来源配置位于 `data/year-links/`，发布 metadata 位于 `metadata/`，规范数据、来源清单和转换报告位于 `data/`。新增年度需要先检查来源和转换结果，再发布：
+年度来源配置位于 `data/year-links/`，规范数据和来源清单位于 `data/`，已发布转换摘要集中在 `metadata/school-data.json`。新增年度需要先检查来源和转换结果，再发布：
 
 ```powershell
 python -m convert.ingest_year --seed data/year-links/YYYY.json --check

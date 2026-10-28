@@ -175,16 +175,20 @@ class RefreshCatalogTest(unittest.TestCase):
                 'dataset': 'score-segments', 'year': 2027,
                 'entries': [{'year': 2027, 'majorCode': '51', 'localPath': '一分一段/原始PDF/2027/51.pdf'}],
             }), encoding='utf-8')
-            (data / 'reports').mkdir()
-            (data / 'reports/转换报告_2027.json').write_text(json.dumps({
-                'year': 2027, 'inputMajorCount': 1, 'blockingCount': 0, 'publishedMajorCount': 1,
-                'officialEmptyCount': 0, 'officialEmpty': [], 'blockers': [],
-                'validationErrors': []}), encoding='utf-8')
+            report_path = data / 'reports/转换报告_2027.json'
+            valid_report = json.dumps({
+                'year': 2027, 'sourceManifest': '来源清单/来源清单_2027.json',
+                'inputMajorCount': 1, 'blockingCount': 0, 'publishedMajorCount': 1,
+                'officialEmptyCount': 0, 'sourceUnavailableCount': 0,
+                'officialEmpty': [], 'sourceUnavailable': [], 'blockers': [],
+                'validationErrors': []})
             template = root / 'template.json'
             template.write_text(json.dumps({'schemaVersion': 2, 'defaultYear': 2026,
                 'supportedYears': [2026]}), encoding='utf-8')
             metadata = root / 'metadata.json'
             result = refresh_catalog(data, template, metadata)
+            self.assertFalse(report_path.exists())
+            self.assertEqual(result['conversionReports']['2027']['publishedMajorCount'], 1)
             self.assertEqual(result['supportedYears'], [2027])
             self.assertEqual(result['defaultYear'], 2027)
             catalog = json.loads((root / result['catalogSource']).read_text(encoding='utf-8'))
@@ -197,14 +201,17 @@ class RefreshCatalogTest(unittest.TestCase):
             self.assertEqual(yearly['scoreSegmentShardTemplate'], 'data/一分一段/2027/{majorCode}.json')
             self.assertFalse(list((data / 'generated').glob('2027/*/shards')))
             first_publication = metadata.read_bytes()
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            report_path.write_text(valid_report, encoding='utf-8')
+            self.assertEqual(refresh_catalog(data, template, metadata, retain_reports=True), result)
+            self.assertTrue(report_path.exists())
             self.assertEqual(refresh_catalog(data, template, metadata), result)
+            self.assertFalse(report_path.exists())
             self.assertEqual(metadata.read_bytes(), first_publication)
             manifest_path = data / '来源清单/来源清单_2027.json'
             canonical_path = data / '一分一段/一分一段_2027.json'
-            report_path = data / 'reports/转换报告_2027.json'
             valid_manifest = manifest_path.read_text(encoding='utf-8')
             valid_segments = canonical_path.read_text(encoding='utf-8')
-            valid_report = report_path.read_text(encoding='utf-8')
             manifest = json.loads(valid_manifest)
             manifest['entries'].append(dict(manifest['entries'][0]))
             manifest_path.write_text(json.dumps(manifest), encoding='utf-8')
@@ -225,6 +232,7 @@ class RefreshCatalogTest(unittest.TestCase):
             canonical_path.write_text(valid_segments, encoding='utf-8')
             report = json.loads(valid_report)
             report['inputMajorCount'] = 2
+            report_path.parent.mkdir(parents=True, exist_ok=True)
             report_path.write_text(json.dumps(report), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'report inputMajorCount=2 but source manifest has 1 majors'):
                 refresh_catalog(data, template, metadata)

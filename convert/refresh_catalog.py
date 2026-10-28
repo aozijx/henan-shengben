@@ -60,6 +60,25 @@ def _manifest_identity_hash(path: Path) -> str:
     return _json_content_sha256(document)
 
 
+def _published_report(report: dict) -> dict:
+    """Retain validation facts in metadata without successful OCR detail."""
+    keys = ('year', 'sourceManifest', 'inputMajorCount', 'publishedMajorCount',
+            'officialEmptyCount', 'sourceUnavailableCount', 'blockingCount')
+    summary = {key: report.get(key) for key in keys}
+    for key in ('officialEmpty', 'sourceUnavailable', 'blockers', 'validationErrors'):
+        if report.get(key):
+            summary[key] = report[key]
+    return summary
+
+
+def _clean_report(year: int, segments: dict) -> dict:
+    majors = segments.get('majors', [])
+    return {'year': year, 'sourceManifest': segments.get('sourceManifest'),
+            'inputMajorCount': len(majors),
+            'publishedMajorCount': sum(item.get('status', 'ok') == 'ok' for item in majors),
+            'officialEmptyCount': 0, 'sourceUnavailableCount': 0, 'blockingCount': 0}
+
+
 def validate_year_sources(year: int, files: dict, canonical: dict, report: dict, data_root: Path,
                           manifest: dict | None = None) -> None:
     for parser, directory in [('mapping', '专业对照'), ('scorelines', '省控线'),
@@ -360,7 +379,8 @@ def _analytics(year, mapping, scores, plans):
     return {'schemaVersion': 1, 'year': year, 'majors': result}
 
 
-def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -> dict:
+def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
+                    *, retain_reports: bool = False) -> dict:
     data_root = Path(data_root)
     template = _json(Path(template_path))
     sources = _source_map(data_root)
@@ -377,6 +397,8 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     publish = {}
     input_hashes = {}
     output = {}
+    conversion_reports = {}
+    report_files_to_remove = []
     for year, files in sorted(sources.items()):
         required = ('mapping', 'scorelines', 'plans', 'score-segments')
         missing = [key for key in required if key not in files]
@@ -384,25 +406,26 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
             if year in previously_published_years:
                 raise ValueError(f'{year}: published year missing canonical sources: {missing}')
             continue
-        report_path = files.get('report', f'reports/转换报告_{year}.json')
-        report_file = _source_path(data_root, report_path)
-        if not report_file.is_file():
-            if year in previously_published_years:
-                raise ValueError(f'{year}: missing conversion report')
-            continue
         canonical = {key: _json(_source_path(data_root, files[key])) for key in required}
-        report = _json(report_file)
+        report_file = _source_path(data_root, files['report']) if 'report' in files else None
+        report = (_json(report_file) if report_file else
+                  previous.get('conversionReports', {}).get(str(year)) or
+                  _clean_report(year, canonical['score-segments']))
+        published_report = _published_report(report)
         year_hashes = {key: _json_content_sha256(canonical[key]) for key in required}
-        year_hashes['report'] = _json_content_sha256(report)
+        year_hashes['report'] = _json_content_sha256(published_report)
         derivation_hashes = dict(year_hashes)
         manifest_path = canonical['score-segments'].get('sourceManifest')
         if isinstance(manifest_path, str):
             year_hashes['manifest'] = _manifest_identity_hash(_source_path(data_root, manifest_path))
         input_hashes[str(year)] = year_hashes
         previous_year_hashes = previously_published_inputs.get(str(year), {})
-        unchanged_published_year = previous_year_hashes == year_hashes
+        unchanged_published_year = previous_year_hashes == year_hashes and report_file is None
         if not unchanged_published_year:
             validate_year_sources(year, files, canonical, report, data_root)
+        conversion_reports[str(year)] = published_report
+        if report_file:
+            report_files_to_remove.append(report_file)
         version = hashlib.sha256(json.dumps({'derivationVersion': DERIVATION_VERSION,
                                              'inputs': derivation_hashes}, sort_keys=True).encode('utf-8')).hexdigest()[:16]
         prefix = f'generated/{year}/{version}'
@@ -434,7 +457,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     metadata.update({'schemaVersion': max(3, template.get('schemaVersion', 1)),
                 'supportedYears': years, 'yearSources': publish,
                 'queryMappingYear': query_mapping_year, 'queryMappingSource': query_mapping_source,
-                'sourceCatalog': source_catalog})
+                'sourceCatalog': source_catalog, 'conversionReports': conversion_reports})
     previous_years = previous.get('supportedYears') or template.get('supportedYears') or []
     previous_default = previous.get('defaultYear', metadata.get('defaultYear'))
     if previous_default not in years or (previous_years and previous_default == max(previous_years)):
@@ -469,6 +492,9 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
         temporary = staging / 'metadata.json'
         write_json(temporary, metadata, indent=2)
         os.replace(temporary, metadata_target)
+    if not retain_reports:
+        for report_file in report_files_to_remove:
+            report_file.unlink(missing_ok=True)
     return metadata
 
 

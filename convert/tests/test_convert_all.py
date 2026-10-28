@@ -123,14 +123,14 @@ class ConvertAllTest(unittest.TestCase):
                 unchanged_time = 1_700_000_000_000_000_000
                 os.utime(shard, ns=(unchanged_time, unchanged_time))
                 os.utime(index, ns=(unchanged_time, unchanged_time))
-                os.utime(report, ns=(unchanged_time, unchanged_time))
+                self.assertFalse(report.exists())
                 second = convert_target(target, root, workers=1, plan=plan)
             self.assertEqual(2, normalize.call_count)
             self.assertEqual(first, second)
             self.assertEqual(first_index_hash, json.loads(index.read_text(encoding='utf-8'))['majors'][0]['sha256'])
             self.assertEqual(unchanged_time, shard.stat().st_mtime_ns)
             self.assertEqual(unchanged_time, index.stat().st_mtime_ns)
-            self.assertEqual(unchanged_time, report.stat().st_mtime_ns)
+            self.assertFalse(report.exists())
 
     def test_empty_manifest_writes_a_complete_conversion_document(self):
         with tempfile.TemporaryDirectory() as directory:

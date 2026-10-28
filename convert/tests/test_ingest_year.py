@@ -135,9 +135,8 @@ def write_synthetic_extraction(target, data_root, plan, *, needs_review=False, f
                 {'score': 200, 'cumulativeCount': 4}, {'score': 199, 'cumulativeCount': 7}],
             'issues': [{'code': 'ocr-review'}] if needs_review else []}],
         'summary': {'total': 1, 'ok': 0 if needs_review else 1, 'needsReview': 1 if needs_review else 0}}
-    normalized, _ = save_normalized_target(target, plan, data_root, result,
-                                           full_report=full_report)
-    return normalized
+    return save_normalized_target(target, plan, data_root, result,
+                                  full_report=full_report)
 
 
 def mocked_tabular_parsers(*, needs_review=False):

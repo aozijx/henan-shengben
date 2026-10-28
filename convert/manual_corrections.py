@@ -24,6 +24,8 @@ def ensure_manual_corrections(path: Path, reports: list[dict[str, Any]]) -> bool
                 "replacementSegments": [],
                 "evidenceNote": "",
             })
+    if not corrections:
+        return False
     write_json(path, {"schemaVersion": 1, "corrections": corrections})
     return True
 

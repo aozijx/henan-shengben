@@ -17,7 +17,7 @@
 | `convert_all` | `--workers N` | 覆盖 `pipeline_config.py` 的 OCR 进程数。 |
 | `convert_all` | `--dataset NAME`、`--data-root PATH` | 指定数据集（当前为 `score-segments`）和数据根目录。 |
 | `issue_reports` | `--years YYYY …`、`--full-report` | 限定年份；默认只保留可疑 OCR 行及上下文，完整 OCR 行仅在完整报告中写入。 |
-| `refresh_catalog` | `--data-root PATH`、`--template PATH`、`--metadata PATH` | 校验最终规范分片和转换报告，刷新 catalog。 |
+| `refresh_catalog` | `--data-root PATH`、`--template PATH`、`--metadata PATH` | 校验规范分片和转换依据，将年度摘要写入 metadata 并刷新 catalog。 |
 | `extract_cli` | `--local --year YYYY --write` | 不要求 year-links，独立转换当年已保存且输入齐全的表格 PDF，并记录来源与产物哈希。 |
 | `segment_store` | `--year YYYY --output NEW_PATH` | 核对规范索引和分片哈希后导出合并副本；拒绝覆盖已有路径。 |
 | `ingest_year` | `--seed YEAR_LINKS --check` | 在暂存目录核验新年度，不发布。 |
@@ -26,19 +26,19 @@
 | `crawler.download` | `--major CODE`（可重复） | 只下载或重试指定专业的官方 PDF，可与年份筛选一起使用。 |
 | 各入口 | `--data-root PATH` | 改用指定数据根目录，适合隔离演练。 |
 
-一分一段只有一套持久化分片：年度索引 `一分一段/一分一段_<年份>.json` 和专业文件 `一分一段/<年份>/<专业代号>.json`。`convert_all` 在内存中完成 OCR 和归一化，只写一次最终规范分片及转换报告；`issue_reports` 应用确认修正时复用同一写入入口。独立的 `normalize` 命令已移除，复核已有数据直接运行 `refresh_catalog`。写入先落到临时文件再原子替换；内容不变时不改写。索引的 `sha256` 是分片内容哈希，仅在内容变化时更新；分片里的 `sourceSha256` 是官方 PDF 哈希。`needs-review` 保留在同一分片和索引中，但不会进入浏览器展示。单专业 `--major` 只重算该专业，`--retry-review` 只重算索引里待审的专业；两者不能同时使用。日志含完成数、专业代号和名称、错误码及原因。
+一分一段只有一套持久化分片：年度索引 `一分一段/一分一段_<年份>.json` 和专业文件 `一分一段/<年份>/<专业代号>.json`。`convert_all` 在内存中完成 OCR 和归一化，只写一次最终规范分片；出现阻塞或官方例外时，暂存转换报告供 catalog 校验。`issue_reports` 应用确认修正时复用同一写入入口。独立的 `normalize` 命令已移除，复核已有数据直接运行 `refresh_catalog`。写入先落到临时文件再原子替换；内容不变时不改写。索引的 `sha256` 是分片内容哈希，仅在内容变化时更新；分片里的 `sourceSha256` 是官方 PDF 哈希。`needs-review` 保留在同一分片和索引中，但不会进入浏览器展示。单专业 `--major` 只重算该专业，`--retry-review` 只重算索引里待审的专业；两者不能同时使用。日志含完成数、专业代号和名称、错误码及原因。
 
 `refresh_catalog` 从规范招生计划生成按院校代码区分的年度分析摘要。变更摘要派生规则时需更新 `DERIVATION_VERSION`，再运行 `python -m convert.refresh_catalog`，将新版本的 `data/generated/` 文件与更新后的 `metadata/school-data.json` 一同提交。旧版本文件保持不可变；专项标注和筛选口径见 [数据目录说明](../data/README.md#建档立卡专项与院校代码)。
 
 本地离线表格可按独立发布时间转换。将 PDF 放入 `data/专业对照/原始PDF/专业对照一览_YYYY.pdf`、`data/专业对照/原始PDF/专业代号对照_YYYY.pdf` 或 `data/招生高校及专业/原始PDF/招生高校及专业_YYYY.pdf` 等约定路径后运行 `python -m convert.extract_cli --local --year YYYY --write`，再运行 `python -m convert.refresh_catalog`。在线导入、本地转换和年度来源计划共用 `crawler/year_sources.py` 的表格路径定义；seed 的 `localPath` 可以覆盖对应 PDF 的默认路径。专业对照需要完整对照一览和代号对照两份 PDF；只有其中一份时会跳过该角色。来源与输出哈希记录在 `data/来源清单/本地表_YYYY.json`；哈希不符时 catalog 会拒绝使用。`sourceCatalog` 分别登记专业对照、院校总表、招生计划、省控线和一分一段的可用年份；页面年份筛选取已发布的对照、总表和计划年份的并集。某年缺少招生计划或省控线时，院校与专业仍可检索，对应人数或分数显示“未公布”；只有完整年度才进入 `supportedYears` 和统计分析。
 
-`generated/<年份>/<16位哈希>/analytics.json` 的目录名是年度版本：对规范映射、省控线、招生计划、一分一段索引、转换报告的规范 JSON 内容哈希和派生规则版本再计算 SHA-256，取前 16 位。`generated/catalog/<16位哈希>.json` 的文件名是整份目录清单的版本：清单含各年发布路径、完整输入哈希及来源清单的来源身份哈希，序列化后计算 SHA-256 并取前 16 位。规范 JSON 内容哈希不受键顺序、缩进或换行符影响；来源身份哈希还忽略 `downloadStatus`，但来源 URL、专业与 PDF 哈希变化仍会改变它。因此来源清单或其他年度变化可能只改变 catalog 的哈希；这两段短哈希也都不是 `analytics.json` 文件本身的校验和。各输入的完整校验值在 catalog 的 `inputSha256` 中。
+`generated/<年份>/<16位哈希>/analytics.json` 的目录名是年度版本：对规范映射、省控线、招生计划、一分一段索引、metadata 中的年度转换摘要的规范 JSON 内容哈希和派生规则版本再计算 SHA-256，取前 16 位。`generated/catalog/<16位哈希>.json` 的文件名是整份目录清单的版本：清单含各年发布路径、完整输入哈希及来源清单的来源身份哈希，序列化后计算 SHA-256 并取前 16 位。规范 JSON 内容哈希不受键顺序、缩进或换行符影响；来源身份哈希还忽略 `downloadStatus`，但来源 URL、专业与 PDF 哈希变化仍会改变它。因此来源清单或其他年度变化可能只改变 catalog 的哈希；这两段短哈希也都不是 `analytics.json` 文件本身的校验和。各输入的完整校验值在 catalog 的 `inputSha256` 中。
 
 合并命令仅用于临时导出，不参与处理链；日常转换、复核、重试和 catalog 都使用同一套规范分片。
 
 批量转换、异常报告和爬取从 `data/year-links/*.json` 构建同一年度计划，再按年份过滤，不扫描 seed 未声明的来源；`extract_cli --local` 是独立的本地表格入口，catalog 会合并其已验证的输出。分数段来源尚未发布或 seed 未声明时，不会创建抓取目标；本地已有表格 PDF/规范数据仍可供离线转换入口使用。分数段归一化还需要省控线与招生计划 JSON：全量转换会报告并跳过缺少这些输入的年度，继续处理其他完整年份；如果所有年度都缺输入，则不启动 OCR 并返回失败。官方站 HTTP 请求通过同一个线程安全会话串行执行，下载默认 1 个线程；OCR 进程数仍独立配置。
 
-异常报告写入 `data/reports/异常数据_<年份>.json`，默认保留错误、可疑 OCR 行及上下文；只有 `issue_reports --full-report` 才附带每个待审专业的完整 OCR 行。人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只初始化一次，不会被报告生成器覆盖。确认修正后重新运行 `python -m convert.issue_reports`：它只复核待审专业，将 `status: confirmed` 的修正直接应用并覆盖对应规范分片；`official-empty` 不作为待审异常，也不会生成分数段。年度全量转换也会跳过标注为 `official-empty` 的 OCR 任务，并在进度里显示该状态，而不是显示原始识别的 `needs-review`。这样无需重跑全量 OCR 或再次运行 `normalize`。
+仅有待审异常时才写入 `data/reports/异常数据_<年份>.json`，默认保留错误、可疑 OCR 行及上下文；没有异常时会清理旧的空报告。只有 `issue_reports --full-report` 才附带每个待审专业的完整 OCR 行。人工核对规则见 `data/reports/README.md`。`data/一分一段/人工修正.json` 只在需要人工修正时初始化，不会被报告生成器覆盖。确认修正后重新运行 `python -m convert.issue_reports`：它只复核待审专业，将 `status: confirmed` 的修正直接应用并覆盖对应规范分片；`official-empty` 不作为待审异常，也不会生成分数段。年度全量转换也会跳过标注为 `official-empty` 的 OCR 任务，并在进度里显示该状态，而不是显示原始识别的 `needs-review`。这样无需重跑全量 OCR 或再次运行 `normalize`。
 
 ## 已有年度复核
 
@@ -56,9 +56,9 @@ if ($LASTEXITCODE -ne 0) { throw "issue_reports 失败，停止复核" }
 python -m convert.refresh_catalog --data-root $verifyData --template metadata/school-data.template.json --metadata "$verifyData/metadata/school-data.json"
 ```
 
-`issue_reports` 没有 `--only-issues` 参数；它本身只会对索引中非 `ok` 的分片重新 OCR，并为选定年份写异常报告，确认修正会直接生成最终规范分片和转换报告。`refresh_catalog` 校验仍有阻塞项时会失败，只在通过后更新临时副本中的派生文件和 metadata。将 `$years` 改为需要检查的年份；每次执行会新建隔离目录，不会改动仓库正式数据。
+`issue_reports` 没有 `--only-issues` 参数；它本身只会对索引中非 `ok` 的分片重新 OCR，并仅在仍有待审项时写异常报告。确认修正会直接更新规范分片。`refresh_catalog` 校验仍有阻塞项时会失败，只在通过后更新临时副本中的派生文件和 metadata。将 `$years` 改为需要检查的年份；每次执行会新建隔离目录，不会改动仓库正式数据。
 
-转换报告写入 `reports/转换报告_<年份>.json`。默认只保留 catalog 校验所需的计数、阻塞项、异常解析、官方空表和来源未列出记录；`ingest_year --full-report` 才附带成功专业的逐条解析。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业。官方分数段清单未列出的代号会写入 `sourceUnavailable` 并附官方清单地址，不生成虚假分数段；catalog 只接受此类代号与省控线未覆盖清单完全一致。官方 PDF 明确为空表的情况仍通过人工文件的 `official-empty` 状态记录。
+年度转换摘要写入 `metadata/school-data.json` 的 `conversionReports`，含计数、官方空表和来源未列出的依据。需要校验的阻塞项或官方例外会暂存于 `reports/转换报告_<年份>.json`；成功刷新 metadata 后删除，PR 核验 artifact 则在可信发布前保留。无实质内容的报告不生成。`ingest_year --full-report` 仅在命令输出中附带成功专业的逐条解析。归一化只发布 `status: ok` 且通过哈希、唯一性、严格降序和累计人数单调校验的专业。官方分数段清单未列出的代号会记入 `sourceUnavailable` 并附官方清单地址，不生成虚假分数段；catalog 只接受此类代号与省控线未覆盖清单完全一致。官方 PDF 明确为空表的情况仍通过人工文件的 `official-empty` 状态记录。
 
 ## 新年度链接导入
 

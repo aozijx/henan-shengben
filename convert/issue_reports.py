@@ -185,8 +185,12 @@ def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None,
 
         report = {"schemaVersion": 1, "year": year, "issueCount": len(issues), "issues": issues}
         report_path = data_root / "reports" / f"异常数据_{target['year']}.json"
-        write_json(report_path, report)
-        print(f"[{target['year']}] 异常报告已写入 {report_path}，共 {report['issueCount']} 项", flush=True)
+        if issues:
+            write_json(report_path, report)
+            print(f"[{year}] 异常报告已写入 {report_path}，共 {len(issues)} 项", flush=True)
+        else:
+            report_path.unlink(missing_ok=True)
+            print(f"[{year}] 无待审异常，不生成异常报告", flush=True)
         reports.append(report)
     ensure_manual_corrections(correction_path, reports)
     return reports

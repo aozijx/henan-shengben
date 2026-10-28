@@ -135,10 +135,10 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
                   f'{"；".join(normalization_deferred)}', flush=True)
         else:
             print(f'[{year}] 抽取并归一化一分一段分数段 …', flush=True)
-            segment_result = convert_target(crawl_target, root, plan=plan, full_report=full_report)
+            segment_result, normalization_report = convert_target(
+                crawl_target, root, plan=plan, full_report=full_report, return_report=True)
             if segment_result['summary']['needsReview']:
                 raise ValueError(f'{year}: OCR requires human review before publication')
-            normalization_report = read_json(root / crawl_target['conversionReportPath'])
             if normalization_report['blockingCount']:
                 raise ValueError(f'{year}: normalization has unresolved blockers')
 
@@ -175,7 +175,8 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
         report = _run_in_staging(seed, staging_root, session, full_report=full_report)
         staged_metadata = Path(temporary) / 'metadata.json'
         if report['complete']:
-            result = refresh_catalog(staging_root, template_path, staged_metadata)
+            result = refresh_catalog(staging_root, template_path, staged_metadata,
+                                     retain_reports=check and export_dir is not None)
             report['supportedYears'] = result['supportedYears']
         else:
             report['supportedYears'] = read_json(metadata_path)['supportedYears']

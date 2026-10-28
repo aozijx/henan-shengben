@@ -167,7 +167,11 @@ def save_normalized_target(target: dict[str, Any], plan: dict[str, Any], data_ro
     document, report = normalize_target(target, plan, data_root, source_document,
                                          full_report=full_report)
     write_year(data_root / target["normalizedPath"], data_root, document)
-    write_json(data_root / target["conversionReportPath"], report)
+    report_path = data_root / target["conversionReportPath"]
+    if any(report.get(key) for key in ("blockers", "validationErrors", "officialEmpty", "sourceUnavailable")):
+        write_json(report_path, report)
+    else:
+        report_path.unlink(missing_ok=True)
     return document, report
 
 

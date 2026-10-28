@@ -70,7 +70,8 @@ def _convert_entry(arguments: tuple[dict[str, Any], Path, dict[str, Any] | None]
 def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str] | None = None,
                    workers: int | None = None, *, plan: dict[str, Any] | None = None,
                    retry_review: bool = False,
-                   verbose: bool = False, full_report: bool = False) -> dict[str, Any]:
+                   verbose: bool = False, full_report: bool = False,
+                   return_report: bool = False) -> dict[str, Any] | tuple[dict[str, Any], dict[str, Any]]:
     workers = max(1, SCORE_SEGMENT_WORKERS if workers is None else workers)
     plan = plan if plan is not None else load_data_plan(data_root, {int(target['year'])})
     manifest = read_json(data_root / target["manifestPath"])
@@ -130,14 +131,14 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
             "needsReview": sum(item["status"] == "needs-review" for item in majors),
         },
     }
-    normalized, _ = save_normalized_target(target, plan, data_root, result, full_report=full_report)
+    normalized, report = save_normalized_target(target, plan, data_root, result, full_report=full_report)
     review = [f"{item['majorCode']} {item['majorName']}" for item in normalized['majors']
               if item['status'] == 'needs-review']
     summary = normalized['summary']
     print(f"{target['year']}: {summary['ok']}/{summary['total']} ok, "
           f"{summary['officialEmpty']} official empty, {summary['needsReview']} needs review"
           f"{' — ' + '、'.join(review) if review else ''}", flush=True)
-    return normalized
+    return (normalized, report) if return_report else normalized
 
 
 def main() -> int:

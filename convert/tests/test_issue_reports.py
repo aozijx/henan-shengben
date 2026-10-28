@@ -46,12 +46,16 @@ class IssueReportTest(unittest.TestCase):
                     'sourceSha256': source_hash, 'status': 'needs-review', 'issues': [],
                     'segments': [],
                 }]})
+            stale_report = root / 'reports/异常数据_2027.json'
+            stale_report.parent.mkdir(parents=True, exist_ok=True)
+            stale_report.write_text('{"issueCount":0,"issues":[]}', encoding='utf-8')
             with patch('convert.issue_reports.load_data_plan', return_value=plan), \
                  patch('convert.issue_reports.extract_rows', return_value=[]), \
                  patch('convert.normalize.write_year', wraps=write_year) as write:
                 reports = generate_reports(root, {2027})
             self.assertEqual(1, write.call_count)
             self.assertEqual(0, reports[0]['issueCount'])
+            self.assertFalse((root / 'reports/异常数据_2027.json').exists())
             major = merge_year(index_path, root)['majors'][0]
             self.assertEqual('ok', major['status'])
             self.assertEqual(100, major['controlScore'])
@@ -96,6 +100,8 @@ class IssueReportTest(unittest.TestCase):
     def test_manual_correction_file_is_created_once_and_never_overwritten(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "人工修正.json"
+            self.assertFalse(ensure_manual_corrections(path, [{"issues": []}]))
+            self.assertFalse(path.exists())
             report = {"issues": [{"issueId": "2026-53", "year": 2026, "majorCode": "53", "majorName": "网络工程"}]}
             ensure_manual_corrections(path, [report])
             created = json.loads(path.read_text(encoding="utf-8"))

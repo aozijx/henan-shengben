@@ -228,7 +228,7 @@
       "scoreSource": "data/省控线/省控线_2023.json",
       "planSource": "data/招生计划/招生计划_2023.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2023.json",
-      "analyticsSource": "data/generated/2023/4e599b0e6fbf8dae/analytics.json",
+      "analyticsSource": "data/generated/2023/684a39e24138a58b/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2023.json",
       "scoreSegmentShardTemplate": "data/一分一段/2023/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -239,7 +239,7 @@
       "scoreSource": "data/省控线/省控线_2024.json",
       "planSource": "data/招生计划/招生计划_2024.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2024.json",
-      "analyticsSource": "data/generated/2024/bc1680e0964c6b57/analytics.json",
+      "analyticsSource": "data/generated/2024/53b788598e85c993/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2024.json",
       "scoreSegmentShardTemplate": "data/一分一段/2024/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -250,7 +250,7 @@
       "scoreSource": "data/省控线/省控线_2025.json",
       "planSource": "data/招生计划/招生计划_2025.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2025.json",
-      "analyticsSource": "data/generated/2025/80463ff0d8574b50/analytics.json",
+      "analyticsSource": "data/generated/2025/c3f8512c8830c625/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2025.json",
       "scoreSegmentShardTemplate": "data/一分一段/2025/{majorCode}.json",
       "mappingReferenceYear": 2026
@@ -261,7 +261,7 @@
       "scoreSource": "data/省控线/省控线_2026.json",
       "planSource": "data/招生计划/招生计划_2026.json",
       "scoreSegmentSource": "data/一分一段/一分一段_2026.json",
-      "analyticsSource": "data/generated/2026/9535583352abb54b/analytics.json",
+      "analyticsSource": "data/generated/2026/d3f54dbf5b1dd411/analytics.json",
       "scoreSegmentIndexSource": "data/一分一段/一分一段_2026.json",
       "scoreSegmentShardTemplate": "data/一分一段/2026/{majorCode}.json",
       "collegeFallbackSource": "data/招生高校及专业/招生高校及专业_2026.json"
@@ -297,5 +297,59 @@
       "2026": "data/一分一段/一分一段_2026.json"
     }
   },
-  "catalogSource": "data/generated/catalog/053c6e754a49b764.json"
+  "conversionReports": {
+    "2023": {
+      "year": 2023,
+      "sourceManifest": "来源清单/来源清单_2023.json",
+      "inputMajorCount": 146,
+      "publishedMajorCount": 146,
+      "officialEmptyCount": 0,
+      "sourceUnavailableCount": 0,
+      "blockingCount": 0
+    },
+    "2024": {
+      "year": 2024,
+      "sourceManifest": "来源清单/来源清单_2024.json",
+      "inputMajorCount": 142,
+      "publishedMajorCount": 142,
+      "officialEmptyCount": 0,
+      "sourceUnavailableCount": 1,
+      "blockingCount": 0,
+      "sourceUnavailable": [
+        {
+          "majorCode": "R8",
+          "majorName": "能源与动力工程",
+          "reason": "not-listed-in-official-score-segment-manifest",
+          "sourcePageUrl": "https://www.haeea.cn/a/202404/43297_fd486546.shtml"
+        }
+      ]
+    },
+    "2025": {
+      "year": 2025,
+      "sourceManifest": "来源清单/来源清单_2025.json",
+      "inputMajorCount": 172,
+      "publishedMajorCount": 172,
+      "officialEmptyCount": 0,
+      "sourceUnavailableCount": 0,
+      "blockingCount": 0
+    },
+    "2026": {
+      "year": 2026,
+      "sourceManifest": "来源清单/来源清单_2026.json",
+      "inputMajorCount": 186,
+      "publishedMajorCount": 185,
+      "officialEmptyCount": 1,
+      "sourceUnavailableCount": 0,
+      "blockingCount": 0,
+      "officialEmpty": [
+        {
+          "majorCode": "N8",
+          "majorName": "金融工程",
+          "reason": "official-empty",
+          "evidenceNote": "官方PDF仅含水印、无分数表，且2026省控线表无N8记录；作为官方空表保留，不生成分数段。"
+        }
+      ]
+    }
+  },
+  "catalogSource": "data/generated/catalog/b66f901d68571881.json"
 }
