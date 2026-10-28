@@ -1,6 +1,6 @@
 import { schoolName } from './utils.js';
 
-export function masterMarkFields(metadata) {
+function masterMarkFields(metadata) {
   return (metadata && metadata.fields || []).filter(function (field) {
     return field.filterEnable && field.sourceRole === 'colleges' && field.sourceColumn;
   });
