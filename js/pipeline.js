@@ -6,13 +6,7 @@ function normalizeText(value) {
   return String(value == null ? '' : value).replace(/\s+/g, '');
 }
 
-function schoolCountLimit(value) {
-  if (value == null || value === '') return null;
-  var text = String(value);
-  return /^\d+$/.test(text) ? Number(text) : null;
-}
-
-function scoreBound(value) {
+function wholeNumberFilter(value) {
   if (value == null || value === '') return null;
   return /^\d+$/.test(String(value)) ? Number(value) : null;
 }
@@ -25,13 +19,13 @@ function rowMatchesStaticFilters(row, filters) {
 }
 
 function rowMatchesYearFilters(row, filters, year) {
-  var minScore = scoreBound(filters.scoreMin);
-  var maxScore = scoreBound(filters.scoreMax);
+  var minScore = wholeNumberFilter(filters.scoreMin);
+  var maxScore = wholeNumberFilter(filters.scoreMax);
   if (minScore != null && maxScore != null && minScore > maxScore) return false;
   var score = year == null ? null : row['score' + year];
   if (minScore != null && (score == null || score < minScore)) return false;
   if (maxScore != null && (score == null || score > maxScore)) return false;
-  var limit = schoolCountLimit(filters.schoolCount);
+  var limit = wholeNumberFilter(filters.schoolCount);
   if (limit != null && year != null && (row['schoolCount' + year] || 0) <= limit) return false;
   return true;
 }
@@ -48,8 +42,8 @@ function allowsUnpublishedMajor(filters, metadata) {
   return (!filters.schoolType || filters.schoolType === '全部') &&
     (!filters.povertyStatus || filters.povertyStatus === '全部' || filters.povertyStatus === '否') &&
     !hasMasterMarkFilter(filters, metadata) &&
-    schoolCountLimit(filters.schoolCount) == null &&
-    scoreBound(filters.scoreMin) == null && scoreBound(filters.scoreMax) == null;
+    wholeNumberFilter(filters.schoolCount) == null &&
+    wholeNumberFilter(filters.scoreMin) == null && wholeNumberFilter(filters.scoreMax) == null;
 }
 
 function allSchoolsFor(publicSchools, privateSchools) {
