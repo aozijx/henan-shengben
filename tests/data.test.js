@@ -2,12 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildIndexes,
-  createLazyStore,
   getCollegesByYear,
   getMasterRowsByYear,
   getMappingByYear,
   getScore,
-  getScoreIndex,
   loadAll,
   loadYears,
   normalizedPlansForYears
@@ -93,19 +91,6 @@ function createFetch(payloads, calls) {
   };
 }
 
-test('exposes the lazy repository through the data module', async () => {
-  const calls = [];
-  const metadata = metadata2027({
-    queryIndexSource: 'fixtures/mapping-2027.json',
-    scoreSegmentSource: 'fixtures/segments-2027.json'
-  });
-  const repository = createLazyStore(metadata, createFetch(fixturePayloads(), calls));
-
-  await repository.ensureQueryIndex(2027);
-
-  assert.deepEqual(calls, ['fixtures/mapping-2027.json']);
-});
-
 test('college lookup does not attach a sibling major with the same code', async () => {
   const metadata = metadata2027();
   const payloads = fixturePayloads();
@@ -170,7 +155,7 @@ test('builds a generic 2027 index without year-specific production code', async 
 
   assert.equal(store.plansByYear[2027].length, 1);
   assert.equal(getScore(index, major, 2027), 188);
-  assert.equal(getScoreIndex()[2027]['80'].score, 188);
+  assert.equal(index.scoreByYear[2027]['80'].score, 188);
   assert.deepEqual(getCollegesByYear(index, 2027, major).map((row) => row.院校名称), ['测试大学']);
 });
 

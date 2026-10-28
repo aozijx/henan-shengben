@@ -10,7 +10,7 @@ import pdfplumber
 import requests
 from bs4 import BeautifulSoup
 
-from crawler.source_rules import CrawlTarget, is_official_pdf_url
+from crawler.source_rules import CrawlTarget, is_official_url, is_pdf_link
 from pipeline_config import REQUEST_TIMEOUT
 
 
@@ -34,20 +34,12 @@ PDF_MARKERS = {
 }
 
 
-def _official_page(url: str) -> bool:
-    parsed = urlparse(url)
-    return parsed.scheme == 'https' and parsed.hostname in {
-        'www.haeea.cn', 'haeea.cn', 'news.haeea.cn', 'www.heao.com.cn',
-        'gaokao.haedu.cn', 'jyt.henan.gov.cn'
-    }
-
-
 def load_year_links(path: Path) -> dict:
     seed = json.loads(Path(path).read_text(encoding='utf-8'))
     year = seed.get('year')
     if not isinstance(year, int) or year < 2000 or year > 2200:
         raise SourceResolutionError('year-links must contain a valid integer year')
-    if seed.get('searchPageUrl') and not _official_page(seed['searchPageUrl']):
+    if seed.get('searchPageUrl') and not is_official_url(seed['searchPageUrl']):
         raise SourceResolutionError('searchPageUrl must use an official HTTPS host')
     sources = seed.get('sources')
     if not isinstance(sources, dict):
@@ -57,7 +49,7 @@ def load_year_links(path: Path) -> dict:
             raise SourceResolutionError(f'unknown source role: {role}')
         for key in ('pageUrl', 'attachmentUrl'):
             url = item.get(key)
-            if url and not _official_page(url) and not is_official_pdf_url(url):
+            if url and not is_official_url(url):
                 raise SourceResolutionError(f'{role}.{key} must use an official HTTPS host')
         if 'localPath' in item:
             local_path = item['localPath']
@@ -81,7 +73,7 @@ def score_segment_target_for_seed(seed: dict, *, resolved_page_url: str | None =
     discovery_url = segment_page or seed.get('searchPageUrl')
     if not discovery_url:
         return None
-    if not _official_page(discovery_url):
+    if not is_official_url(discovery_url):
         raise SourceResolutionError(f'{year} scoreSegments: pageUrl/searchPageUrl must use an official HTTPS host')
     return CrawlTarget(
         dataset='score-segments',
@@ -210,7 +202,7 @@ def _search_candidates(seed: dict, session) -> dict[str, set[str]]:
     candidates: dict[str, set[str]] = {}
     for link in soup.find_all('a', href=True):
         page_url = urljoin(url, link['href'])
-        if not _official_page(page_url):
+        if not is_official_url(page_url):
             continue
         title = ' '.join(link.parent.get_text(' ', strip=True).split())
         for role in _classify(title, seed['year']):
@@ -230,7 +222,7 @@ def resolve_score_segment_target(seed: dict, session) -> CrawlTarget | None:
     if not seed.get('searchPageUrl'):
         return None
     candidates = _search_candidates(seed, session).get('scoreSegments', set())
-    candidates = {url for url in candidates if _official_page(url)}
+    candidates = {url for url in candidates if is_official_url(url)}
     if not candidates:
         return None
     if len(candidates) != 1:
@@ -246,7 +238,7 @@ def _page_attachments(page_url: str, session, year: int) -> list[tuple[str, str]
     found = []
     for link in soup.find_all('a', href=True):
         url = urljoin(page_url, link['href'])
-        if not is_official_pdf_url(url):
+        if not is_pdf_link(url):
             continue
         label = ' '.join(link.get_text(' ', strip=True).split())
         filename = urlparse(url).path.rsplit('/', 1)[-1]
@@ -298,7 +290,7 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
     for role in roles:
         explicit = declared[role].get('pageUrl')
         urls = {explicit} if explicit else candidates.get(role, set())
-        urls = {url for url in urls if _official_page(url)}
+        urls = {url for url in urls if is_official_url(url)}
         if len(urls) != 1:
             raise SourceResolutionError(f'{year} {role}: expected one official page, found {len(urls)}; add an exact pageUrl')
         pages[role] = next(iter(urls))
@@ -324,8 +316,8 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
         elif len(files) != 1:
             raise SourceResolutionError(f'{year} {role}: expected one official PDF, found {len(files)}; add an exact attachmentUrl')
         for url, _label in files:
-            if not is_official_pdf_url(url):
-                raise SourceResolutionError(f'{year} {role}: attachment is not an official PDF')
+            if not is_official_url(url):
+                raise SourceResolutionError(f'{year} {role}: attachment must use an official HTTPS host')
         local_path = seed.get('sources', {}).get(role, {}).get('localPath')
         attachments[role] = [{'url': url, 'title': title, **({'localPath': local_path} if local_path else {})}
                               for url, title in files]

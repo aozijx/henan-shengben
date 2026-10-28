@@ -1,4 +1,4 @@
-import { nextSortDirection } from './preview.js';
+import { nextSortDirection } from './table-utils.js';
 import { getCollegeYears } from './metadata.js';
 import { esc } from './utils.js';
 import { buildExpandedMajorHtml, buildResultViewModel, buildResultWorkspaceHtml, resultMessage } from './results-view.js';

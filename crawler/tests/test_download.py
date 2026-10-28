@@ -77,6 +77,14 @@ class DownloadTest(unittest.TestCase):
             self.assertEqual(result['finalUrl'], response.url)
             self.assertEqual(result['sha256'], hashlib.sha256(response.content).hexdigest())
 
+    def test_official_attachment_without_pdf_suffix_is_checked_by_content(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'attachment.pdf'
+            url = 'https://xcoss.henan.gov.cn/attachment?id=2027'
+            result = download_entry(url, target, Session(Response(b'%PDF-1.4 test', url=url)))
+            self.assertEqual(result['downloadStatus'], 'downloaded')
+            self.assertEqual(target.read_bytes(), b'%PDF-1.4 test')
+
     def test_same_final_url_is_not_repeated_in_result(self):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / '01.pdf'

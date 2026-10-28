@@ -1,4 +1,4 @@
-import { formatFieldValue } from './preview.js';
+import { formatFieldValue } from './table-utils.js';
 import { getSelectableYears } from './metadata.js';
 
 function isSelectedYearField(field, metadata, selectedYears) {

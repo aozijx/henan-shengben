@@ -6,7 +6,7 @@ import { loadYears, buildIndexes } from '../js/data.js';
 import { buildMajorAggregates } from '../js/aggregate.js';
 import { buildExplorerControlsHtml, canExport, createInitialState, reduceExplorerState } from '../js/explorer.js';
 import { buildExportFilename, prepareExport, serializeCsv } from '../js/export.js';
-import { createPreviewModel } from '../js/preview.js';
+import { buildResultModel } from '../js/result-model.js';
 import { buildResultWorkspaceHtml } from '../js/results-view.js';
 import { normalizeMajorOption, normalizePlanEntry } from '../js/model.js';
 
@@ -28,7 +28,7 @@ async function fixtureFetch(overrides = {}) {
   };
 }
 
-test('a metadata-only new year flows through selection, table, preview and export', async () => {
+test('a metadata-only new year flows through selection, result table and export', async () => {
   const loaded = await bootstrapData('fixtures/metadata-2027.json', await fixtureFetch());
   await loadYears(loaded.store, [2027], await fixtureFetch());
   buildIndexes(loaded.store, loaded.metadata);
@@ -43,8 +43,9 @@ test('a metadata-only new year flows through selection, table, preview and expor
     ])),
     fallbacksByYear: loaded.store.fallbacksByYear
   });
-  const preview = createPreviewModel(aggregates, loaded.metadata, { ...state, status: 'ready', hasSearch: true });
-  const exported = prepareExport(preview, loaded.metadata, state.focusYear);
+  const result = buildResultModel({ aggregates, metadata: loaded.metadata,
+    selectedYears: state.selectedYears, filters: state.filters, sort: state.sort });
+  const exported = prepareExport({ ...result, status: 'ready' }, loaded.metadata, state.focusYear);
   const csv = serializeCsv(exported.rows, exported.fields);
   const tableHtml = buildResultWorkspaceHtml({
     status: 'ready', hasQuery: true, aggregates: aggregates,
@@ -54,8 +55,8 @@ test('a metadata-only new year flows through selection, table, preview and expor
   assert.deepEqual(loaded.store.years, [2027]);
   assert.deepEqual(state.selectedYears, loaded.metadata.supportedYears);
   assert.equal(state.focusYear, loaded.metadata.defaultYear);
-  assert.deepEqual(preview.allRows.map((row) => row.majorName), ['数据工程', '智能工程']);
-  assert.deepEqual(preview.selectedYears, loaded.metadata.supportedYears);
+  assert.deepEqual(result.allRows.map((row) => row.majorName), ['数据工程', '智能工程']);
+  assert.deepEqual(result.selectedYears, loaded.metadata.supportedYears);
   assert.match(buildExplorerControlsHtml(loaded.metadata, state), /year-selection-dialog/);
   assert.doesNotMatch(tableHtml, /year-selection-dialog/);
   assert.match(tableHtml, /data-result-sort="score2027" aria-label="按2027 年省控线排序"/);

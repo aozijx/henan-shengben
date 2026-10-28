@@ -13,7 +13,7 @@ if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from pipeline_config import REQUEST_TIMEOUT
-from crawler.source_rules import is_official_pdf_url
+from crawler.source_rules import is_pdf_link
 from crawler.waf import build_session
 
 
@@ -42,7 +42,7 @@ def discover_year(target, html, base_url=None):
     found = {}
     for link in soup.find_all('a', href=True):
         url = urljoin(base_url or target.source_page_url, link['href'])
-        if not is_official_pdf_url(url):
+        if not is_pdf_link(url):
             continue
         decoded = unquote(url)
         match = MAJOR_PATTERN.search(decoded)

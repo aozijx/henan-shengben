@@ -1,7 +1,7 @@
 import { projectAnalytics } from './analytics-projection.js';
 import { buildCurve, lookupScoreSegmentCode } from './score-curves.js';
 import { esc } from './utils.js';
-import { buildPaginationHtml, paginate } from './preview.js';
+import { buildPaginationHtml, paginate } from './table-utils.js';
 import { hiddenResultFields, resultFieldVisible } from './result-visibility.js';
 import { hasMasterMarkFilter } from './master-flags.js';
 import { chartPalette } from './theme.js';
@@ -138,7 +138,7 @@ function renderTable(projection, metadata, hiddenFields) {
   page = current.page;
   var root = document.getElementById('stats-table');
   root.innerHTML = buildStatsTableHtml(projection, metadata, page, hiddenFields);
-  root.querySelectorAll('.preview-pagination [data-page]').forEach(function (button) {
+  root.querySelectorAll('.table-pagination [data-page]').forEach(function (button) {
     button.onclick = function () { page = Number(button.dataset.page); renderTable(projection, metadata, hiddenFields); };
   });
 }

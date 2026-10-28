@@ -10,7 +10,6 @@ import { buildResultModel } from '../js/result-model.js';
 import { normalizeMajorOption } from '../js/model.js';
 import { buildYearSummaryHtml } from '../js/year-stack.js';
 import { createInitialState } from '../js/explorer-state.js';
-import { getPreviewFields } from '../js/preview.js';
 import { getExportFields } from '../js/export.js';
 
 const json = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
@@ -23,7 +22,6 @@ test('2027 mapping and college master are searchable before plans and score tabl
   assert.equal(metadata.supportedYears.includes(2027), false);
   const expanded = expandMetadata(metadata);
   assert.ok(createInitialState(expanded).selectedYears.includes(2027));
-  assert.ok(getPreviewFields(expanded, [2027]).some((field) => field.key === 'score2027'));
   assert.ok(getExportFields(expanded, [2027]).some((field) => field.key === 'schoolSplit2027'));
   assert.ok(getExportFields(expanded, [2027]).every((field) => !field.key.endsWith('2026')));
 

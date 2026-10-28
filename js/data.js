@@ -1,14 +1,10 @@
 /* 数据加载、索引与读取。数据源和年份完全由 metadata 声明。 */
 import { normCode6, schoolName } from './utils.js';
-import { createDataRepository } from './data-source.js';
 import { getSelectableYears } from './metadata.js';
 import { normalizeCollegeMasterRow, normalizePlanEntry } from './model.js';
 import { normalizeMajorName, selectMajorRows } from './major-match.js';
 
-export var YEARS = [];
-export var SCORE_BY_YEAR = {};
 export var MAPPING = [];
-export var PLANS = [];
 export var ALL_MAJORS = [];
 
 var activeStore = null;
@@ -18,11 +14,6 @@ var ready = false;
 
 export function isReady() { return ready; }
 export function getMetadata() { return activeMetadata; }
-
-/* 新页面按需加载入口；保留 loadAll 供现有页面迁移期间使用。 */
-export function createLazyStore(metadata, fetchImpl) {
-  return createDataRepository(metadata, fetchImpl);
-}
 
 function normName(value) { return normalizeMajorName(value); }
 
@@ -55,10 +46,7 @@ export async function loadAll(metadata, fetchImpl, repository) {
   store.mapping = store.queryIndexByYear[defaultYear] || [];
   activeStore = store;
   activeMetadata = metadata;
-  YEARS = store.years.slice();
-  SCORE_BY_YEAR = store.scoresByYear;
   MAPPING = store.mapping;
-  PLANS = [];
   ready = true;
   return store;
 }
@@ -89,7 +77,6 @@ export async function loadYears(store, years, fetchImpl) {
       return normalizeCollegeMasterRow(row, Boolean(planPath));
     });
   }));
-  PLANS = store.plansByYear[store.metadata.defaultYear] || [];
   return store;
 }
 
@@ -146,14 +133,6 @@ export function getMappingByYear(year) {
   return activeStore && (activeStore.queryIndexByYear[year] || activeStore.mappingByYear[year]) || [];
 }
 
-export function getPlansByYear(year) {
-  return activeStore && activeStore.plansByYear[year] ? activeStore.plansByYear[year] : [];
-}
-
-export function getScoreIndex() {
-  return activeIndex ? activeIndex.scoreByYear : {};
-}
-
 export function getScore(indexOrMajor, majorOrYear, maybeYear) {
   var hasIndex = indexOrMajor && indexOrMajor.scoreByYear;
   var index = hasIndex ? indexOrMajor : activeIndex;
@@ -206,19 +185,6 @@ export function getMasterRowsByYear(indexOrYear, yearOrMajor, maybeMajor) {
   if (!source || !major) return [];
   var code6 = normCode6(major['代码6位'] || major.disciplineCode6 || '');
   return (code6 ? source.byCode[code6] : source.byName[normName(major['专业名称'] || major.majorName)]) || [];
-}
-
-export function getPlanStats(year) {
-  var schools = {}, privateRows = 0, povertyRows = 0, regularRows = 0, total = 0;
-  var rows = year == null ? PLANS : getPlansByYear(year);
-  rows.forEach(function (row) {
-    schools[schoolName(row)] = true;
-    if (row['办学性质'] === '民办') privateRows += 1;
-    if (row['建档立卡'] === '是') povertyRows += 1;
-    if (row['招生类别'] === '普通专升本') regularRows += 1;
-    total += Number(row['计划人数']) || 0;
-  });
-  return { 条数: rows.length, 院校数: Object.keys(schools).length, 民办条目: privateRows, 建档立卡专项: povertyRows, 普通计划: regularRows, 计划人数合计: total };
 }
 
 export function uniqueMajors() {

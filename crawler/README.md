@@ -12,7 +12,7 @@
 | `download.py` | `--compact-url-fields` | 只清理清单中与原 PDF 地址等价的 `finalUrl`，不联网或重新下载。 |
 | `download.py` | `--major CODE` | 只下载或重试所选专业的 PDF；可重复传入，与 `--years` 配合缩小范围。 |
 
-发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。下载后会校验实际地址仍在官方域名白名单内，也会拒绝非 PDF 内容。公告页允许使用 `haeea.cn`、`news.haeea.cn`、`heao.com.cn`、河南省教育厅域名 `jyt.henan.gov.cn` 和河南省教育厅高考信息网 `gaokao.haedu.cn`；PDF 附件允许使用这些官方域名及已验证的政府附件域名 `xcoss.henan.gov.cn`。
+发现阶段将专业代号、名称、官方 PDF 地址和目标路径写入 `来源清单/来源清单_YYYY.json`。下载阶段读取该清单；文件 SHA-256 与记录一致时跳过下载，失败响应不会覆盖已有 PDF。所有 URL 都经 `crawler/source_rules.py` 中同一套官方 HTTPS 域名白名单校验，包含考试院、教育厅和已验证的政府附件域名 `xcoss.henan.gov.cn`。发现 PDF 链接时用 `.pdf` 后缀缩小候选范围；明确配置的附件地址无需该后缀，下载后仍验证响应类型和 PDF 文件头。
 
 年度导入还会校验 PDF 是否能确认年份和来源类型。扫描版 PDF 没有正文文本时，也会检查可解码的标题元数据；正文和元数据都无法确认时仍会停止导入。
 

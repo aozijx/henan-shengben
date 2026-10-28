@@ -1,5 +1,5 @@
-/* Lightweight annual summaries in the shape consumed by the existing preview
-   and aggregate pipeline. These rows are never shown as detailed plan records. */
+/* Lightweight annual summaries for query results and aggregates.
+   These rows are never shown as detailed plan records. */
 import { normalizeCollegeMasterRow } from './model.js';
 export function queryRowsFromAnalytics(analyticsByYear, years) {
   var scoresByYear = {}, plansByYear = {};

@@ -11,7 +11,7 @@ if __package__ in {None, ''}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT
-from crawler.source_rules import is_official_pdf_url
+from crawler.source_rules import is_official_url
 from crawler.waf import build_session
 from crawler.year_sources import build_data_plan, seed_paths_in
 
@@ -22,14 +22,14 @@ def _sha256(content):
 
 def download_entry(url, target: Path, session, expected_sha256=None):
     try:
-        if not is_official_pdf_url(url):
+        if not is_official_url(url):
             raise ValueError('PDF URL is not on the official host allowlist')
         if expected_sha256 and target.is_file() and _sha256(target.read_bytes()) == expected_sha256:
             return {'downloadStatus': 'skipped', 'sha256': expected_sha256, 'bytes': target.stat().st_size}
         response = session.get(url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         final_url = getattr(response, 'url', url)
-        if not is_official_pdf_url(final_url):
+        if not is_official_url(final_url):
             raise ValueError('PDF redirect left the official host allowlist')
         content = response.content
         content_type = response.headers.get('content-type', '').lower()
@@ -85,7 +85,7 @@ def download_manifest(manifest_path: Path, data_root: Path, session, workers: in
             raise ValueError(f"manifest path escapes data root: {entry['localPath']}")
         if target in destinations:
             raise ValueError(f"duplicate manifest destination: {entry['localPath']}")
-        if not is_official_pdf_url(entry['pdfUrl']):
+        if not is_official_url(entry['pdfUrl']):
             raise ValueError(f"manifest PDF URL is not on the official host allowlist: {entry['pdfUrl']}")
         destinations.add(target)
         targets.append(target)
