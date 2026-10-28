@@ -33,6 +33,28 @@ PDF_MARKERS = {
     'master': ('招生高校及专业总表',),
 }
 
+TABLE_PDF_PATHS = {
+    'mappingCodeTable': '专业对照/原始PDF/专业代号对照_{year}.pdf',
+    'mappingOverview': '专业对照/原始PDF/专业对照一览_{year}.pdf',
+    'master': '招生高校及专业/原始PDF/招生高校及专业_{year}.pdf',
+    'plans': '招生计划/原始PDF/招生计划_{year}.pdf',
+    'scorelines': '省控线/原始PDF/省控线_{year}.pdf',
+}
+TABLE_SOURCE_SPECS = (
+    ('mappingCodeTable', ('mappingCodeTable',), '专业对照/专业代号对照_{year}.json'),
+    ('mapping', ('mappingCodeTable', 'mappingOverview'), '专业对照/专业对照_{year}.json'),
+    ('master', ('master',), '招生高校及专业/招生高校及专业_{year}.json'),
+    ('plans', ('plans',), '招生计划/招生计划_{year}.json'),
+    ('scorelines', ('scorelines',), '省控线/省控线_{year}.json'),
+)
+
+
+def _table_rows(year: int, declared: dict):
+    for parser, roles, output in TABLE_SOURCE_SPECS:
+        paths = [declared.get(role, {}).get('localPath') or TABLE_PDF_PATHS[role].format(year=year)
+                 for role in roles]
+        yield parser, roles, output.format(year=year), paths
+
 
 def load_year_links(path: Path) -> dict:
     seed = json.loads(Path(path).read_text(encoding='utf-8'))
@@ -109,26 +131,9 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
     """Derive tabular parser inputs from a seed and conventional local files."""
     year = int(seed['year'])
     data_root = Path(data_root)
-    specs = (
-        ('mappingCodeTable', ('mappingCodeTable',), f'专业对照/专业代号对照_{year}.json',
-         (f'专业对照/原始PDF/专业代号对照_{year}.pdf',)),
-        ('mapping', ('mappingCodeTable', 'mappingOverview'), f'专业对照/专业对照_{year}.json',
-         (f'专业对照/原始PDF/专业代号对照_{year}.pdf', f'专业对照/原始PDF/专业对照一览_{year}.pdf')),
-        ('master', ('master',), f'招生高校及专业/招生高校及专业_{year}.json',
-         (f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf',)),
-        ('plans', ('plans',), f'招生计划/招生计划_{year}.json',
-         (f'招生计划/原始PDF/招生计划_{year}.pdf',)),
-        ('scorelines', ('scorelines',), f'省控线/省控线_{year}.json',
-         (f'省控线/原始PDF/省控线_{year}.pdf',)),
-    )
     rows = []
     declared = seed.get('sources', {})
-    for parser, roles, output_path, pdf_paths in specs:
-        pdf_paths = list(pdf_paths)
-        for index, role in enumerate(roles):
-            local_path = declared.get(role, {}).get('localPath')
-            if local_path:
-                pdf_paths[index] = local_path
+    for parser, roles, output_path, pdf_paths in _table_rows(year, declared):
         if parser == 'mapping':
             # A complete mapping needs both official roles in the year's seed.
             # A leftover JSON or PDF alone must not become the latest mapping.
@@ -327,34 +332,16 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
 def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
     year = resolved['year']
     attachments = resolved['attachments']
+    selected = {role: items[0] for role, items in attachments.items() if role in TABLE_PDF_PATHS}
     sources = []
-    single_sources = (
-        ('mappingCodeTable', f'专业对照/专业代号对照_{year}.json',
-         f'专业对照/原始PDF/专业代号对照_{year}.pdf'),
-        ('scorelines', f'省控线/省控线_{year}.json', f'省控线/原始PDF/省控线_{year}.pdf'),
-        ('plans', f'招生计划/招生计划_{year}.json', f'招生计划/原始PDF/招生计划_{year}.pdf'),
-        ('master', f'招生高校及专业/招生高校及专业_{year}.json',
-         f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf'),
-    )
-    for role, output_path, pdf_path in single_sources:
-        if role not in attachments:
-            continue
-        sources.append({'outputPath': output_path,
-                        'pdfPaths': [attachments[role][0].get('localPath', pdf_path)],
-                        'pdfUrls': [attachments[role][0]['url']],
-                        'pageUrls': [resolved['pages'][role]], 'parser': role, 'year': year})
-    mapping_roles = ('mappingCodeTable', 'mappingOverview')
-    if all(role in attachments for role in mapping_roles):
-        sources.append({
-            'outputPath': f'专业对照/专业对照_{year}.json',
-            'pdfPaths': [attachments['mappingCodeTable'][0].get(
-                             'localPath', f'专业对照/原始PDF/专业代号对照_{year}.pdf'),
-                         attachments['mappingOverview'][0].get(
-                             'localPath', f'专业对照/原始PDF/专业对照一览_{year}.pdf')],
-            'pdfUrls': [attachments[role][0]['url'] for role in mapping_roles],
-            'pageUrls': [resolved['pages'][role] for role in mapping_roles],
-            'parser': 'mapping', 'year': year,
-        })
+    for parser, roles, output_path, pdf_paths in _table_rows(year, selected):
+        if all(role in selected for role in roles):
+            sources.append({
+                'outputPath': output_path, 'pdfPaths': pdf_paths,
+                'pdfUrls': [selected[role]['url'] for role in roles],
+                'pageUrls': [resolved['pages'][role] for role in roles],
+                'parser': parser, 'year': year,
+            })
     crawl = None
     segment_page = resolved['pages'].get('scoreSegments')
     if segment_page:

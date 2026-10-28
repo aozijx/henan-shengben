@@ -9,7 +9,7 @@ import re
 import tempfile
 from pathlib import Path
 
-from .common import DATA_ROOT, REPO_ROOT, load_data_plan, read_json
+from .common import DATA_ROOT, REPO_ROOT, load_data_plan, read_json, write_json
 from .validate import validate_score_segment_major
 from .segment_store import iter_year
 from .local_tables import load_local_tables
@@ -29,11 +29,6 @@ def _json_content_sha256(document: object) -> str:
     encoded = json.dumps(document, ensure_ascii=False, sort_keys=True,
                          separators=(',', ':')).encode('utf-8')
     return hashlib.sha256(encoded).hexdigest()
-
-
-def _write_manifest(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 def _source_path(data_root: Path, relative: str) -> Path:
@@ -459,7 +454,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
     with tempfile.TemporaryDirectory(prefix='.publish-', dir=data_root) as folder:
         staging = Path(folder)
         for relative, value in output.items():
-            _write_manifest(staging / relative, value)
+            write_json(staging / relative, value, indent=2)
         for relative in output:
             target = data_root / relative
             source = staging / relative
@@ -472,7 +467,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path) -
         metadata_target = Path(metadata_path)
         metadata_target.parent.mkdir(parents=True, exist_ok=True)
         temporary = staging / 'metadata.json'
-        _write_manifest(temporary, metadata)
+        write_json(temporary, metadata, indent=2)
         os.replace(temporary, metadata_target)
     return metadata
 

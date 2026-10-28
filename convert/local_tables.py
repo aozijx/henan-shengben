@@ -5,23 +5,16 @@ import hashlib
 from pathlib import Path
 
 from convert.common import read_json, write_json
-from crawler.year_sources import source_rows_for_seed
+from crawler.year_sources import TABLE_PDF_PATHS, TABLE_SOURCE_SPECS, source_rows_for_seed
 
 
-PDF_ROLES = {
-    'mappingCodeTable': '专业对照/原始PDF/专业代号对照_{year}.pdf',
-    'mappingOverview': '专业对照/原始PDF/专业对照一览_{year}.pdf',
-    'master': '招生高校及专业/原始PDF/招生高校及专业_{year}.pdf',
-    'plans': '招生计划/原始PDF/招生计划_{year}.pdf',
-    'scorelines': '省控线/原始PDF/省控线_{year}.pdf',
-}
-PARSERS = {'mappingCodeTable', 'mapping', 'master', 'plans', 'scorelines'}
+PARSERS = {parser for parser, _roles, _output in TABLE_SOURCE_SPECS}
 
 
 def local_source_rows(data_root: Path, year: int) -> list[dict]:
     """Discover only parsers whose complete conventional PDF inputs exist."""
     root = Path(data_root)
-    roles = {role: {} for role, pattern in PDF_ROLES.items()
+    roles = {role: {} for role, pattern in TABLE_PDF_PATHS.items()
              if (root / pattern.format(year=year)).is_file()}
     rows = source_rows_for_seed({'year': year, 'sources': roles}, root)
     available = [row for row in rows if all((root / pdf).is_file() for pdf in row['pdfPaths'])]

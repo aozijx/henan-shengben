@@ -176,6 +176,15 @@ class YearSourcesTests(unittest.TestCase):
         seed_row = next(row for row in source_rows_for_seed(seed, Path('data')) if row['parser'] == 'mapping')
         self.assertEqual(seed_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
 
+    def test_seed_and_resolved_sources_share_table_paths(self):
+        resolved = resolve_year_sources(self.seed, FakeSession())
+        with tempfile.TemporaryDirectory() as directory:
+            expected = {row['parser']: (row['outputPath'], row['pdfPaths'])
+                        for row in source_rows_for_seed(self.seed, Path(directory))}
+            actual = {row['parser']: (row['outputPath'], row['pdfPaths'])
+                      for row in execution_rows_for_year(resolved)[0]}
+            self.assertEqual(actual, expected)
+
     def test_partial_mapping_seed_ignores_stale_complete_mapping_file(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

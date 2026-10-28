@@ -30,7 +30,7 @@
 
 `refresh_catalog` 从规范招生计划生成按院校代码区分的年度分析摘要。变更摘要派生规则时需更新 `DERIVATION_VERSION`，再运行 `python -m convert.refresh_catalog`，将新版本的 `data/generated/` 文件与更新后的 `metadata/school-data.json` 一同提交。旧版本文件保持不可变；专项标注和筛选口径见 [数据目录说明](../data/README.md#建档立卡专项与院校代码)。
 
-本地离线表格可按独立发布时间转换。将 PDF 放入 `data/专业对照/原始PDF/专业对照一览_YYYY.pdf`、`data/专业对照/原始PDF/专业代号对照_YYYY.pdf` 或 `data/招生高校及专业/原始PDF/招生高校及专业_YYYY.pdf` 等约定路径后运行 `python -m convert.extract_cli --local --year YYYY --write`，再运行 `python -m convert.refresh_catalog`。专业对照需要完整对照一览和代号对照两份 PDF；只有其中一份时会跳过该角色。来源与输出哈希记录在 `data/来源清单/本地表_YYYY.json`；哈希不符时 catalog 会拒绝使用。`sourceCatalog` 分别登记专业对照、院校总表、招生计划、省控线和一分一段的可用年份；页面年份筛选取已发布的对照、总表和计划年份的并集。某年缺少招生计划或省控线时，院校与专业仍可检索，对应人数或分数显示“未公布”；只有完整年度才进入 `supportedYears` 和统计分析。
+本地离线表格可按独立发布时间转换。将 PDF 放入 `data/专业对照/原始PDF/专业对照一览_YYYY.pdf`、`data/专业对照/原始PDF/专业代号对照_YYYY.pdf` 或 `data/招生高校及专业/原始PDF/招生高校及专业_YYYY.pdf` 等约定路径后运行 `python -m convert.extract_cli --local --year YYYY --write`，再运行 `python -m convert.refresh_catalog`。在线导入、本地转换和年度来源计划共用 `crawler/year_sources.py` 的表格路径定义；seed 的 `localPath` 可以覆盖对应 PDF 的默认路径。专业对照需要完整对照一览和代号对照两份 PDF；只有其中一份时会跳过该角色。来源与输出哈希记录在 `data/来源清单/本地表_YYYY.json`；哈希不符时 catalog 会拒绝使用。`sourceCatalog` 分别登记专业对照、院校总表、招生计划、省控线和一分一段的可用年份；页面年份筛选取已发布的对照、总表和计划年份的并集。某年缺少招生计划或省控线时，院校与专业仍可检索，对应人数或分数显示“未公布”；只有完整年度才进入 `supportedYears` 和统计分析。
 
 `generated/<年份>/<16位哈希>/analytics.json` 的目录名是年度版本：对规范映射、省控线、招生计划、一分一段索引、转换报告的规范 JSON 内容哈希和派生规则版本再计算 SHA-256，取前 16 位。`generated/catalog/<16位哈希>.json` 的文件名是整份目录清单的版本：清单含各年发布路径、完整输入哈希及来源清单的来源身份哈希，序列化后计算 SHA-256 并取前 16 位。规范 JSON 内容哈希不受键顺序、缩进或换行符影响；来源身份哈希还忽略 `downloadStatus`，但来源 URL、专业与 PDF 哈希变化仍会改变它。因此来源清单或其他年度变化可能只改变 catalog 的哈希；这两段短哈希也都不是 `analytics.json` 文件本身的校验和。各输入的完整校验值在 catalog 的 `inputSha256` 中。
 

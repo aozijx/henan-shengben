@@ -39,8 +39,9 @@ def write_bytes_if_changed(path: Path, content: bytes) -> None:
     os.replace(temporary, path)
 
 
-def write_json(path: Path, value: object) -> None:
-    write_bytes_if_changed(path, (json.dumps(value, ensure_ascii=False) + "\n").encode("utf-8"))
+def write_json(path: Path, value: object, *, indent: int | None = None) -> None:
+    content = json.dumps(value, ensure_ascii=False, indent=indent) + "\n"
+    write_bytes_if_changed(path, content.encode("utf-8"))
 
 
 def load_data_plan(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> dict[str, Any]:

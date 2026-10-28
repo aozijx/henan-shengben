@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from convert.ingest_year import (
-    _summary_report, ingest_year, publish_staged_files, source_role_for_attachment,
+    _summary_report, ingest_year, publish_staged_files,
     validate_score_segment_pdfs,
 )
 from convert.common import REPO_ROOT
@@ -208,19 +208,6 @@ class IngestYearTests(unittest.TestCase):
                 ingest_year(wrong_name, data, REPO_ROOT / 'metadata/school-data.template.json',
                             metadata, FakeSession(), check=True)
             self.assertEqual(metadata.read_bytes(), old_metadata)
-
-    def test_source_parser_attachment_role_mapping(self):
-        self.assertEqual(source_role_for_attachment('master', 0), 'master')
-        self.assertEqual(source_role_for_attachment('scorelines', 0), 'scorelines')
-        self.assertEqual(source_role_for_attachment('plans', 0), 'plans')
-        self.assertEqual(source_role_for_attachment('mapping', 0), 'mappingCodeTable')
-        self.assertEqual(source_role_for_attachment('mapping', 1), 'mappingOverview')
-
-    def test_rejects_unknown_or_extra_attachment(self):
-        with self.assertRaises(ValueError):
-            source_role_for_attachment('master', 1)
-        with self.assertRaises(ValueError):
-            source_role_for_attachment('unknown', 0)
 
     def test_check_then_publish_generates_catalog_and_shard_without_touching_inputs_first(self):
         with tempfile.TemporaryDirectory() as folder:

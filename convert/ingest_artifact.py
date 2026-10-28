@@ -8,14 +8,11 @@ import os
 import shutil
 from pathlib import Path, PurePosixPath
 
+from convert.common import write_json
+
 
 def _digest(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest()
-
-
-def _write_json(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 def export_staged_changes(staging_root: Path, data_root: Path, export_dir: Path,
@@ -55,14 +52,14 @@ def export_staged_changes(staging_root: Path, data_root: Path, export_dir: Path,
     if not files:
         raise ValueError(f'{year}: checked ingest produced no new data files to export')
     seed_content = Path(seed_path).read_bytes()
-    _write_json(export_dir / 'manifest.json', {
+    write_json(export_dir / 'manifest.json', {
         'schemaVersion': 1,
         'year': year,
         'seedPath': f'data/year-links/{year}.json',
         'seedSha256': _digest(seed_content),
         'complete': bool(complete),
         'files': files,
-    })
+    }, indent=2)
 
 
 def package_run_manifest(artifact_root: Path, repository: str, pr_number: int,
@@ -88,7 +85,7 @@ def package_run_manifest(artifact_root: Path, repository: str, pr_number: int,
             complete_years.append(year)
     if not years or len(years) != len(set(years)):
         raise ValueError('changed-seeds must contain one or more unique yearly seeds')
-    _write_json(artifact_root / 'run.json', {
+    write_json(artifact_root / 'run.json', {
         'schemaVersion': 1,
         'repository': repository,
         'prNumber': pr_number,
@@ -96,7 +93,7 @@ def package_run_manifest(artifact_root: Path, repository: str, pr_number: int,
         'workflowRunId': run_id,
         'years': sorted(years),
         'completeYears': sorted(complete_years),
-    })
+    }, indent=2)
 
 
 def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str,

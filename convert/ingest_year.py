@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
-from convert.common import REPO_ROOT, read_json
+from convert.common import REPO_ROOT, read_json, write_json
 from convert.convert_all import convert_target
 from convert.ingest_artifact import export_staged_changes
 from convert.normalize import normalization_input_status
@@ -22,27 +22,12 @@ from crawler.waf import build_session
 from crawler.year_sources import (
     SOURCE_ROLES,
     SourceResolutionError,
+    TABLE_PDF_PATHS,
     load_year_links,
     execution_rows_for_year,
     resolve_year_sources,
     validate_attachment,
 )
-
-
-def _write(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes((json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
-
-
-def source_role_for_attachment(parser: str, index: int) -> str:
-    """Map a derived parser row and PDF position to its source provenance role."""
-    if parser == 'mapping':
-        if index not in (0, 1):
-            raise ValueError(f'unsupported mapping attachment index: {index}')
-        return 'mappingCodeTable' if index == 0 else 'mappingOverview'
-    if parser in {'mappingCodeTable', 'scorelines', 'plans', 'master'} and index == 0:
-        return parser
-    raise ValueError(f'unsupported parser attachment: {parser}[{index}]')
 
 
 def validate_score_segment_pdfs(entries: list[dict], data_root: Path, year: int) -> None:
@@ -85,18 +70,11 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
 
     # Download only explicitly configured table sources. Missing roles stay absent.
     provenance = []
-    attachment_paths = {
-        'scorelines': f'省控线/原始PDF/省控线_{year}.pdf',
-        'plans': f'招生计划/原始PDF/招生计划_{year}.pdf',
-        'master': f'招生高校及专业/原始PDF/招生高校及专业_{year}.pdf',
-        'mappingCodeTable': f'专业对照/原始PDF/专业代号对照_{year}.pdf',
-        'mappingOverview': f'专业对照/原始PDF/专业对照一览_{year}.pdf',
-    }
     for role, items in resolved['attachments'].items():
         if role == 'scoreSegments':
             continue
         for item in items:
-            relative = item.get('localPath') or attachment_paths[role]
+            relative = item.get('localPath') or TABLE_PDF_PATHS[role].format(year=year)
             url = item['url']
             print(f'[{year}] 下载官方 PDF：{relative}', flush=True)
             destination = root / relative
@@ -120,7 +98,8 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
             provenance.append({'year': year, 'type': role, 'sourcePageUrl': resolved['pages'][role],
                 'sourceUrl': url, **({'finalUrl': result['finalUrl']} if result.get('finalUrl') else {}),
                 'localPath': relative, 'sha256': result['sha256'], 'bytes': result['bytes']})
-    _write(root / f'来源清单/官方来源_{year}.json', {'schemaVersion': 1, 'year': year, 'sources': provenance})
+    write_json(root / f'来源清单/官方来源_{year}.json',
+               {'schemaVersion': 1, 'year': year, 'sources': provenance}, indent=2)
 
     results = extract_year_sources(plan, root, year, write=True) if source_rows else []
     if results:
@@ -144,7 +123,7 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
                     'sourcePageUrl': crawl_target['sourcePageUrl'], 'discoveryUrl': crawl_target['discoveryUrl'],
                     'entries': [entry_document(item) for item in entries]}
         manifest_path = root / crawl_target['manifestPath']
-        _write(manifest_path, manifest)
+        write_json(manifest_path, manifest, indent=2)
         counts = download_manifest(manifest_path, root, session)
         if counts['failed'] or counts['downloaded'] + counts['skipped'] != len(entries):
             raise ValueError(f'{year}: score-segment downloads incomplete: {counts}')
