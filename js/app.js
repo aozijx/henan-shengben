@@ -79,38 +79,20 @@ function createAggregateRenderer(loaded) {
         });
         renderWorkspace({ status: 'ready', hasQuery: true, aggregates: resultModel.aggregates }, years, state, dispatch,
           function (aggregate, selected, hiddenFields, schoolYears) {
-            var extraYears = (schoolYears || []).filter(function (year) { return selected.indexOf(year) < 0; });
-            return Promise.all([data.loadYears(loaded.store, selected), Promise.all(selected.map(function (year) {
+            var detailYears = schoolYears || selected;
+            return Promise.all([Promise.all(selected.map(function (year) {
               if (!loaded.metadata.yearSources[year]) return Promise.resolve(null);
               return loaded.repository.ensureScoreSegmentIndex(year).then(function (index) {
                 var code = lookupScoreSegmentCode(index, aggregate.major.majorCode);
                 return code ? loaded.repository.ensureScoreSegment(year, code) : null;
               });
-            })), Promise.all(extraYears.map(function (year) {
+            })), Promise.all(detailYears.map(function (year) {
               return loaded.repository.ensureCollegeYear(year);
             }))]).then(function (values) {
-              var shards = values[1];
-              var detail = buildMajorAggregates({ majors: [aggregate.major], years: selected,
-                plansByYear: data.normalizedPlansForYears(loaded.store, selected),
-                scoresByYear: loaded.store.scoresByYear, segmentsByYear: {},
-                fallbacksByYear: loaded.store.fallbacksByYear,
-                planPublishedByYear: Object.fromEntries(selected.map(function (year) {
-                  return [year, Boolean(((loaded.metadata.sourceCatalog || {}).plans || {})[year] || loaded.metadata.yearSources[year])];
-                })),
-                scorePublishedByYear: Object.fromEntries(selected.map(function (year) {
-                  return [year, Boolean(((loaded.metadata.sourceCatalog || {}).scorelines || {})[year] || loaded.metadata.yearSources[year])];
-                })) })[0];
-              detail = buildResultModel({ aggregates: [detail], metadata: loaded.metadata,
-                selectedYears: selected, filters: state && state.filters }).aggregates[0] || detail;
-              selected.forEach(function (year, index) {
-                var yearValue = detail.years[year];
-                if (!yearValue) return;
-                yearValue.scoreSegments = shards[index] ? normalizeScoreSegmentSeries(shards[index]) : null;
-                yearValue.scoreContext = resolveScoreContext(yearValue.scoreSegments, null, yearValue.score);
-              });
-              extraYears.forEach(function (year, index) {
-                var source = values[2][index];
-                var extra = buildMajorAggregates({ majors: [aggregate.major], years: [year],
+              var detail = { ...aggregate, years: { ...aggregate.years } };
+              detailYears.forEach(function (year, index) {
+                var source = values[1][index];
+                var yearDetail = buildMajorAggregates({ majors: [aggregate.major], years: [year],
                   plansByYear: { [year]: source.plans.map(normalizePlanEntry) },
                   scoresByYear: { [year]: source.scores },
                   scorePublishedByYear: { [year]: source.scorePublished },
@@ -119,11 +101,18 @@ function createAggregateRenderer(loaded) {
                     return normalizeCollegeMasterRow(row, source.planPublished);
                   }) }
                 })[0].years[year];
-                extra.planPublished = source.planPublished;
-                extra.schools = extra.schools.map(function (school) {
+                yearDetail.planPublished = source.planPublished;
+                yearDetail.schools = yearDetail.schools.map(function (school) {
                   return { ...school, planPublished: source.planPublished };
                 });
-                detail.years[year] = filterYear(extra, state && state.filters || {}, loaded.metadata);
+                detail.years[year] = filterYear(yearDetail, state && state.filters || {}, loaded.metadata);
+              });
+              selected.forEach(function (year, index) {
+                var yearValue = detail.years[year];
+                if (!yearValue) return;
+                var scoreSegments = values[0][index] ? normalizeScoreSegmentSeries(values[0][index]) : null;
+                detail.years[year] = { ...yearValue, scoreSegments: scoreSegments,
+                  scoreContext: resolveScoreContext(scoreSegments, null, yearValue.score) };
               });
               return { html: buildExpandedMajorHtml(detail, selected, hiddenFields, schoolYears) };
             }).catch(function (error) { return { error: error.message }; });

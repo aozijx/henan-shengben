@@ -1,5 +1,6 @@
 import { nextSortDirection } from './preview.js';
 import { getCollegeYears } from './metadata.js';
+import { defaultCollegeYear } from './detail-years.js';
 import { esc } from './utils.js';
 import { buildExpandedMajorHtml, buildResultViewModel, buildResultWorkspaceHtml, resultMessage } from './results-view.js';
 
@@ -31,7 +32,9 @@ function resultStateFor(root, model) {
   var state = resultStates.get(root);
   var signature = resultSignature(model);
   if (!state || (model.status !== 'loading' && state.signature !== signature)) {
-    state = { signature: signature, expandedDetails: {}, selectedMajorKey: '', schoolLayout: 'cards', schoolYear: 'all', returnScrollY: null, returnMajorIndex: null, detailRequestId: 0 };
+    state = { signature: signature, expandedDetails: {}, selectedMajorKey: '', schoolLayout: 'cards',
+      schoolYear: defaultCollegeYear(model.collegeYears || model.selectedYears),
+      returnScrollY: null, returnMajorIndex: null, detailRequestId: 0 };
     resultStates.set(root, state);
   }
   if (model.status !== 'loading') state.signature = signature;
@@ -54,7 +57,9 @@ function renderSelectedMajor(root, context) {
   if (!section || !content || !state) return Promise.resolve();
   var collegeYears = context.model.collegeYears || context.model.selectedYears;
   if (yearSelect) {
-    if (state.schoolYear !== 'all' && collegeYears.indexOf(Number(state.schoolYear)) < 0) state.schoolYear = 'all';
+    if (state.schoolYear !== 'all' && collegeYears.indexOf(Number(state.schoolYear)) < 0) {
+      state.schoolYear = defaultCollegeYear(collegeYears);
+    }
     yearSelect.innerHTML = '<option value="all">全部可用年份</option>' + collegeYears.map(function (year) {
       return '<option value="' + esc(year) + '">' + esc(year) + ' 年</option>';
     }).join('');

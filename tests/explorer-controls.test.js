@@ -16,7 +16,7 @@ test('year selection remains in filters when no matching major is shown', () => 
   assert.match(html, /当前基准：2026 年/);
 });
 
-test('three selected years remain explicit', () => {
+test('three selected years use a compact range label', () => {
   const metadata = { supportedYears: [2024, 2025, 2026], fields: [] };
   const state = {
     status: 'ready', majors: [], filters: {}, selectedYears: [2024, 2025, 2026],
@@ -25,8 +25,9 @@ test('three selected years remain explicit', () => {
   const html = buildExplorerControlsHtml(metadata, state);
   const yearButton = html.match(/<button type="button" data-filter-action="years"[^>]*>([^<]*)<\/button>/);
 
-  assert.equal(yearButton && yearButton[1], '2024、2025、2026');
+  assert.equal(yearButton && yearButton[1], '2024–2026');
   assert.doesNotMatch(yearButton && yearButton[0] || '', /全部/);
+  assert.match(yearButton && yearButton[0] || '', /当前已选 2024、2025、2026/);
 });
 
 test('more than three selected years use a compact label but keep the full accessible list', () => {

@@ -147,7 +147,8 @@
 .result-toolbar .export-trigger:disabled,.result-toolbar .result-layout-switch button:disabled{opacity:.5;cursor:not-allowed;}
 
 @media(max-width:899px){
-  #view-query #result.result{min-width:0;}
+  #view-query #result.result{height:auto;min-width:0;min-height:0;}
+  #view-query #result-state.result-state{margin:0;padding:28px 16px;}
   #view-query .result-feedback-toolbar{align-items:flex-start;flex-wrap:wrap;gap:4px 8px;padding:12px 12px 0;}
   #view-query .result-feedback-toolbar>.hint{flex-basis:180px;}
   #view-query #result-toolbar.result-toolbar{flex-wrap:wrap;margin-left:auto;overflow:visible;white-space:normal;}
@@ -212,6 +213,8 @@
 .selected-major-section[data-school-layout="list"] .school-plan-record{grid-row:1/span 2;margin:0;padding:0;border:0;}
 
 @media(max-width:600px){
+  #view-query .filter-field-number{flex-basis:100%;}
+  #view-query .filter-field-number input[data-filter-number]{max-width:none;}
   #view-query .school-detail-return:not([hidden]){position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:20;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border:1px solid var(--line-strong);border-radius:var(--radius-pill);background:var(--card);color:var(--blue-deep);font:600 14px/1 var(--sans);box-shadow:0 4px 18px rgb(0 0 0 / .18);cursor:pointer;}
   #view-query .school-detail-return:focus-visible{outline:2px solid var(--blue);outline-offset:3px;}
   #view-query .aggregate-table-wrap{max-height:none;overflow:auto;border-radius:var(--radius-sm);}

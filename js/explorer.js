@@ -31,7 +31,7 @@ function enumControl(field, stateKey, state, disabled) {
 function minControl(field, state, disabled) {
   if (!field) return '';
   var value = state.filters[field.key] || '';
-  return '<label class="filter-field"><span>' + esc(field.label) + ' &gt;</span>' +
+  return '<label class="filter-field filter-field-number"><span>' + esc(field.label) + ' &gt;</span>' +
     '<input data-filter-number="' + esc(field.key) + '" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="不限" value="' + esc(value) + '"' +
     (disabled ? ' disabled' : '') + '></label>';
 }
@@ -40,7 +40,7 @@ export function buildExplorerControlsHtml(metadata, state) {
   var unavailable = state.status !== 'ready' || !state.majors.length;
   var years = getSelectableYears(metadata);
   var selectedYears = state.selectedYears || years;
-  var yearLabel = selectedYears.length > 3
+  var yearLabel = selectedYears.length >= 3
     ? selectedYears[0] + '–' + selectedYears[selectedYears.length - 1]
     : selectedYears.join('、');
   var fullYearLabel = selectedYears.join('、');
