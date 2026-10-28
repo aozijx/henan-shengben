@@ -65,6 +65,18 @@ test('latest mapping and a master-only college year load independently of annual
   assert.deepEqual(calls, ['mapping-2028.json', 'colleges-2028.json']);
 });
 
+test('published year can load its college master without loading detailed plans', async () => {
+  const calls = [];
+  const config = metadata();
+  config.sourceCatalog = { colleges: { 2027: 'colleges.json' }, plans: { 2027: 'plans.json' } };
+  const repository = createDataRepository(config, async (url) => {
+    calls.push(url);
+    return { ok: true, json: async () => [{ source: url }] };
+  });
+  assert.deepEqual(await repository.ensureCollegeMaster(2027), [{ source: 'colleges.json' }]);
+  assert.deepEqual(calls, ['colleges.json']);
+});
+
 test('retry evicts a failed URL and requests it again', async () => {
   let attempt = 0;
   const repository = createDataRepository(metadata(), async () => {

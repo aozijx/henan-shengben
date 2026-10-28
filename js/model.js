@@ -45,9 +45,7 @@ export function normalizePlanEntry(row) {
     address: text(row['通信地址']),
     notes: text(row['其他说明']),
     phone: text(row['咨询电话']),
-    charterUrl: text(row['招生章程网址']),
-    teacherTraining: /师范/.test(String(row['专业名称'] || '')),
-    arts: /艺术|美术|音乐|舞蹈|表演|设计|动画|摄影/.test(String(row['专业名称'] || ''))
+    charterUrl: text(row['招生章程网址'])
   };
 }
 
@@ -55,7 +53,6 @@ export function normalizeCollegeMasterRow(row, planPublished) {
   return { ...row,
     '院校名称': row['院校名称'] || row['学校名称'],
     '院校代号': row['院校代号'] || row['院校代码'],
-    '办学性质': row['办学性质'] || '未标注',
     _planUnpublished: planPublished === false };
 }
 

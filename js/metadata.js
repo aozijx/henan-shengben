@@ -233,6 +233,12 @@ export function validateMetadata(value) {
         enumOptions(field).indexOf(field.filterDefault) < 0) {
       errors.push((field.key || prefix) + ' filterDefault 必须是「全部」或 enumValues 之一');
     }
+    if (field.sourceRole != null || field.sourceColumn != null) {
+      if (field.sourceRole !== 'colleges' || !isNonEmptyString(field.sourceColumn) ||
+          field.type !== 'enum' || !field.filterEnable) {
+        errors.push((field.key || prefix) + ' 来源列筛选须配置 colleges、sourceColumn 和启用的 enum 字段');
+      }
+    }
     if (field.type === 'number') {
       if (field.min != null && !Number.isFinite(field.min)) errors.push((field.key || prefix) + ' min 必须是数字');
       if (field.max != null && !Number.isFinite(field.max)) errors.push((field.key || prefix) + ' max 必须是数字');

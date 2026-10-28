@@ -120,7 +120,7 @@ function createFallbackIndex(rows) {
     if (name) (byName[name] = byName[name] || []).push(row);
     if (code) (byCode[code] = byCode[code] || []).push(row);
   });
-  return { byName: byName, byCode: byCode };
+  return { byName: byName, byCode: byCode, all: rows };
 }
 
 export function buildIndexes(store, metadata) {
@@ -166,7 +166,6 @@ export function getScore(indexOrMajor, majorOrYear, maybeYear) {
   if (code && db[code]) return db[code].score;
   if (name) {
     for (var key in db) if (db[key].name === name) return db[key].score;
-    for (var fallbackKey in db) if (db[fallbackKey].name && db[fallbackKey].name.indexOf(name) > -1) return db[fallbackKey].score;
   }
   return null;
 }
@@ -186,15 +185,27 @@ export function getCollegesByYear(indexOrYear, yearOrMajor, maybeMajor) {
     function (row) { return row['专业代号'] || row['专业代码']; },
     function (row) { return row['专业名称']; });
   if (!list.length) list = null;
-  if (!list) list = (code6 && fallbackIndex.byCode[code6]) || (name && fallbackIndex.byName[name]);
+  if (!list) list = code6 ? fallbackIndex.byCode[code6] : name && fallbackIndex.byName[name];
   if (!list) return [];
   return list.slice().sort(function (a, b) {
-    var aType = a['办学性质'] || '公办', bType = b['办学性质'] || '公办';
-    if (aType !== bType) return aType === '公办' ? -1 : 1;
+    var order = { '公办': 0, '民办': 1 };
+    var aType = a['办学性质'] || '未标注', bType = b['办学性质'] || '未标注';
+    if (aType !== bType) return (order[aType] ?? 2) - (order[bType] ?? 2);
     var aName = schoolName(a), bName = schoolName(b);
     if (aName !== bName) return aName.localeCompare(bName, 'zh-CN');
     return String(a['院校代号'] || '').localeCompare(String(b['院校代号'] || ''));
   });
+}
+
+export function getMasterRowsByYear(indexOrYear, yearOrMajor, maybeMajor) {
+  var hasIndex = indexOrYear && indexOrYear.fallbackByYear;
+  var index = hasIndex ? indexOrYear : activeIndex;
+  var year = hasIndex ? yearOrMajor : indexOrYear;
+  var major = hasIndex ? maybeMajor : yearOrMajor;
+  var source = index && index.fallbackByYear[year];
+  if (!source || !major) return [];
+  var code6 = normCode6(major['代码6位'] || major.disciplineCode6 || '');
+  return (code6 ? source.byCode[code6] : source.byName[normName(major['专业名称'] || major.majorName)]) || [];
 }
 
 export function getPlanStats(year) {

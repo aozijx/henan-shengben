@@ -1,4 +1,4 @@
-import { getCollegesByYear, getScore } from './data.js';
+import { getCollegesByYear, getMasterRowsByYear, getScore } from './data.js';
 import { enumOptions, getSelectableYears } from './metadata.js';
 import { createInitialState, reduceExplorerState, sanitizeNumberInput } from './explorer-state.js';
 import { buildPreviewRows, sortPreviewRows } from './pipeline.js';
@@ -51,9 +51,8 @@ export function buildExplorerControlsHtml(metadata, state) {
     '<section class="filter-panel" aria-label="筛选条件">' +
       '<div class="filter-group"><h3>筛选条件</h3><div class="filter-row">' +
         '<div class="filter-field"><span>年份</span><button type="button" data-filter-action="years" aria-haspopup="dialog" aria-label="选择展示年份，当前已选 ' + esc(fullYearLabel) + '">' + esc(yearLabel) + '</button></div>' +
-        enumControl(filterField(metadata, 'schoolType'), 'schoolType', state, unavailable) +
-        enumControl(filterField(metadata, 'povertyStatus'), 'povertyStatus', state, unavailable) +
-        enumControl(filterField(metadata, 'subject'), 'subject', state, unavailable) +
+        metadata.fields.filter(function (field) { return field.filterEnable && field.type === 'enum'; })
+          .map(function (field) { return enumControl(field, field.key, state, unavailable); }).join('') +
         minControl(filterField(metadata, 'schoolCount'), state, unavailable) +
       '</div></div>' +
       '<div class="filter-group filter-operations"><h3>筛选操作</h3><div class="filter-row">' +
@@ -121,12 +120,11 @@ function renderExplorerControls(root, metadata, state, dispatch) {
 /* ---------- 筛选联动结果区 ----------
    把筛选后的专业（保持原顺序）通知给上层，用于重渲染专业摘要；
    同时返回「筛选后 X / Y 个专业」的计数说明（未启用筛选时为 null）。 */
-function activeFilterNote(state) {
+function activeFilterNote(state, metadata) {
   var f = state.filters || {};
-  var active = (f.schoolType && f.schoolType !== '全部') ||
-    (f.povertyStatus && f.povertyStatus !== '全部') ||
-    (f.subject && f.subject !== '全部') ||
-    (f.schoolCount != null && f.schoolCount !== '');
+  var active = (metadata.fields || []).some(function (field) {
+    return field.filterEnable && f[field.key] != null && f[field.key] !== '' && f[field.key] !== '全部';
+  });
   if (!active) return null;
   return '筛选后 ' + state.rows.length + ' / ' + state.majors.length + ' 个专业';
 }
@@ -135,15 +133,16 @@ export function orderedMajorsFromRows(rows, majors) {
   return rows.map(function (row) { return majors[row.originalOrder]; });
 }
 
-function notifyFilteredResult(state, options) {
+function notifyFilteredResult(state, metadata, options) {
   if (typeof options.onFilteredResult !== 'function') return;
   var majors = orderedMajorsFromRows(state.rows, state.majors);
-  options.onFilteredResult(majors, state, activeFilterNote(state));
+  options.onFilteredResult(majors, state, activeFilterNote(state, metadata));
 }
 
 function recompute(state, metadata) {
   if (state.status !== 'ready' || !state.majors.length) return { ...state, rows: [], effectiveSchoolCount: 0 };
   var preview = buildPreviewRows({
+    metadata: metadata,
     majors: state.majors,
     years: state.selectedYears,
     filters: state.filters,
@@ -151,7 +150,8 @@ function recompute(state, metadata) {
       return [year, Boolean((metadata.sourceCatalog.plans || {})[year] || (metadata.yearSources || {})[year])];
     })),
     getScore: function (major, year) { return getScore(major, year); },
-    getPlans: function (major, year) { return getCollegesByYear(year, major); }
+    getPlans: function (major, year) { return getCollegesByYear(year, major); },
+    getMasters: function (major, year) { return getMasterRowsByYear(year, major); }
   });
   return {
     ...state,
@@ -188,7 +188,7 @@ export function initExplorer(root, metadata, options) {
     if (event.type === 'CLEAR_ALL') localStorage.removeItem(EXPLORER_STATE_KEY);
     state = recompute(state, metadata);
     renderExplorerControls(root, metadata, state, dispatch);
-    notifyFilteredResult(state, options);
+    notifyFilteredResult(state, metadata, options);
   }
   activeExplorer = {
     dispatch: dispatch,
@@ -206,7 +206,7 @@ export function initExplorer(root, metadata, options) {
     }
   );
   renderExplorerControls(root, metadata, state, dispatch);
-  notifyFilteredResult(state, options);
+  notifyFilteredResult(state, metadata, options);
   return activeExplorer;
 }
 

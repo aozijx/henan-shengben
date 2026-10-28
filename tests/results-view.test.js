@@ -119,6 +119,24 @@ test('a master-only college listing states that plan counts are unpublished', ()
   assert.doesNotMatch(html, /普通计划 0 人/);
 });
 
+test('school detail preserves master-table fields and distinguishes blank marks from a negative value', () => {
+  const school = { schoolName: '甲大学', schoolCode: '6001', schoolType: '公办',
+    planPublished: true, fallbackOnly: true, planEntries: [], masterEntries: [
+      { 院校代码: '10001', 专业代码: '130401', 专业名称: '美术学', 学制: '2年',
+        师范: '是', 艺术: '', 备注: '就读地点：主校区', 新增原表列: '原值' }
+    ] };
+  const html = buildSchoolDetailHtml(school, 2027);
+  assert.match(html, /10001/);
+  assert.match(html, /130401/);
+  assert.match(html, /师范/);
+  assert.match(html, /艺术/);
+  assert.match(html, /原表未标注/);
+  assert.match(html, /就读地点：主校区/);
+  assert.match(html, /新增原表列<\/dt><dd>原值/);
+  assert.match(html, /招生计划未单列/);
+  assert.doesNotMatch(html, /普通计划 0 人/);
+});
+
 test('result status helper distinguishes empty query filtered empty unpublished year and load failure', () => {
   const metadata = { supportedYears: [2026], latestYear: 2026 };
   assert.match(resultMessage({ status: 'idle' }, metadata), /输入专科专业/);

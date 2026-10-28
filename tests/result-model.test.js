@@ -48,3 +48,38 @@ test('a mapping-only major remains searchable while a poverty-only annual major 
     filters: { schoolType: '全部', povertyStatus: '否' } });
   assert.deepEqual(result.aggregates.map(item => item.major.majorName), ['新专业']);
 });
+
+test('master mark filters keep only schools with explicit source-table evidence', () => {
+  const metadata = { supportedYears: [2027], fields: [
+    { key: 'teacherTraining', sourceRole: 'colleges', sourceColumn: '师范', filterEnable: true },
+    { key: 'arts', sourceRole: 'colleges', sourceColumn: '艺术', filterEnable: true }
+  ] };
+  const aggregate = { major: { majorName: '美术学' }, years: { 2027: {
+    score: null, planPublished: false,
+    schools: [
+      { schoolName: '甲大学', schoolType: '未标注', fallbackOnly: true,
+        masterEntries: [{ 师范: '是', 艺术: '是' }], planEntries: [] },
+      { schoolName: '乙大学', schoolType: '未标注', fallbackOnly: true,
+        masterEntries: [{ 师范: '', 艺术: '' }], planEntries: [] }
+    ],
+    publicSummary: { schoolCount: 0 }, privateSummary: { schoolCount: 0 }
+  } } };
+  const result = buildResultModel({ aggregates: [aggregate], metadata,
+    selectedYears: [2027], filters: { arts: '是', povertyStatus: '否' } });
+  assert.deepEqual(result.aggregates[0].years[2027].schools.map((school) => school.schoolName), ['甲大学']);
+  const blank = buildResultModel({ aggregates: [aggregate], metadata,
+    selectedYears: [2027], filters: { teacherTraining: '未标注' } });
+  assert.deepEqual(blank.aggregates[0].years[2027].schools.map((school) => school.schoolName), ['乙大学']);
+});
+
+test('a published master-only school is not reported as a zero-person plan', () => {
+  const aggregate = { major: { majorName: '美术学' }, years: { 2026: {
+    planPublished: true, score: null, schools: [{ schoolName: '甲大学', schoolType: '未标注',
+      fallbackOnly: true, ordinaryPlanCount: 0, povertyPlanCount: 0, planEntries: [] }],
+    publicSummary: { schoolCount: 0 }, privateSummary: { schoolCount: 0 }
+  } } };
+  const result = buildResultModel({ aggregates: [aggregate], metadata: { supportedYears: [2026] },
+    selectedYears: [2026], filters: {} });
+  assert.equal(result.allRows[0].planCount2026, null);
+  assert.equal(result.allRows[0].planSplit2026, '未单列');
+});

@@ -55,3 +55,24 @@ test('resolves cumulative reference counts and score difference without inventin
     controlCumulativeCount: null
   });
 });
+
+test('attaches only exact master major and school records while keeping unmatched schools separate', () => {
+  const item = { ...major, disciplineCode6: '080902' };
+  const year = buildMajorAggregates({ majors: [item], years: [2027],
+    plansByYear: { 2027: [{ majorCode: '80', majorName: '软件工程', schoolCode: '6001',
+      schoolName: '甲大学', schoolType: '公办', povertyStatus: '否', planCount: 20 }] },
+    fallbacksByYear: { 2027: [
+      { 专业代码: '080902', 专业名称: '软件工程', 院校代号: '10001', 院校名称: '甲大学',
+        师范: '是', 艺术: '', 学制: '2年', 备注: '就读地点：主校区', 办学性质: '未标注' },
+      { 专业代码: '080902', 专业名称: '软件工程', 院校代号: '10002', 院校名称: '乙大学',
+        师范: '', 艺术: '是', 学制: '3年', 备注: '', 办学性质: '未标注' },
+      { 专业代码: '080903', 专业名称: '软件工程', 院校代号: '10003', 院校名称: '丙大学',
+        师范: '是', 艺术: '是', 学制: '2年', 备注: '', 办学性质: '未标注' }
+    ] }
+  })[0].years[2027];
+  assert.deepEqual(year.schools.map((school) => school.schoolName), ['甲大学', '乙大学']);
+  assert.equal(year.schools[0].masterEntries[0]['师范'], '是');
+  assert.equal(year.schools[0].ordinaryPlanCount, 20);
+  assert.equal(year.schools[1].fallbackOnly, true);
+  assert.equal(year.schools[1].masterEntries[0]['艺术'], '是');
+});

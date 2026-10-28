@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import { buildPreviewRows, sortPreviewRows } from '../js/pipeline.js';
 
 const years = [2024, 2025, 2026];
+const markMetadata = { fields: [
+  { key: 'teacherTraining', sourceRole: 'colleges', sourceColumn: '师范', filterEnable: true },
+  { key: 'arts', sourceRole: 'colleges', sourceColumn: '艺术', filterEnable: true }
+] };
 
 const majors = [
   { 专业名称: '软件工程', 专业代号: '80', 考试科目: '高等数学' },
@@ -145,6 +149,65 @@ test('a searchable mapping major with no published annual plan remains visible',
   });
   assert.equal(result.rows.length, 1);
   assert.equal(result.rows[0].schoolCount2026, 0);
+});
+
+test('art and teacher filters use only master-table marks and never infer them from names', () => {
+  const major = { 专业名称: '美术学', 专业代号: 'E3', 代码6位: '130401', 考试科目: '美术专业综合' };
+  const plans = [
+    { 院校名称: '甲大学', 院校代号: '6001', 办学性质: '公办', 建档立卡: '否', 计划人数: 20 },
+    { 院校名称: '乙大学', 院校代号: '6002', 办学性质: '公办', 建档立卡: '否', 计划人数: 10 }
+  ];
+  const masters = [
+    { 学校名称: '甲大学', 专业代码: '130401', 专业名称: '美术学', 师范: '是', 艺术: '是' },
+    { 学校名称: '乙大学', 专业代码: '130401', 专业名称: '美术学', 师范: '', 艺术: '' }
+  ];
+  const input = { metadata: markMetadata, majors: [major], years: [2027], getScore: () => null,
+    getPlans: () => plans, getMasters: () => masters };
+  const art = buildPreviewRows({ ...input, filters: { arts: '是' } });
+  assert.equal(art.rows[0].schoolCount2027, 1);
+  assert.equal(art.rows[0].planCount2027, 20);
+  const teacher = buildPreviewRows({ ...input, filters: { teacherTraining: '是' } });
+  assert.equal(teacher.rows[0].schoolCount2027, 1);
+  const blank = buildPreviewRows({ ...input, filters: { arts: '未标注' } });
+  assert.equal(blank.rows[0].planCount2027, 10);
+});
+
+test('master-only school remains visible beside a separately published plan', () => {
+  const major = { 专业名称: '美术学', 专业代号: 'E3', 代码6位: '130401' };
+  const result = buildPreviewRows({ metadata: markMetadata, majors: [major], years: [2027], filters: { arts: '是' },
+    getScore: () => null,
+    getPlans: () => [{ 院校名称: '甲大学', 院校代号: '6001', 办学性质: '公办', 建档立卡: '否', 计划人数: 20 }],
+    getMasters: () => [
+      { 学校名称: '甲大学', 院校代码: '10001', 专业代码: '130401', 艺术: '是' },
+      { 学校名称: '乙大学', 院校代码: '10002', 专业代码: '130401', 艺术: '是' }
+    ] });
+  assert.equal(result.rows[0].schoolCount2027, 2);
+  assert.equal(result.rows[0].planCount2027, 20);
+  assert.match(result.rows[0].planSplit2027, /未单列/);
+});
+
+test('a master-only school has no published numeric plan total', () => {
+  const major = { 专业名称: '美术学', 专业代号: 'E3', 代码6位: '130401' };
+  const result = buildPreviewRows({ metadata: markMetadata, majors: [major], years: [2026],
+    filters: { arts: '是' }, planPublishedByYear: { 2026: true }, getScore: () => null,
+    getPlans: () => [], getMasters: () => [
+      { 学校名称: '甲大学', 院校代码: '10001', 专业代码: '130401', 艺术: '是' }
+    ] });
+  assert.equal(result.rows[0].schoolCount2026, 1);
+  assert.equal(result.rows[0].planCount2026, null);
+  assert.equal(result.rows[0].planSplit2026, '未单列');
+});
+
+test('a new master-column filter works from metadata without code-specific branching', () => {
+  const metadata = { fields: [{ key: 'industry', sourceRole: 'colleges', sourceColumn: '产教融合',
+    type: 'enum', filterEnable: true, enumValues: ['是', '未标注'] }] };
+  const major = { 专业名称: '软件工程', 专业代号: '51', 代码6位: '080902' };
+  const result = buildPreviewRows({ metadata, majors: [major], years: [2027], filters: { industry: '是' },
+    getScore: () => null,
+    getPlans: () => [{ 院校名称: '甲大学', 院校代号: '6001', 办学性质: '公办', 计划人数: 10 },
+      { 院校名称: '乙大学', 院校代号: '6002', 办学性质: '公办', 计划人数: 20 }],
+    getMasters: () => [{ 学校名称: '甲大学', 专业代码: '080902', 产教融合: '是' }] });
+  assert.equal(result.rows[0].planCount2027, 10);
 });
 
 test('splits school counts and plan totals into public/private as pub/min text', () => {

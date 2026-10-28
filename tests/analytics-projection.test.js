@@ -55,3 +55,24 @@ test('two named majors sharing one code keep separate analytics rows', () => {
   assert.deepEqual(view.majors.map((row) => [row.majorName, row.years[2027].planCount]),
     [['会计学', 20], ['财务管理', 30]]);
 });
+
+test('master mark filtering counts only exactly matched schools and never treats blank as no', () => {
+  const metadata = { fields: [{ key: 'arts', sourceRole: 'colleges', sourceColumn: '艺术', filterEnable: true }] };
+  const major = { '专业代号': '51', '代码6位': '080901', '专业名称': '软件工程' };
+  const schoolTypes = { public: { schools: [
+    { schoolName: '甲大学', ordinaryPlanCount: 20, povertyPlanCount: 2 },
+    { schoolName: '乙大学', ordinaryPlanCount: 30, povertyPlanCount: 0 }
+  ] } };
+  const annual = { 2027: { majors: [{ majorCode: '51', majorName: '软件工程', schoolTypes }] } };
+  const masters = { 2027: [
+    { '学校名称': '甲大学', '专业代码': '080901', '艺术': '是', '师范': '' },
+    { '学校名称': '乙大学', '专业代码': '080901', '艺术': '', '师范': '' },
+    { '学校名称': '乙大学', '专业代码': '999999', '艺术': '是', '师范': '' }
+  ] };
+  const mapping = [{ '可报本科专业': [major] }];
+  const arts = projectAnalytics(annual, mapping, [2027], { arts: '是', povertyStatus: '否' }, null, masters, metadata);
+  assert.equal(arts.majors[0].years[2027].schoolCount, 1);
+  assert.equal(arts.majors[0].years[2027].planCount, 20);
+  const blank = projectAnalytics(annual, mapping, [2027], { arts: '未标注' }, null, masters, metadata);
+  assert.equal(blank.majors[0].years[2027].planCount, 30);
+});

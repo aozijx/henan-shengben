@@ -44,6 +44,12 @@ export function createDataRepository(metadata, fetchImpl) {
             planPublished: Boolean(planPath), scorePublished: Boolean(scorePath) };
         });
     },
+    ensureCollegeMaster: function (year) {
+      var catalog = metadata.sourceCatalog || {};
+      var annual = metadata.yearSources && metadata.yearSources[year] || {};
+      var path = catalog.colleges && catalog.colleges[year] || annual.collegeFallbackSource;
+      return path ? load(path) : Promise.resolve([]);
+    },
     ensureMapping: function (year) { return load(sourceFor(metadata, year, 'mappingSource')); },
     ensureScores: function (year) { return load(sourceFor(metadata, year, 'scoreSource')); },
     ensurePlans: function (year) { return load(sourceFor(metadata, year, 'planSource')); },

@@ -39,3 +39,10 @@ test('more than three selected years use a compact label but keep the full acces
   assert.match(html, /aria-label="选择展示年份，当前已选 2023、2024、2026、2027"/);
   assert.match(html, /value="2027" checked/);
 });
+
+test('enum filters are rendered from metadata field definitions', () => {
+  const metadata = { supportedYears: [2027], fields: [{ key: 'industry', label: '产教融合',
+    type: 'enum', enumValues: ['是', '未标注'], filterEnable: true }] };
+  const state = { status: 'ready', majors: [{}], filters: { industry: '是' }, selectedYears: [2027] };
+  assert.match(buildExplorerControlsHtml(metadata, state), /data-filter="industry"[\s\S]*value="是" selected/);
+});

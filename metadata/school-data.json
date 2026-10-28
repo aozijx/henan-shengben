@@ -71,6 +71,38 @@
       "exportEnable": false
     },
     {
+      "key": "teacherTraining",
+      "label": "师范标记",
+      "exportLabel": "师范标记筛选",
+      "type": "enum",
+      "enumValues": [
+        "是",
+        "未标注"
+      ],
+      "sourceRole": "colleges",
+      "sourceColumn": "师范",
+      "filterEnable": true,
+      "sortEnable": false,
+      "tableShow": false,
+      "exportEnable": false
+    },
+    {
+      "key": "arts",
+      "label": "艺术标记",
+      "exportLabel": "艺术标记筛选",
+      "type": "enum",
+      "enumValues": [
+        "是",
+        "未标注"
+      ],
+      "sourceRole": "colleges",
+      "sourceColumn": "艺术",
+      "filterEnable": true,
+      "sortEnable": false,
+      "tableShow": false,
+      "exportEnable": false
+    },
+    {
       "key": "subject",
       "label": "专业基础课",
       "exportLabel": "专业基础课",

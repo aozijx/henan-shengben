@@ -1,8 +1,11 @@
 import { selectMajorRows } from './major-match.js';
+import { hasMasterMarkFilter, masterEvidenceForSchool } from './master-flags.js';
+import { normCode6 } from './utils.js';
+import { excludesPovertyPlans } from './plan-filter.js';
 
 function code(value) { return String(value == null ? '' : value).trim(); }
 
-export function projectAnalytics(analyticsByYear, mapping, selectedYears, filters, candidateMajors) {
+export function projectAnalytics(analyticsByYear, mapping, selectedYears, filters, candidateMajors, masterByYear, metadata) {
   var years = (selectedYears || []).slice().sort(function (a, b) { return a - b; });
   var focusYear = years[years.length - 1] || null;
   var options = new Map();
@@ -24,6 +27,10 @@ export function projectAnalytics(analyticsByYear, mapping, selectedYears, filter
         function (item) { return item.majorCode; },
         function (item) { return item.majorName; })[0];
       if (!found) { values[year] = null; return; }
+      var majorMasters = (masterByYear && masterByYear[year] || []).filter(function (row) {
+        var code6 = normCode6(major['代码6位']);
+        return code6 ? normCode6(row['专业代码']) === code6 : code(row['专业名称']) === code(major['专业名称']);
+      });
       var types = found.schoolTypes || {};
       var included = filters && filters.schoolType === '公办' ? ['public']
         : filters && filters.schoolType === '民办' ? ['private'] : ['public', 'private'];
@@ -31,20 +38,32 @@ export function projectAnalytics(analyticsByYear, mapping, selectedYears, filter
       var splits = {};
       included.forEach(function (type) {
         var part = types[type] || {};
-        var ordinarySchoolCount = Array.isArray(part.schools)
-          ? part.schools.filter(function (school) { return Number(school.ordinaryPlanCount) > 0; }).length
+        var markedSchools = hasMasterMarkFilter(filters, metadata)
+          ? (Array.isArray(part.schools) ? part.schools : []).filter(function (school) {
+            return masterEvidenceForSchool(majorMasters, school.schoolName, filters, metadata);
+          }) : null;
+        var sourceSchools = markedSchools || part.schools;
+        var ordinarySchoolCount = Array.isArray(sourceSchools)
+          ? sourceSchools.filter(function (school) { return Number(school.ordinaryPlanCount) > 0; }).length
           : (part.ordinarySchoolCount || 0);
-        var count = filters && filters.povertyStatus === '否' ? ordinarySchoolCount : (part.allSchoolCount || 0);
+        var count = excludesPovertyPlans(filters) ? ordinarySchoolCount :
+          markedSchools ? markedSchools.length : (part.allSchoolCount || 0);
+        var ordinaryCount = markedSchools ? markedSchools.reduce(function (sum, school) {
+          return sum + (Number(school.ordinaryPlanCount) || 0);
+        }, 0) : (part.ordinaryPlanCount || 0);
+        var povertyCount = markedSchools ? markedSchools.reduce(function (sum, school) {
+          return sum + (Number(school.povertyPlanCount) || 0);
+        }, 0) : (part.povertyPlanCount || 0);
         schools += count;
-        splits[type] = { schoolCount: count, ordinaryPlanCount: part.ordinaryPlanCount || 0,
-          povertyPlanCount: filters && filters.povertyStatus === '否' ? 0 : (part.povertyPlanCount || 0) };
-        ordinary += part.ordinaryPlanCount || 0;
-        poverty += part.povertyPlanCount || 0;
+        splits[type] = { schoolCount: count, ordinaryPlanCount: ordinaryCount,
+          povertyPlanCount: excludesPovertyPlans(filters) ? 0 : povertyCount };
+        ordinary += ordinaryCount;
+        poverty += povertyCount;
       });
-      plans = ordinary + (filters && filters.povertyStatus === '否' ? 0 : poverty);
+      plans = ordinary + (excludesPovertyPlans(filters) ? 0 : poverty);
       var score = found.controlScore;
       values[year] = { score: score, schoolCount: schools, planCount: plans,
-        ordinaryPlanCount: ordinary, povertyPlanCount: filters && filters.povertyStatus === '否' ? 0 : poverty,
+        ordinaryPlanCount: ordinary, povertyPlanCount: excludesPovertyPlans(filters) ? 0 : poverty,
         schoolTypes: splits };
       if (schools > 0) present = true;
     });

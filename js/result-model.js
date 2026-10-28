@@ -1,13 +1,16 @@
 import { getFocusYear, normalizeSelectedYears } from './metadata.js';
 import { sortPreviewRows } from './pipeline.js';
+import { hasMasterMarkFilter, matchesMasterMarks } from './master-flags.js';
+import { excludesPovertyPlans, matchesSchoolType, isPovertyPlan } from './plan-filter.js';
 
 function numberOrNull(value) {
+  if (value == null || value === '') return null;
   var number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
 
 function summaryFor(schools, type) {
-  return (schools || []).filter(function (school) { return (school.schoolType || '公办') === type; })
+  return (schools || []).filter(function (school) { return school.schoolType === type; })
     .reduce(function (summary, school) {
       summary.schoolCount += 1;
       summary.ordinaryPlanCount += Number(school.ordinaryPlanCount) || 0;
@@ -16,30 +19,31 @@ function summaryFor(schools, type) {
     }, { schoolCount: 0, ordinaryPlanCount: 0, povertyPlanCount: 0 });
 }
 
-function isPovertyPlan(entry) {
-  return entry && (entry.povertyStatus === '是' || entry['建档立卡'] === '是' || /建档立卡/.test(String(entry.admissionCategory || entry['招生类别'] || '')));
-}
-
 function planCount(entry) {
   return Number(entry && (entry.planCount == null ? entry['计划人数'] : entry.planCount)) || 0;
 }
 
-export function filterYear(yearAggregate, filters) {
+export function filterYear(yearAggregate, filters, metadata) {
   if ((!filters.schoolType || filters.schoolType === '全部') &&
-      (!filters.povertyStatus || filters.povertyStatus === '全部')) return yearAggregate;
+      (!filters.povertyStatus || filters.povertyStatus === '全部') &&
+      !hasMasterMarkFilter(filters, metadata)) return yearAggregate;
   var schools = (yearAggregate && yearAggregate.schools || []).map(function (school) {
-    if (filters.schoolType && filters.schoolType !== '全部' && school.schoolType !== filters.schoolType) return false;
+    if (!matchesSchoolType(school.schoolType, filters)) return false;
+    if (hasMasterMarkFilter(filters, metadata) && !(school.masterEntries || []).some(function (row) {
+      return matchesMasterMarks(row, filters, metadata);
+    })) return false;
     var entries = Array.isArray(school.planEntries) ? school.planEntries : [];
-    var visibleEntries = filters.povertyStatus === '否' ? entries.filter(function (entry) { return !isPovertyPlan(entry); }) : entries;
+    var visibleEntries = excludesPovertyPlans(filters) ? entries.filter(function (entry) { return !isPovertyPlan(entry); }) : entries;
     var ordinaryPlanCount = visibleEntries.length
       ? visibleEntries.reduce(function (sum, entry) { return sum + (isPovertyPlan(entry) ? 0 : planCount(entry)); }, 0)
       : Number(school.ordinaryPlanCount) || 0;
-    if (filters.povertyStatus === '否' && ordinaryPlanCount <= 0 && yearAggregate.planPublished !== false) return false;
+    if (excludesPovertyPlans(filters) && ordinaryPlanCount <= 0 && !school.fallbackOnly &&
+        yearAggregate.planPublished !== false) return false;
     return {
       ...school,
       planEntries: visibleEntries,
       ordinaryPlanCount: ordinaryPlanCount,
-      povertyPlanCount: visibleEntries.length ? visibleEntries.filter(isPovertyPlan).reduce(function (sum, entry) { return sum + planCount(entry); }, 0) : (filters.povertyStatus === '否' ? 0 : Number(school.povertyPlanCount) || 0)
+      povertyPlanCount: visibleEntries.length ? visibleEntries.filter(isPovertyPlan).reduce(function (sum, entry) { return sum + planCount(entry); }, 0) : (excludesPovertyPlans(filters) ? 0 : Number(school.povertyPlanCount) || 0)
     };
   }).filter(Boolean);
   return {
@@ -85,19 +89,26 @@ function projectAggregate(aggregate, years) {
     var priv = value.privateSummary || {};
     var publicSchools = pub.schoolCount || 0;
     var privateSchools = priv.schoolCount || 0;
+    var unclassifiedSchools = Math.max(0, value.schools.length - publicSchools - privateSchools);
     var publicPlan = pub.ordinaryPlanCount || 0;
     var privatePlan = priv.ordinaryPlanCount || 0;
     var publicPoverty = pub.povertyPlanCount || 0;
     var privatePoverty = priv.povertyPlanCount || 0;
+    var listedPlans = value.schools.some(function (school) { return !school.fallbackOnly; });
+    var unlistedMaster = value.schools.some(function (school) { return school.fallbackOnly; });
     row['score' + year] = value.score == null ? null : Number(value.score);
     row['publicSchoolCount' + year] = publicSchools;
     row['privateSchoolCount' + year] = privateSchools;
+    row['unclassifiedSchoolCount' + year] = unclassifiedSchools;
     row['schoolCount' + year] = value.schools.length;
-    row['schoolSplit' + year] = publicSchools + '/' + privateSchools;
-    row['planCount' + year] = value.planPublished === false ? null : publicPlan + privatePlan;
-    row['povertyPlanCount' + year] = value.planPublished === false ? null : publicPoverty + privatePoverty;
-    row['planSplit' + year] = value.planPublished === false ? '未公布' : publicPlan + '/' + privatePlan;
-    row['povertyPlanSplit' + year] = value.planPublished === false ? '未公布' : publicPoverty + '/' + privatePoverty;
+    row['schoolSplit' + year] = publicSchools + '/' + privateSchools +
+      (unclassifiedSchools ? ' · 未标注 ' + unclassifiedSchools : '');
+    row['planCount' + year] = value.planPublished === false || !listedPlans ? null : publicPlan + privatePlan;
+    row['povertyPlanCount' + year] = value.planPublished === false || !listedPlans ? null : publicPoverty + privatePoverty;
+    row['planSplit' + year] = value.planPublished === false ? '未公布' : !listedPlans ? '未单列' :
+      publicPlan + '/' + privatePlan + (unlistedMaster ? ' · 其余未单列' : '');
+    row['povertyPlanSplit' + year] = value.planPublished === false ? '未公布' : !listedPlans ? '未单列' :
+      publicPoverty + '/' + privatePoverty + (unlistedMaster ? ' · 其余未单列' : '');
   });
   return row;
 }
@@ -112,7 +123,7 @@ export function buildResultModel(input) {
       return (((aggregate.years || {})[year] || {}).schools || []).length > 0;
     });
     selectedYears.forEach(function (year) {
-      years[year] = filterYear((aggregate.years || {})[year] || { score: null, schools: [] }, filters);
+      years[year] = filterYear((aggregate.years || {})[year] || { score: null, schools: [] }, filters, metadata);
     });
     return { ...aggregate, hadSchools: hadSchools,
       originalOrder: aggregate.originalOrder == null ? originalOrder : aggregate.originalOrder, years: years };
@@ -122,6 +133,7 @@ export function buildResultModel(input) {
     if (aggregate.hadSchools) return false;
     return (!filters.schoolType || filters.schoolType === '全部') &&
       (!filters.povertyStatus || filters.povertyStatus === '全部' || filters.povertyStatus === '否') &&
+      !hasMasterMarkFilter(filters, metadata) &&
       (filters.schoolCount == null || filters.schoolCount === '') &&
       (filters.scoreMin == null || filters.scoreMin === '') &&
       (filters.scoreMax == null || filters.scoreMax === '');

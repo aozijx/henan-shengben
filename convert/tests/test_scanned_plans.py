@@ -51,6 +51,14 @@ class ScannedPlanTableTests(unittest.TestCase):
         self.assertEqual([row['其他说明'] for row in plans], ['', '说明'])
         self.assertEqual([row['咨询电话'] for row in plans], ['电话', '电话'])
 
+    def test_blank_plan_cost_and_duration_are_not_invented_as_zero(self):
+        row = ['17', '学前教育', '10', '', '', '', '6086', '某大学', '地址', '电话', '网址']
+        with patch('convert.sources.tables_of', return_value=[[row]]):
+            plans = extract_plans(Path('unused.pdf'), 2023)
+        self.assertIsNone(plans[0]['学制'])
+        self.assertIsNone(plans[0]['学费标准'])
+        self.assertIsNone(plans[0]['最低住宿费'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,6 @@
 import { selectMajorRows } from './major-match.js';
 import { admissionSchoolKey } from './utils.js';
+import { isPovertyPlan } from './plan-filter.js';
 
 function numberOrNull(value) {
   if (value == null || value === '') return null;
@@ -38,6 +39,15 @@ function planRowsForMajor(collection, year, major) {
     function (row) { return row.majorName == null ? row['专业名称'] : row.majorName; });
 }
 
+function masterRowsForMajor(collection, year, major) {
+  var rows = valuesForYear(collection, year);
+  var code6 = codeOf(major.disciplineCode6);
+  if (code6) {
+    return rows.filter(function (row) { return codeOf(row['专业代码']) === code6; });
+  }
+  return planRowsForMajor(collection, year, major);
+}
+
 function cumulativeAt(series, target) {
   if (!series || target == null || !Array.isArray(series.segments) || !series.segments.length) return null;
   var sorted = series.segments.slice().sort(function (a, b) { return Number(b.score) - Number(a.score); });
@@ -64,7 +74,7 @@ export function resolveScoreContext(series, score, controlScore) {
 }
 
 function schoolType(row) {
-  return String(row.schoolType || row['办学性质'] || '公办').trim() || '公办';
+  return String(row.schoolType || row['办学性质'] || '未标注').trim() || '未标注';
 }
 
 function createSchool(row) {
@@ -76,6 +86,7 @@ function createSchool(row) {
     ordinaryPlanCount: 0,
     povertyPlanCount: 0,
     planEntries: [],
+    masterEntries: [],
     fallbackOnly: true
   };
 }
@@ -83,14 +94,24 @@ function createSchool(row) {
 function addSchool(schools, row, isFallback) {
   var identity = admissionSchoolKey(row);
   if (!identity) return;
+  if (isFallback) {
+    var name = String(row.schoolName || row['院校名称'] || '').trim();
+    var planSchools = Array.from(schools.values()).filter(function (school) {
+      return !school.fallbackOnly && school.schoolName === name;
+    });
+    if (planSchools.length) {
+      planSchools.forEach(function (school) { school.masterEntries.push(row); });
+      return;
+    }
+  }
   var school = schools.get(identity);
   if (!school) {
     school = createSchool(row);
     schools.set(identity, school);
   }
-  if (isFallback) return;
+  if (isFallback) { school.masterEntries.push(row); return; }
   var count = numberOrNull(row.planCount == null ? row['计划人数'] : row.planCount) || 0;
-  var poverty = row.povertyStatus === '是' || row['建档立卡'] === '是' || /建档立卡/.test(String(row.admissionCategory || row['招生类别'] || ''));
+  var poverty = isPovertyPlan(row);
   if (poverty) school.povertyPlanCount += count;
   else school.ordinaryPlanCount += count;
   school.planEntries.push(row);
@@ -116,7 +137,7 @@ export function buildMajorAggregates(input) {
     var aggregate = { major: major, originalOrder: originalOrder, years: {} };
     years.forEach(function (year) {
       var planRows = planRowsForMajor(input.plansByYear, year, major);
-      var fallbackRows = planRowsForMajor(input.fallbacksByYear, year, major);
+      var fallbackRows = masterRowsForMajor(input.fallbacksByYear, year, major);
       var scoreRow = valuesForYear(input.scoresByYear, year).find(function (row) { return belongsToMajor(row, major); }) || null;
       var series = valuesForYear(input.segmentsByYear, year).find(function (row) { return belongsToMajor(row, major); }) || null;
       var schools = new Map();

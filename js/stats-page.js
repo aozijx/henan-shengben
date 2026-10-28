@@ -3,6 +3,7 @@ import { buildCurve, lookupScoreSegmentCode } from './score-curves.js';
 import { esc } from './utils.js';
 import { buildPaginationHtml, paginate } from './preview.js';
 import { hiddenResultFields, resultFieldVisible } from './result-visibility.js';
+import { hasMasterMarkFilter } from './master-flags.js';
 import { chartPalette } from './theme.js';
 
 var chartInstances = {};
@@ -224,11 +225,14 @@ export async function renderStatsPage(repository, metadata, state, mapping) {
       return;
     }
     cards.forEach(function (card) { card.hidden = false; });
-    var documents = await Promise.all(years.map(function (year) { return repository.ensureAnalytics(year); }));
+    var documents = await Promise.all(years.map(function (year) {
+      return Promise.all([repository.ensureAnalytics(year), repository.ensureCollegeMaster(year)]);
+    }));
     if (token !== pageGeneration) return;
-    var analytics = Object.fromEntries(years.map(function (year, index) { return [year, documents[index]]; }));
+    var analytics = Object.fromEntries(years.map(function (year, index) { return [year, documents[index][0]]; }));
+    var masters = Object.fromEntries(years.map(function (year, index) { return [year, documents[index][1]]; }));
     var projection = projectAnalytics(analytics, mapping, years, state.filters,
-      state.specName ? state.majors : null);
+      state.specName ? state.majors : null, masters, metadata);
     document.querySelectorAll('[data-stats-focus-year]').forEach(function (node) {
       node.textContent = String(projection.focusYear || '最新');
     });
@@ -237,10 +241,17 @@ export async function renderStatsPage(repository, metadata, state, mapping) {
     selectedCodes.forEach(function (code) { if (!allowed.has(code)) { selectedCodes.delete(code); removed += 1; } });
     context = { projection, repository };
     var hiddenFields = hiddenResultFields(metadata, state.filters);
-    document.getElementById('stats-context').textContent = '年份：' + projection.years.join('、') + ' · 办学性质：' + state.filters.schoolType +
-      ' · 建档立卡：' + state.filters.povertyStatus + ' · 专业基础课：' + state.filters.subject + ' · ' + projection.majors.length + ' 个专业';
-    status.textContent = removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' :
-      (years.length < state.selectedYears.length ? '部分年份的分数统计尚未公布。' : '');
+    var filterLabels = metadata.fields.filter(function (field) {
+      return field.filterEnable && field.type === 'enum';
+    }).map(function (field) {
+      return field.label + '：' + (state.filters[field.key] || '全部');
+    });
+    document.getElementById('stats-context').textContent = ['年份：' + projection.years.join('、')]
+      .concat(filterLabels, [projection.majors.length + ' 个专业']).join(' · ');
+    status.textContent = [removed ? '条件变化，已取消 ' + removed + ' 个专业的勾选。' : '',
+      years.length < state.selectedYears.length ? '部分年份的分数统计尚未公布。' : '',
+      hasMasterMarkFilter(state.filters, metadata) ? '统计人数只计已单列招生计划；总表未单列院校见查询结果。' : '']
+      .filter(Boolean).join(' ');
     summary(projection, hiddenFields); renderTable(projection, metadata, hiddenFields); choices(projection, hiddenFields); renderCurves();
   } catch (error) { if (token === pageGeneration) status.textContent = '统计加载失败：' + error.message; }
 }

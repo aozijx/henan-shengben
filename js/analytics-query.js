@@ -36,17 +36,17 @@ export function queryRowsFromPublishedSources(analyticsByYear, collegeByYear, ye
   result.planPublishedByYear = {};
   result.scorePublishedByYear = {};
   (years || []).forEach(function (year) {
+    var source = collegeByYear[year] || { plans: [], colleges: [], planPublished: false };
+    result.fallbacksByYear[year] = (source.colleges || []).map(function (row) {
+      return normalizeCollegeMasterRow(row, Boolean(analyticsByYear[year]) || source.planPublished);
+    });
     if (analyticsByYear[year]) {
       result.planPublishedByYear[year] = true;
       result.scorePublishedByYear[year] = true;
       return;
     }
-    var source = collegeByYear[year] || { plans: [], colleges: [], planPublished: false };
     result.scoresByYear[year] = source.scores || [];
     result.plansByYear[year] = source.plans;
-    result.fallbacksByYear[year] = source.colleges.map(function (row) {
-      return normalizeCollegeMasterRow(row, source.planPublished);
-    });
     result.planPublishedByYear[year] = source.planPublished;
     result.scorePublishedByYear[year] = source.scorePublished === true;
   });

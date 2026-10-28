@@ -20,6 +20,12 @@ test('normalizes plan entries and preserves missing values as null', () => {
   assert.equal(plan.tuition, null);
 });
 
+test('plan normalization does not infer art or teacher status from a major name', () => {
+  const plan = normalizePlanEntry({ 专业名称: '美术学(师范)', 院校名称: '甲大学' });
+  assert.equal(Object.hasOwn(plan, 'arts'), false);
+  assert.equal(Object.hasOwn(plan, 'teacherTraining'), false);
+});
+
 test('normalizes score segment series without inventing missing values', () => {
   const series = normalizeScoreSegmentSeries({ year: 2027, majorCode: '52', majorName: '软件工程', sourceId: 'official', segments: [{ score: 200, cumulativeCount: 1 }] });
   assert.deepEqual(series.segments, [{ score: 200, cumulativeCount: 1 }]);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { queryRowsFromAnalytics } from '../js/analytics-query.js';
+import { queryRowsFromAnalytics, queryRowsFromPublishedSources } from '../js/analytics-query.js';
 import { buildPreviewRows } from '../js/pipeline.js';
 import { selectMajorRows } from '../js/major-match.js';
 import { readFileSync } from 'node:fs';
@@ -9,6 +9,13 @@ import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 function read(relative) { return JSON.parse(readFileSync(join(root, relative), 'utf8')); }
+
+test('published analytics retains exact college master fields for filters and details', () => {
+  const master = { '学校名称': '甲大学', '专业代码': '080901', '专业名称': '软件工程', '师范': '', '艺术': '是' };
+  const result = queryRowsFromPublishedSources({ 2027: { majors: [] } }, { 2027: { colleges: [master] } }, [2027]);
+  assert.equal(result.fallbacksByYear[2027].length, 1);
+  assert.equal(result.fallbacksByYear[2027][0]['艺术'], '是');
+});
 
 test('annual summaries drive preview totals and deduplicated school count', () => {
   const major = { '专业代号': '51', '专业名称': '软件工程', '考试科目': '高等数学' };

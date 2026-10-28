@@ -64,7 +64,6 @@ function createAggregateRenderer(loaded) {
           }),
           years: years,
           plansByYear: data.normalizedPlansForYears(summaryStore, years),
-          fallbacksByYear: summaryStore.fallbacksByYear,
           planPublishedByYear: summaryStore.planPublishedByYear,
           scorePublishedByYear: summaryStore.scorePublishedByYear,
           scoresByYear: summaryStore.scoresByYear,
@@ -124,7 +123,7 @@ function createAggregateRenderer(loaded) {
                 extra.schools = extra.schools.map(function (school) {
                   return { ...school, planPublished: source.planPublished };
                 });
-                detail.years[year] = filterYear(extra, state && state.filters || {});
+                detail.years[year] = filterYear(extra, state && state.filters || {}, loaded.metadata);
               });
               return { html: buildExpandedMajorHtml(detail, selected, hiddenFields, schoolYears) };
             }).catch(function (error) { return { error: error.message }; });
@@ -303,7 +302,8 @@ bootstrapData('metadata/school-data.json').then(function (loaded) {
     setResultState($result, '正在读取所选年份的统计摘要…', 'loading');
     Promise.all(selectedYears.map(function (year) {
       return loaded.metadata.yearSources[year]
-        ? loaded.repository.ensureAnalytics(year).then(function (document) { return { analytics: document }; })
+        ? Promise.all([loaded.repository.ensureAnalytics(year), loaded.repository.ensureCollegeMaster(year)])
+          .then(function ([analytics, colleges]) { return { analytics: analytics, college: { colleges: colleges } }; })
         : loaded.repository.ensureCollegeYear(year).then(function (source) { return { college: source }; });
     })).then(function (documents) {
       var currentState = explorerController.getState();

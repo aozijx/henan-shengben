@@ -4,6 +4,7 @@ import {
   buildIndexes,
   createLazyStore,
   getCollegesByYear,
+  getMasterRowsByYear,
   getMappingByYear,
   getScore,
   getScoreIndex,
@@ -185,4 +186,22 @@ test('preserves the 99 to A1 professional-code alias', async () => {
   const index = buildIndexes(store, metadata2027());
 
   assert.equal(getCollegesByYear(index, 2027, { 专业名称: '财务管理', 专业代号: '99' })[0].院校名称, '财经学院');
+});
+
+test('master lookup requires the published six-digit major code when available', () => {
+  const store = { years: [2027], scoresByYear: {}, plansByYear: {}, fallbacksByYear: {
+    2027: [
+      { 专业代码: '130401', 专业名称: '美术学', 学校名称: '甲大学', 艺术: '是' },
+      { 专业代码: '130402', 专业名称: '美术学', 学校名称: '乙大学', 艺术: '是' }
+    ]
+  } };
+  const index = buildIndexes(store, { supportedYears: [2027] });
+  assert.deepEqual(getMasterRowsByYear(index, 2027, { 专业名称: '美术学', 代码6位: '130401' })
+    .map((row) => row.学校名称), ['甲大学']);
+  assert.deepEqual(getMasterRowsByYear(index, 2027, { 专业名称: '美术学', 代码6位: '130499' }), []);
+});
+
+test('score lookup does not assign a merged-name score by substring', () => {
+  const index = { scoreByYear: { 2027: { '51': { name: '软件工程（含方向）', score: 180 } } } };
+  assert.equal(getScore(index, { 专业代号: '52', 专业名称: '软件工程' }, 2027), null);
 });

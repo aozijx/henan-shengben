@@ -34,8 +34,14 @@ export function buildYearAdmissionsHtml(yearAggregate, hiddenFields, compact) {
     var count = (yearAggregate.schools || []).length;
     return '<span class="year-unpublished">' + (count ? count + ' 所院校 · ' : '') + '招生计划人数未公布</span>';
   }
+  var unclassified = (yearAggregate.schools || []).filter(function (school) {
+    return school.schoolType !== '公办' && school.schoolType !== '民办';
+  }).length;
+  var unlisted = (yearAggregate.schools || []).filter(function (school) { return school.fallbackOnly; }).length;
   return summaryPart('公办', yearAggregate.publicSummary, hiddenFields, compact) +
-    summaryPart('民办', yearAggregate.privateSummary, hiddenFields, compact);
+    summaryPart('民办', yearAggregate.privateSummary, hiddenFields, compact) +
+    (unclassified ? '<span class="year-kind">办学性质未标注 ' + unclassified + ' 所</span>' : '') +
+    (unlisted ? '<span class="year-kind">另有 ' + unlisted + ' 所计划未单列</span>' : '');
 }
 
 function planRecordHtml(entry) {
@@ -59,21 +65,32 @@ function planRecordHtml(entry) {
     '</dl></section>';
 }
 
+function masterRecordHtml(row) {
+  var fields = Object.entries(row).filter(function ([key]) {
+    return !key.startsWith('_') &&
+      !(key === '院校名称' && Object.hasOwn(row, '学校名称')) &&
+      !(key === '院校代号' && Object.hasOwn(row, '院校代码'));
+  });
+  return '<section class="school-plan-record school-master-record"><div class="school-plan-record-title">招生高校及专业总表</div>' +
+    '<dl>' + fields.map(function ([key, value]) {
+      return '<dt>' + esc(key) + '</dt><dd>' + (value == null || value === '' ? '原表未标注' : text(value)) + '</dd>';
+    }).join('') + '</dl></section>';
+}
+
 export function buildSchoolDetailHtml(school, year, hiddenFields) {
   var entries = school.planEntries || [];
+  var masterEntries = school.masterEntries || [];
   var planPublished = school.planPublished !== false;
   var yearLabel = year == null ? '' : '<span class="school-year-badge">' + esc(String(year)) + ' 年</span>';
   var schoolCode = school.schoolCode ? '<span class="school-type">代码 ' + esc(String(school.schoolCode)) + '</span>' : '';
-  var records = entries.length
-    ? entries.map(planRecordHtml).join('')
-    : '<p class="school-detail-empty">' + (planPublished
-      ? '该院校仅有招生高校总表回退信息，暂无计划明细。'
-      : '来自招生高校及专业总表；招生计划人数尚未公布。') + '</p>';
+  var records = entries.map(planRecordHtml).join('') + masterEntries.map(masterRecordHtml).join('');
+  if (!records) records = '<p class="school-detail-empty">' +
+    (planPublished ? '暂无招生计划明细。' : '招生计划尚未公布。') + '</p>';
   return '<article class="school-detail">' +
     '<header><h5>' + esc(school.schoolName || '') + '</h5>' + schoolCode + yearLabel +
     '<span class="school-type">' + esc(school.schoolType || '—') + '</span></header>' +
-    '<p class="school-plan-summary">' + (planPublished ? '普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人' : '计划人数未公布') +
-    (planPublished && resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人' : '') + '</p>' +
+    '<p class="school-plan-summary">' + (!planPublished ? '计划人数未公布' : school.fallbackOnly ? '招生计划未单列' : '普通计划 ' + (school.ordinaryPlanCount || 0) + ' 人') +
+    (planPublished && !school.fallbackOnly && resultFieldVisible(hiddenFields, 'povertyPlan') ? ' · 建档立卡专项 ' + (school.povertyPlanCount || 0) + ' 人' : '') + '</p>' +
     records +
     '</article>';
 }
