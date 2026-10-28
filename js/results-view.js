@@ -91,7 +91,9 @@ function tableRowsHtml(aggregates, years, selectedMajorKey, hiddenFields, showPr
       (showProfessionalCourse ? ' · 专业基础课 ' + (course.name || '—') + (course.code ? ' (' + course.code + ')' : '') : '');
     var scoreCells = years.map(function (year) {
       return '<td class="aggregate-score-cell score-year-cell">' + tableMetricValue(aggregate, year, function (value) {
-        return buildYearScoreHtml(value, false);
+        return buildYearScoreHtml(value) +
+          '<span class="estimated-score" title="按该专业普通计划人数和一分一段累计人数估算，仅供参考">预估最低分 <b>' +
+          (value.estimatedMinScore == null ? '—' : esc(String(value.estimatedMinScore))) + '</b></span>';
       }, hiddenFields) + '</td>';
     }).join('');
     var admissionCells = years.map(function (year) {
@@ -108,7 +110,7 @@ function tableRowsHtml(aggregates, years, selectedMajorKey, hiddenFields, showPr
 
 function tableHtml(model, metadata) {
   var yearCount = model.selectedYears.length;
-  var scoreColumnWidth = 96;
+  var scoreColumnWidth = 132;
   var admissionsColumnWidth = 200;
   var detailColumnWidth = 112;
   var tableMinWidth = Math.max(720, 210 + detailColumnWidth + yearCount * (scoreColumnWidth + admissionsColumnWidth));

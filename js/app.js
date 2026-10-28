@@ -15,6 +15,7 @@ import { bootstrapData } from './bootstrap.js';
 import { getLatestYear, getSelectableYears, getSortedYears } from './metadata.js';
 import { normalizeCollegeMasterRow, normalizeMajorOption, normalizePlanEntry, normalizeScoreSegmentSeries } from './model.js';
 import { buildMajorAggregates, resolveScoreContext } from './aggregate.js';
+import { loadEstimatedScores } from './score-estimates.js';
 import { buildResultModel, filterYear } from './result-model.js';
 import { buildExpandedMajorHtml } from './results-view.js';
 import { renderResultWorkspace, setResultState } from './results-controller.js';
@@ -53,7 +54,7 @@ function createAggregateRenderer(loaded) {
     }
     renderWorkspace({ status: 'loading', hasQuery: true, aggregates: [] }, years, state, dispatch);
     Promise.resolve([])
-      .then(function () {
+      .then(async function () {
         if (requestId !== aggregateRequestId) return;
         var summaryStore = loaded.store.querySummaryStore || { plansByYear: {}, scoresByYear: {}, fallbacksByYear: {} };
         var aggregates = buildMajorAggregates({
@@ -74,7 +75,11 @@ function createAggregateRenderer(loaded) {
           filters: state && state.filters,
           sort: state && state.sort
         });
-        renderWorkspace({ status: 'ready', hasQuery: true, aggregates: resultModel.aggregates }, years, state, dispatch,
+        var resultAggregates = state && state.resultLayout === 'table'
+          ? await loadEstimatedScores(resultModel.aggregates, years, loaded.metadata, loaded.repository)
+          : resultModel.aggregates;
+        if (requestId !== aggregateRequestId) return;
+        renderWorkspace({ status: 'ready', hasQuery: true, aggregates: resultAggregates }, years, state, dispatch,
           function (aggregate, selected, hiddenFields, schoolYears) {
             var detailYears = schoolYears || selected;
             return Promise.all([Promise.all(selected.map(function (year) {

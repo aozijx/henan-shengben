@@ -10,7 +10,7 @@ const aggregate = {
   },
   years: {
     2026: {
-      year: 2026, score: 180,
+      year: 2026, score: 180, estimatedMinScore: 200,
       scoreContext: { controlCumulativeCount: 45 },
       publicSummary: { schoolCount: 1, ordinaryPlanCount: 20, povertyPlanCount: 3 },
       privateSummary: { schoolCount: 1, ordinaryPlanCount: 10, povertyPlanCount: 0 },
@@ -173,8 +173,8 @@ test('table layout separates yearly scores and admissions into comparable fields
   assert.match(html, /软件工程/);
   assert.match(html, /<th class="score-year-column">2026 年<\/th>/);
   assert.match(html, /<th class="admission-year-column"><span class="admission-year-label">2026 年 <span class="year-kind-public">公办<\/span>\/<span class="year-kind-private">民办<\/span><\/span><\/th>/);
-  assert.match(html, /<td class="aggregate-score-cell score-year-cell"><span class="year-score"><span>180<\/span><\/span><\/td><td class="aggregate-admissions-cell admission-year-cell"><span class="year-kind year-kind-public"><span>1 所 · 普通 20 人 · 专项 3 人<\/span><\/span><span class="year-kind year-kind-private"><span>1 所 · 普通 10 人 · 专项 0 人<\/span><\/span><\/td>/);
-  assert.doesNotMatch(html, /<strong>省控线<\/strong>|<strong>公办<\/strong>|<strong>民办<\/strong>|历年成绩|历年招生/);
+  assert.match(html, /<td class="aggregate-score-cell score-year-cell">[\s\S]*?省控线[\s\S]*?180[\s\S]*?预估最低分[\s\S]*?200[\s\S]*?<\/td><td class="aggregate-admissions-cell admission-year-cell">/);
+  assert.doesNotMatch(html, /<strong>公办<\/strong>|<strong>民办<\/strong>|历年成绩|历年招生/);
   assert.doesNotMatch(html, /历年成绩与招生/);
   assert.match(html, /专业基础课 高等数学/);
   assert.doesNotMatch(html, /2026 省控线|2026 院校\(公\/民\)/);

@@ -169,6 +169,9 @@
 .aggregate-table-scroll-hint{display:none;}
 #view-query .aggregate-table .score-year-cell .year-score{display:block;border:0;padding:0;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;}
 #view-query .aggregate-table .score-year-cell .year-score>span{font-size:inherit;}
+#view-query .aggregate-table .score-year-cell .year-score strong{margin-right:5px;vertical-align:baseline;}
+#view-query .aggregate-table .score-year-cell .estimated-score{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:500;}
+#view-query .aggregate-table .score-year-cell .estimated-score b{color:var(--ink);font-size:13px;font-variant-numeric:tabular-nums;}
 #view-query .aggregate-table .admission-year-cell .year-kind{display:block;margin:0;white-space:nowrap;font-size:11px;line-height:1.5;}
 .admission-year-label{font-size:11px;font-weight:650;white-space:nowrap;}
 .admission-year-label .year-kind-public,.admission-year-label .year-kind-private{font-size:10px;}

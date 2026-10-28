@@ -73,6 +73,17 @@ export function resolveScoreContext(series, score, controlScore) {
   };
 }
 
+export function estimateMinimumScore(series, ordinarySeats) {
+  if (!series || !Array.isArray(series.segments) || !Number.isInteger(ordinarySeats) || ordinarySeats <= 0) return null;
+  var rows = series.segments.slice().sort(function (a, b) { return Number(b.score) - Number(a.score); });
+  for (var i = 0; i < rows.length; i += 1) {
+    var score = numberOrNull(rows[i].score);
+    var cumulative = numberOrNull(rows[i].cumulativeCount);
+    if (score != null && cumulative != null && cumulative >= ordinarySeats) return score;
+  }
+  return null;
+}
+
 function schoolType(row) {
   return String(row.schoolType || row['办学性质'] || '未标注').trim() || '未标注';
 }
@@ -152,6 +163,10 @@ export function buildMajorAggregates(input) {
         planPublished: !input.planPublishedByYear || input.planPublishedByYear[year] !== false,
         scorePublished: !input.scorePublishedByYear || input.scorePublishedByYear[year] !== false,
         score: score,
+        estimatedMinScore: input.planPublishedByYear && input.planPublishedByYear[year] === false ? null :
+          estimateMinimumScore(series, schoolList.reduce(function (total, school) {
+            return total + school.ordinaryPlanCount;
+          }, 0)),
         scoreContext: resolveScoreContext(series, null, controlScore),
         publicSummary: summarize(schoolList, '公办'),
         privateSummary: summarize(schoolList, '民办'),
