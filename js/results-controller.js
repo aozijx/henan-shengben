@@ -1,6 +1,5 @@
 import { nextSortDirection } from './preview.js';
 import { getCollegeYears } from './metadata.js';
-import { defaultCollegeYear } from './detail-years.js';
 import { esc } from './utils.js';
 import { buildExpandedMajorHtml, buildResultViewModel, buildResultWorkspaceHtml, resultMessage } from './results-view.js';
 
@@ -8,6 +7,11 @@ var resultStates = new WeakMap();
 var resultContexts = new WeakMap();
 var boundResults = new WeakSet();
 var userInteractionVersion = 0;
+
+function defaultCollegeYear(years) {
+  var available = (years || []).filter(Number.isInteger);
+  return available.length ? String(Math.max(...available)) : 'all';
+}
 
 if (typeof window !== 'undefined') {
   ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (eventName) {
@@ -32,7 +36,7 @@ function resultStateFor(root, model) {
   var state = resultStates.get(root);
   var signature = resultSignature(model);
   if (!state || (model.status !== 'loading' && state.signature !== signature)) {
-    state = { signature: signature, expandedDetails: {}, selectedMajorKey: '', schoolLayout: 'cards',
+    state = { signature: signature, selectedMajorKey: '', schoolLayout: 'cards',
       schoolYear: defaultCollegeYear(model.collegeYears || model.selectedYears),
       returnScrollY: null, returnMajorIndex: null, detailRequestId: 0 };
     resultStates.set(root, state);
@@ -249,7 +253,6 @@ export function renderResultWorkspace(root, model, metadata, dispatch, onExpand)
   var viewModel = buildResultViewModel(model, metadata);
   viewModel.collegeYears = getCollegeYears(metadata);
   var state = resultStateFor(root, viewModel);
-  viewModel = { ...viewModel, expandedDetails: state.expandedDetails };
   var hasResults = viewModel.status === 'ready' && viewModel.aggregates.length > 0;
   var status = root.querySelector('#result-state');
   var content = root.querySelector('#result-content');

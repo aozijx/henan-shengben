@@ -228,7 +228,7 @@ test('result view model normalizes shared years and layout without mutating meta
 
 test('workspace marks the selected major while leaving school details to the static section', () => {
   const html = buildResultWorkspaceHtml(buildResultViewModel({
-    aggregates: [aggregate], selectedYears: [2026], expandedDetails: { '080902': true }
+    aggregates: [aggregate], selectedYears: [2026], selectedMajorKey: '080902'
   }, { supportedYears: [2026] }), { supportedYears: [2026] });
 
   assert.match(html, /data-select-major="0" aria-pressed="true">当前院校/);

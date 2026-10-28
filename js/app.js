@@ -55,8 +55,6 @@ function createAggregateRenderer(loaded) {
     Promise.resolve([])
       .then(function () {
         if (requestId !== aggregateRequestId) return;
-        var segmentsByYear = {};
-        years.forEach(function (year) { segmentsByYear[year] = []; });
         var summaryStore = loaded.store.querySummaryStore || { plansByYear: {}, scoresByYear: {}, fallbacksByYear: {} };
         var aggregates = buildMajorAggregates({
           majors: majors.map(function (major) {
@@ -67,7 +65,6 @@ function createAggregateRenderer(loaded) {
           planPublishedByYear: summaryStore.planPublishedByYear,
           scorePublishedByYear: summaryStore.scorePublishedByYear,
           scoresByYear: summaryStore.scoresByYear,
-          segmentsByYear: segmentsByYear,
           fallbacksByYear: summaryStore.fallbacksByYear
         });
         var resultModel = buildResultModel({
@@ -90,22 +87,22 @@ function createAggregateRenderer(loaded) {
               return loaded.repository.ensureCollegeYear(year);
             }))]).then(function (values) {
               var detail = { ...aggregate, years: { ...aggregate.years } };
+              var input = { majors: [aggregate.major], years: detailYears,
+                plansByYear: {}, scoresByYear: {}, planPublishedByYear: {},
+                scorePublishedByYear: {}, fallbacksByYear: {} };
               detailYears.forEach(function (year, index) {
                 var source = values[1][index];
-                var yearDetail = buildMajorAggregates({ majors: [aggregate.major], years: [year],
-                  plansByYear: { [year]: source.plans.map(normalizePlanEntry) },
-                  scoresByYear: { [year]: source.scores },
-                  scorePublishedByYear: { [year]: source.scorePublished },
-                  planPublishedByYear: { [year]: source.planPublished },
-                  fallbacksByYear: { [year]: source.colleges.map(function (row) {
-                    return normalizeCollegeMasterRow(row, source.planPublished);
-                  }) }
-                })[0].years[year];
-                yearDetail.planPublished = source.planPublished;
-                yearDetail.schools = yearDetail.schools.map(function (school) {
-                  return { ...school, planPublished: source.planPublished };
+                input.plansByYear[year] = source.plans.map(normalizePlanEntry);
+                input.scoresByYear[year] = source.scores;
+                input.planPublishedByYear[year] = source.planPublished;
+                input.scorePublishedByYear[year] = source.scorePublished;
+                input.fallbacksByYear[year] = source.colleges.map(function (row) {
+                  return normalizeCollegeMasterRow(row, source.planPublished);
                 });
-                detail.years[year] = filterYear(yearDetail, state && state.filters || {}, loaded.metadata);
+              });
+              var loadedDetail = buildMajorAggregates(input)[0];
+              detailYears.forEach(function (year) {
+                detail.years[year] = filterYear(loadedDetail.years[year], state && state.filters || {}, loaded.metadata);
               });
               selected.forEach(function (year, index) {
                 var yearValue = detail.years[year];

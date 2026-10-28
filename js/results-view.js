@@ -1,5 +1,5 @@
 import { esc } from './utils.js';
-import { getSelectableYears, getSortedYears, normalizeSelectedYears } from './metadata.js';
+import { getSelectableYears, normalizeSelectedYears } from './metadata.js';
 import { buildSchoolComparisonHtml, buildScoreSegmentsHtml, buildYearAdmissionsHtml, buildYearScoreHtml, buildYearSummaryHtml } from './year-stack.js';
 import { hiddenResultFields } from './result-visibility.js';
 
@@ -13,17 +13,12 @@ export function resultMessage(model) {
 
 export function buildResultViewModel(model, metadata) {
   var source = model || {};
-  var expandedDetails = { ...(source.expandedDetails || {}) };
-  var selectedMajorKey = source.selectedMajorKey || Object.keys(expandedDetails).find(function (key) {
-    return expandedDetails[key];
-  }) || '';
   return {
     ...source,
     aggregates: Array.isArray(source.aggregates) ? source.aggregates : [],
     selectedYears: normalizeSelectedYears(source.selectedYears, metadata),
     resultLayout: source.resultLayout === 'table' ? 'table' : 'cards',
-    expandedDetails: expandedDetails,
-    selectedMajorKey: selectedMajorKey,
+    selectedMajorKey: source.selectedMajorKey || '',
     schoolLayout: source.schoolLayout === 'list' ? 'list' : 'cards',
     showProfessionalCourse: !source.filters || !source.filters.subject || source.filters.subject === '全部',
     hiddenFields: hiddenResultFields(metadata, source.filters)
@@ -129,7 +124,7 @@ function tableHtml(model, metadata) {
     '<th class="aggregate-detail-column">院校详情</th>' +
     '</tr></thead>';
   return '<div class="aggregate-table-wrap"><div class="aggregate-table-scroll-hint">横向滑动查看其他年份和院校列</div><table class="aggregate-table" style="--table-min-width:' + tableMinWidth + 'px;--score-column-width:' + scoreColumnWidth + 'px;--admissions-column-width:' + admissionsColumnWidth + 'px;--detail-column-width:' + detailColumnWidth + 'px;--year-count:' + yearCount + '">' + headers +
-    '<tbody>' + tableRowsHtml(model.aggregates, model.selectedYears || getSortedYears(metadata), model.selectedMajorKey, model.hiddenFields, model.showProfessionalCourse) + '</tbody></table></div>';
+    '<tbody>' + tableRowsHtml(model.aggregates, model.selectedYears, model.selectedMajorKey, model.hiddenFields, model.showProfessionalCourse) + '</tbody></table></div>';
 }
 
 export function buildYearDialogHtml(metadata, selectedYears) {
