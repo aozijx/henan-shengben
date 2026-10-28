@@ -5,7 +5,6 @@ import argparse
 import hashlib
 import json
 import os
-import shutil
 from pathlib import Path, PurePosixPath
 
 from convert.common import write_json
@@ -168,8 +167,13 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
             if len(content) != item.get('bytes') or _digest(content) != item.get('sha256'):
                 raise ValueError(f'artifact file failed its checksum: {relative_text}')
             destination = repo_root.joinpath(*relative.parts)
-            if destination.is_symlink():
-                raise ValueError(f'merged repository contains a symlink at {relative_text}')
+            if not destination.resolve().is_relative_to(repo_root):
+                raise ValueError(f'merged artifact path escapes repository root: {relative_text}')
+            current = repo_root
+            for part in relative.parts:
+                current = current / part
+                if current.is_symlink():
+                    raise ValueError(f'merged repository contains a symlink at {relative_text}')
             if destination.exists() and destination.read_bytes() != content:
                 raise ValueError(f'merged repository already has different data at {relative_text}')
             copies.append((source, destination, content, relative_text))
