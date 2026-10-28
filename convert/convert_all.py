@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
-import sys
 from typing import Any
 
 from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json

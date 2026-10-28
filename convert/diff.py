@@ -77,8 +77,8 @@ def diff_mapping(
             diffs.append((major, "<专科专业缺失于现有JSON>", a[major], ""))
         else:
             extra, missing = a[major] - b[major], b[major] - a[major]
-            for item in list(extra)[:3]:
+            for item in sorted(extra, key=repr)[:3]:
                 diffs.append((major, "<多出>", item, ""))
-            for item in list(missing)[:3]:
+            for item in sorted(missing, key=repr)[:3]:
                 diffs.append((major, "<缺少>", "", item))
     return diffs

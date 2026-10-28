@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
-from convert.common import REPO_ROOT, read_json, write_json
+from convert.common import REPO_ROOT, _ensure_stdout_utf8, read_json, write_json
 from convert.convert_all import convert_target
 from convert.ingest_artifact import export_staged_changes
 from convert.normalize import normalization_input_status
@@ -226,6 +226,7 @@ def _summary_report(report: dict, *, check: bool) -> dict:
 
 
 def main() -> int:
+    _ensure_stdout_utf8()
     parser = argparse.ArgumentParser(description='Ingest and validate one new official data year')
     parser.add_argument('--seed', required=True, type=Path)
     parser.add_argument('--data-root', type=Path, default=REPO_ROOT / 'data')

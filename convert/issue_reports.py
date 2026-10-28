@@ -197,6 +197,7 @@ def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None,
 
 
 def main() -> int:
+    _ensure_stdout_utf8()
     parser = argparse.ArgumentParser(description="生成一分一段 OCR 异常人工核对报告")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--years", nargs="+", type=int)

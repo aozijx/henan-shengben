@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote, urljoin
 
-import requests
 from bs4 import BeautifulSoup
 
 if __package__ in {None, ''}:
