@@ -5,7 +5,6 @@ import { EXPLORER_STATE_KEY, clearUiPreferences, readColumnWidths, writeColumnWi
 import { resetTheme } from './theme.js';
 import { esc } from './utils.js';
 import { buildYearDialogHtml } from './results-view.js';
-import { setResultState } from './results-controller.js';
 import { bindExportDialog } from './export-dialog.js';
 import { downloadCsv, prepareExport } from './export.js';
 
@@ -57,82 +56,63 @@ export function buildExplorerControlsHtml(metadata, state) {
       '</div></div>' + buildYearDialogHtml(metadata, selectedYears) + '</section>';
 }
 
-function renderExplorerControls(root, metadata, state, dispatch) {
+function renderExplorerControls(root, metadata, state) {
   if (!root) return;
   root.innerHTML = buildExplorerControlsHtml(metadata, state);
+}
 
-  var yearDialog = root.querySelector('.year-selection-dialog');
-  root.querySelector('[data-filter-action="years"]').addEventListener('click', function () {
-    if (typeof yearDialog.showModal === 'function') yearDialog.showModal();
-    else yearDialog.setAttribute('open', '');
-  });
-  yearDialog.querySelectorAll('[data-year-select]').forEach(function (button) {
-    button.addEventListener('click', function () {
+function bindExplorerEvents(root, metadata, dispatch, onClear) {
+  if (!root || root.dataset.eventsBound === 'true') return;
+  root.addEventListener('click', function (event) {
+    var target = event.target.closest('[data-filter-action], [data-year-select], [data-year-apply], [data-action]');
+    if (!target || !root.contains(target)) return;
+    var yearDialog = root.querySelector('.year-selection-dialog');
+    if (target.matches('[data-filter-action="years"]')) {
+      if (typeof yearDialog.showModal === 'function') yearDialog.showModal();
+      else yearDialog.setAttribute('open', '');
+    } else if (target.matches('[data-year-select]')) {
       var years = getSelectableYears(metadata);
-      var selected = button.dataset.yearSelect === 'latest' ? [years[years.length - 1]] : years;
+      var selected = target.dataset.yearSelect === 'latest' ? [years[years.length - 1]] : years;
       yearDialog.querySelectorAll('input[name="selected-year"]').forEach(function (input) {
         input.checked = selected.indexOf(Number(input.value)) >= 0;
       });
-    });
-  });
-  yearDialog.querySelector('[data-year-apply]').addEventListener('click', function () {
-    var selected = Array.from(yearDialog.querySelectorAll('input[name="selected-year"]:checked'))
-      .map(function (input) { return Number(input.value); });
-    if (!selected.length) {
-      yearDialog.querySelector('.year-selection-error').textContent = '请至少选择一个年份。';
-      return;
+    } else if (target.matches('[data-year-apply]')) {
+      var selectedYears = Array.from(yearDialog.querySelectorAll('input[name="selected-year"]:checked'))
+        .map(function (input) { return Number(input.value); });
+      if (!selectedYears.length) {
+        yearDialog.querySelector('.year-selection-error').textContent = '请至少选择一个年份。';
+        return;
+      }
+      if (typeof yearDialog.close === 'function') yearDialog.close();
+      else yearDialog.removeAttribute('open');
+      dispatch({ type: 'SET_SELECTED_YEARS', years: selectedYears });
+    } else if (target.matches('[data-action="reset"]')) {
+      dispatch({ type: 'RESET_FILTERS' });
+    } else if (target.matches('[data-action="clear-storage"]')) {
+      clearUiPreferences(localStorage, metadata);
+      resetTheme();
+      if (typeof onClear === 'function') onClear();
+      dispatch({ type: 'CLEAR_ALL', columnWidths: readColumnWidths(localStorage, metadata) });
     }
-    if (typeof yearDialog.close === 'function') yearDialog.close();
-    else yearDialog.removeAttribute('open');
-    dispatch({ type: 'SET_SELECTED_YEARS', years: selected });
   });
-
-  root.querySelectorAll('[data-filter]').forEach(function (control) {
-    control.addEventListener('change', function () { dispatch({ type: 'SET_FILTER', key: control.dataset.filter, value: control.value }); });
+  root.addEventListener('change', function (event) {
+    var control = event.target;
+    if (control.matches('[data-filter]')) {
+      dispatch({ type: 'SET_FILTER', key: control.dataset.filter, value: control.value });
+    }
   });
-  root.querySelectorAll('[data-filter-number]').forEach(function (control) {
-    control.addEventListener('input', function () {
-      var clean = sanitizeNumberInput(control.value);
-      if (control.value !== clean) control.value = clean;
-      dispatch({ type: 'SET_FILTER', key: control.dataset.filterNumber, value: clean });
-    });
+  root.addEventListener('input', function (event) {
+    var control = event.target;
+    if (!control.matches('[data-filter-number]')) return;
+    var clean = sanitizeNumberInput(control.value);
+    if (control.value !== clean) control.value = clean;
+    dispatch({ type: 'SET_FILTER', key: control.dataset.filterNumber, value: clean });
   });
-  var reset = root.querySelector('[data-action="reset"]');
-  if (reset) reset.addEventListener('click', function () { dispatch({ type: 'RESET_FILTERS' }); });
-  var clearStorage = root.querySelector('[data-action="clear-storage"]');
-  if (clearStorage) clearStorage.addEventListener('click', function () {
-    clearUiPreferences(localStorage, metadata);
-    resetTheme();
-    var search = document.getElementById('q');
-    var hint = document.getElementById('hint');
-    var result = document.getElementById('result');
-    if (search) search.value = '';
-    if (hint) hint.textContent = '';
-    if (result) setResultState(result, '输入专业名称，回车或点「查询」开始检索', 'empty');
-    dispatch({ type: 'CLEAR_ALL', columnWidths: readColumnWidths(localStorage, metadata) });
-  });
-}
-
-/* ---------- 筛选联动结果区 ----------
-   把筛选后的专业（保持原顺序）通知给上层，用于重渲染专业摘要；
-   同时返回「筛选后 X / Y 个专业」的计数说明（未启用筛选时为 null）。 */
-function activeFilterNote(state, metadata) {
-  var f = state.filters || {};
-  var active = (metadata.fields || []).some(function (field) {
-    return field.filterEnable && f[field.key] != null && f[field.key] !== '' && f[field.key] !== '全部';
-  });
-  if (!active) return null;
-  return '筛选后 ' + state.rows.length + ' / ' + state.majors.length + ' 个专业';
+  root.dataset.eventsBound = 'true';
 }
 
 export function orderedMajorsFromRows(rows, majors) {
   return rows.map(function (row) { return majors[row.originalOrder]; });
-}
-
-function notifyFilteredResult(state, metadata, options) {
-  if (typeof options.onFilteredResult !== 'function') return;
-  var majors = orderedMajorsFromRows(state.rows, state.majors);
-  options.onFilteredResult(majors, state, activeFilterNote(state, metadata));
 }
 
 function recompute(state, metadata, data) {
@@ -175,9 +155,6 @@ export function initExplorer(root, metadata, options) {
     var nextState = reduceExplorerState(state, event, metadata);
     if (nextState === state) return state;
     state = nextState;
-    if (event.type === 'SET_SELECTED_YEARS') {
-      if (typeof options.onYearChange === 'function') options.onYearChange(state);
-    }
     if (event.type === 'SET_COLUMN_WIDTH') writeColumnWidths(localStorage, state.columnWidths);
     if (event.type === 'SET_FILTER' || event.type === 'SET_SORT' || event.type === 'RESET_FILTERS' ||
         event.type === 'SET_SELECTED_YEARS' || event.type === 'SET_RESULT_LAYOUT') {
@@ -185,8 +162,7 @@ export function initExplorer(root, metadata, options) {
     }
     if (event.type === 'CLEAR_ALL') localStorage.removeItem(EXPLORER_STATE_KEY);
     state = recompute(state, metadata, data);
-    renderExplorerControls(root, metadata, state, dispatch);
-    notifyFilteredResult(state, metadata, options);
+    renderExplorerControls(root, metadata, state);
     if (typeof options.onStateChange === 'function') options.onStateChange(state, event);
     return state;
   }
@@ -205,7 +181,7 @@ export function initExplorer(root, metadata, options) {
       downloadCsv({ ...exportModel, date: new Date() });
     }
   );
-  renderExplorerControls(root, metadata, state, dispatch);
-  notifyFilteredResult(state, metadata, options);
+  bindExplorerEvents(root, metadata, dispatch, options.onClear);
+  renderExplorerControls(root, metadata, state);
   return controller;
 }

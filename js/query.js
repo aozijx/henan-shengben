@@ -87,3 +87,32 @@ export function createQueryController(data, options) {
     doQuery: doQuery
   };
 }
+
+export function bindQueryControls(options) {
+  var input = options.input;
+  var suggest = options.suggest;
+  var hint = options.hint;
+  var result = options.result;
+  var clearButton = options.clearButton;
+  var getController = options.getController;
+  function run() {
+    var controller = getController();
+    if (controller) controller.doQuery(input, hint, result);
+  }
+
+  input.addEventListener('input', function () {
+    var controller = getController();
+    if (controller) controller.fillSuggest(suggest, input.value.trim());
+    clearButton.style.display = input.value ? 'inline-block' : 'none';
+  });
+  input.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') run();
+  });
+  options.goButton.addEventListener('click', run);
+  clearButton.addEventListener('click', function () {
+    input.value = '';
+    input.focus();
+    clearButton.style.display = 'none';
+    run();
+  });
+}
