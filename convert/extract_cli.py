@@ -18,7 +18,7 @@ from .console import ensure_stdout_utf8
 from .paths import DATA_ROOT
 from .diff import diff_mapping, diff_rows
 from .local_tables import local_source_rows, record_local_tables
-from .sources import extract_entry
+from .table_extraction import extract_entry
 from crawler.source_plan import build_data_plan
 from pipeline_io import read_json, write_json
 
