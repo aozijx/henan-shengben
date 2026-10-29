@@ -70,7 +70,7 @@
     <section class="view is-active" id="view-query" role="tabpanel">
       <div class="search-row">
         <label class="sr-only" for="q">专业名称</label>
-        <input id="q" type="search" placeholder="输入专业名称开始查询" autocomplete="off" list="suggest" spellcheck="false">
+        <input id="q" type="text" placeholder="输入专业名称开始查询" autocomplete="off" list="suggest" spellcheck="false">
         <datalist id="suggest"></datalist>
         <button class="clear" id="clearBtn" type="button" aria-label="清空">清除</button>
         <button class="go" id="goBtn" type="button">查询</button>
@@ -82,11 +82,9 @@
             <div class="result-layout-switch" role="group" aria-label="结果布局">
               <button type="button" data-result-layout="cards" aria-label="切换为专业卡片" title="专业卡片" aria-pressed="true" disabled>
                 <svg class="layout-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"></rect><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"></rect><rect x="9" y="9" width="5.5" height="5.5" rx="1"></rect></svg>
-                <span>专业卡片</span>
               </button>
               <button type="button" data-result-layout="table" aria-label="切换为专业表格" title="专业表格" aria-pressed="false" disabled>
                 <svg class="layout-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 3.25h12M2 8h12M2 12.75h12"></path><circle cx="3" cy="3.25" r=".5"></circle><circle cx="3" cy="8" r=".5"></circle><circle cx="3" cy="12.75" r=".5"></circle></svg>
-                <span>专业表格</span>
               </button>
             </div>
             <button type="button" id="exportCsv" class="export-trigger" disabled>导出 CSV</button>

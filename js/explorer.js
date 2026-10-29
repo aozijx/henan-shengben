@@ -19,7 +19,7 @@ function enumControl(field, stateKey, state, disabled) {
   var options = enumOptions(field).map(function (value) {
     return '<option value="' + esc(value) + '"' + (state.filters[stateKey] === value ? ' selected' : '') + '>' + esc(value) + '</option>';
   }).join('');
-  return '<label class="filter-field"><span>' + esc(field.label) + '</span>' +
+  return '<label class="filter-field filter-field-select"><span>' + esc(field.label) + '</span>' +
     '<select data-filter="' + stateKey + '"' + (disabled ? ' disabled' : '') + '>' + options + '</select></label>';
 }
 
@@ -51,8 +51,8 @@ export function buildExplorerControlsHtml(metadata, state) {
         minControl(filterField(metadata, 'schoolCount'), state, unavailable) +
       '</div></div>' +
       '<div class="filter-group filter-operations"><h3>筛选操作</h3><div class="filter-row">' +
-      '<button type="button" data-action="reset"' + (unavailable ? ' disabled' : '') + '>重置筛选</button>' +
-      '<button type="button" data-action="clear-storage"' + (state.status !== 'ready' ? ' disabled' : '') + '>清除本地存储</button>' +
+      '<button type="button" data-action="reset">重置筛选</button>' +
+      '<button type="button" data-action="clear-storage">清除本地存储</button>' +
       '</div></div>' + buildYearDialogHtml(metadata, selectedYears) + '</section>';
 }
 

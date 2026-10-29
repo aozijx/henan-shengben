@@ -73,84 +73,77 @@ function masterRecordHtml(row) {
   });
   return '<section class="school-plan-record school-master-record"><div class="school-plan-record-title">招生高校及专业总表</div>' +
     '<dl>' + fields.map(function ([key, value]) {
-      return '<dt>' + esc(key) + '</dt><dd>' + (value == null || value === '' ? '原表未标注' : text(value)) + '</dd>';
+      return '<dt>' + esc(key) + '</dt><dd>' + (value == null || value === '' ? '—' : text(value)) + '</dd>';
     }).join('') + '</dl></section>';
 }
 
-function planTableRow(record, entry) {
-  var school = record.school;
-  var charter = entry.charterUrl
-    ? '<a href="' + esc(entry.charterUrl) + '" target="_blank" rel="noopener noreferrer">招生章程</a>'
-    : '—';
-  var more = '<details class="school-table-more"><summary>联系与备注</summary><dl>' +
-    '<dt>通信地址</dt><dd>' + text(entry.address) + '</dd>' +
-    '<dt>咨询电话</dt><dd>' + text(entry.phone) + '</dd>' +
-    '<dt>招生章程</dt><dd>' + charter + '</dd>' +
-    '</dl></details>';
-  return '<tr><td>' + record.year + ' 年</td>' +
-    '<th scope="row">' + text(school.schoolName) + '</th>' +
-    '<td>' + text(school.schoolType) + '</td>' +
-    '<td>' + text(entry.schoolCode || school.schoolCode) + '</td>' +
-    '<td>' + text(entry.majorCode) + '</td>' +
-    '<td>' + text(entry.admissionCategory) + '</td>' +
-    '<td class="school-table-count">' + text(entry.planCount) + '</td>' +
-    '<td>' + (entry.duration == null ? '—' : esc(String(entry.duration)) + ' 年') + '</td>' +
-    '<td>' + (entry.tuition == null ? '—' : '¥' + esc(String(entry.tuition))) + '</td>' +
-    '<td>' + (entry.accommodation == null ? '—' : '¥' + esc(String(entry.accommodation))) + '</td>' +
-    '<td>' + text(entry.notes) + more + '</td></tr>';
-}
-
-function masterTableHtml(records) {
-  var rows = [];
+function schoolTableColumns(records) {
+  var columns = ['院校代码', '专业代码', '专业名称', '学制', '师范', '艺术', '备注'];
   records.forEach(function (record) {
-    (record.school.masterEntries || []).forEach(function (row) { rows.push({ year: record.year, row: row }); });
-  });
-  if (!rows.length) return '';
-  var columns = [];
-  rows.forEach(function (item) {
-    Object.keys(item.row).forEach(function (key) {
-      if (key.startsWith('_') || (key === '院校名称' && Object.hasOwn(item.row, '学校名称')) ||
-          (key === '院校代号' && Object.hasOwn(item.row, '院校代码'))) return;
-      if (columns.indexOf(key) < 0) columns.push(key);
+    (record.school.masterEntries || []).forEach(function (row) {
+      Object.keys(row).forEach(function (key) {
+        if (key.startsWith('_') || key === '学校名称' || key === '院校名称' || key === '院校代号') return;
+        if (columns.indexOf(key) < 0) columns.push(key);
+      });
     });
   });
-  var header = '<thead><tr><th scope="col">年份</th>' + columns.map(function (key) {
-    return '<th scope="col">' + esc(key) + '</th>';
-  }).join('') + '</tr></thead>';
-  var body = rows.map(function (item) {
-    return '<tr><td>' + item.year + ' 年</td>' + columns.map(function (key) {
-      var value = item.row[key];
-      return '<td>' + (value == null || value === '' ? '原表未标注' : text(value)) + '</td>';
-    }).join('') + '</tr>';
-  }).join('');
-  return '<section class="school-comparison-table-section school-master-table-section"><h5>招生高校及专业总表</h5>' +
-    '<div class="school-comparison-table-scroll"><table class="school-comparison-table" aria-label="招生高校及专业总表对照表">' +
-    header + '<tbody>' + body + '</tbody></table></div></section>';
+  return columns;
 }
 
-function schoolListTables(records) {
+function schoolTableRow(record, entry, master, masterColumns) {
+  var school = record.school;
+  var charter = entry && entry.charterUrl
+    ? '<a href="' + esc(entry.charterUrl) + '" target="_blank" rel="noopener noreferrer">查看</a>'
+    : '—';
+  var more = entry
+    ? '<details class="school-table-more"><summary>联系信息</summary><dl>' +
+      '<dt>通信地址</dt><dd>' + text(entry.address) + '</dd>' +
+      '<dt>咨询电话</dt><dd>' + text(entry.phone) + '</dd>' +
+      '<dt>招生章程</dt><dd>' + charter + '</dd>' +
+      '</dl></details>'
+    : '—';
+  var planStatus = school.planPublished === false ? '招生计划未公布' :
+    school.fallbackOnly ? '招生计划未单列' : '暂无计划明细';
+  var planValues = entry ? [
+    text(entry.schoolCode || school.schoolCode), text(entry.majorCode), text(entry.admissionCategory),
+    '<span class="school-table-count">' + text(entry.planCount) + '</span>',
+    entry.duration == null ? '—' : esc(String(entry.duration)) + ' 年',
+    entry.tuition == null ? '—' : '¥' + esc(String(entry.tuition)),
+    entry.accommodation == null ? '—' : '¥' + esc(String(entry.accommodation)),
+    text(entry.notes) + more
+  ] : ['—', '—', planStatus, '—', '—', '—', '—', '—'];
+  return '<tr><td>' + record.year + ' 年</td><th scope="row">' + text(school.schoolName) + '</th>' +
+    '<td>' + text(school.schoolType) + '</td>' + planValues.map(function (value) { return '<td>' + value + '</td>'; }).join('') +
+    masterColumns.map(function (key) {
+      var value = master && master[key];
+      return '<td>' + (value == null || value === '' ? '—' : text(value)) + '</td>';
+    }).join('') + '</tr>';
+}
+
+function schoolListTable(records) {
+  var masterColumns = schoolTableColumns(records);
   var rows = [];
   records.forEach(function (record) {
     var entries = record.school.planEntries || [];
-    if (entries.length) {
-      entries.forEach(function (entry) { rows.push(planTableRow(record, entry)); });
-      return;
-    }
-    var status = record.school.planPublished === false ? '招生计划未公布' :
-      record.school.fallbackOnly ? '招生计划未单列' : '暂无计划明细';
-    rows.push('<tr><td>' + record.year + ' 年</td><th scope="row">' + text(record.school.schoolName) +
-      '</th><td>' + text(record.school.schoolType) + '</td><td>' + text(record.school.schoolCode) +
-      '</td><td colspan="6" class="school-table-status">' + status + '</td><td>—</td></tr>');
+    var masters = record.school.masterEntries || [];
+    var planRows = entries.length ? entries : [null];
+    var masterRows = masters.length ? masters : [null];
+    planRows.forEach(function (entry) {
+      masterRows.forEach(function (master) {
+        rows.push(schoolTableRow(record, entry, master, masterColumns));
+      });
+    });
   });
-  var planTable = rows.length
-    ? '<section class="school-comparison-table-section"><h5>招生计划</h5><div class="school-comparison-table-scroll">' +
-      '<table class="school-comparison-table" aria-label="招生计划对照表"><thead><tr>' +
-      '<th scope="col">年份</th><th scope="col">院校名称</th><th scope="col">办学性质</th><th scope="col">院校代号</th>' +
-      '<th scope="col">专业代号</th><th scope="col">招生类别</th><th scope="col">计划人数</th>' +
-      '<th scope="col">学制</th><th scope="col">学费标准</th><th scope="col">最低住宿费</th>' +
-      '<th scope="col">办学地点/备注及联系</th></tr></thead><tbody>' + rows.join('') +
-      '</tbody></table></div></section>' : '';
-  return '<div class="school-comparison-table-view">' + planTable + masterTableHtml(records) + '</div>';
+  if (!rows.length) return '<div class="result-state">所选年份暂无院校招生计划。</div>';
+  var planHeadings = ['院校代号', '专业代号', '招生类别', '计划人数', '学制', '学费标准', '最低住宿费', '办学地点/备注及联系'];
+  var header = '<thead><tr><th scope="col" rowspan="2">年份</th><th scope="col" rowspan="2">院校名称</th>' +
+    '<th scope="col" rowspan="2">办学性质</th><th class="school-table-group" scope="colgroup" colspan="' + planHeadings.length + '">招生计划</th>' +
+    '<th class="school-table-group" scope="colgroup" colspan="' + masterColumns.length + '">招生高校及专业总表</th></tr><tr>' +
+    planHeadings.map(function (heading) { return '<th scope="col">' + esc(heading) + '</th>'; }).join('') +
+    masterColumns.map(function (heading) { return '<th scope="col">' + esc(heading) + '</th>'; }).join('') +
+    '</tr></thead>';
+  return '<div class="school-comparison-table-view"><div class="school-comparison-table-scroll"><table class="school-comparison-table" aria-label="院校与招生计划对照表">' +
+    header + '<tbody>' + rows.join('') + '</tbody></table></div></div>';
 }
 
 export function buildSchoolDetailHtml(school, year, hiddenFields) {
@@ -193,7 +186,7 @@ export function buildSchoolComparisonHtml(aggregate, years, hiddenFields) {
     return '<section class="school-comparison-card">' + records.map(function (record) {
       return buildSchoolDetailHtml(record.school, record.year, hiddenFields);
     }).join('') + '</section>';
-  }).join('') + '</div></div>' + schoolListTables(flattenedRecords);
+  }).join('') + '</div></div>' + schoolListTable(flattenedRecords);
 }
 
 export function buildScoreSegmentsHtml(series) {
