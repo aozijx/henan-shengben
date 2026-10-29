@@ -2,12 +2,11 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 from pathlib import Path, PurePosixPath
 
-from convert.common import write_json
 from pipeline_integrity import sha256_bytes
+from pipeline_io import read_json, write_bytes_if_changed, write_json
 
 
 def export_staged_changes(staging_root: Path, data_root: Path, export_dir: Path,
@@ -72,7 +71,7 @@ def package_run_manifest(artifact_root: Path, repository: str, pr_number: int,
         manifest_path = artifact_root / str(year) / 'manifest.json'
         if not manifest_path.is_file():
             raise ValueError(f'missing exported artifact manifest for {year}')
-        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+        manifest = read_json(manifest_path)
         if manifest.get('year') != year or manifest.get('seedPath') != seed.as_posix():
             raise ValueError(f'exported artifact does not match seed {seed.as_posix()}')
         years.append(year)
@@ -96,7 +95,7 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
                            applied_paths_file: Path, seeds_file: Path) -> list[str]:
     artifact_root = Path(artifact_root).resolve()
     repo_root = Path(repo_root).resolve()
-    run_manifest = json.loads((artifact_root / 'run.json').read_text(encoding='utf-8'))
+    run_manifest = read_json(artifact_root / 'run.json')
     expected = {
         'schemaVersion': 1,
         'repository': repository,
@@ -125,7 +124,7 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
     seen_paths = set()
     for year in years:
         year_root = artifact_root / str(year)
-        manifest = json.loads((year_root / 'manifest.json').read_text(encoding='utf-8'))
+        manifest = read_json(year_root / 'manifest.json')
         seed_path = f'data/year-links/{year}.json'
         if manifest.get('year') != year or manifest.get('seedPath') != seed_path:
             raise ValueError(f'artifact manifest does not match year {year}')
@@ -184,7 +183,7 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
         temporary.write_bytes(content)
         os.replace(temporary, destination)
         applied.append(relative_text)
-    Path(applied_paths_file).write_text(''.join(f'{path}\n' for path in applied), encoding='utf-8')
+    write_bytes_if_changed(Path(applied_paths_file), ''.join(f'{path}\n' for path in applied).encode('utf-8'))
     return applied
 
 

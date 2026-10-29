@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 import re
+
+from pipeline_io import read_json, write_bytes_if_changed
 
 
 SEED_PATH = re.compile(r'data/year-links/([0-9]{4})\.json')
@@ -28,9 +29,9 @@ def main() -> None:
     parser.add_argument('metadata_file', type=Path)
     args = parser.parse_args()
     paths = [line.strip() for line in args.seeds_file.read_text(encoding='utf-8').splitlines() if line.strip()]
-    metadata = json.loads(args.metadata_file.read_text(encoding='utf-8'))
+    metadata = read_json(args.metadata_file)
     selected, skipped = select_unpublished(paths, metadata)
-    args.seeds_file.write_text(''.join(f'{path}\n' for path in selected), encoding='utf-8')
+    write_bytes_if_changed(args.seeds_file, ''.join(f'{path}\n' for path in selected).encode('utf-8'))
     for path in skipped:
         print(f'Already published, skipping new-year ingest: {path}', flush=True)
     print(f'Unpublished yearly seeds: {len(selected)}', flush=True)

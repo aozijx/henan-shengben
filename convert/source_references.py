@@ -2,10 +2,11 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-import json
 from pathlib import Path
 import re
 from typing import Any, Callable
+
+from pipeline_io import read_json
 
 
 def _compact(value: object) -> str:
@@ -20,7 +21,7 @@ def major_rows(data_root: Path, year: int) -> list[dict[str, str]]:
     path = data_root / f"来源清单/来源清单_{year}.json"
     if not path.is_file():
         return []
-    document = json.loads(path.read_text(encoding="utf-8"))
+    document = read_json(path)
     return [{"专业代号": item.get("majorCode"), "专业名称": item.get("majorName")}
             for item in document.get("entries", [])]
 
@@ -67,7 +68,7 @@ def school_names(data_root: Path, year: int,
         if path.stem == f"招生计划_{year}":
             continue
         try:
-            rows = json.loads(path.read_text(encoding="utf-8"))
+            rows = read_json(path)
         except (OSError, ValueError):
             continue
         for item in rows if isinstance(rows, list) else []:
