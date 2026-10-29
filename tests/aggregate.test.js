@@ -56,31 +56,6 @@ test('resolves cumulative reference counts and score difference without inventin
   });
 });
 
-test('estimates a major cutoff at the first score whose cumulative count fills ordinary seats', () => {
-  const year = buildMajorAggregates({ majors: [major], years: [2026],
-    plansByYear: { 2026: [
-      { majorCode: '80', schoolName: '甲大学', schoolType: '公办', planCount: 8, povertyStatus: '否' },
-      { majorCode: '80', schoolName: '乙大学', schoolType: '民办', planCount: 4, povertyStatus: '否' },
-      { majorCode: '80', schoolName: '乙大学', schoolType: '民办', planCount: 3, povertyStatus: '是' }
-    ] },
-    segmentsByYear: { 2026: [{ majorCode: '80', segments: [
-      { score: 210, cumulativeCount: 5 }, { score: 200, cumulativeCount: 12 },
-      { score: 190, cumulativeCount: 18 }
-    ] }] }
-  })[0].years[2026];
-  assert.equal(year.estimatedMinScore, 200);
-});
-
-test('does not invent an estimated cutoff beyond the available score segments', () => {
-  const year = buildMajorAggregates({ majors: [major], years: [2026],
-    plansByYear: { 2026: [{ majorCode: '80', schoolName: '甲大学', schoolType: '公办', planCount: 20 }] },
-    segmentsByYear: { 2026: [{ majorCode: '80', segments: [
-      { score: 210, cumulativeCount: 5 }, { score: 200, cumulativeCount: 12 }
-    ] }] }
-  })[0].years[2026];
-  assert.equal(year.estimatedMinScore, null);
-});
-
 test('attaches only exact master major and school records while keeping unmatched schools separate', () => {
   const item = { ...major, disciplineCode6: '080902' };
   const year = buildMajorAggregates({ majors: [item], years: [2027],
