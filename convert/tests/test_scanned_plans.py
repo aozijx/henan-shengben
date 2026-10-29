@@ -4,7 +4,8 @@ from unittest.mock import patch
 
 from convert.scanned_tables import _group_scanned_table_tokens
 from convert.source_references import canonical_plan_major_name, school_code
-from convert.table_extraction import _scoreline_rows_from_table, extract_plans
+from convert.plan_parser import extract_plans
+from convert.scoreline_parser import _scoreline_rows_from_table
 
 
 def box(center_x: float, center_y: float):
@@ -46,14 +47,14 @@ class ScannedPlanTableTests(unittest.TestCase):
     def test_plan_optional_column_is_determined_by_table_width(self):
         base = ['17', '学前教育', '10', '2', '4400', '800', '6086', '某大学', '地址']
         rows = [base + ['电话', '网址'], base + ['说明', '电话', '网址']]
-        with patch('convert.table_extraction.tables_of', return_value=[[row] for row in rows]):
+        with patch('convert.plan_parser.tables_of', return_value=[[row] for row in rows]):
             plans = extract_plans(Path('unused.pdf'), 2023)
         self.assertEqual([row['其他说明'] for row in plans], ['', '说明'])
         self.assertEqual([row['咨询电话'] for row in plans], ['电话', '电话'])
 
     def test_blank_plan_cost_and_duration_are_not_invented_as_zero(self):
         row = ['17', '学前教育', '10', '', '', '', '6086', '某大学', '地址', '电话', '网址']
-        with patch('convert.table_extraction.tables_of', return_value=[[row]]):
+        with patch('convert.plan_parser.tables_of', return_value=[[row]]):
             plans = extract_plans(Path('unused.pdf'), 2023)
         self.assertIsNone(plans[0]['学制'])
         self.assertIsNone(plans[0]['学费标准'])
