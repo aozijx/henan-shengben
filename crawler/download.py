@@ -1,4 +1,3 @@
-import hashlib
 import argparse
 import json
 from concurrent.futures import ThreadPoolExecutor
@@ -14,17 +13,14 @@ from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT
 from crawler.source_rules import is_official_url
 from crawler.waf import build_session
 from crawler.year_sources import build_data_plan, seed_paths_in
-
-
-def _sha256(content):
-    return hashlib.sha256(content).hexdigest()
+from pipeline_integrity import sha256_bytes, sha256_file
 
 
 def download_entry(url, target: Path, session, expected_sha256=None):
     try:
         if not is_official_url(url):
             raise ValueError('PDF URL is not on the official host allowlist')
-        if expected_sha256 and target.is_file() and _sha256(target.read_bytes()) == expected_sha256:
+        if expected_sha256 and target.is_file() and sha256_file(target) == expected_sha256:
             return {'downloadStatus': 'skipped', 'sha256': expected_sha256, 'bytes': target.stat().st_size}
         response = session.get(url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
@@ -39,7 +35,7 @@ def download_entry(url, target: Path, session, expected_sha256=None):
         part = target.with_suffix(target.suffix + '.part')
         part.write_bytes(content)
         part.replace(target)
-        result = {'downloadStatus': 'downloaded', 'sha256': _sha256(content), 'bytes': len(content)}
+        result = {'downloadStatus': 'downloaded', 'sha256': sha256_bytes(content), 'bytes': len(content)}
         if requests.utils.requote_uri(final_url) != requests.utils.requote_uri(url):
             result['finalUrl'] = final_url
         return result

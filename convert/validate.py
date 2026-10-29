@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import hashlib
 from pathlib import Path
+from pipeline_integrity import sha256_file
 
 
 @dataclass(frozen=True)
@@ -37,7 +37,7 @@ def validate_score_segment_major(major: object, data_root: Path, path: str = "ma
     source_path = data_root / str(source_pdf or "")
     if not source_pdf or not source_path.is_file():
         errors.append(ValidationError("source-missing", path + ".sourcePdf", "源 PDF 不存在"))
-    elif hashlib.sha256(source_path.read_bytes()).hexdigest() != major.get("sourceSha256"):
+    elif sha256_file(source_path) != major.get("sourceSha256"):
         errors.append(ValidationError("source-hash-mismatch", path + ".sourceSha256", "源 PDF 哈希不一致"))
     return tuple(errors)
 

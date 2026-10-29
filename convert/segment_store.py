@@ -2,12 +2,12 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 from typing import Iterator
 
 from .common import DATA_ROOT, read_json, write_bytes_if_changed
+from pipeline_integrity import sha256_bytes
 
 
 def _bytes(value: object) -> bytes:
@@ -41,7 +41,7 @@ def write_year(index_path: Path, data_root: Path, document: dict) -> dict:
         entries.append({'majorCode': code, 'majorName': major['majorName'],
                         **({'status': major['status']} if 'status' in major else {}),
                         'path': path.relative_to(data_root).as_posix(),
-                        'sha256': hashlib.sha256(content).hexdigest()})
+                        'sha256': sha256_bytes(content)})
     for path, content in prepared:
         write_bytes_if_changed(path, content)
     index = {key: value for key, value in document.items() if key not in ('schemaVersion', 'majors')}
@@ -65,7 +65,7 @@ def iter_year(index_path: Path, data_root: Path) -> Iterator[dict]:
         if entry.get('path') != expected.relative_to(data_root).as_posix():
             raise ValueError(f'invalid shard path for {code}')
         content = expected.read_bytes()
-        if hashlib.sha256(content).hexdigest() != entry.get('sha256'):
+        if sha256_bytes(content) != entry.get('sha256'):
             raise ValueError(f'hash mismatch for {code}: {expected}')
         major = json.loads(content)
         if major.get('majorCode') != code or major.get('majorName') != entry.get('majorName'):

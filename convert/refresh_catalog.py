@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import re
@@ -13,6 +12,7 @@ from .common import DATA_ROOT, REPO_ROOT, load_data_plan, read_json, write_json
 from .validate import validate_score_segment_major
 from .segment_store import iter_year
 from .local_tables import load_local_tables
+from pipeline_integrity import sha256_bytes
 
 CODE_RE = re.compile(r'^[A-Za-z0-9]+$')
 DERIVATION_VERSION = 3
@@ -28,7 +28,7 @@ def _json_content_sha256(document: object) -> str:
     """Hash JSON values consistently across formatting and line endings."""
     encoded = json.dumps(document, ensure_ascii=False, sort_keys=True,
                          separators=(',', ':')).encode('utf-8')
-    return hashlib.sha256(encoded).hexdigest()
+    return sha256_bytes(encoded)
 
 
 def _source_path(data_root: Path, relative: str) -> Path:
@@ -426,8 +426,8 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
         conversion_reports[str(year)] = published_report
         if report_file:
             report_files_to_remove.append(report_file)
-        version = hashlib.sha256(json.dumps({'derivationVersion': DERIVATION_VERSION,
-                                             'inputs': derivation_hashes}, sort_keys=True).encode('utf-8')).hexdigest()[:16]
+        version = sha256_bytes(json.dumps({'derivationVersion': DERIVATION_VERSION,
+                                           'inputs': derivation_hashes}, sort_keys=True).encode('utf-8'))[:16]
         prefix = f'generated/{year}/{version}'
         analytics = _analytics(year, canonical['mapping'], canonical['scorelines'], canonical['plans'])
         analytics_path = f'{prefix}/analytics.json'
@@ -468,7 +468,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
                'supportedYears': years, 'yearSources': publish,
                'sourceCatalog': source_catalog,
                'inputSha256': input_hashes}
-    catalog_version = hashlib.sha256(json.dumps(catalog, ensure_ascii=False, sort_keys=True).encode('utf-8')).hexdigest()[:16]
+    catalog_version = sha256_bytes(json.dumps(catalog, ensure_ascii=False, sort_keys=True).encode('utf-8'))[:16]
     catalog_path = f'generated/catalog/{catalog_version}.json'
     output[catalog_path] = catalog
     metadata['catalogSource'] = f'data/{catalog_path}'

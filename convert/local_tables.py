@@ -1,11 +1,11 @@
 """Explicit, hash-checked local PDF conversions independent of year links."""
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
 
 from convert.common import read_json, write_json
 from crawler.year_sources import TABLE_PDF_PATHS, TABLE_SOURCE_SPECS, source_rows_for_seed
+from pipeline_integrity import sha256_file
 
 
 PARSERS = {parser for parser, _roles, _output in TABLE_SOURCE_SPECS}
@@ -25,10 +25,6 @@ def local_source_rows(data_root: Path, year: int) -> list[dict]:
     return available
 
 
-def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
 def _manifest_path(root: Path, year: int) -> Path:
     return root / f'来源清单/本地表_{year}.json'
 
@@ -45,8 +41,8 @@ def record_local_tables(data_root: Path, year: int, rows: list[dict]) -> Path:
         entries[row['parser']] = {
             'parser': row['parser'], 'outputPath': row['outputPath'],
             'pdfPaths': row['pdfPaths'],
-            'pdfSha256': [_sha256(root / pdf) for pdf in row['pdfPaths']],
-            'outputSha256': _sha256(output),
+            'pdfSha256': [sha256_file(root / pdf) for pdf in row['pdfPaths']],
+            'outputSha256': sha256_file(output),
         }
     write_json(path, {'schemaVersion': 1, 'year': year,
                       'sources': [entries[key] for key in sorted(entries)]})
@@ -78,7 +74,7 @@ def load_local_tables(data_root: Path) -> dict[int, dict[str, str]]:
                 if not isinstance(relative, str) or not isinstance(expected, str):
                     raise ValueError(f'invalid local table record: {path}: {parser}')
                 target = (root / relative).resolve()
-                if not target.is_relative_to(root) or not target.is_file() or _sha256(target) != expected:
+                if not target.is_relative_to(root) or not target.is_file() or sha256_file(target) != expected:
                     raise ValueError(f'local table source changed: {relative}')
             found.setdefault(year, {})[parser] = item['outputPath']
     return found

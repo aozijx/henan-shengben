@@ -2,16 +2,12 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
 
 from convert.common import write_json
-
-
-def _digest(content: bytes) -> str:
-    return hashlib.sha256(content).hexdigest()
+from pipeline_integrity import sha256_bytes
 
 
 def export_staged_changes(staging_root: Path, data_root: Path, export_dir: Path,
@@ -46,7 +42,7 @@ def export_staged_changes(staging_root: Path, data_root: Path, export_dir: Path,
         artifact_file = export_dir / Path(*PurePosixPath(repo_path).parts)
         artifact_file.parent.mkdir(parents=True, exist_ok=True)
         artifact_file.write_bytes(content)
-        files.append({'path': repo_path, 'sha256': _digest(content), 'bytes': len(content)})
+        files.append({'path': repo_path, 'sha256': sha256_bytes(content), 'bytes': len(content)})
 
     if not files:
         raise ValueError(f'{year}: checked ingest produced no new data files to export')
@@ -55,7 +51,7 @@ def export_staged_changes(staging_root: Path, data_root: Path, export_dir: Path,
         'schemaVersion': 1,
         'year': year,
         'seedPath': f'data/year-links/{year}.json',
-        'seedSha256': _digest(seed_content),
+        'seedSha256': sha256_bytes(seed_content),
         'complete': bool(complete),
         'files': files,
     }, indent=2)
@@ -134,7 +130,7 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
         if manifest.get('year') != year or manifest.get('seedPath') != seed_path:
             raise ValueError(f'artifact manifest does not match year {year}')
         current_seed = repo_root / Path(*PurePosixPath(seed_path).parts)
-        if not current_seed.is_file() or _digest(current_seed.read_bytes()) != manifest.get('seedSha256'):
+        if not current_seed.is_file() or sha256_bytes(current_seed.read_bytes()) != manifest.get('seedSha256'):
             raise ValueError(f'merged seed differs from the seed that produced year {year}')
         files = manifest.get('files')
         if not isinstance(files, list) or not files:
@@ -164,7 +160,7 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
                 if current.is_symlink():
                     raise ValueError(f'artifact contains a symlink: {relative_text}')
             content = source.read_bytes()
-            if len(content) != item.get('bytes') or _digest(content) != item.get('sha256'):
+            if len(content) != item.get('bytes') or sha256_bytes(content) != item.get('sha256'):
                 raise ValueError(f'artifact file failed its checksum: {relative_text}')
             destination = repo_root.joinpath(*relative.parts)
             if not destination.resolve().is_relative_to(repo_root):
