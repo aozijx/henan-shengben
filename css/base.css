@@ -163,7 +163,7 @@ body{
   transition:background-color .25s ease, color .25s ease;
 }
 /* Shared shell for page-level surfaces; component sheets keep only their own spacing and layout. */
-:where(.filter-panel,.explorer-actions,.export-actions,.result,.chart-card){
+:where(.filter-panel,.result,.chart-card){
   background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
 }
 .page{max-width:1280px;margin:0 auto;padding:0 20px 56px;}
@@ -181,7 +181,7 @@ select option{background-color:var(--surface);color:var(--ink);}
 
 /* Superellipse corners enhance supported browsers; border-radius remains the fallback. */
 @supports (corner-shape:superellipse(1.2)){
-  :where(.theme-toggle,.stats>div,.tab,.search-row input,.search-row button,.filter-panel,.filter-field select,.filter-field input,.filter-field button,.filter-operations button,.result-toolbar button,.aggregate-card,.aggregate-detail-action button,.school-comparison-card,.score-segment-year,.aggregate-table-wrap,.year-selection-dialog,.year-selection-actions button,.table-pagination button,.chart-card,.plan-card,.stats-major-choices,.stats-selection-controls button,#stats-edit-filters,.about-block,.export-actions button){
+  :where(.theme-toggle,.stats>div,.tab,.search-row input,.search-row button,.filter-panel,.filter-field select,.filter-field input,.filter-field button,.filter-operations button,.result-toolbar button,.aggregate-card,.aggregate-detail-action button,.school-comparison-card,.score-segment-year,.aggregate-table-wrap,.year-selection-dialog,.year-selection-actions button,.table-pagination button,.chart-card,.plan-card,.stats-major-choices,.stats-selection-controls button,#stats-edit-filters,.about-block){
     corner-shape:superellipse(1.2);
   }
 }
