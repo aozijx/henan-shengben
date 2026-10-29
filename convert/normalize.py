@@ -4,9 +4,9 @@ from pathlib import Path
 from typing import Any
 
 from .authority import SourceValue, resolve_field
-from .common import read_json, write_json
 from .validate import validate_score_segment_year
 from .segment_store import write_year
+from pipeline_io import read_json, write_json
 
 
 def normalization_input_status(target: dict[str, Any], plan: dict[str, Any],

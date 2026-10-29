@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from convert.common import read_json, write_json
+from pipeline_io import read_json, write_json
 
 
 class JsonWritingTest(unittest.TestCase):

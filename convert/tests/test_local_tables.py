@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from convert.common import write_json
+from pipeline_io import write_json
 from convert.local_tables import load_local_tables, local_source_rows, record_local_tables
 from convert.refresh_catalog import _source_catalog
 

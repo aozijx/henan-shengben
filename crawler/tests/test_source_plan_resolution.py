@@ -3,18 +3,20 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from crawler.year_sources import (
+from crawler.source_plan import (
     SOURCE_ROLES,
-    SourceResolutionError,
+    AnnualSourceError,
     build_data_plan,
     crawl_target_record,
+    execution_rows_from_resolved,
     load_year_links,
-    execution_rows_for_year,
-    resolve_year_sources,
     seed_paths_in,
     source_rows_for_seed,
     score_segment_target_for_seed,
+)
+from crawler.source_resolution import (
     _attachment_identity_evidence,
+    resolve_year_sources,
     validate_attachment,
 )
 
@@ -85,7 +87,7 @@ class YearSourcesTests(unittest.TestCase):
             second.parent.mkdir()
             first.write_text(json.dumps(seed), encoding='utf-8')
             second.write_text(json.dumps(seed), encoding='utf-8')
-            with self.assertRaisesRegex(SourceResolutionError, 'duplicate year-links seed'):
+            with self.assertRaisesRegex(AnnualSourceError, 'duplicate year-links seed'):
                 build_data_plan(Path(directory), seed_paths=[first, second])
 
     def test_seed_derives_every_year_specific_execution_path(self):
@@ -101,7 +103,7 @@ class YearSourcesTests(unittest.TestCase):
 
     def test_resolved_ingest_target_matches_shared_seed_target_record(self):
         page_url = 'https://www.haeea.cn/a/segments-2027.shtml'
-        _sources, resolved_target = execution_rows_for_year({
+        _sources, resolved_target = execution_rows_from_resolved({
             'year': 2027, 'pages': {'scoreSegments': page_url}, 'attachments': {},
         })
         self.assertEqual(resolved_target, crawl_target_record({
@@ -163,7 +165,7 @@ class YearSourcesTests(unittest.TestCase):
         without_master = dict(self.seed, sources={k: v for k, v in self.seed['sources'].items() if k != 'master'})
         partial = resolve_year_sources(without_master, FakeSession())
         self.assertNotIn('master', partial['attachments'])
-        rows, crawl = execution_rows_for_year(partial)
+        rows, crawl = execution_rows_from_resolved(partial)
         self.assertNotIn('master', [row['parser'] for row in rows])
         self.assertIsNotNone(crawl)
 
@@ -171,7 +173,7 @@ class YearSourcesTests(unittest.TestCase):
         seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
         seed['sources']['mappingOverview']['localPath'] = '专业对照/原始PDF/专业对照一览_附件2_2027.pdf'
         resolved = resolve_year_sources(seed, FakeSession())
-        mapping_row = next(row for row in execution_rows_for_year(resolved)[0] if row['parser'] == 'mapping')
+        mapping_row = next(row for row in execution_rows_from_resolved(resolved)[0] if row['parser'] == 'mapping')
         self.assertEqual(mapping_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
         seed_row = next(row for row in source_rows_for_seed(seed, Path('data')) if row['parser'] == 'mapping')
         self.assertEqual(seed_row['pdfPaths'][1], seed['sources']['mappingOverview']['localPath'])
@@ -182,7 +184,7 @@ class YearSourcesTests(unittest.TestCase):
             expected = {row['parser']: (row['outputPath'], row['pdfPaths'])
                         for row in source_rows_for_seed(self.seed, Path(directory))}
             actual = {row['parser']: (row['outputPath'], row['pdfPaths'])
-                      for row in execution_rows_for_year(resolved)[0]}
+                      for row in execution_rows_from_resolved(resolved)[0]}
             self.assertEqual(actual, expected)
 
     def test_partial_mapping_seed_ignores_stale_complete_mapping_file(self):
@@ -203,7 +205,7 @@ class YearSourcesTests(unittest.TestCase):
             seed = dict(self.seed, sources={key: dict(value) for key, value in self.seed['sources'].items()})
             seed['sources']['mappingOverview']['localPath'] = '../outside.pdf'
             path.write_text(json.dumps(seed), encoding='utf-8')
-            with self.assertRaisesRegex(SourceResolutionError, 'localPath'):
+            with self.assertRaisesRegex(AnnualSourceError, 'localPath'):
                 load_year_links(path)
 
     def test_xcoss_host_is_allowed_but_arbitrary_pdf_host_is_rejected(self):
@@ -213,11 +215,11 @@ class YearSourcesTests(unittest.TestCase):
             load_year_links(path)
             self.seed['sources']['master']['attachmentUrl'] = 'https://mirror.example/master.pdf'
             path.write_text(json.dumps(self.seed), encoding='utf-8')
-            with self.assertRaisesRegex(SourceResolutionError, 'official HTTPS host'):
+            with self.assertRaisesRegex(AnnualSourceError, 'official HTTPS host'):
                 load_year_links(path)
             self.seed['sources']['master']['attachmentUrl'] = 'http://xcoss.henan.gov.cn/typtfile/2027/master.pdf'
             path.write_text(json.dumps(self.seed), encoding='utf-8')
-            with self.assertRaisesRegex(SourceResolutionError, 'official HTTPS host'):
+            with self.assertRaisesRegex(AnnualSourceError, 'official HTTPS host'):
                 load_year_links(path)
 
     def test_education_authority_hosts_are_allowed_for_official_pages(self):
@@ -234,7 +236,7 @@ class YearSourcesTests(unittest.TestCase):
 
     def test_execution_rows_include_master_parser(self):
         resolved = resolve_year_sources(self.seed, FakeSession())
-        sources, _crawl = execution_rows_for_year(resolved)
+        sources, _crawl = execution_rows_from_resolved(resolved)
         row = next(row for row in sources if row['parser'] == 'master')
         self.assertEqual(row['outputPath'], '招生高校及专业/招生高校及专业_2027.json')
         self.assertEqual(row['pdfPaths'], ['招生高校及专业/原始PDF/招生高校及专业_2027.pdf'])
@@ -277,7 +279,7 @@ class YearSourcesTests(unittest.TestCase):
             pages={candidate: '2027 录取控制分数线'},
         )
         resolved = resolve_year_sources(seed, session)
-        rows, _target = execution_rows_for_year(resolved)
+        rows, _target = execution_rows_from_resolved(resolved)
         self.assertEqual(resolved['pages']['scorelines'], candidate)
         self.assertTrue(all(row['year'] == 2027 for row in rows))
         self.assertTrue(all('_2027.' in row['outputPath'] for row in rows))
@@ -288,7 +290,7 @@ class YearSourcesTests(unittest.TestCase):
         seed['sources']['scorelines'].pop('pageUrl')
         html = ('<div><a href="/a/first">2027年招生录取控制分数线</a></div>'
                 '<div><a href="/a/second">2027年招生录取控制分数线</a></div>')
-        with self.assertRaisesRegex(SourceResolutionError, 'expected one official page, found 2'):
+        with self.assertRaisesRegex(AnnualSourceError, 'expected one official page, found 2'):
             resolve_year_sources(seed, SearchSession(html))
 
     def test_skips_undeclared_role_but_rejects_html_412_for_declared_source(self):
@@ -302,7 +304,7 @@ class YearSourcesTests(unittest.TestCase):
         seed = dict(self.seed, sources=dict(self.seed['sources']))
         seed['sources']['scorelines'] = dict(seed['sources']['scorelines'])
         seed['sources']['scorelines']['pageUrl'] = self.seed['sources']['scoreSegments']['pageUrl']
-        with self.assertRaisesRegex(SourceResolutionError, 'does not confirm the year and source type'):
+        with self.assertRaisesRegex(AnnualSourceError, 'does not confirm the year and source type'):
             resolve_year_sources(seed, FakeSession())
 
 

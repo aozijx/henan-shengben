@@ -4,14 +4,13 @@ import sys
 from pathlib import Path
 
 from crawler.discover import DiscoveryBlockedError, discover_year
-from crawler.year_sources import (
-    SourceResolutionError,
+from crawler.source_plan import (
+    AnnualSourceError,
     build_data_plan,
     load_year_links,
-    resolve_score_segment_target,
     score_segment_target_for_seed,
-    seed_paths_in,
 )
+from crawler.source_resolution import resolve_score_segment_target
 
 
 class Response:
@@ -79,7 +78,7 @@ class DiscoverTest(unittest.TestCase):
                 'sources': {'scoreSegments': {}}}
         session = Session({'https://www.haeea.cn/search':
             '<a href="/a/one">2027 分数段统计表</a><a href="/a/two">2027 分数段统计表</a>'})
-        with self.assertRaisesRegex(SourceResolutionError, 'found 2'):
+        with self.assertRaisesRegex(AnnualSourceError, 'found 2'):
             resolve_score_segment_target(seed, session)
 
     def test_discovers_unique_official_pdfs_sorted_by_major_code(self):

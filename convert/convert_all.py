@@ -5,7 +5,10 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
-from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json
+from .console import ensure_stdout_utf8
+from .paths import DATA_ROOT
+from crawler.source_plan import build_data_plan
+from pipeline_io import read_json
 from .manual_corrections import apply_manual_correction
 from .normalize import normalization_input_status, save_normalized_target
 from .pdf_tables import RawPdfRow, extract_rows
@@ -72,7 +75,7 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
                    verbose: bool = False, full_report: bool = False,
                    return_report: bool = False) -> dict[str, Any] | tuple[dict[str, Any], dict[str, Any]]:
     workers = max(1, SCORE_SEGMENT_WORKERS if workers is None else workers)
-    plan = plan if plan is not None else load_data_plan(data_root, {int(target['year'])})
+    plan = plan if plan is not None else build_data_plan(data_root, {int(target['year'])})
     manifest = read_json(data_root / target["manifestPath"])
     output_path = data_root / target["normalizedPath"]
     existing = ({item['majorCode']: item for item in iter_year(output_path, data_root)}
@@ -141,7 +144,7 @@ def convert_target(target: dict[str, Any], data_root: Path, major_codes: set[str
 
 
 def main() -> int:
-    _ensure_stdout_utf8()
+    ensure_stdout_utf8()
     parser = argparse.ArgumentParser(description="批量抽取官方一分一段 PDF")
     parser.add_argument("--dataset", default="score-segments")
     parser.add_argument("--year", dest="years", action="append", type=int)
@@ -153,7 +156,7 @@ def main() -> int:
     args = parser.parse_args()
     if args.retry_review and args.major_codes:
         parser.error('--retry-review 和 --major 不能同时使用')
-    plan = load_data_plan(args.data_root, set(args.years) if args.years else None)
+    plan = build_data_plan(args.data_root, set(args.years) if args.years else None)
     data_root = args.data_root
     targets = [
         item for item in plan["targets"]

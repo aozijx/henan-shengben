@@ -4,12 +4,15 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from .common import DATA_ROOT, _ensure_stdout_utf8, load_data_plan, read_json, write_json
+from .console import ensure_stdout_utf8
+from .paths import DATA_ROOT
 from .manual_corrections import apply_manual_correction, ensure_manual_corrections
 from .normalize import save_normalized_target
 from .pdf_tables import RawPdfRow, extract_rows
 from .score_segments import parse_score_segments
 from .segment_store import iter_year
+from crawler.source_plan import build_data_plan
+from pipeline_io import read_json, write_json
 
 
 def _analyze_rows(rows: list[RawPdfRow]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -93,7 +96,7 @@ def _issue_detail(
 def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None,
                      *, full_report: bool = False) -> list[dict[str, Any]]:
     data_root = Path(data_root)
-    plan = load_data_plan(data_root, years)
+    plan = build_data_plan(data_root, years)
     score_paths = {int(item["year"]): item["outputPath"] for item in plan["sources"] if item["parser"] == "scorelines"}
     correction_path = data_root / "一分一段" / "人工修正.json"
     corrections = read_json(correction_path).get("corrections", []) if correction_path.exists() else []
@@ -197,7 +200,7 @@ def generate_reports(data_root: Path = DATA_ROOT, years: set[int] | None = None,
 
 
 def main() -> int:
-    _ensure_stdout_utf8()
+    ensure_stdout_utf8()
     parser = argparse.ArgumentParser(description="生成一分一段 OCR 异常人工核对报告")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--years", nargs="+", type=int)

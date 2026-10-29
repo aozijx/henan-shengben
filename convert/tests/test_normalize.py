@@ -2,7 +2,8 @@ import unittest
 import tempfile
 from pathlib import Path
 
-from convert.common import load_data_plan, read_json
+from crawler.source_plan import build_data_plan
+from pipeline_io import read_json
 from convert.normalize import normalize_target
 from convert.segment_store import merge_year
 
@@ -13,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 class NormalizeTest(unittest.TestCase):
     def _published_plan(self, data_root):
         metadata = read_json(REPO_ROOT / 'metadata/school-data.json')
-        return load_data_plan(data_root, set(metadata['supportedYears']))
+        return build_data_plan(data_root, set(metadata['supportedYears']))
 
     def test_reviewed_inputs_never_become_published_majors(self):
         data_root = REPO_ROOT / "data"

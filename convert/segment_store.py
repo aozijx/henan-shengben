@@ -6,8 +6,10 @@ import json
 from pathlib import Path
 from typing import Iterator
 
-from .common import DATA_ROOT, read_json, write_bytes_if_changed
+from .paths import DATA_ROOT
+from crawler.source_plan import build_data_plan
 from pipeline_integrity import sha256_bytes
+from pipeline_io import read_json, write_bytes_if_changed
 
 
 def _bytes(value: object) -> bytes:
@@ -88,8 +90,7 @@ def main() -> int:
     parser.add_argument('--data-root', type=Path, default=DATA_ROOT)
     parser.add_argument('--output', type=Path, required=True, help='new merged copy; never overwrites the index')
     args = parser.parse_args()
-    from .common import load_data_plan
-    targets = [item for item in load_data_plan(args.data_root, {args.year})['targets']
+    targets = [item for item in build_data_plan(args.data_root, {args.year})['targets']
                if item['year'] == args.year and item['dataset'] == 'score-segments']
     if len(targets) != 1:
         parser.error(f'year-links does not define one score-segments target for {args.year}')

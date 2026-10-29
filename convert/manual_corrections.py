@@ -3,8 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .common import write_json
 from .pdf_tables import RawPdfRow
+from pipeline_io import write_json
 
 
 def ensure_manual_corrections(path: Path, reports: list[dict[str, Any]]) -> bool:

@@ -11,10 +11,6 @@ class AnnualSourceError(ValueError):
     pass
 
 
-# Compatibility name retained for existing seed and resolution callers.
-SourceResolutionError = AnnualSourceError
-
-
 SOURCE_ROLES = {
     'scoreSegments': ('分数段统计表', '一分一段'),
     'scorelines': ('录取控制分数线', '控制分数线'),

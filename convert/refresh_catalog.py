@@ -8,11 +8,13 @@ import re
 import tempfile
 from pathlib import Path
 
-from .common import DATA_ROOT, REPO_ROOT, load_data_plan, read_json, write_json
+from .paths import DATA_ROOT, REPO_ROOT
 from .validate import validate_score_segment_major
 from .segment_store import iter_year
 from .local_tables import load_local_tables
 from pipeline_integrity import sha256_bytes
+from pipeline_io import read_json, write_json
+from crawler.source_plan import build_data_plan
 
 CODE_RE = re.compile(r'^[A-Za-z0-9]+$')
 DERIVATION_VERSION = 3
@@ -239,7 +241,7 @@ def validate_year_sources(year: int, files: dict, canonical: dict, report: dict,
 
 def _source_map(data_root: Path):
     by_year = {}
-    plan = load_data_plan(data_root)
+    plan = build_data_plan(data_root)
     for item in plan['sources']:
         if (data_root / item['outputPath']).is_file():
             by_year.setdefault(int(item['year']), {})[item['parser']] = item['outputPath']

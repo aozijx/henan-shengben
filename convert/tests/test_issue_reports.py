@@ -49,7 +49,7 @@ class IssueReportTest(unittest.TestCase):
             stale_report = root / 'reports/异常数据_2027.json'
             stale_report.parent.mkdir(parents=True, exist_ok=True)
             stale_report.write_text('{"issueCount":0,"issues":[]}', encoding='utf-8')
-            with patch('convert.issue_reports.load_data_plan', return_value=plan), \
+            with patch('convert.issue_reports.build_data_plan', return_value=plan), \
                  patch('convert.issue_reports.extract_rows', return_value=[]), \
                  patch('convert.normalize.write_year', wraps=write_year) as write:
                 reports = generate_reports(root, {2027})

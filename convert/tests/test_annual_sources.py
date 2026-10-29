@@ -3,13 +3,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from convert.common import DATA_ROOT, load_data_plan
-from crawler.year_sources import load_year_links, seed_paths_in
+from convert.paths import DATA_ROOT
+from crawler.source_plan import build_data_plan, load_year_links, seed_paths_in
 
 
 class AnnualSourcePlanTests(unittest.TestCase):
     def test_repository_plan_is_derived_from_year_seeds_and_local_files(self):
-        plan = load_data_plan(DATA_ROOT)
+        plan = build_data_plan(DATA_ROOT)
         seeds = [load_year_links(path) for path in seed_paths_in(DATA_ROOT)]
         expected_targets = [seed['year'] for seed in seeds if 'scoreSegments' in seed.get('sources', {})]
         self.assertEqual([target['year'] for target in plan['targets']], expected_targets)
@@ -40,7 +40,7 @@ class AnnualSourcePlanTests(unittest.TestCase):
                     },
                 }), encoding='utf-8')
 
-            plan = load_data_plan(root, {2024, 2028})
+            plan = build_data_plan(root, {2024, 2028})
 
             self.assertEqual([target['year'] for target in plan['targets']], [2024, 2028])
             self.assertEqual([(row['year'], row['parser']) for row in plan['sources']],

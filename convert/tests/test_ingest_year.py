@@ -9,9 +9,9 @@ from convert.ingest_year import (
     _summary_report, ingest_year, publish_staged_files,
     validate_score_segment_pdfs,
 )
-from convert.common import REPO_ROOT
+from convert.paths import REPO_ROOT
 from convert.normalize import save_normalized_target
-from crawler.year_sources import SourceResolutionError
+from crawler.source_plan import AnnualSourceError
 
 
 YEAR = 2027
@@ -157,8 +157,8 @@ class IngestYearTests(unittest.TestCase):
             path.parent.mkdir(parents=True)
             path.write_bytes(b'%PDF-')
             with patch('convert.ingest_year.validate_attachment',
-                       side_effect=SourceResolutionError('source type mismatch')):
-                with self.assertRaisesRegex(SourceResolutionError, '51_计算机科学与技术.pdf'):
+                       side_effect=AnnualSourceError('source type mismatch')):
+                with self.assertRaisesRegex(AnnualSourceError, '51_计算机科学与技术.pdf'):
                     validate_score_segment_pdfs([entry], Path(folder), YEAR)
 
     def test_default_cli_summary_omits_per_source_and_success_resolution_details(self):

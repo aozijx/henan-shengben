@@ -34,8 +34,8 @@ class ConvertAllTest(unittest.TestCase):
             plan = {'targets': targets, 'sources': sources, 'seeds': []}
 
             with patch('sys.argv', ['convert_all', '--data-root', str(root)]), \
-                    patch('convert.convert_all._ensure_stdout_utf8'), \
-                    patch('convert.convert_all.load_data_plan', return_value=plan), \
+                    patch('convert.convert_all.ensure_stdout_utf8'), \
+                    patch('convert.convert_all.build_data_plan', return_value=plan), \
                     patch('convert.convert_all.convert_target') as convert, \
                     redirect_stdout(StringIO()) as output:
                 result = convert_all_main()

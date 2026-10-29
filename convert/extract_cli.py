@@ -14,16 +14,13 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from .common import (
-    DATA_ROOT,
-    _ensure_stdout_utf8,
-    load_data_plan,
-    read_json,
-    write_json,
-)
+from .console import ensure_stdout_utf8
+from .paths import DATA_ROOT
 from .diff import diff_mapping, diff_rows
 from .local_tables import local_source_rows, record_local_tables
 from .sources import extract_entry
+from crawler.source_plan import build_data_plan
+from pipeline_io import read_json, write_json
 
 
 def _diff_for(parser: str) -> Any:
@@ -52,7 +49,7 @@ def extract_year_sources(plan: dict, data_root: Path, year: int, *, write: bool,
 
 
 def main() -> int:
-    _ensure_stdout_utf8()
+    ensure_stdout_utf8()
 
     parser = argparse.ArgumentParser(description="官方数据表：抽取校验 + 可选写回")
     parser.add_argument("--write", action="store_true", help="将重新抽取的结果写回 data/（仅写有差异的文件）")
@@ -64,7 +61,7 @@ def main() -> int:
     if args.local and args.year is None:
         parser.error('--local requires --year')
     plan = ({'sources': local_source_rows(args.data_root, args.year)} if args.local
-            else load_data_plan(args.data_root, {args.year} if args.year is not None else None))
+            else build_data_plan(args.data_root, {args.year} if args.year is not None else None))
     if args.local and not plan['sources']:
         parser.error(f'{args.year}: no local PDF table found')
 
