@@ -5,10 +5,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from convert.refresh_catalog import (
-    _analytics, _json_content_sha256, _major_name_matches, _manifest_identity_hash, _source_map,
-    _apply_source_reuse, refresh_catalog, validate_year_sources,
-)
+from convert.catalog_analytics import build_annual_analytics
+from convert.catalog_sources import apply_source_reuse, collect_source_map
+from convert.catalog_identity import major_name_matches
+from convert.catalog_validation import json_content_sha256, manifest_identity_sha256, validate_year_sources
+from convert.refresh_catalog import refresh_catalog
 from convert.segment_store import merge_year, write_year
 
 
@@ -32,44 +33,44 @@ class RefreshCatalogTest(unittest.TestCase):
             2026: {'mapping': 'mapping-2026.json'},
             2027: {'mappingCodeTable': 'codes-2027.json'},
         }
-        _apply_source_reuse(sources, {'mapping': 'latestAvailable'})
+        apply_source_reuse(sources, {'mapping': 'latestAvailable'})
         self.assertEqual(sources[2024]['mapping'], 'mapping-2026.json')
         self.assertEqual(sources[2024]['mappingReferenceYear'], 2026)
         sources[2027]['mapping'] = 'mapping-2027.json'
         del sources[2024]['mapping']
         del sources[2024]['mappingReferenceYear']
-        _apply_source_reuse(sources, {'mapping': 'latestAvailable'})
+        apply_source_reuse(sources, {'mapping': 'latestAvailable'})
         self.assertEqual(sources[2024]['mapping'], 'mapping-2027.json')
         self.assertEqual(sources[2024]['mappingReferenceYear'], 2027)
         self.assertEqual(sources[2026]['mapping'], 'mapping-2026.json')
 
     def test_source_reuse_requires_explicit_policy(self):
         sources = {2024: {}, 2026: {'mapping': 'mapping-2026.json'}}
-        _apply_source_reuse(sources, {})
+        apply_source_reuse(sources, {})
         self.assertNotIn('mapping', sources[2024])
         with self.assertRaisesRegex(ValueError, 'unsupported source reuse policy'):
-            _apply_source_reuse(sources, {'plans': 'latestAvailable'})
+            apply_source_reuse(sources, {'plans': 'latestAvailable'})
 
     def test_input_hash_is_stable_across_json_format_and_line_endings(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'input.json'
             path.write_bytes(b'{\r\n  "year": 2023,\r\n  "value": 10\r\n}')
-            first = _json_content_sha256(json.loads(path.read_text(encoding='utf-8')))
+            first = json_content_sha256(json.loads(path.read_text(encoding='utf-8')))
             path.write_text('{"value":10,"year":2023}', encoding='utf-8')
-            self.assertEqual(first, _json_content_sha256(json.loads(path.read_text(encoding='utf-8'))))
+            self.assertEqual(first, json_content_sha256(json.loads(path.read_text(encoding='utf-8'))))
 
     def test_manifest_hash_ignores_download_status_and_json_formatting(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'manifest.json'
             source = {'year': 2023, 'entries': [{'majorCode': '01', 'pdfUrl': 'https://example.org/one.pdf'}]}
             path.write_text(json.dumps(source), encoding='utf-8')
-            first = _manifest_identity_hash(path)
+            first = manifest_identity_sha256(path)
             source['entries'][0]['downloadStatus'] = 'downloaded'
             path.write_text(json.dumps(source, ensure_ascii=False, indent=2), encoding='utf-8')
-            self.assertEqual(first, _manifest_identity_hash(path))
+            self.assertEqual(first, manifest_identity_sha256(path))
             source['entries'][0]['pdfUrl'] = 'https://example.org/two.pdf'
             path.write_text(json.dumps(source), encoding='utf-8')
-            self.assertNotEqual(first, _manifest_identity_hash(path))
+            self.assertNotEqual(first, manifest_identity_sha256(path))
 
     def test_year_validator_is_public_for_ingestion_and_tools(self):
         self.assertTrue(callable(validate_year_sources))
@@ -77,31 +78,31 @@ class RefreshCatalogTest(unittest.TestCase):
     def test_special_99_a1_code_alias_accepts_official_parenthetical_name(self):
         mapping_names = {'99': {'财务管理', '会计学'}}
         plan_names = {'A1': {'财务管理'}}
-        self.assertTrue(_major_name_matches(
+        self.assertTrue(major_name_matches(
             'A1', '财务管理（含大数据与财务管理）', mapping_names, plan_names))
 
     def test_special_99_a1_alias_does_not_accept_parenthetical_name_for_other_code(self):
         mapping_names = {'99': {'财务管理', '会计学'}}
         plan_names = {'A1': {'财务管理'}}
-        self.assertFalse(_major_name_matches(
+        self.assertFalse(major_name_matches(
             '99', '财务管理（含大数据与财务管理）', mapping_names, plan_names))
 
     def test_special_99_a1_alias_does_not_strip_arbitrary_parenthetical_suffix(self):
         mapping_names = {'99': {'财务管理'}}
         plan_names = {'A1': {'财务管理'}}
-        self.assertFalse(_major_name_matches(
+        self.assertFalse(major_name_matches(
             'A1', '财务管理（错配）', mapping_names, plan_names))
 
     def test_borrowed_mapping_missing_code_falls_back_to_scoreline_and_plan_name(self):
-        self.assertTrue(_major_name_matches(
+        self.assertTrue(major_name_matches(
             'E4', '绘画', {}, {'E4': {'绘画'}}))
-        self.assertFalse(_major_name_matches(
+        self.assertFalse(major_name_matches(
             'E4', '绘画', {'E4': {'油画'}}, {'E4': {'绘画'}}))
 
     def test_borrowed_mapping_accepts_teacher_training_direction_only(self):
-        self.assertTrue(_major_name_matches(
+        self.assertTrue(major_name_matches(
             'R2', '书法学', {}, {'R2': {'书法学(师范)'}}))
-        self.assertFalse(_major_name_matches(
+        self.assertFalse(major_name_matches(
             'R2', '书法学', {}, {'R2': {'书法学(错配)'}}))
 
     def test_discovers_seeded_new_year_canonical_files_and_ignores_unseeded_files(self):
@@ -113,7 +114,7 @@ class RefreshCatalogTest(unittest.TestCase):
                 (data / directory).mkdir(parents=True)
                 (data / directory / f'{prefix}_2028.json').write_text('{}', encoding='utf-8')
                 (data / directory / f'{prefix}_2099.json').write_text('{}', encoding='utf-8')
-            sources = _source_map(data)
+            sources = collect_source_map(data)
             self.assertEqual(set(sources[2028]), {'mapping', 'scorelines', 'plans', 'score-segments'})
             self.assertEqual(sources[2028]['mapping'], '专业对照/专业对照_2028.json')
             self.assertNotIn(2099, sources)
@@ -126,7 +127,7 @@ class RefreshCatalogTest(unittest.TestCase):
         plans = [
             {'专业代号': '99', '专业名称': '会计学', '院校名称': '甲大学', '办学性质': '公办', '计划人数': 20},
             {'专业代号': '99', '专业名称': '财务管理', '院校名称': '乙大学', '办学性质': '公办', '计划人数': 30}]
-        rows = _analytics(2027, mapping, scores, plans)['majors']
+        rows = build_annual_analytics(2027, mapping, scores, plans)['majors']
         self.assertEqual({row['majorName']: row['schoolTypes']['public']['ordinaryPlanCount'] for row in rows},
                          {'会计学': 20, '财务管理': 30})
 
@@ -138,7 +139,7 @@ class RefreshCatalogTest(unittest.TestCase):
         plans = [
             {'专业代号': '51', '专业名称': '计算机科学与技术', '院校名称': '甲', '计划人数': 2070},
             {'专业代号': '51', '专业名称': '计算机应用工程', '院校名称': '乙', '计划人数': 150}]
-        rows = _analytics(2024, mapping, [], plans)['majors']
+        rows = build_annual_analytics(2024, mapping, [], plans)['majors']
         totals = {row['majorName']: row['schoolTypes']['public']['ordinaryPlanCount'] for row in rows}
         self.assertEqual(totals, {'计算机科学与技术': 2070,
                                   '计算机应用工程（本科层次职业教育专业）': 150,

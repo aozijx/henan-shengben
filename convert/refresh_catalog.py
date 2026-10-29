@@ -4,396 +4,35 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import tempfile
 from pathlib import Path
 
+from .catalog_analytics import build_annual_analytics
+from .catalog_sources import apply_source_reuse, build_source_catalog, collect_source_map
+from .catalog_validation import (
+    clean_report, json_content_sha256, manifest_identity_sha256, published_report,
+    read_catalog_json, resolve_data_path, validate_year_sources,
+)
 from .paths import DATA_ROOT, REPO_ROOT
-from .validate import validate_score_segment_major
-from .segment_store import iter_year
-from .local_tables import load_local_tables
 from pipeline_integrity import sha256_bytes
-from pipeline_io import read_json, write_json
-from crawler.source_plan import build_data_plan
+from pipeline_io import write_json
 
-CODE_RE = re.compile(r'^[A-Za-z0-9]+$')
 DERIVATION_VERSION = 3
-
-
-def _json(path: Path):
-    if not path.is_file():
-        raise ValueError(f"Missing canonical source: {path}")
-    return read_json(path)
-
-
-def _json_content_sha256(document: object) -> str:
-    """Hash JSON values consistently across formatting and line endings."""
-    encoded = json.dumps(document, ensure_ascii=False, sort_keys=True,
-                         separators=(',', ':')).encode('utf-8')
-    return sha256_bytes(encoded)
-
-
-def _source_path(data_root: Path, relative: str) -> Path:
-    path = (data_root / relative).resolve()
-    if not path.is_relative_to(data_root.resolve()):
-        raise ValueError(f'Source escapes data root: {relative}')
-    return path
-
-
-def _previous_input_hashes(data_root: Path, metadata: dict) -> dict:
-    """Read the prior catalog only when metadata explicitly points to it."""
-    source = metadata.get('catalogSource')
-    if not isinstance(source, str) or not source.startswith('data/'):
-        return {}
-    path = _source_path(data_root, source.removeprefix('data/'))
-    if not path.is_file():
-        return {}
-    catalog = _json(path)
-    hashes = catalog.get('inputSha256', {})
-    return hashes if isinstance(hashes, dict) else {}
-
-
-def _manifest_identity_hash(path: Path) -> str:
-    """Hash source identity, ignoring download bookkeeping and JSON formatting."""
-    document = _json(path)
-    for entry in document.get('entries', []):
-        if isinstance(entry, dict):
-            entry.pop('downloadStatus', None)
-    return _json_content_sha256(document)
-
-
-def _published_report(report: dict) -> dict:
-    """Retain validation facts in metadata without successful OCR detail."""
-    keys = ('year', 'sourceManifest', 'inputMajorCount', 'publishedMajorCount',
-            'officialEmptyCount', 'sourceUnavailableCount', 'blockingCount')
-    summary = {key: report.get(key) for key in keys}
-    for key in ('officialEmpty', 'sourceUnavailable', 'blockers', 'validationErrors'):
-        if report.get(key):
-            summary[key] = report[key]
-    return summary
-
-
-def _clean_report(year: int, segments: dict) -> dict:
-    majors = segments.get('majors', [])
-    return {'year': year, 'sourceManifest': segments.get('sourceManifest'),
-            'inputMajorCount': len(majors),
-            'publishedMajorCount': sum(item.get('status', 'ok') == 'ok' for item in majors),
-            'officialEmptyCount': 0, 'sourceUnavailableCount': 0, 'blockingCount': 0}
-
-
-def validate_year_sources(year: int, files: dict, canonical: dict, report: dict, data_root: Path,
-                          manifest: dict | None = None) -> None:
-    for parser, directory in [('mapping', '专业对照'), ('scorelines', '省控线'),
-                              ('plans', '招生计划'), ('score-segments', '一分一段')]:
-        path = Path(files[parser])
-        if path.parent.as_posix() != directory:
-            raise ValueError(f'{year}: unexpected {parser} source directory')
-        source_year = int(path.stem.rsplit('_', 1)[1]) if path.stem.rsplit('_', 1)[-1].isdigit() else None
-        if source_year != (files.get('mappingReferenceYear', year) if parser == 'mapping' else year):
-            raise ValueError(f'{year}: {parser} source year mismatch')
-    mapping = canonical['mapping']
-    scores = canonical['scorelines']
-    plans = canonical['plans']
-    segments = canonical['score-segments']
-    if not isinstance(mapping, list) or not mapping or not isinstance(scores, list) or not isinstance(plans, list):
-        raise ValueError(f'{year}: mapping, scorelines and plans must be non-empty arrays')
-    mapping_codes = set()
-    for entry in mapping:
-        if not isinstance(entry, dict) or not isinstance(entry.get('专科专业'), str) or not isinstance(entry.get('可报本科专业'), list):
-            raise ValueError(f'{year}: invalid specialty mapping')
-        for major in entry['可报本科专业']:
-            if not isinstance(major, dict) or not CODE_RE.fullmatch(str(major.get('专业代号', ''))) or not major.get('专业名称'):
-                raise ValueError(f'{year}: invalid mapped major')
-            mapping_codes.add(str(major['专业代号']))
-    score_codes = set()
-    for row in scores:
-        code = str(row.get('专业代号', '')) if isinstance(row, dict) else ''
-        if not CODE_RE.fullmatch(code) or code in score_codes or not row.get('专业名称') or not isinstance(row.get('分数线'), int):
-            raise ValueError(f'{year}: invalid or duplicate scoreline code {code}')
-        score_codes.add(code)
-    plan_codes = set()
-    for row in plans:
-        code = str(row.get('专业代号', '')) if isinstance(row, dict) else ''
-        if (not CODE_RE.fullmatch(code) or row.get('年度') != year or not row.get('院校名称') or
-                row.get('办学性质') not in ('公办', '民办') or
-                not isinstance(row.get('计划人数'), int) or row['计划人数'] < 0):
-            raise ValueError(f'{year}: invalid or wrong-year plan row for {code}')
-        plan_codes.add(code)
-    if segments.get('year') != year:
-        raise ValueError(f'{year}: score segment year mismatch')
-    segment_index_path = _source_path(data_root, files['score-segments'])
-    segment_codes = set()
-    for position, major in enumerate(iter_year(segment_index_path, data_root)):
-        code = str(major['majorCode'])
-        if major.get('status', 'ok') != 'ok':
-            continue
-        if code in segment_codes:
-            raise ValueError(f'{year}: duplicate score segment code {code}')
-        segment_codes.add(code)
-        errors = validate_score_segment_major(major, data_root, f'majors[{position}]')
-        if errors:
-            issue = errors[0]
-            raise ValueError(f'{year}: score segment validation failed: {issue.code} at {issue.path}')
-    if report.get('year') != year:
-        raise ValueError(f'{year}: conversion report year is {report.get("year")!r}')
-    blockers = report.get('blockers') or []
-    validation_errors = report.get('validationErrors') or []
-    if report.get('blockingCount') != 0 or blockers or validation_errors:
-        details = [f"{item.get('majorCode', '?')} {item.get('majorName', '')}".strip()
-                   for item in blockers]
-        details.extend(str(item.get('code', 'validation-error')) for item in validation_errors)
-        detail_text = '、'.join(details) if details else '报告阻塞计数非零但未提供明细'
-        raise ValueError(f"{year}: conversion report has {report.get('blockingCount')} blocking issue(s): {detail_text}")
-    published_entries = [item for item in segments['majors'] if item.get('status', 'ok') == 'ok']
-    if report.get('publishedMajorCount') != len(published_entries):
-        raise ValueError(f'{year}: conversion report major count mismatch')
-    if not segment_codes <= score_codes:
-        raise ValueError(f'{year}: score segments contain codes absent from scorelines')
-    official_empty_codes = {str(item.get('majorCode')) for item in report.get('officialEmpty', [])}
-    official_empty_rows = report.get('officialEmpty', [])
-    unavailable_codes: set[str] = set()
-    if report.get('officialEmptyCount', len(official_empty_rows)) != len(official_empty_rows):
-        raise ValueError(f'{year}: official-empty count does not match evidence records')
-    for item in official_empty_rows:
-        if (not CODE_RE.fullmatch(str(item.get('majorCode', ''))) or
-                item.get('reason') != 'official-empty' or not str(item.get('evidenceNote', '')).strip()):
-            raise ValueError(f'{year}: official-empty exception requires a code and evidence note')
-    manifest_path = segments.get('sourceManifest')
-    if manifest is None and isinstance(manifest_path, str):
-        manifest = _json(_source_path(data_root, manifest_path))
-    if manifest is not None:
-        entries = manifest.get('entries')
-        if manifest.get('year') != year or manifest.get('dataset') != 'score-segments' or not isinstance(entries, list):
-            raise ValueError(f'{year}: invalid score segment source manifest')
-        manifest_codes = [str(item.get('majorCode', '')) for item in entries if isinstance(item, dict)]
-        if len(manifest_codes) != len(entries) or any(not CODE_RE.fullmatch(code) for code in manifest_codes):
-            raise ValueError(f'{year}: invalid source manifest major code')
-        if len(set(manifest_codes)) != len(manifest_codes):
-            raise ValueError(f'{year}: duplicate manifest major code')
-        if any(item.get('year') != year for item in entries):
-            raise ValueError(f'{year}: source manifest year mismatch')
-        unavailable_rows = report.get('sourceUnavailable', [])
-        unavailable_codes = {str(item.get('majorCode')) for item in unavailable_rows}
-        if report.get('sourceUnavailableCount', len(unavailable_rows)) != len(unavailable_rows):
-            raise ValueError(f'{year}: source-unavailable count does not match evidence records')
-        for item in unavailable_rows:
-            if (not CODE_RE.fullmatch(str(item.get('majorCode', ''))) or
-                    item.get('reason') != 'not-listed-in-official-score-segment-manifest' or
-                    item.get('sourcePageUrl') != manifest.get('sourcePageUrl')):
-                raise ValueError(f'{year}: source-unavailable exception requires matching official manifest evidence')
-        expected_unavailable = set(score_codes) - set(manifest_codes)
-        if unavailable_codes != expected_unavailable:
-            raise ValueError(f'{year}: source-unavailable codes do not match scorelines missing from the official manifest')
-        if unavailable_codes & official_empty_codes:
-            raise ValueError(f'{year}: a major cannot be both source-unavailable and official-empty')
-        if report.get('inputMajorCount') != len(entries):
-            missing = sorted(set(manifest_codes) - segment_codes - official_empty_codes)
-            raise ValueError(f"{year}: report inputMajorCount={report.get('inputMajorCount')} "
-                             f"but source manifest has {len(entries)} majors; "
-                             f"unpublished codes: {', '.join(missing) or 'none'}")
-        if report.get('publishedMajorCount') != len(segment_codes):
-            raise ValueError(f'{year}: report published major count mismatch')
-        if not official_empty_codes <= set(manifest_codes):
-            raise ValueError(f'{year}: official-empty code absent from source manifest')
-        if set(manifest_codes) != segment_codes | official_empty_codes:
-            raise ValueError(f'{year}: source manifest coverage does not match published and official-empty majors')
-        canonical_codes = {str(item.get('majorCode', '')) for item in segments['majors']}
-        if len(canonical_codes) != len(segments['majors']) or canonical_codes != set(manifest_codes):
-            raise ValueError(f'{year}: canonical shard codes do not match source manifest')
-        canonical_empty = {str(item['majorCode']) for item in segments['majors']
-                           if item.get('status') == 'official-empty'}
-        canonical_review = {str(item['majorCode']) for item in segments['majors']
-                            if item.get('status') == 'needs-review'}
-        if canonical_empty != official_empty_codes or canonical_review:
-            raise ValueError(f'{year}: canonical shard statuses do not match conversion report')
-    missing_segments = score_codes - segment_codes
-    if missing_segments - official_empty_codes - unavailable_codes:
-        score_names = {str(row['专业代号']): str(row.get('专业名称', '')) for row in scores}
-        missing = '、'.join(f"{code} {score_names.get(code, '')}".strip()
-                            for code in sorted(missing_segments - official_empty_codes - unavailable_codes))
-        raise ValueError(f'{year}: scorelines missing score segments without official-empty evidence: {missing}')
-    for row in iter_year(segment_index_path, data_root):
-        if row.get('status', 'ok') != 'ok':
-            continue
-        matching_score = next(item['分数线'] for item in scores if str(item['专业代号']) == str(row['majorCode']))
-        if row.get('controlScore') != matching_score:
-            raise ValueError(f'{year}: score segment control score mismatch for {row["majorCode"]}')
-    if not score_codes <= plan_codes or not plan_codes <= score_codes | {
-            str(item.get('majorCode')) for item in report.get('officialEmpty', [])}:
-        raise ValueError(f'{year}: scorelines and plans use inconsistent major codes')
-    mapping_names = {}
-    for entry in mapping:
-        for major in entry.get('可报本科专业', []):
-            mapping_names.setdefault(str(major.get('专业代号', '')), set()).add(
-                _normalized_major_name(major.get('专业名称')))
-    plan_names = {}
-    for row in plans:
-        plan_names.setdefault(str(row.get('专业代号', '')), set()).add(
-            _normalized_major_name(row.get('专业名称')))
-    for row in scores:
-        code = str(row['专业代号'])
-        expected_name = _normalized_major_name(row['专业名称'])
-        if not _major_name_matches(code, expected_name, mapping_names, plan_names):
-            raise ValueError(f'{year}: major name mismatch across mapping, scorelines and plans for {code}')
-    if files.get('mappingReferenceYear', year) == year and not (score_codes | plan_codes) <= mapping_codes | {'A1'}:
-        raise ValueError(f'{year}: yearly mapping is missing published major codes')
-
-
-def _source_map(data_root: Path):
-    by_year = {}
-    plan = build_data_plan(data_root)
-    for item in plan['sources']:
-        if (data_root / item['outputPath']).is_file():
-            by_year.setdefault(int(item['year']), {})[item['parser']] = item['outputPath']
-    for item in plan['targets']:
-        year = int(item['year'])
-        if (data_root / item['normalizedPath']).is_file():
-            by_year.setdefault(year, {})['score-segments'] = item['normalizedPath']
-        if (data_root / item['conversionReportPath']).is_file():
-            by_year.setdefault(year, {})['report'] = item['conversionReportPath']
-    return by_year
-
-
-def _source_catalog(data_root: Path, annual_sources: dict[int, dict]) -> dict[str, dict[str, str]]:
-    """Index each published table independently of complete annual statistics."""
-    roles = {'mapping': 'mapping', 'master': 'colleges', 'plans': 'plans',
-             'scorelines': 'scorelines', 'score-segments': 'scoreSegments'}
-    sources = {year: dict(files) for year, files in annual_sources.items()}
-    for year, files in load_local_tables(data_root).items():
-        sources.setdefault(year, {}).update(files)
-    catalog: dict[str, dict[str, str]] = {name: {} for name in roles.values()}
-    for year, files in sorted(sources.items()):
-        for parser, name in roles.items():
-            if parser in files:
-                catalog[name][str(year)] = f'data/{files[parser]}'
-    return catalog
-
-
-def _apply_source_reuse(sources: dict[int, dict], policies: dict[str, str]) -> None:
-    """Apply configured reuse only to source types that support cross-year validation."""
-    for parser, policy in policies.items():
-        if parser != 'mapping' or policy != 'latestAvailable':
-            raise ValueError(f'unsupported source reuse policy: {parser}={policy}')
-        available = {year: files[parser] for year, files in sources.items() if parser in files}
-        if not available:
-            continue
-        latest = max(available)
-        for files in sources.values():
-            if parser not in files:
-                files[parser] = available[latest]
-                files['mappingReferenceYear'] = latest
-
-
-def _major_rows(mapping):
-    found = {}
-    for item in mapping:
-        for major in item.get('可报本科专业', []):
-            code = str(major.get('专业代号', '')).strip()
-            if code:
-                found.setdefault((code, major['专业名称']), major)
-    return found
-
-
-def _normalized_major_name(value):
-    name = ''.join(str(value or '').split()).replace('（', '(').replace('）', ')')
-    return name.removesuffix('(本科层次职业教育专业)')
-
-
-def _major_name_matches(code: str, expected_name: str, mapping_names: dict, plan_names: dict) -> bool:
-    expected = _normalized_major_name(expected_name)
-    mapped = {_normalized_major_name(name) for name in mapping_names.get(code, set())}
-    planned = {_normalized_major_name(name) for name in plan_names.get(code, set())}
-    if expected in mapped or mapped & planned:
-        return True
-    # Older years borrow the current mapping; when it has no row for a legacy
-    # code, validate the scoreline against that year's plan. Current-year
-    # mapping coverage is checked separately below.
-    if not mapped and any(name == expected or name == f'{expected}(师范)' for name in planned):
-        return True
-
-    # An official A1 scoreline uses this qualified name, while the
-    # same major is listed as 财务管理 under mapping code 99 and plan code A1.
-    # Keep this as an evidence-backed exception rather than stripping arbitrary
-    # parentheses or merging names across the two codes.
-    return (
-        code == 'A1'
-        and expected == '财务管理(含大数据与财务管理)'
-        and '财务管理' in planned
-        and '财务管理' in {_normalized_major_name(name) for name in mapping_names.get('99', set())}
-    )
-
-
-def _matching_plan_rows(major, plan_by_code, plans):
-    code = str(major['专业代号']).strip()
-    name = _normalized_major_name(major['专业名称'])
-    exact = [row for row in plans if _normalized_major_name(row.get('专业名称')) == name]
-    if exact:
-        same_code = [row for row in exact if str(row.get('专业代号', '')).strip() == code]
-        return same_code or exact
-    codes = [code]
-    if code in ('99', 'A1'):
-        codes.append('A1' if code == '99' else '99')
-    for candidate_code in codes:
-        rows = plan_by_code.get(candidate_code, [])
-        if len({_normalized_major_name(row.get('专业名称')) for row in rows}) == 1:
-            return rows
-    return []
-
-
-def _analytics(year, mapping, scores, plans):
-    score_by_code = {str(row['专业代号']): row for row in scores}
-    plan_by_code = {}
-    for row in plans:
-        plan_by_code.setdefault(str(row.get('专业代号', '')), []).append(row)
-    result = []
-    for (code, _name), major in sorted(_major_rows(mapping).items()):
-        school_types = {}
-        candidates = _matching_plan_rows(major, plan_by_code, plans)
-        for label, key in [('公办', 'public'), ('民办', 'private')]:
-            rows = [r for r in candidates if r.get('办学性质', '公办') == label]
-            ordinary = [r for r in rows if r.get('建档立卡') != '是' and '建档立卡' not in r.get('招生类别', '')]
-            poverty = [r for r in rows if r not in ordinary]
-            schools = {}
-            for row in rows:
-                name = str(row.get('院校名称') or '').strip()
-                school_code = str(row.get('院校代号') or '').strip()
-                identity = (school_code, name) if school_code else ('', name)
-                school = schools.setdefault(identity, {'schoolName': name, 'schoolCode': school_code,
-                                                    'ordinaryPlanCount': 0,
-                                                    'povertyPlanCount': 0, 'hasOrdinaryPlan': False,
-                                                    'hasPovertyPlan': False})
-                special = row in poverty
-                school['povertyPlanCount' if special else 'ordinaryPlanCount'] += int(row.get('计划人数') or 0)
-                school['hasPovertyPlan' if special else 'hasOrdinaryPlan'] = True
-            school_types[key] = {
-                'allSchoolCount': len(schools),
-                'ordinarySchoolCount': sum(1 for school in schools.values() if school['ordinaryPlanCount'] > 0),
-                'ordinaryPlanCount': sum(int(r.get('计划人数') or 0) for r in ordinary),
-                'povertyPlanCount': sum(int(r.get('计划人数') or 0) for r in poverty),
-                'schools': [schools[identity] for identity in sorted(schools)],
-            }
-        score = score_by_code.get(code)
-        if score is None and code in ('99', 'A1'):
-            score = score_by_code.get('A1' if code == '99' else '99')
-        result.append({'majorCode': code, 'majorName': major['专业名称'],
-                       'controlScore': score.get('分数线') if score else None,
-                       'schoolTypes': school_types})
-    return {'schemaVersion': 1, 'year': year, 'majors': result}
 
 
 def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
                     *, retain_reports: bool = False) -> dict:
     data_root = Path(data_root)
-    template = _json(Path(template_path))
-    sources = _source_map(data_root)
-    source_catalog = _source_catalog(data_root, sources)
+    template = read_catalog_json(Path(template_path))
+    sources = collect_source_map(data_root)
+    source_catalog = build_source_catalog(data_root, sources)
     mapping_years = source_catalog['mapping']
     if not mapping_years:
         raise ValueError('No complete professional mapping is available for search')
     query_mapping_year = max(map(int, mapping_years))
     query_mapping_source = mapping_years[str(query_mapping_year)]
-    _apply_source_reuse(sources, template.get('sourceReuse', {}))
-    previous = _json(Path(metadata_path)) if Path(metadata_path).is_file() else {}
+    apply_source_reuse(sources, template.get('sourceReuse', {}))
+    previous = read_catalog_json(Path(metadata_path)) if Path(metadata_path).is_file() else {}
     previously_published_years = set(previous.get('supportedYears', []))
     previously_published_inputs = _previous_input_hashes(data_root, previous)
     publish = {}
@@ -408,18 +47,18 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
             if year in previously_published_years:
                 raise ValueError(f'{year}: published year missing canonical sources: {missing}')
             continue
-        canonical = {key: _json(_source_path(data_root, files[key])) for key in required}
-        report_file = _source_path(data_root, files['report']) if 'report' in files else None
-        report = (_json(report_file) if report_file else
+        canonical = {key: read_catalog_json(resolve_data_path(data_root, files[key])) for key in required}
+        report_file = resolve_data_path(data_root, files['report']) if 'report' in files else None
+        report = (read_catalog_json(report_file) if report_file else
                   previous.get('conversionReports', {}).get(str(year)) or
-                  _clean_report(year, canonical['score-segments']))
-        published_report = _published_report(report)
-        year_hashes = {key: _json_content_sha256(canonical[key]) for key in required}
-        year_hashes['report'] = _json_content_sha256(published_report)
+                  clean_report(year, canonical['score-segments']))
+        published_report = published_report(report)
+        year_hashes = {key: json_content_sha256(canonical[key]) for key in required}
+        year_hashes['report'] = json_content_sha256(published_report)
         derivation_hashes = dict(year_hashes)
         manifest_path = canonical['score-segments'].get('sourceManifest')
         if isinstance(manifest_path, str):
-            year_hashes['manifest'] = _manifest_identity_hash(_source_path(data_root, manifest_path))
+            year_hashes['manifest'] = manifest_identity_sha256(resolve_data_path(data_root, manifest_path))
         input_hashes[str(year)] = year_hashes
         previous_year_hashes = previously_published_inputs.get(str(year), {})
         unchanged_published_year = previous_year_hashes == year_hashes and report_file is None
@@ -431,7 +70,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
         version = sha256_bytes(json.dumps({'derivationVersion': DERIVATION_VERSION,
                                            'inputs': derivation_hashes}, sort_keys=True).encode('utf-8'))[:16]
         prefix = f'generated/{year}/{version}'
-        analytics = _analytics(year, canonical['mapping'], canonical['scorelines'], canonical['plans'])
+        analytics = build_annual_analytics(year, canonical['mapping'], canonical['scorelines'], canonical['plans'])
         analytics_path = f'{prefix}/analytics.json'
         output[analytics_path] = analytics
         score_segment_directory = Path(files['score-segments']).parent / str(year)
@@ -449,7 +88,7 @@ def refresh_catalog(data_root: Path, template_path: Path, metadata_path: Path,
         mapping_year = int(mapping_filename.rsplit('_', 1)[1])
         if mapping_year != year:
             publish[str(year)]['mappingReferenceYear'] = mapping_year
-        fallback = _source_path(data_root, f'招生高校及专业/招生高校及专业_{year}.json')
+        fallback = resolve_data_path(data_root, f'招生高校及专业/招生高校及专业_{year}.json')
         if fallback.exists():
             publish[str(year)]['collegeFallbackSource'] = f'data/{fallback.relative_to(data_root).as_posix()}'
     if not publish:
@@ -508,7 +147,3 @@ def main():
     args = parser.parse_args()
     result = refresh_catalog(args.data_root, args.template, args.metadata)
     print('Published years:', ', '.join(map(str, result['supportedYears'])))
-
-
-if __name__ == '__main__':
-    main()

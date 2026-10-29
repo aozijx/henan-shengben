@@ -4,7 +4,7 @@ from pathlib import Path
 
 from pipeline_io import write_json
 from convert.local_tables import load_local_tables, local_source_rows, record_local_tables
-from convert.refresh_catalog import _source_catalog
+from convert.catalog_sources import build_source_catalog
 
 
 class LocalTablesTest(unittest.TestCase):
@@ -28,7 +28,7 @@ class LocalTablesTest(unittest.TestCase):
                 write_json(root / row['outputPath'], [])
             record_local_tables(root, year, rows)
             self.assertEqual(load_local_tables(root)[year]['mapping'], f'专业对照/专业对照_{year}.json')
-            catalog = _source_catalog(root, {2031: {'mapping': '专业对照/专业对照_2031.json'}})
+            catalog = build_source_catalog(root, {2031: {'mapping': '专业对照/专业对照_2031.json'}})
             self.assertEqual(catalog['mapping'][str(year)], f'data/专业对照/专业对照_{year}.json')
             self.assertEqual(catalog['colleges'][str(year)], f'data/招生高校及专业/招生高校及专业_{year}.json')
             paths[1].write_bytes(b'changed')
