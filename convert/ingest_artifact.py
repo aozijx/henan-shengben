@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import os
 from pathlib import Path, PurePosixPath
 
 from pipeline_integrity import sha256_bytes
@@ -178,10 +177,7 @@ def apply_checked_artifact(artifact_root: Path, repo_root: Path, repository: str
     for _, destination, content, relative_text in copies:
         if destination.exists():
             continue
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        temporary = destination.with_name(destination.name + '.new')
-        temporary.write_bytes(content)
-        os.replace(temporary, destination)
+        write_bytes_if_changed(destination, content)
         applied.append(relative_text)
     write_bytes_if_changed(Path(applied_paths_file), ''.join(f'{path}\n' for path in applied).encode('utf-8'))
     return applied
