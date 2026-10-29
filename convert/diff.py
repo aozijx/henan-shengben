@@ -6,14 +6,9 @@ diff_mapping 用于专业对照表，按「专科专业 → 本科条目集合�
 """
 from __future__ import annotations
 
-import re
 from typing import Any
 
-
-def _squash(text: str | None) -> str:
-    if text is None:
-        return ""
-    return re.sub(r"\s+", "", str(text))
+from .text import squash
 
 
 def norm_item(item: Any) -> Any:
@@ -23,7 +18,7 @@ def norm_item(item: Any) -> Any:
     if isinstance(item, list):
         return [norm_item(v) for v in item]
     if isinstance(item, str):
-        return _squash(item)
+        return squash(item)
     return item
 
 
@@ -65,7 +60,7 @@ def diff_mapping(
                 )
                 for i in row["可报本科专业"]
             }
-            out[_squash(row["专科专业"])] = items
+            out[squash(row["专科专业"])] = items
         return out
 
     a, b = _key_map(extracted), _key_map(existing)

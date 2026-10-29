@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from convert.scanned_tables import tables_of
+from convert.text import squash
 from convert.source_references import (
     canonical_major_code, canonical_plan_major_name, major_codes, major_names,
     major_rows, school_code, school_names,
@@ -20,13 +21,6 @@ from convert.source_references import (
 
 
 # ---------- 通用工具 ----------
-
-def squash(text: str | None) -> str:
-    """去掉所有空白（PDF 单元格内自动换行不含语义）。"""
-    if text is None:
-        return ""
-    return re.sub(r"\s+", "", str(text))
-
 
 def to_int(text: str | None) -> int | None:
     text = squash(text)
