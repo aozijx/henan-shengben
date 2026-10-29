@@ -23,7 +23,7 @@
 | 配置内容 | 唯一维护位置 | 用途 |
 | --- | --- | --- |
 | 年度官方链接和来源覆盖项 | `data/year-links/YYYY.json` | 人工维护的年度来源声明。 |
-| 年度角色、路径和解析计划 | `crawler/year_sources.py` | 生成采集和转换共用的 `build_data_plan(...)`；可选目标由 seed 中声明的来源决定。 |
+| 年度角色、路径和解析计划 | `crawler/source_plan.py`、`crawler/source_resolution.py` | 前者验证 seed 并生成计划；后者解析官方网页和附件。可选目标由 seed 中声明的来源决定。 |
 | 浏览器可用年份、文件路径和字段规则 | `metadata/school-data.json`、`metadata/school-data.template.json` | 供页面读取的发布 metadata 及其模板。 |
 | 网络和 OCR 参数 | `pipeline_config.py` | 请求超时、WAF 引导、下载和设备默认值。 |
 | Actions 触发条件和权限 | `.github/workflows/yearly-data.yml` | GitHub Actions 工作流策略和发布行为。 |
@@ -32,6 +32,12 @@
 
 ## Python 数据流水线
 
-`crawler/` 校验官方 URL、发现附件、下载文件并管理串行 WAF 会话。`convert/` 提取、规范化、校验并发布规范 JSON 与浏览器 metadata。采集和转换通过 `crawler.year_sources.build_data_plan` 共用年度来源计划；本地 PDF 转换保留为独立离线入口。
+`crawler/` 校验官方 URL、发现附件、下载文件并管理串行 WAF 会话。`crawler.source_plan` 验证年度 seed 并派生纯数据执行计划；`crawler.source_resolution` 处理联网公告页、附件解析和 PDF 身份校验。采集和转换直接依赖相应模块。`convert/` 提取、规范化、校验并发布规范 JSON 与浏览器 metadata；本地 PDF 转换保留为独立离线入口。
+
+流水线跨包的文件操作集中在仓库根目录的 `pipeline_io.py`：统一 UTF-8 JSON 读取、稳定 JSON 序列化、内容未变时跳过写入、原子字节写入和保留元数据的原子复制。原始字节 SHA-256 位于 `pipeline_integrity.py`；规范化 JSON 内容哈希和来源身份哈希仍由 catalog 逻辑各自定义，因为它们代表不同内容。`convert.paths` 管理仓库与数据目录，`convert.console` 管理 CLI 编码，`convert.text.squash` 为 PDF 表格比较和来源引用提供共享的去空白规则。
+
+catalog 刷新由 `convert.refresh_catalog` 编排并发布；`catalog_sources` 收集年度输入和复用策略，`catalog_identity` 管理跨表专业身份规则，`catalog_validation` 校验数据约束，`catalog_analytics` 聚合浏览器统计数据。各模块由编排层按步骤调用，分析和校验共享专业身份规则，不互相依赖。
+
+表格 PDF 的文本表与扫描表识别由 `convert.scanned_tables` 提供；`table_extraction` 负责 parser 分派，具体字段解析分别位于省控线、招生计划、专业对照和高校总表模块，共用行筛选工具集中在 `table_rows`。
 
 GitHub Actions 校验年度 seed 派生的 artifact 并发布已验证的数据。工作流只维护触发和权限策略；数据角色和解析规则由共享年度计划维护。

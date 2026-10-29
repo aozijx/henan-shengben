@@ -4,7 +4,7 @@
 
 一分一段 PDF 没有文本层，是整页扫描图。流水线先由 `pdfplumber` 读取页码和内嵌图片，再由 RapidOCR 识别表格数字，最后通过纯解析器检查分数唯一性及累计人数单调性。快速识别违反约束时会自动逐单元格重试；仍无法确认的数字写入 `issues`，不会被静默补造。OCR 并发默认读取根目录 `pipeline_config.py`，CLI `--workers` 可临时覆盖。多进程按完成顺序显示进度，但年度索引仍按来源清单顺序保存。流式消费有利于及时显示结果和减少待处理对象，OCR 耗时仍主要由图像识别决定。
 
-省控线、招生计划、专业对照和招生高校表由 `scanned_tables.py` 优先读取 PDF 文本表格；只有页面没有文本表格时，才按扫描图上的表格线定位单元格并调用 RapidOCR。`sources.py` 解析字段，`source_references.py` 用年度来源清单校正 OCR 误读的代码与名称。招生计划的可选列按实际表格宽度识别，不按年份硬编码。扫描结果仍需核对行数、专业代码和跨表一致性；OCR 不能确认的数据不得当作空值通过。
+省控线、招生计划、专业对照和招生高校表由 `scanned_tables.py` 优先读取 PDF 文本表格；只有页面没有文本表格时，才按扫描图上的表格线定位单元格并调用 RapidOCR。`scoreline_parser.py`、`plan_parser.py`、`mapping_parser.py` 和 `master_parser.py` 分别解析对应表；`table_rows.py` 提供共用表格行工具，`table_extraction.py` 根据年度计划分派 parser。`source_references.py` 用来源清单校正 OCR 误读的代码与名称。招生计划的可选列按实际表格宽度识别，不按年份硬编码。扫描结果仍需核对行数、专业代码和跨表一致性；OCR 不能确认的数据不得当作空值通过。
 
 Windows 下的转换和异常复核 CLI 会将控制台输出设为 UTF-8，避免 OCR 行、中文名称或路径无法显示。
 
@@ -40,7 +40,7 @@ Windows 下的转换和异常复核 CLI 会将控制台输出设为 UTF-8，避�
 
 本地离线表格可按独立发布时间转换。将 PDF 放入 `data/专业对照/原始PDF/专业对照一览_YYYY.pdf`、`data/专业对照/原始PDF/专业代号对照_YYYY.pdf` 或 `data/招生高校及专业/原始PDF/招生高校及专业_YYYY.pdf` 等约定路径后运行 `python -m convert.extract_cli --local --year YYYY --write`，再运行 `python -m convert.refresh_catalog`。
 
-在线导入、本地转换和年度来源计划共用 `crawler/year_sources.py` 的表格路径定义；seed 的 `localPath` 可以覆盖对应 PDF 的默认路径。专业对照需要完整对照一览和代号对照两份 PDF；只有其中一份时会跳过该角色。来源与输出哈希记录在 `data/来源清单/本地表_YYYY.json`；哈希不符时 catalog 会拒绝使用。
+在线导入、本地转换和年度来源计划共用 `crawler/source_plan.py` 的表格路径定义；seed 的 `localPath` 可以覆盖对应 PDF 的默认路径。专业对照需要完整对照一览和代号对照两份 PDF；只有其中一份时会跳过该角色。来源与输出哈希记录在 `data/来源清单/本地表_YYYY.json`；哈希不符时 catalog 会拒绝使用。
 
 `sourceCatalog` 分别登记专业对照、院校总表、招生计划、省控线和一分一段的可用年份；页面年份筛选取已发布的对照、总表和计划年份的并集。某年缺少招生计划或省控线时，院校与专业仍可检索，对应人数或分数显示“未公布”；只有完整年度才进入 `supportedYears` 和统计分析。
 
