@@ -19,13 +19,13 @@ from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
 from crawler.waf import build_session
 from crawler.source_plan import (
+    AnnualSourceError,
     SOURCE_ROLES,
-    SourceResolutionError,
     TABLE_PDF_PATHS,
+    execution_rows_from_resolved,
     load_year_links,
 )
 from crawler.source_resolution import (
-    execution_rows_for_year,
     resolve_year_sources,
     validate_attachment,
 )
@@ -39,8 +39,8 @@ def validate_score_segment_pdfs(entries: list[dict], data_root: Path, year: int)
         print(f'[{year}] 校验一分一段 PDF：{relative}', flush=True)
         try:
             validate_attachment('scoreSegments', year, (Path(data_root) / relative).read_bytes())
-        except SourceResolutionError as error:
-            raise SourceResolutionError(f'{relative}: {error}') from error
+        except AnnualSourceError as error:
+            raise AnnualSourceError(f'{relative}: {error}') from error
 
 
 def publish_staged_files(staging_root: Path, data_root: Path) -> None:
@@ -63,7 +63,7 @@ def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = Fals
     year = seed['year']
     resolved = resolve_year_sources(seed, session)
     print(f'[{year}] 已解析并校验官方来源页', flush=True)
-    source_rows, crawl_target = execution_rows_for_year(resolved)
+    source_rows, crawl_target = execution_rows_from_resolved(resolved)
     plan = {'seeds': [seed], 'sources': source_rows,
             'targets': [crawl_target] if crawl_target else []}
 

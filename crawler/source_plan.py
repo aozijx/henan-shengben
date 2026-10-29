@@ -7,8 +7,12 @@ from crawler.source_rules import CrawlTarget, is_official_url
 from pipeline_io import read_json
 
 
-class SourceResolutionError(ValueError):
+class AnnualSourceError(ValueError):
     pass
+
+
+# Compatibility name retained for existing seed and resolution callers.
+SourceResolutionError = AnnualSourceError
 
 
 SOURCE_ROLES = {
@@ -53,28 +57,28 @@ def load_year_links(path: Path) -> dict:
     seed = read_json(path)
     year = seed.get('year')
     if not isinstance(year, int) or year < 2000 or year > 2200:
-        raise SourceResolutionError('year-links must contain a valid integer year')
+        raise AnnualSourceError('year-links must contain a valid integer year')
     if seed.get('searchPageUrl') and not is_official_url(seed['searchPageUrl']):
-        raise SourceResolutionError('searchPageUrl must use an official HTTPS host')
+        raise AnnualSourceError('searchPageUrl must use an official HTTPS host')
     sources = seed.get('sources')
     if not isinstance(sources, dict):
-        raise SourceResolutionError('sources must be an object keyed by source role')
+        raise AnnualSourceError('sources must be an object keyed by source role')
     for role, item in sources.items():
         if role not in SOURCE_ROLES or not isinstance(item, dict):
-            raise SourceResolutionError(f'unknown source role: {role}')
+            raise AnnualSourceError(f'unknown source role: {role}')
         for key in ('pageUrl', 'attachmentUrl'):
             url = item.get(key)
             if url and not is_official_url(url):
-                raise SourceResolutionError(f'{role}.{key} must use an official HTTPS host')
+                raise AnnualSourceError(f'{role}.{key} must use an official HTTPS host')
         if 'localPath' in item:
             local_path = item['localPath']
             if not isinstance(local_path, str) or not local_path.strip():
-                raise SourceResolutionError(f'{role}.localPath must be a safe relative PDF path')
+                raise AnnualSourceError(f'{role}.localPath must be a safe relative PDF path')
             normalized_path = Path(str(local_path).replace('\\', '/'))
             if (PureWindowsPath(local_path).is_absolute() or normalized_path.is_absolute()
                     or '..' in normalized_path.parts
                     or normalized_path.suffix.lower() != '.pdf'):
-                raise SourceResolutionError(f'{role}.localPath must be a safe relative PDF path')
+                raise AnnualSourceError(f'{role}.localPath must be a safe relative PDF path')
     return seed
 
 
@@ -89,7 +93,7 @@ def score_segment_target_for_seed(seed: dict, *, resolved_page_url: str | None =
     if not discovery_url:
         return None
     if not is_official_url(discovery_url):
-        raise SourceResolutionError(f'{year} scoreSegments: pageUrl/searchPageUrl must use an official HTTPS host')
+        raise AnnualSourceError(f'{year} scoreSegments: pageUrl/searchPageUrl must use an official HTTPS host')
     return CrawlTarget(
         dataset='score-segments',
         year=year,
@@ -161,9 +165,9 @@ def build_data_plan(data_root: Path, years: set[int] | None = None,
     for path in seed_paths if seed_paths is not None else seed_paths_in(data_root):
         seed = load_year_links(path)
         if path.stem != str(seed['year']):
-            raise SourceResolutionError(f'year-links filename/year mismatch: {path.name}')
+            raise AnnualSourceError(f'year-links filename/year mismatch: {path.name}')
         if seed['year'] in seen_years:
-            raise SourceResolutionError(f'duplicate year-links seed: {seed["year"]}')
+            raise AnnualSourceError(f'duplicate year-links seed: {seed["year"]}')
         seen_years.add(seed['year'])
         if years is None or int(seed['year']) in years:
             seeds.append(seed)
@@ -178,3 +182,26 @@ def build_data_plan(data_root: Path, years: set[int] | None = None,
         'sources': sorted(rows, key=lambda row: (int(row['year']), row['parser'])),
         'targets': sorted(targets, key=lambda target: (target['dataset'], int(target['year']))),
     }
+
+
+def execution_rows_from_resolved(resolved: dict) -> tuple[list[dict], dict | None]:
+    """Turn verified page and attachment records into parser and crawl inputs."""
+    year = resolved['year']
+    attachments = resolved['attachments']
+    selected = {role: items[0] for role, items in attachments.items() if role in TABLE_PDF_PATHS}
+    sources = []
+    for parser, roles, output_path, pdf_paths in _table_rows(year, selected):
+        if all(role in selected for role in roles):
+            sources.append({
+                'outputPath': output_path, 'pdfPaths': pdf_paths,
+                'pdfUrls': [selected[role]['url'] for role in roles],
+                'pageUrls': [resolved['pages'][role] for role in roles],
+                'parser': parser, 'year': year,
+            })
+    crawl = None
+    segment_page = resolved['pages'].get('scoreSegments')
+    if segment_page:
+        crawl = crawl_target_record({
+            'year': year, 'sources': {'scoreSegments': {'pageUrl': segment_page}},
+        })
+    return sources, crawl

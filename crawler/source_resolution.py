@@ -12,10 +12,7 @@ from crawler.source_rules import CrawlTarget, is_official_url, is_pdf_link
 from crawler.source_plan import (
     PDF_MARKERS,
     SOURCE_ROLES,
-    TABLE_PDF_PATHS,
-    SourceResolutionError,
-    _table_rows,
-    crawl_target_record,
+    AnnualSourceError,
     score_segment_target_for_seed,
 )
 from pipeline_config import REQUEST_TIMEOUT
@@ -65,7 +62,7 @@ def resolve_score_segment_target(seed: dict, session) -> CrawlTarget | None:
     if not candidates:
         return None
     if len(candidates) != 1:
-        raise SourceResolutionError(
+        raise AnnualSourceError(
             f"{seed['year']} scoreSegments: expected one official page, found {len(candidates)}; add an exact pageUrl")
     return score_segment_target_for_seed(seed, resolved_page_url=next(iter(candidates)))
 
@@ -92,10 +89,10 @@ def validate_attachment(role: str, year: int, content: bytes) -> None:
             text = ' '.join((page.extract_text() or '') for page in pdf.pages[:3])
             text = _attachment_identity_evidence(text, pdf.metadata or {})
     except Exception as error:
-        raise SourceResolutionError(f'{year} {role}: attachment is not a readable PDF: {error}') from error
+        raise AnnualSourceError(f'{year} {role}: attachment is not a readable PDF: {error}') from error
     markers = PDF_MARKERS[role]
     if str(year) not in text or not any(marker in text for marker in markers):
-        raise SourceResolutionError(f'{year} {role}: PDF content does not confirm year and source type')
+        raise AnnualSourceError(f'{year} {role}: PDF content does not confirm year and source type')
 
 
 def _attachment_identity_evidence(text: str, metadata: dict) -> str:
@@ -131,13 +128,13 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
         urls = {explicit} if explicit else candidates.get(role, set())
         urls = {url for url in urls if is_official_url(url)}
         if len(urls) != 1:
-            raise SourceResolutionError(f'{year} {role}: expected one official page, found {len(urls)}; add an exact pageUrl')
+            raise AnnualSourceError(f'{year} {role}: expected one official page, found {len(urls)}; add an exact pageUrl')
         pages[role] = next(iter(urls))
         response = session.get(pages[role], timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         page_text = BeautifulSoup(response.content, 'html.parser').get_text(' ', strip=True)
         if str(year) not in page_text or not any(word in page_text for word in SOURCE_ROLES[role]):
-            raise SourceResolutionError(f'{year} {role}: official page title/content does not confirm the year and source type')
+            raise AnnualSourceError(f'{year} {role}: official page title/content does not confirm the year and source type')
 
     attachments = {}
     for role, page_url in pages.items():
@@ -151,35 +148,13 @@ def resolve_year_sources(seed: dict, session=None) -> dict:
             files = [item for item in files if any(word in (item[0] + item[1]) for word in ('招生高校及专业', '高校及专业总表'))]
         if role == 'scoreSegments':
             if not files:
-                raise SourceResolutionError(f'{year} {role}: no official major PDFs found')
+                raise AnnualSourceError(f'{year} {role}: no official major PDFs found')
         elif len(files) != 1:
-            raise SourceResolutionError(f'{year} {role}: expected one official PDF, found {len(files)}; add an exact attachmentUrl')
+            raise AnnualSourceError(f'{year} {role}: expected one official PDF, found {len(files)}; add an exact attachmentUrl')
         for url, _label in files:
             if not is_official_url(url):
-                raise SourceResolutionError(f'{year} {role}: attachment must use an official HTTPS host')
+                raise AnnualSourceError(f'{year} {role}: attachment must use an official HTTPS host')
         local_path = seed.get('sources', {}).get(role, {}).get('localPath')
         attachments[role] = [{'url': url, 'title': title, **({'localPath': local_path} if local_path else {})}
                               for url, title in files]
     return {'year': year, 'pages': pages, 'attachments': attachments}
-
-
-def execution_rows_for_year(resolved: dict) -> tuple[list[dict], dict]:
-    year = resolved['year']
-    attachments = resolved['attachments']
-    selected = {role: items[0] for role, items in attachments.items() if role in TABLE_PDF_PATHS}
-    sources = []
-    for parser, roles, output_path, pdf_paths in _table_rows(year, selected):
-        if all(role in selected for role in roles):
-            sources.append({
-                'outputPath': output_path, 'pdfPaths': pdf_paths,
-                'pdfUrls': [selected[role]['url'] for role in roles],
-                'pageUrls': [resolved['pages'][role] for role in roles],
-                'parser': parser, 'year': year,
-            })
-    crawl = None
-    segment_page = resolved['pages'].get('scoreSegments')
-    if segment_page:
-        crawl = crawl_target_record({
-            'year': year, 'sources': {'scoreSegments': {'pageUrl': segment_page}},
-        })
-    return sources, crawl
