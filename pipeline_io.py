@@ -17,8 +17,12 @@ def write_bytes_if_changed(path: Path, content: bytes) -> None:
     if path.is_file() and path.read_bytes() == content:
         return
     temporary = path.with_name(path.name + '.new')
-    temporary.write_bytes(content)
-    os.replace(temporary, path)
+    try:
+        temporary.write_bytes(content)
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
 
 
 def write_json(path: Path, value: object, *, indent: int | None = None) -> None:

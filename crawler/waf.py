@@ -24,6 +24,7 @@ from pathlib import Path
 import requests
 
 from pipeline_config import WAF_AUTO_BOOTSTRAP
+from pipeline_io import write_json
 
 WAF_COOKIE_FILE = Path(__file__).resolve().parent.parent / '.waf-cookie'
 WAF_BLOCKED_STATUS = {400, 403, 412}
@@ -141,14 +142,7 @@ class WafSession(requests.Session):
 
     @staticmethod
     def _persist_cookie(credentials: dict) -> None:
-        WAF_COOKIE_FILE.parent.mkdir(parents=True, exist_ok=True)
-        temporary = WAF_COOKIE_FILE.with_name(WAF_COOKIE_FILE.name + '.new')
-        try:
-            temporary.write_text(json.dumps(credentials, ensure_ascii=False), encoding='utf-8')
-            os.replace(temporary, WAF_COOKIE_FILE)
-        finally:
-            if temporary.exists():
-                temporary.unlink()
+        write_json(WAF_COOKIE_FILE, credentials)
 
     def get(self, url, **kwargs):
         with self._request_lock:
