@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import shutil
 import tempfile
 from pathlib import Path
@@ -28,6 +27,7 @@ from crawler.year_sources import (
     resolve_year_sources,
     validate_attachment,
 )
+from pipeline_io import copy_file_atomically
 
 
 def validate_score_segment_pdfs(entries: list[dict], data_root: Path, year: int) -> None:
@@ -54,10 +54,7 @@ def publish_staged_files(staging_root: Path, data_root: Path) -> None:
         target = Path(data_root) / relative
         if target.exists():
             continue
-        target.parent.mkdir(parents=True, exist_ok=True)
-        temporary_file = target.with_name(target.name + '.new')
-        shutil.copy2(source, temporary_file)
-        os.replace(temporary_file, target)
+        copy_file_atomically(source, target)
 
 
 def _run_in_staging(seed: dict, root: Path, session, *, full_report: bool = False) -> dict:
@@ -195,9 +192,7 @@ def ingest_year(seed_path: Path, data_root: Path, template_path: Path, metadata_
         publish_staged_files(staging_root, data_root)
         if report['complete']:
             staged_file = Path(temporary) / 'metadata.json'
-            metadata_tmp = metadata_path.with_name(metadata_path.name + '.new')
-            shutil.copy2(staged_file, metadata_tmp)
-            os.replace(metadata_tmp, metadata_path)
+            copy_file_atomically(staged_file, metadata_path)
         return report
 
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import shutil
 from typing import Any
 
 
@@ -20,6 +21,19 @@ def write_bytes_if_changed(path: Path, content: bytes) -> None:
     try:
         temporary.write_bytes(content)
         os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def copy_file_atomically(source: Path, destination: Path) -> None:
+    """Copy a file with metadata, replacing the destination only when complete."""
+    source, destination = Path(source), Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_name(destination.name + '.new')
+    try:
+        shutil.copy2(source, temporary)
+        os.replace(temporary, destination)
     finally:
         if temporary.exists():
             temporary.unlink()
