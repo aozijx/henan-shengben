@@ -44,7 +44,7 @@
 .aggregate-card-heading .aggregate-detail-action button{white-space:nowrap;}
 .result-toolbar{margin:18px 0 22px;}
 .result-layout-switch{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;width:max-content;max-width:100%;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--surface);}
-.result-toolbar .result-layout-switch button{display:grid;place-items:center;width:34px;min-width:34px;min-height:30px;padding:5px;border-color:transparent;background:transparent;}
+.result-toolbar .result-layout-switch button{display:flex;align-items:center;justify-content:center;gap:6px;width:auto;min-width:0;min-height:30px;padding:5px 9px;border-color:transparent;background:transparent;white-space:nowrap;}
 .result-toolbar .result-layout-switch button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);}
 .layout-icon{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;}
 .filter-operations .filter-row{align-items:center;}
@@ -202,15 +202,28 @@
 .selected-major-section .school-comparison{width:100%;min-width:0;padding:15px 16px;}
 .selected-major-section .school-comparison>h4{margin-bottom:12px;}
 .selected-major-section .school-comparison-list{width:100%;}
-.selected-major-section[data-school-layout="list"] .school-comparison-list{grid-template-columns:minmax(0,1fr);gap:0;}
-.selected-major-section[data-school-layout="list"] .school-comparison-card{grid-template-columns:minmax(0,1fr);gap:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;overflow:visible;}
-.selected-major-section[data-school-layout="list"] .school-comparison-card:last-child{border-bottom:0;}
-.selected-major-section[data-school-layout="list"] .school-detail{display:grid;grid-template-columns:minmax(190px,.36fr) minmax(0,1fr);align-items:start;gap:0 18px;padding:13px 4px;background:transparent;}
-.selected-major-section[data-school-layout="list"] .school-detail>header,.selected-major-section[data-school-layout="list"] .school-plan-summary{grid-column:1;}
-.selected-major-section[data-school-layout="list"] .school-detail>header{align-self:end;}
-.selected-major-section[data-school-layout="list"] .school-plan-summary{margin:6px 0 0;}
-.selected-major-section[data-school-layout="list"] .school-plan-record,.selected-major-section[data-school-layout="list"] .school-detail-empty{grid-column:2;}
-.selected-major-section[data-school-layout="list"] .school-plan-record{grid-row:1/span 2;margin:0;padding:0;border:0;}
+.selected-major-section[data-school-layout="cards"] .school-comparison-table-view{display:none;}
+.selected-major-section[data-school-layout="list"] .school-comparison-cards{display:none;}
+.school-comparison-table-view{display:grid;gap:16px;}
+.school-comparison-table-section{min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden;}
+.school-comparison-table-section h5{margin:0;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);color:var(--blue-deep);font-size:13px;}
+.school-comparison-table-scroll{max-width:100%;overflow:auto;}
+.school-comparison-table{width:100%;min-width:1080px;border-collapse:separate;border-spacing:0;font-size:12px;}
+.school-comparison-table th,.school-comparison-table td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;white-space:nowrap;}
+.school-comparison-table thead th{position:sticky;top:0;z-index:1;background:var(--surface-2);color:var(--muted);font-size:11px;font-weight:700;}
+.school-comparison-table tbody tr:last-child th,.school-comparison-table tbody tr:last-child td{border-bottom:0;}
+.school-comparison-table tbody th[scope="row"]{min-width:150px;font-weight:700;}
+.school-comparison-table tbody td:last-child{min-width:190px;max-width:300px;white-space:normal;overflow-wrap:anywhere;}
+.school-table-count{font-weight:700;font-variant-numeric:tabular-nums;color:var(--blue-deep);}
+.school-table-status{color:var(--muted);}
+.school-table-more{margin-top:4px;}
+.school-table-more summary{color:var(--blue-deep);cursor:pointer;font-size:11px;}
+.school-table-more dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 8px;margin:6px 0 0;font-size:11px;}
+.school-table-more dt{color:var(--muted);}
+.school-table-more dd{margin:0;}
+.school-table-more a,.school-comparison-table-section a{color:var(--blue-deep);}
+.school-master-table-section .school-comparison-table{min-width:760px;}
+.school-master-table-section .school-comparison-table tbody td{white-space:normal;}
 
 @media(max-width:600px){
   #view-query .filter-field-number{flex-basis:100%;}
@@ -232,9 +245,7 @@
   #view-query .aggregate-table tr.aggregate-table-detail td{display:table-cell;width:auto;padding:0;border:0;white-space:normal;}
   .selected-major-section-header{align-items:flex-start;flex-direction:column;padding:12px;}
   .selected-major-section .school-comparison{padding:12px;}
-  .selected-major-section[data-school-layout="list"] .school-detail{grid-template-columns:minmax(0,1fr);gap:0;padding:12px 2px;}
-  .selected-major-section[data-school-layout="list"] .school-detail>header,.selected-major-section[data-school-layout="list"] .school-plan-summary,
-  .selected-major-section[data-school-layout="list"] .school-plan-record,.selected-major-section[data-school-layout="list"] .school-detail-empty{grid-column:1;grid-row:auto;}
-  .selected-major-section[data-school-layout="list"] .school-plan-record{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);}
+  .school-comparison-table{min-width:980px;}
+  .school-comparison-table-section h5{position:sticky;left:0;}
 }
 .view#view-stats .chart-card[hidden] { display: none; }
