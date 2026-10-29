@@ -6,15 +6,12 @@ from pathlib import Path
 import re
 from typing import Any, Callable
 
+from convert.text import squash
 from pipeline_io import read_json
 
 
-def _compact(value: object) -> str:
-    return re.sub(r"\s+", "", str(value or ""))
-
-
 def _major_key(value: object) -> str:
-    return re.sub(r"[（(][^（）()]*[）)]", "", _compact(value))
+    return re.sub(r"[（(][^（）()]*[）)]", "", squash(value))
 
 
 def major_rows(data_root: Path, year: int) -> list[dict[str, str]]:
@@ -29,15 +26,15 @@ def major_rows(data_root: Path, year: int) -> list[dict[str, str]]:
 def major_codes(rows: list[dict[str, Any]] | None) -> dict[str, set[str]]:
     refs: dict[str, set[str]] = {}
     for row in rows or []:
-        key, code = _major_key(row.get("专业名称")), _compact(row.get("专业代号"))
+        key, code = _major_key(row.get("专业名称")), squash(row.get("专业代号"))
         if key and code:
             refs.setdefault(key, set()).add(code)
     return refs
 
 
 def major_names(rows: list[dict[str, Any]] | None) -> dict[str, str]:
-    return {_compact(row.get("专业代号")): _compact(row.get("专业名称"))
-            for row in rows or [] if _compact(row.get("专业代号")) and _compact(row.get("专业名称"))}
+    return {squash(row.get("专业代号")): squash(row.get("专业名称"))
+            for row in rows or [] if squash(row.get("专业代号")) and squash(row.get("专业名称"))}
 
 
 def canonical_major_code(code: str, title: str, references: dict[str, set[str]]) -> str:
@@ -47,7 +44,7 @@ def canonical_major_code(code: str, title: str, references: dict[str, set[str]])
 
 def canonical_plan_major_name(value: str | None, code: str, references: dict[str, str]) -> str:
     """Remove OCR watermark text and reconcile a damaged name by major code."""
-    cleaned = re.sub(r"[A-Za-z]+", "", _compact(value))
+    cleaned = re.sub(r"[A-Za-z]+", "", squash(value))
     expected = references.get(code, "")
     if not cleaned or not expected:
         return cleaned or expected
@@ -56,7 +53,7 @@ def canonical_plan_major_name(value: str | None, code: str, references: dict[str
 
 
 def school_code(value: object) -> str:
-    matches = re.findall(r"\d{4}", _compact(value))
+    matches = re.findall(r"\d{4}", squash(value))
     return matches[-1] if matches else ""
 
 
