@@ -6,11 +6,11 @@
 from __future__ import annotations
 
 import io
-import json
-import os
 import sys
 from pathlib import Path
 from typing import Any
+
+from pipeline_io import read_json, write_bytes_if_changed, write_json
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_ROOT = REPO_ROOT / "data"
@@ -24,24 +24,6 @@ def _ensure_stdout_utf8() -> None:
     except AttributeError:
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
-
-
-def read_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def write_bytes_if_changed(path: Path, content: bytes) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if path.is_file() and path.read_bytes() == content:
-        return
-    temporary = path.with_name(path.name + '.new')
-    temporary.write_bytes(content)
-    os.replace(temporary, path)
-
-
-def write_json(path: Path, value: object, *, indent: int | None = None) -> None:
-    content = json.dumps(value, ensure_ascii=False, indent=indent) + "\n"
-    write_bytes_if_changed(path, content.encode("utf-8"))
 
 
 def load_data_plan(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> dict[str, Any]:

@@ -1,7 +1,6 @@
 """Resolve one year's official source pages from a small human-maintained seed."""
 from __future__ import annotations
 
-import json
 from pathlib import Path, PureWindowsPath
 from urllib.parse import urljoin, urlparse
 from io import BytesIO
@@ -12,6 +11,7 @@ from bs4 import BeautifulSoup
 
 from crawler.source_rules import CrawlTarget, is_official_url, is_pdf_link
 from pipeline_config import REQUEST_TIMEOUT
+from pipeline_io import read_json
 
 
 class SourceResolutionError(ValueError):
@@ -57,7 +57,7 @@ def _table_rows(year: int, declared: dict):
 
 
 def load_year_links(path: Path) -> dict:
-    seed = json.loads(Path(path).read_text(encoding='utf-8'))
+    seed = read_json(path)
     year = seed.get('year')
     if not isinstance(year, int) or year < 2000 or year > 2200:
         raise SourceResolutionError('year-links must contain a valid integer year')
@@ -147,7 +147,7 @@ def source_rows_for_seed(seed: dict, data_root: Path) -> list[dict]:
         row = {'outputPath': output_path, 'pdfPaths': pdf_paths, 'parser': parser, 'year': year}
         output = data_root / output_path
         if output.is_file():
-            value = json.loads(output.read_text(encoding='utf-8'))
+            value = read_json(output)
             if isinstance(value, list):
                 row['expectedCount'] = len(value)
         rows.append(row)

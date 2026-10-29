@@ -1,6 +1,5 @@
 import re
 import argparse
-import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -14,6 +13,7 @@ if __package__ in {None, ''}:
 from pipeline_config import REQUEST_TIMEOUT
 from crawler.source_rules import is_pdf_link
 from crawler.waf import build_session
+from pipeline_io import write_json
 
 
 class DiscoveryBlockedError(RuntimeError):
@@ -96,8 +96,7 @@ def main():
                     'discoveryUrl': target.discovery_url,
                     'entries': [entry_document(entry) for entry in entries]}
         output = args.data_root / target.manifest_path
-        output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        write_json(output, document, indent=2)
         print(f'[{target.year}] 清单已写入 {output}', flush=True)
 
 

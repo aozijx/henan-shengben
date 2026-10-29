@@ -1,5 +1,4 @@
 import argparse
-import json
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import sys
@@ -14,6 +13,7 @@ from crawler.source_rules import is_official_url
 from crawler.waf import build_session
 from crawler.year_sources import build_data_plan, seed_paths_in
 from pipeline_integrity import sha256_bytes, sha256_file
+from pipeline_io import read_json, write_json
 
 
 def download_entry(url, target: Path, session, expected_sha256=None):
@@ -51,7 +51,7 @@ DOWNLOAD_STATUS_LABELS = {'downloaded': '已下载', 'skipped': '跳过（SHA-25
 
 def compact_manifest_urls(manifest_path: Path) -> int:
     """Remove URL-encoding duplicates while retaining actual redirects and hashes."""
-    document = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
+    document = read_json(manifest_path)
     removed = 0
     for entry in document['entries']:
         final_url = entry.get('finalUrl')
@@ -59,13 +59,13 @@ def compact_manifest_urls(manifest_path: Path) -> int:
             del entry['finalUrl']
             removed += 1
     if removed:
-        Path(manifest_path).write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        write_json(manifest_path, document, indent=2)
     return removed
 
 
 def download_manifest(manifest_path: Path, data_root: Path, session, workers: int | None = None,
                      major_codes: set[str] | None = None):
-    document = json.loads(manifest_path.read_text(encoding='utf-8'))
+    document = read_json(manifest_path)
     counts = {'downloaded': 0, 'skipped': 0, 'failed': 0}
     destinations = set()
     targets = []
@@ -109,7 +109,7 @@ def download_manifest(manifest_path: Path, data_root: Path, session, workers: in
             entry.pop('finalUrl')
         entry.update(result)
         counts[result['downloadStatus']] += 1
-    manifest_path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    write_json(manifest_path, document, indent=2)
     return counts
 
 
@@ -128,7 +128,7 @@ def download_targets(seed_paths, data_root: Path, years: set[int] | None, sessio
             continue
         target_codes = major_codes
         if major_codes:
-            document = json.loads(manifest_path.read_text(encoding='utf-8'))
+            document = read_json(manifest_path)
             available = {entry['majorCode'] for entry in document['entries']}
             target_codes = major_codes & available
             matched_codes.update(target_codes)
