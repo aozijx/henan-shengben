@@ -18,11 +18,13 @@ from pipeline_config import REQUEST_TIMEOUT
 from crawler.discover import discover_year, entry_document
 from crawler.download import download_entry, download_manifest
 from crawler.waf import build_session
-from crawler.year_sources import (
+from crawler.source_plan import (
     SOURCE_ROLES,
     SourceResolutionError,
     TABLE_PDF_PATHS,
     load_year_links,
+)
+from crawler.source_resolution import (
     execution_rows_for_year,
     resolve_year_sources,
     validate_attachment,

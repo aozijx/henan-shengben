@@ -11,7 +11,7 @@ if __package__ in {None, ''}:
 from pipeline_config import DOWNLOAD_WORKERS, REQUEST_TIMEOUT
 from crawler.source_rules import is_official_url
 from crawler.waf import build_session
-from crawler.year_sources import build_data_plan, seed_paths_in
+from crawler.source_plan import build_data_plan, seed_paths_in
 from pipeline_integrity import sha256_bytes, sha256_file
 from pipeline_io import read_json, write_json
 

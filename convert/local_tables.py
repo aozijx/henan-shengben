@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from convert.common import read_json, write_json
-from crawler.year_sources import TABLE_PDF_PATHS, TABLE_SOURCE_SPECS, source_rows_for_seed
+from crawler.source_plan import TABLE_PDF_PATHS, TABLE_SOURCE_SPECS, source_rows_for_seed
 from pipeline_integrity import sha256_file
 
 

@@ -73,7 +73,8 @@ def main():
     parser.add_argument('--years', nargs='*', type=int)
     parser.add_argument('--data-root', type=Path, default=Path('data'))
     args = parser.parse_args()
-    from crawler.year_sources import build_data_plan, resolve_score_segment_target, seed_paths_in
+    from crawler.source_plan import build_data_plan, seed_paths_in
+    from crawler.source_resolution import resolve_score_segment_target
     seed_paths = args.seed or seed_paths_in(args.data_root)
     plan = build_data_plan(args.data_root, set(args.years) if args.years else None, seed_paths)
     if not plan['seeds']:

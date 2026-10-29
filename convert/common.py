@@ -27,6 +27,6 @@ def _ensure_stdout_utf8() -> None:
 
 
 def load_data_plan(data_root: Path = DATA_ROOT, years: set[int] | None = None) -> dict[str, Any]:
-    from crawler.year_sources import build_data_plan
+    from crawler.source_plan import build_data_plan
 
     return build_data_plan(Path(data_root), years)
